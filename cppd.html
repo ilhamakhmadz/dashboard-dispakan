@@ -10,18 +10,13 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         :root {
-            /* Default: Light Theme */
             --bg-color: #f1f5f9;
             --card-bg: rgba(255, 255, 255, 0.8);
             --card-border: rgba(16, 185, 129, 0.25);
             --text-main: #0f172a;
             --text-muted: #64748b;
-
-            /* Bandung Bedas Vibes */
             --primary: #059669;
-            /* Bandung Bedas Green (contrast optimized) */
             --accent: #dc2626;
-            /* Bandung Bedas Red (contrast optimized) */
             --accent-glow: rgba(220, 38, 38, 0.1);
             --primary-glow: rgba(5, 150, 105, 0.1);
             --success: #059669;
@@ -32,24 +27,16 @@
             --bg-color: #0b0f19;
             --card-bg: rgba(20, 27, 45, 0.6);
             --card-border: rgba(16, 185, 129, 0.15);
-            /* Green glow border */
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-
             --primary: #10b981;
-            /* Bandung Bedas Green */
             --accent: #ef4444;
-            /* Bandung Bedas Red */
             --accent-glow: rgba(239, 68, 68, 0.15);
             --primary-glow: rgba(16, 185, 129, 0.15);
             --success: #10b981;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: var(--font-family);
@@ -65,182 +52,84 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
-        /* Loading Overlay */
         #loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--bg-color);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--bg-color); z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
             transition: opacity 0.5s ease;
         }
 
         .spinner {
-            width: 50px;
-            height: 50px;
+            width: 50px; height: 50px;
             border: 4px solid rgba(16, 185, 129, 0.1);
-            border-radius: 50%;
-            border-top-color: var(--primary);
+            border-radius: 50%; border-top-color: var(--primary);
             animation: spin 1s ease-in-out infinite;
         }
 
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 1.25rem;
-        }
+        .container { max-width: 1400px; margin: 0 auto; padding: 1.25rem; }
 
         header {
-            text-align: left;
-            margin-bottom: 2rem;
-            padding-top: 1rem;
-            position: relative;
+            text-align: left; margin-bottom: 2rem;
+            padding-top: 1rem; position: relative;
         }
 
         .dept-title {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--primary);
-            font-weight: 600;
-            margin-bottom: 0.5rem;
+            font-size: 0.85rem; text-transform: uppercase;
+            letter-spacing: 1.5px; color: var(--primary);
+            font-weight: 600; margin-bottom: 0.5rem;
         }
 
         header h1 {
-            font-size: 2.2rem;
-            font-weight: 700;
+            font-size: 2.2rem; font-weight: 700;
             background: linear-gradient(135deg, var(--text-main), var(--text-muted));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.25rem;
-            letter-spacing: -0.5px;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 0.25rem; letter-spacing: -0.5px;
         }
 
-        header p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
+        header p { color: var(--text-muted); font-size: 0.95rem; }
 
         .section-title {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-top: 1rem;
+            font-size: 1.4rem; font-weight: 600; margin-bottom: 0.5rem;
+            display: flex; align-items: center; gap: 0.75rem; margin-top: 1rem;
         }
 
         .section-title::before {
-            content: '';
-            display: block;
-            width: 6px;
-            height: 24px;
+            content: ''; display: block; width: 6px; height: 24px;
             background: linear-gradient(to bottom, var(--primary), var(--accent));
             border-radius: 3px;
         }
 
-        .section-desc {
-            color: var(--text-muted);
-            margin-bottom: 1.25rem;
-            line-height: 1.5;
-            max-width: 900px;
-            font-size: 0.85rem;
-        }
-
         .glass-panel {
-            background: var(--card-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 1rem;
+            background: var(--card-bg); backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px); border: 1px solid var(--card-border);
+            border-radius: 16px; padding: 1rem;
             box-shadow: 0 4px 20px -1px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s, border-color 0.3s;
         }
 
-        .glass-panel:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 24px -1px rgba(0, 0, 0, 0.15);
-        }
+        .glass-panel:hover { transform: translateY(-3px); box-shadow: 0 8px 24px -1px rgba(0, 0, 0, 0.15); }
 
-        /* Layout Grids */
-        .grid-filters {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 0.75rem;
-            margin-bottom: 1.25rem;
-        }
-
-        .grid-summary {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1.25rem;
-        }
-
-        .grid-charts {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 1rem;
-            margin-bottom: 2.5rem;
-        }
-
-        .grid-charts-equal {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-bottom: 2.5rem;
-        }
+        .grid-filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; margin-bottom: 1.25rem; }
+        .grid-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.25rem; }
+        .grid-charts { display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; margin-bottom: 2.5rem; }
+        .grid-charts-equal { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2.5rem; }
 
         @media (max-width: 1024px) {
-
-            .grid-charts,
-            .grid-charts-equal {
-                grid-template-columns: 1fr;
-            }
+            .grid-charts, .grid-charts-equal { grid-template-columns: 1fr; }
         }
 
-        /* Controls */
-        .control-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-        }
-
-        .control-group label {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
+        .control-group { display: flex; flex-direction: column; gap: 0.25rem; }
+        .control-group label { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
 
         select {
-            appearance: none;
-            background: rgba(0, 0, 0, 0.05);
-            border: 1px solid var(--card-border);
-            border-radius: 10px;
-            color: var(--text-main);
-            padding: 0.5rem 0.75rem;
-            font-family: inherit;
-            font-size: 0.9rem;
-            outline: none;
-            transition: border-color 0.3s;
+            appearance: none; background: rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--card-border); border-radius: 10px;
+            color: var(--text-main); padding: 0.5rem 0.75rem;
+            font-family: inherit; font-size: 0.9rem; outline: none; transition: border-color 0.3s;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23059669'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 0.75rem center;
-            background-size: 0.85rem;
+            background-repeat: no-repeat; background-position: right 0.75rem center; background-size: 0.85rem;
         }
 
         [data-theme="dark"] select {
@@ -248,151 +137,80 @@
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2310b981'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
         }
 
-        select:focus {
-            border-color: var(--primary);
-        }
+        select:focus { border-color: var(--primary); }
+        select option { background: var(--bg-color); color: var(--text-main); }
 
-        select option {
-            background: var(--bg-color);
-            color: var(--text-main);
-        }
+        .summary-card { text-align: left; padding: 1rem 1.25rem; }
+        .summary-card .title { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.25rem; }
+        .summary-card .value { font-size: 1.8rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.15rem; }
+        .summary-card .subtitle { font-size: 0.8rem; color: var(--primary); }
 
-        /* Summary Cards */
-        .summary-card {
-            text-align: left;
-            padding: 1rem 1.25rem;
+        .pct-badge {
+            display: inline-block; font-size: 0.73rem; font-weight: 700;
+            color: #fff; background: var(--primary); border-radius: 6px;
+            padding: 0.1rem 0.45rem; margin-left: 0.3rem; vertical-align: middle;
         }
+        .pct-badge.accent { background: var(--accent); }
+        .pct-badge.amber  { background: #d97706; }
 
-        .summary-card .title {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 0.25rem;
-        }
-
-        .summary-card .value {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--text-main);
-            margin-bottom: 0.15rem;
-        }
-
-        .summary-card .subtitle {
-            font-size: 0.8rem;
-            color: var(--primary);
-        }
-
-        .chart-container {
-            position: relative;
-            height: 260px;
-            width: 100%;
-        }
+        .chart-container { position: relative; height: 260px; width: 100%; }
 
         .chart-title {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-            text-align: center;
+            font-size: 1rem; font-weight: 600;
+            margin-bottom: 0.75rem; text-align: center;
         }
 
-        /* Themes Switcher & Refresh buttons */
-        #theme-toggle,
-        #refresh-btn {
-            cursor: pointer;
-            padding: 0.4rem 0.8rem;
-            border-radius: 50px;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            font-weight: 600;
-            font-size: 0.8rem;
-            background: var(--card-bg);
-            color: var(--text-main);
-            border: 1px solid var(--card-border);
-            transition: all 0.3s;
-            outline: none;
+        #theme-toggle, #refresh-btn {
+            cursor: pointer; padding: 0.4rem 0.8rem; border-radius: 50px;
+            display: flex; align-items: center; gap: 0.4rem;
+            font-weight: 600; font-size: 0.8rem; background: var(--card-bg);
+            color: var(--text-main); border: 1px solid var(--card-border);
+            transition: all 0.3s; outline: none;
         }
 
-        #theme-toggle:hover,
-        #refresh-btn:hover {
-            border-color: var(--primary);
-            box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+        #theme-toggle:hover, #refresh-btn:hover {
+            border-color: var(--primary); box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
         }
 
-        /* Tables styling */
         .table-wrapper {
-            overflow-x: auto;
-            margin-top: 1rem;
-            border-radius: 12px;
-            border: 1px solid var(--card-border);
-            max-height: 350px;
-            overflow-y: auto;
+            overflow-x: auto; margin-top: 1rem; border-radius: 12px;
+            border: 1px solid var(--card-border); max-height: 350px; overflow-y: auto;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-            font-size: 0.85rem;
-        }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; }
 
         th {
-            background: rgba(255, 255, 255, 0.9);
-            color: var(--text-main);
-            font-weight: 600;
-            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.9); color: var(--text-main);
+            font-weight: 600; padding: 0.75rem 1rem;
             border-bottom: 2px solid var(--card-border);
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            backdrop-filter: blur(16px);
+            position: sticky; top: 0; z-index: 10; backdrop-filter: blur(16px);
         }
 
-        [data-theme="dark"] th {
-            background: rgba(15, 23, 42, 0.9);
-        }
+        [data-theme="dark"] th { background: rgba(15, 23, 42, 0.9); }
 
-        td {
-            padding: 0.75rem 1rem;
-            border-bottom: 1px solid var(--card-border);
-            color: var(--text-muted);
-        }
-
-        tr:hover td {
-            color: var(--text-main);
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        [data-theme="dark"] tr:hover td {
-            background: rgba(255, 255, 255, 0.02);
-        }
+        td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--card-border); color: var(--text-muted); }
+        tr:hover td { color: var(--text-main); background: rgba(255, 255, 255, 0.3); }
+        [data-theme="dark"] tr:hover td { background: rgba(255, 255, 255, 0.02); }
 
         .info-banner {
-            background: rgba(5, 150, 105, 0.08);
-            /* 8% Bedas Green */
-            border-left: 4px solid var(--primary);
-            border-radius: 8px;
-            padding: 0.85rem 1.1rem;
-            margin-bottom: 1.25rem;
-            display: flex;
-            gap: 0.75rem;
-            align-items: flex-start;
-            color: var(--text-main);
-            line-height: 1.5;
-            font-size: 0.85rem;
+            background: rgba(5, 150, 105, 0.08); border-left: 4px solid var(--primary);
+            border-radius: 8px; padding: 0.85rem 1.1rem; margin-bottom: 1.25rem;
+            display: flex; gap: 0.75rem; align-items: flex-start;
+            color: var(--text-main); line-height: 1.5; font-size: 0.85rem;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
-            border: 1px solid var(--card-border);
-            border-left-width: 4px;
+            border: 1px solid var(--card-border); border-left-width: 4px;
         }
 
-        [data-theme="dark"] .info-banner {
-            background: rgba(16, 185, 129, 0.05);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
+        [data-theme="dark"] .info-banner { background: rgba(16, 185, 129, 0.05); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); }
 
-        .info-banner-icon {
-            color: var(--primary);
-            flex-shrink: 0;
-            margin-top: 0.1rem;
+        .info-banner-icon { color: var(--primary); flex-shrink: 0; margin-top: 0.1rem; }
+
+        .lock-badge {
+            display: inline-flex; align-items: center; gap: 0.3rem;
+            font-size: 0.72rem; font-weight: 700; color: #d97706;
+            background: rgba(217, 119, 6, 0.12); border: 1px solid rgba(217, 119, 6, 0.35);
+            border-radius: 6px; padding: 0.15rem 0.55rem;
+            margin-left: 0.6rem; vertical-align: middle;
         }
     </style>
 </head>
@@ -402,21 +220,15 @@
     <div id="loading-overlay">
         <div style="text-align: center;">
             <div class="spinner" style="margin: 0 auto 1.5rem auto;"></div>
-            <h3
-                style="font-size: 1.2rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem; letter-spacing: -0.5px;">
-                Dashboard CPPD</h3>
-            <p id="loading-status" style="color: var(--text-muted); font-size: 0.85rem; font-family: monospace;">
-                Menghubungkan ke server...</p>
+            <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem; letter-spacing: -0.5px;">Dashboard CPPD</h3>
+            <p id="loading-status" style="color: var(--text-muted); font-size: 0.85rem; font-family: monospace;">Menghubungkan ke server...</p>
         </div>
     </div>
 
     <div class="container" id="app" style="opacity: 0; transition: opacity 0.5s ease;">
         <header>
             <div style="position: absolute; top: 0rem; right: 0rem; display: flex; align-items: center; gap: 0.5rem;">
-                <span id="sync-time"
-                    style="font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.25rem; margin-right: 0.5rem;">
-                    <!-- Auto-populated date icon and info -->
-                </span>
+                <span id="sync-time" style="font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.25rem; margin-right: 0.5rem;"></span>
                 <button id="refresh-btn">
                     <i data-lucide="refresh-cw" style="width: 14px; height: 14px;"></i>
                     <span>Sinkronisasi</span>
@@ -426,16 +238,11 @@
                 </button>
             </div>
 
-            <!-- Flex container for side-by-side Logo and Dept Title -->
             <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
-                <!-- Iconic Header Icon -->
-                <div class="logo-area"
-                    style="display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; background: var(--card-bg); border: 1px solid var(--card-border); box-shadow: 0 4px 15px var(--primary-glow); color: var(--primary); flex-shrink: 0;">
+                <div class="logo-area" style="display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; background: var(--card-bg); border: 1px solid var(--card-border); box-shadow: 0 4px 15px var(--primary-glow); color: var(--primary); flex-shrink: 0;">
                     <i data-lucide="wheat" style="width: 22px; height: 22px;"></i>
                 </div>
-
-                <div class="dept-title"
-                    style="margin-bottom: 0; line-height: 1.3; max-width: 700px; font-size: 0.8rem;">
+                <div class="dept-title" style="margin-bottom: 0; line-height: 1.3; max-width: 700px; font-size: 0.8rem;">
                     Dinas Ketahanan Pangan dan Perikanan Kabupaten Bandung (DISPAKAN)
                 </div>
             </div>
@@ -477,23 +284,23 @@
                 <div class="glass-panel summary-card">
                     <div class="title">Total Pengadaan</div>
                     <div class="value" id="s1-val-pengadaan">0</div>
-                    <div class="subtitle">Kg</div>
+                    <div class="subtitle">Kg <span class="pct-badge" id="s1-pct-pengadaan" style="display:none;"></span></div>
                 </div>
                 <div class="glass-panel summary-card">
                     <div class="title">Total Penyaluran</div>
                     <div class="value" id="s1-val-penyaluran">0</div>
-                    <div class="subtitle">Kg</div>
+                    <div class="subtitle">Kg <span class="pct-badge accent" id="s1-pct-penyaluran" style="display:none;"></span></div>
                 </div>
                 <div class="glass-panel summary-card">
-                    <div class="title">Total Stok</div>
+                    <div class="title">Sisa Stok</div>
                     <div class="value" id="s1-val-stok">0</div>
-                    <div class="subtitle">Kg</div>
+                    <div class="subtitle">Kg <span class="pct-badge amber" id="s1-pct-stok" style="display:none;"></span></div>
                 </div>
             </div>
 
             <div class="grid-charts">
                 <div class="glass-panel">
-                    <div class="chart-title">Tren Tahunan Pengadaan & Penyaluran</div>
+                    <div class="chart-title">Tren Tahunan Pengadaan &amp; Penyaluran</div>
                     <div class="chart-container">
                         <canvas id="chart-s1-tren-tahunan"></canvas>
                     </div>
@@ -507,15 +314,14 @@
             </div>
 
             <div class="glass-panel" style="margin-bottom: 2.5rem;">
-                <div class="chart-title">Tren Bulanan Stok & Penyaluran</div>
+                <div class="chart-title">Tren Bulanan Stok, Penyaluran &amp; Sisa Stok</div>
                 <div class="chart-container" style="height: 300px;">
                     <canvas id="chart-s1-tren-bulanan"></canvas>
                 </div>
             </div>
 
-            <!-- Table for Section 1 -->
             <div class="glass-panel" style="margin-bottom: 2.5rem;">
-                <div class="chart-title">Tabel Detail Stok & Penyaluran Bulanan</div>
+                <div class="chart-title">Tabel Detail Stok &amp; Penyaluran Bulanan</div>
                 <div class="table-wrapper">
                     <table>
                         <thead>
@@ -527,12 +333,12 @@
                                 <th>Stok Awal</th>
                                 <th>Pengadaan</th>
                                 <th>Penyaluran</th>
+                                <th>% Penyaluran</th>
+                                <th>Sisa Stok</th>
                                 <th>Unit</th>
                             </tr>
                         </thead>
-                        <tbody id="s1-table-body">
-                            <!-- Populated dynamically -->
-                        </tbody>
+                        <tbody id="s1-table-body"></tbody>
                     </table>
                 </div>
             </div>
@@ -540,13 +346,17 @@
 
         <!-- SECTION 2 -->
         <section>
-            <h2 class="section-title">Penyaluran Kategori Bulanan CPPD</h2>
+            <h2 class="section-title">
+                Penyaluran Kategori Bulanan CPPD
+                <span class="lock-badge"><i data-lucide="lock" style="width:11px;height:11px;"></i> Data Tahunan</span>
+            </h2>
             <div class="info-banner">
                 <i data-lucide="info" class="info-banner-icon" style="width: 18px; height: 18px;"></i>
                 <div>
                     Laporan ini merinci alokasi cadangan pangan yang disalurkan kepada kelompok masyarakat sasaran
                     prioritas. Klasifikasi dilakukan berdasarkan tujuan strategis program, mencakup penanganan kerawanan
                     pangan, pengendalian inflasi, penurunan angka stunting, serta penanggulangan dampak bencana alam.
+                    <strong>Data dikunci per tahun</strong> — tidak difilter per bulan.
                 </div>
             </div>
 
@@ -555,10 +365,6 @@
                     <div class="control-group">
                         <label>Tahun</label>
                         <select id="s2-tahun"></select>
-                    </div>
-                    <div class="control-group">
-                        <label>Bulan</label>
-                        <select id="s2-bulan"></select>
                     </div>
                     <div class="control-group">
                         <label>Kategori</label>
@@ -587,13 +393,13 @@
 
             <div class="grid-charts">
                 <div class="glass-panel">
-                    <div class="chart-title">Tren Penyaluran Bulanan (KK)</div>
-                    <div class="chart-container">
-                        <canvas id="chart-s2-bulanan"></canvas>
+                    <div class="chart-title">Tren Penyaluran Tahunan per Kategori</div>
+                    <div class="chart-container" style="height:300px;">
+                        <canvas id="chart-s2-tahunan"></canvas>
                     </div>
                 </div>
                 <div class="glass-panel">
-                    <div class="chart-title">Alokasi Penerima Manfaat (Kategori)</div>
+                    <div class="chart-title">Alokasi Penerima Manfaat per Kategori (%)</div>
                     <div class="chart-container">
                         <canvas id="chart-s2-alokasi"></canvas>
                     </div>
@@ -601,29 +407,19 @@
             </div>
 
             <div class="glass-panel" style="margin-bottom: 2.5rem;">
-                <div class="chart-title">Tren Penyaluran Tahunan per Kategori</div>
-                <div class="chart-container" style="height: 300px;">
-                    <canvas id="chart-s2-tahunan"></canvas>
-                </div>
-            </div>
-
-            <!-- Table for Section 2 -->
-            <div class="glass-panel" style="margin-bottom: 2.5rem;">
-                <div class="chart-title">Tabel Detail Penyaluran Kategori Bulanan</div>
+                <div class="chart-title">Tabel Detail Penyaluran Kategori (Tahunan)</div>
                 <div class="table-wrapper">
                     <table>
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Bulan</th>
                                 <th>Tahun</th>
                                 <th>Kategori</th>
                                 <th>Penerima Manfaat</th>
+                                <th>% dari Total</th>
                             </tr>
                         </thead>
-                        <tbody id="s2-table-body">
-                            <!-- Populated dynamically -->
-                        </tbody>
+                        <tbody id="s2-table-body"></tbody>
                     </table>
                 </div>
             </div>
@@ -631,7 +427,10 @@
 
         <!-- SECTION 3 -->
         <section>
-            <h2 class="section-title">Penerima Manfaat CPPD Tahunan per Desa</h2>
+            <h2 class="section-title">
+                Penerima Manfaat CPPD Tahunan per Desa
+                <span class="lock-badge"><i data-lucide="lock" style="width:11px;height:11px;"></i> Data Tahunan</span>
+            </h2>
             <div class="info-banner">
                 <i data-lucide="info" class="info-banner-icon" style="width: 18px; height: 18px;"></i>
                 <div>
@@ -654,6 +453,27 @@
                         <label>Desa / Kelurahan</label>
                         <select id="s3-desa"></select>
                     </div>
+                </div>
+            </div>
+
+            <!-- NEW: Grafik Tren Total Penerima Tahunan di paling atas Section 3 -->
+            <div class="glass-panel" style="margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px dashed var(--card-border); padding-bottom: 0.75rem;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <div style="display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 6px; background: rgba(249, 115, 22, 0.12); color: #f97316;">
+                            <i data-lucide="trending-up" style="width: 16px; height: 16px;"></i>
+                        </div>
+                        <span style="font-weight: 600; font-size: 0.95rem; color: var(--text-main);">Tren Total Penerima Tahunan</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">Seluruh Wilayah</span>
+                        <button style="background: none; border: none; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; padding: 2px;">
+                            <i data-lucide="menu" style="width: 16px; height: 16px;"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="chart-container" style="height: 280px;">
+                    <canvas id="chart-s3-tren-tahunan"></canvas>
                 </div>
             </div>
 
@@ -691,22 +511,22 @@
             </div>
 
             <div class="glass-panel" style="margin-bottom: 2.5rem;">
-                <div class="chart-title">Tabel Detail Penerima Manfaat Tahunan</div>
+                <div class="chart-title">
+                    Tabel Detail Penerima Manfaat Tahunan
+                    <small style="font-weight:400; color:var(--text-muted);">(Diurutkan Terbanyak → Tersedikit)</small>
+                </div>
                 <div class="table-wrapper">
                     <table>
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Kecamatan</th>
-                                <th>Desa</th>
+                                <th>Kecamatan – Desa</th>
                                 <th>Penerima Manfaat</th>
                                 <th>Tahun</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
-                        <tbody id="s3-table-body">
-                            <!-- Populated dynamically -->
-                        </tbody>
+                        <tbody id="s3-table-body"></tbody>
                     </table>
                 </div>
             </div>
@@ -714,7 +534,6 @@
     </div>
 
     <script>
-        // State Variables
         let rawStok = [];
         let rawKategori = [];
         let rawDesa = [];
@@ -728,9 +547,7 @@
             if (bulanStr === undefined || bulanStr === null) return -1;
             const str = String(bulanStr).trim().toLowerCase();
             const num = parseInt(str, 10);
-            if (!isNaN(num)) {
-                return num - 1;
-            }
+            if (!isNaN(num)) return num - 1;
             const indMonths = ['januari', 'februari', 'maret', 'april', 'mei', 'juni', 'juli', 'agustus', 'september', 'oktober', 'november', 'desember'];
             const idx = indMonths.indexOf(str);
             if (idx !== -1) return idx;
@@ -738,10 +555,8 @@
             return engMonths.indexOf(str);
         }
 
-        // Default Chart.js settings
         Chart.defaults.font.family = "'Outfit', sans-serif";
 
-        // Themes Toggle Logic
         const themeBtn = document.getElementById('theme-toggle');
         const themeIcon = document.getElementById('theme-icon');
         const themeText = document.getElementById('theme-text');
@@ -755,8 +570,6 @@
             document.documentElement.setAttribute('data-theme', currentTheme);
             localStorage.setItem('theme', currentTheme);
             updateThemeUI(currentTheme);
-
-            // Re-render all sections for grid contrast updates
             updateSection1();
             updateSection2();
             updateSection3();
@@ -805,7 +618,6 @@
                 updateSection2();
                 updateSection3();
 
-                // Format current time and update
                 const now = new Date();
                 const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
                 const dayName = days[now.getDay()];
@@ -815,10 +627,7 @@
                     <span>Terakhir sinkronisasi: ${dateStr}</span>
                 `;
 
-                // Initialize Lucide icons
-                if (window.lucide) {
-                    lucide.createIcons();
-                }
+                if (window.lucide) lucide.createIcons();
 
                 status.innerText = "Selesai!";
                 overlay.style.opacity = '0';
@@ -834,7 +643,7 @@
             }
         }
 
-        // ====== SECTION 1 LOGIC ======
+        // ====== SECTION 1 ======
         function initFilters1() {
             const tahunSet = new Set(rawStok.map(d => d.tahun));
             const tahunSelect = document.getElementById('s1-tahun');
@@ -867,9 +676,7 @@
             sel.innerHTML = '<option value="all">Semua Komoditas</option>';
             [...komoditasSet].sort().forEach(k => sel.innerHTML += `<option value="${k}">${k}</option>`);
 
-            if ([...komoditasSet].includes(currentVal)) {
-                sel.value = currentVal;
-            }
+            if ([...komoditasSet].includes(currentVal)) sel.value = currentVal;
         }
 
         function updateSection1() {
@@ -882,7 +689,6 @@
             if (b !== 'all') filtered = filtered.filter(d => getMonthIndex(d.bulan) === (parseInt(b) - 1));
             if (k !== 'all') filtered = filtered.filter(d => d.jenis == k);
 
-            // Summary
             let sumPengadaan = 0, sumPenyaluran = 0, sumStok = 0;
             filtered.forEach(d => {
                 sumPengadaan += parseFloat(d.pengadaan || 0);
@@ -890,9 +696,22 @@
                 sumStok += parseFloat(d.stock || 0);
             });
 
+            const sisaStok = sumStok > 0 ? sumStok : Math.max(0, sumPengadaan - sumPenyaluran);
+            const totalMasuk = sumPengadaan > 0 ? sumPengadaan : (sumStok + sumPenyaluran);
+
+            const pctPenyaluran = totalMasuk > 0 ? ((sumPenyaluran / totalMasuk) * 100).toFixed(1) : 0;
+            const pctSisa = totalMasuk > 0 ? ((sisaStok / totalMasuk) * 100).toFixed(1) : 0;
+
             document.getElementById('s1-val-pengadaan').innerText = sumPengadaan.toLocaleString('id-ID');
             document.getElementById('s1-val-penyaluran').innerText = sumPenyaluran.toLocaleString('id-ID');
-            document.getElementById('s1-val-stok').innerText = sumStok.toLocaleString('id-ID');
+            document.getElementById('s1-val-stok').innerText = sisaStok.toLocaleString('id-ID');
+
+            const pctPeny = document.getElementById('s1-pct-penyaluran');
+            const pctStk  = document.getElementById('s1-pct-stok');
+            pctPeny.style.display = 'inline-block';
+            pctPeny.innerText = pctPenyaluran + '%';
+            pctStk.style.display = 'inline-block';
+            pctStk.innerText = pctSisa + '%';
 
             // Chart 1: Tren Tahunan
             let yearly = {};
@@ -914,51 +733,66 @@
                     ]
                 },
                 options: {
-                    maintainAspectRatio: false,
-                    responsive: true
-                }
-            });
-
-            // Chart 2: Distribusi
-            let dist = {};
-            filtered.forEach(d => {
-                if (!dist[d.jenis]) dist[d.jenis] = 0;
-                dist[d.jenis] += parseFloat(d.penyaluran || 0);
-            });
-
-            if (c2) c2.destroy();
-            c2 = new Chart(document.getElementById('chart-s1-distribusi'), {
-                type: 'doughnut',
-                data: {
-                    labels: Object.keys(dist),
-                    datasets: [{
-                        data: Object.values(dist),
-                        backgroundColor: ['#059669', '#dc2626', '#d97706', '#2563eb', '#7c3aed', '#0891b2'],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    maintainAspectRatio: false,
+                    maintainAspectRatio: false, responsive: true,
                     plugins: {
-                        legend: {
-                            position: 'right',
-                            labels: {
-                                boxWidth: 12,
-                                padding: 8
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => {
+                                    const val = ctx.raw;
+                                    const total = years.reduce((sum, y) => sum + yearly[y].p + yearly[y].s, 0);
+                                    const pct = total > 0 ? ((val / total) * 100).toFixed(1) : 0;
+                                    return `${ctx.dataset.label}: ${val.toLocaleString('id-ID')} Kg (${pct}%)`;
+                                }
                             }
                         }
                     }
                 }
             });
 
-            // Chart 3: Tren Bulanan
-            let monthly = Array(12).fill(0).map(() => ({ s: 0, p: 0 }));
-            let bulananData = filtered;
-            bulananData.forEach(d => {
+            // Chart 2: Distribusi Doughnut
+            let dist = {};
+            filtered.forEach(d => {
+                if (!dist[d.jenis]) dist[d.jenis] = 0;
+                dist[d.jenis] += parseFloat(d.penyaluran || 0);
+            });
+            const distLabels = Object.keys(dist);
+            const distValues = distLabels.map(l => dist[l]);
+            const distTotal = distValues.reduce((a, b) => a + b, 0);
+
+            if (c2) c2.destroy();
+            c2 = new Chart(document.getElementById('chart-s1-distribusi'), {
+                type: 'doughnut',
+                data: {
+                    labels: distLabels,
+                    datasets: [{ data: distValues, backgroundColor: ['#059669', '#dc2626', '#d97706', '#2563eb', '#7c3aed', '#0891b2'], borderWidth: 0 }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right', labels: { boxWidth: 12, padding: 8 } },
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => {
+                                    const val = ctx.raw;
+                                    const pct = distTotal > 0 ? ((val / distTotal) * 100).toFixed(1) : 0;
+                                    return `${ctx.label}: ${val.toLocaleString('id-ID')} Kg (${pct}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Chart 3: Tren Bulanan — Stok Awal, Penyaluran, Sisa Stok
+            let monthly = Array(12).fill(0).map(() => ({ stokAwal: 0, penyaluran: 0, sisa: 0 }));
+            filtered.forEach(d => {
                 let mIdx = getMonthIndex(d.bulan);
                 if (mIdx >= 0 && mIdx < 12) {
-                    monthly[mIdx].s += parseFloat(d.stock || 0);
-                    monthly[mIdx].p += parseFloat(d.penyaluran || 0);
+                    const stokAwal = parseFloat(d.stock || 0);
+                    const penyaluran = parseFloat(d.penyaluran || 0);
+                    monthly[mIdx].stokAwal += stokAwal;
+                    monthly[mIdx].penyaluran += penyaluran;
+                    monthly[mIdx].sisa += Math.max(0, stokAwal - penyaluran);
                 }
             });
 
@@ -968,57 +802,68 @@
                 data: {
                     labels: months,
                     datasets: [
-                        { label: 'Stok', data: monthly.map(m => m.s), borderColor: '#d97706', tension: 0.4, fill: true, backgroundColor: 'rgba(217, 119, 6, 0.1)' },
-                        { label: 'Penyaluran', data: monthly.map(m => m.p), borderColor: '#059669', tension: 0.4, fill: true, backgroundColor: 'rgba(5, 150, 105, 0.1)' }
+                        { label: 'Stok Awal', data: monthly.map(m => m.stokAwal), borderColor: '#d97706', tension: 0.4, fill: false, pointBackgroundColor: '#d97706' },
+                        { label: 'Penyaluran', data: monthly.map(m => m.penyaluran), borderColor: '#dc2626', tension: 0.4, fill: true, backgroundColor: 'rgba(220,38,38,0.08)', pointBackgroundColor: '#dc2626' },
+                        { label: 'Sisa Stok', data: monthly.map(m => m.sisa), borderColor: '#059669', tension: 0.4, fill: true, backgroundColor: 'rgba(5,150,105,0.08)', borderDash: [5, 4], pointBackgroundColor: '#059669' }
                     ]
                 },
-                options: { maintainAspectRatio: false }
+                options: {
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => `${ctx.dataset.label}: ${ctx.raw.toLocaleString('id-ID')} Kg`
+                            }
+                        }
+                    }
+                }
             });
 
-            // Populate Table
+            // Tabel Section 1
             const tbody = document.getElementById('s1-table-body');
             tbody.innerHTML = '';
             filtered.forEach((d, index) => {
+                const stokAwal = parseFloat(d.stock || 0);
+                const pengadaan = parseFloat(d.pengadaan || 0);
+                const penyaluran = parseFloat(d.penyaluran || 0);
+                const sisa = Math.max(0, stokAwal - penyaluran);
+                const base = stokAwal > 0 ? stokAwal : pengadaan;
+                const pctPeny = base > 0 ? ((penyaluran / base) * 100).toFixed(1) : '0.0';
+
                 tbody.innerHTML += `
                     <tr>
                         <td>${index + 1}</td>
                         <td>${months[getMonthIndex(d.bulan)] || d.bulan}</td>
                         <td>${d.tahun || '-'}</td>
-                        <td style="font-weight: 500; color: var(--text-main);">${d.jenis || '-'}</td>
-                        <td>${parseFloat(d.stock || 0).toLocaleString('id-ID')}</td>
-                        <td>${parseFloat(d.pengadaan || 0).toLocaleString('id-ID')}</td>
-                        <td style="font-weight: 600; color: var(--accent);">${parseFloat(d.penyaluran || 0).toLocaleString('id-ID')}</td>
+                        <td style="font-weight:500;color:var(--text-main);">${d.jenis || '-'}</td>
+                        <td>${stokAwal.toLocaleString('id-ID')}</td>
+                        <td>${pengadaan.toLocaleString('id-ID')}</td>
+                        <td style="font-weight:600;color:var(--accent);">${penyaluran.toLocaleString('id-ID')}</td>
+                        <td><span style="background:rgba(220,38,38,0.1);color:#dc2626;padding:0.1rem 0.4rem;border-radius:5px;font-weight:700;">${pctPeny}%</span></td>
+                        <td style="font-weight:600;color:var(--primary);">${sisa.toLocaleString('id-ID')}</td>
                         <td>${d.unit || 'Kg'}</td>
                     </tr>
                 `;
             });
         }
 
-        // ====== SECTION 2 LOGIC ======
+        // ====== SECTION 2 (LOCKED YEARLY) ======
         function initFilters2() {
             const tahunSet = new Set(rawKategori.map(d => d.tahun));
             const tahunSelect = document.getElementById('s2-tahun');
             tahunSelect.innerHTML = '<option value="all">Semua Tahun</option>';
             [...tahunSet].sort().forEach(t => tahunSelect.innerHTML += `<option value="${t}">${t}</option>`);
 
-            const bulanSelect = document.getElementById('s2-bulan');
-            bulanSelect.innerHTML = '<option value="all">Semua Bulan</option>';
-            months.forEach((m, i) => bulanSelect.innerHTML += `<option value="${i + 1}">${m}</option>`);
-
             updateKategoriFilter();
 
             document.getElementById('s2-tahun').addEventListener('change', () => { updateKategoriFilter(); updateSection2(); });
-            document.getElementById('s2-bulan').addEventListener('change', () => { updateKategoriFilter(); updateSection2(); });
             document.getElementById('s2-kategori').addEventListener('change', updateSection2);
         }
 
         function updateKategoriFilter() {
             const t = document.getElementById('s2-tahun').value;
-            const b = document.getElementById('s2-bulan').value;
-
             let filtered = rawKategori;
             if (t !== 'all') filtered = filtered.filter(d => d.tahun == t);
-            if (b !== 'all') filtered = filtered.filter(d => getMonthIndex(d.bulan) === (parseInt(b) - 1));
 
             const katSet = new Set(filtered.map(d => d.kategori));
             const sel = document.getElementById('s2-kategori');
@@ -1027,22 +872,18 @@
             sel.innerHTML = '<option value="all">Semua Kategori</option>';
             [...katSet].sort().forEach(k => sel.innerHTML += `<option value="${k}">${k}</option>`);
 
-            if ([...katSet].includes(currentVal)) {
-                sel.value = currentVal;
-            }
+            if ([...katSet].includes(currentVal)) sel.value = currentVal;
         }
 
         function updateSection2() {
             const t = document.getElementById('s2-tahun').value;
-            const b = document.getElementById('s2-bulan').value;
             const k = document.getElementById('s2-kategori').value;
 
+            // LOCKED tahunan: hanya filter tahun dan kategori, tidak bulan
             let filtered = rawKategori;
             if (t !== 'all') filtered = filtered.filter(d => d.tahun == t);
-            if (b !== 'all') filtered = filtered.filter(d => getMonthIndex(d.bulan) === (parseInt(b) - 1));
             if (k !== 'all') filtered = filtered.filter(d => d.kategori == k);
 
-            // Summary
             let totalPenerima = 0;
             let katDist = {};
             filtered.forEach(d => {
@@ -1055,8 +896,7 @@
             document.getElementById('s2-val-penerima').innerText = totalPenerima.toLocaleString('id-ID');
             document.getElementById('s2-val-jenis').innerText = Object.keys(katDist).length;
 
-            let topKat = '-';
-            let topVal = 0;
+            let topKat = '-', topVal = 0;
             for (let key in katDist) {
                 if (katDist[key] > topVal) { topVal = katDist[key]; topKat = key; }
             }
@@ -1064,69 +904,43 @@
             let pct = totalPenerima > 0 ? ((topVal / totalPenerima) * 100).toFixed(1) : 0;
             document.getElementById('s2-val-prioritas-sub').innerText = `${topVal.toLocaleString('id-ID')} KK (${pct}% dari total)`;
 
-            // Chart 4: Alokasi Doughnut
+            // Chart 4: Pie dengan %
+            const katLabels = Object.keys(katDist);
+            const katValues = katLabels.map(l => katDist[l]);
+            const katTotal = katValues.reduce((a, b) => a + b, 0);
+
             if (c4) c4.destroy();
             c4 = new Chart(document.getElementById('chart-s2-alokasi'), {
                 type: 'pie',
                 data: {
-                    labels: Object.keys(katDist),
-                    datasets: [{
-                        data: Object.values(katDist),
-                        backgroundColor: ['#059669', '#dc2626', '#d97706', '#2563eb', '#7c3aed'],
-                        borderWidth: 0
-                    }]
+                    labels: katLabels,
+                    datasets: [{ data: katValues, backgroundColor: ['#059669', '#dc2626', '#d97706', '#2563eb', '#7c3aed'], borderWidth: 2, borderColor: 'rgba(255,255,255,0.6)' }]
                 },
                 options: {
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: {
-                            position: 'right',
-                            labels: {
-                                boxWidth: 12,
-                                padding: 8
+                        legend: { position: 'right', labels: { boxWidth: 12, padding: 8 } },
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => {
+                                    const val = ctx.raw;
+                                    const pct = katTotal > 0 ? ((val / katTotal) * 100).toFixed(1) : 0;
+                                    return `${ctx.label}: ${val.toLocaleString('id-ID')} KK (${pct}%)`;
+                                }
                             }
                         }
                     }
                 }
             });
 
-            // Chart 5: Bulanan Line
-            let monthly = Array(12).fill(0);
-            filtered.forEach(d => {
-                let mIdx = getMonthIndex(d.bulan);
-                if (mIdx >= 0 && mIdx < 12) {
-                    monthly[mIdx] += parseFloat(d.jumlah_penerima_manfaat_kk || 0);
-                }
-            });
-            if (c5) c5.destroy();
-            c5 = new Chart(document.getElementById('chart-s2-bulanan'), {
-                type: 'bar',
-                data: {
-                    labels: months,
-                    datasets: [{
-                        label: 'Penerima Manfaat (KK)',
-                        data: monthly,
-                        backgroundColor: 'rgba(5, 150, 105, 0.8)',
-                        borderRadius: 4
-                    }]
-                },
-                options: {
-                    maintainAspectRatio: false,
-                    responsive: true
-                }
-            });
-
-            // Chart 6: Tahunan Stacked
-            let years = [...new Set(rawKategori.map(d => d.tahun))].sort();
+            // Chart 5: Tren Tahunan per Kategori (stacked)
+            let allYears = [...new Set(rawKategori.map(d => d.tahun))].sort();
             let allKats = [...new Set(rawKategori.map(d => d.kategori))].sort();
-
             let datasetMap = {};
-            allKats.forEach(kat => {
-                datasetMap[kat] = Array(years.length).fill(0);
-            });
+            allKats.forEach(kat => { datasetMap[kat] = Array(allYears.length).fill(0); });
 
             (k !== 'all' ? rawKategori.filter(d => d.kategori == k) : rawKategori).forEach(d => {
-                let yIdx = years.indexOf(d.tahun);
+                let yIdx = allYears.indexOf(d.tahun);
                 if (yIdx >= 0 && datasetMap[d.kategori]) {
                     datasetMap[d.kategori][yIdx] += parseFloat(d.jumlah_penerima_manfaat_kk || 0);
                 }
@@ -1139,36 +953,56 @@
                 backgroundColor: colors[i % colors.length]
             }));
 
-            if (c6) c6.destroy();
-            c6 = new Chart(document.getElementById('chart-s2-tahunan'), {
+            if (c5) c5.destroy();
+            c5 = new Chart(document.getElementById('chart-s2-tahunan'), {
                 type: 'bar',
-                data: { labels: years, datasets: datasets },
+                data: { labels: allYears, datasets: datasets },
                 options: {
                     maintainAspectRatio: false,
-                    scales: {
-                        x: { stacked: true },
-                        y: { stacked: true }
+                    scales: { x: { stacked: true }, y: { stacked: true } },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => {
+                                    const val = ctx.raw;
+                                    const yearTotal = allKats.reduce((sum, kat) => sum + (datasetMap[kat][ctx.dataIndex] || 0), 0);
+                                    const pct = yearTotal > 0 ? ((val / yearTotal) * 100).toFixed(1) : 0;
+                                    return `${ctx.dataset.label}: ${val.toLocaleString('id-ID')} KK (${pct}%)`;
+                                }
+                            }
+                        }
                     }
                 }
             });
 
-            // Populate Table
+            // Tabel Section 2: agregasi per tahun-kategori
             const tbody = document.getElementById('s2-table-body');
             tbody.innerHTML = '';
-            filtered.forEach((d, index) => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td>${months[getMonthIndex(d.bulan)] || d.bulan}</td>
-                        <td>${d.tahun || '-'}</td>
-                        <td style="font-weight: 500; color: var(--text-main);">${d.kategori || '-'}</td>
-                        <td style="font-weight: 600; color: var(--primary);">${parseFloat(d.jumlah_penerima_manfaat_kk || 0).toLocaleString('id-ID')} KK</td>
-                    </tr>
-                `;
+
+            let tableData = {};
+            filtered.forEach(d => {
+                const key = `${d.tahun}__${d.kategori}`;
+                if (!tableData[key]) tableData[key] = { tahun: d.tahun, kategori: d.kategori, total: 0 };
+                tableData[key].total += parseFloat(d.jumlah_penerima_manfaat_kk || 0);
             });
+
+            Object.values(tableData)
+                .sort((a, b) => String(a.tahun).localeCompare(String(b.tahun)) || b.total - a.total)
+                .forEach((row, index) => {
+                    const pctRow = totalPenerima > 0 ? ((row.total / totalPenerima) * 100).toFixed(1) : '0.0';
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${row.tahun || '-'}</td>
+                            <td style="font-weight:500;color:var(--text-main);">${row.kategori || '-'}</td>
+                            <td style="font-weight:600;color:var(--primary);">${row.total.toLocaleString('id-ID')} KK</td>
+                            <td><span style="background:rgba(5,150,105,0.12);color:#059669;padding:0.1rem 0.4rem;border-radius:5px;font-weight:700;">${pctRow}%</span></td>
+                        </tr>
+                    `;
+                });
         }
 
-        // ====== SECTION 3 LOGIC ======
+        // ====== SECTION 3 ======
         function initFilters3() {
             const tahunSet = new Set(rawDesa.map(d => d.tahun));
             const tahunSelect = document.getElementById('s3-tahun');
@@ -1192,13 +1026,9 @@
             const currentVal = sel.value;
 
             sel.innerHTML = '<option value="all">Semua Kecamatan</option>';
-            [...kecSet].sort().forEach(k => {
-                if (k) sel.innerHTML += `<option value="${k}">${k}</option>`;
-            });
+            [...kecSet].sort().forEach(k => { if (k) sel.innerHTML += `<option value="${k}">${k}</option>`; });
 
-            if ([...kecSet].includes(currentVal)) {
-                sel.value = currentVal;
-            }
+            if ([...kecSet].includes(currentVal)) sel.value = currentVal;
             updateDesaFilter();
         }
 
@@ -1214,13 +1044,9 @@
             const currentVal = sel.value;
 
             sel.innerHTML = '<option value="all">Semua Desa</option>';
-            [...desaSet].sort().forEach(d => {
-                if (d) sel.innerHTML += `<option value="${d}">${d}</option>`;
-            });
+            [...desaSet].sort().forEach(d => { if (d) sel.innerHTML += `<option value="${d}">${d}</option>`; });
 
-            if ([...desaSet].includes(currentVal)) {
-                sel.value = currentVal;
-            }
+            if ([...desaSet].includes(currentVal)) sel.value = currentVal;
         }
 
         function updateSection3() {
@@ -1233,15 +1059,12 @@
             if (k !== 'all') filtered = filtered.filter(d => d.nama_kecamatan == k);
             if (ds !== 'all') filtered = filtered.filter(d => d.nama_desa == ds);
 
-            // Summary calculations
             let totalPenerima = 0;
             let desaSet = new Set();
-            let kecSet = new Set();
 
             filtered.forEach(d => {
                 totalPenerima += parseFloat(d.jumlah_penerima_manfaat_kk || 0);
                 if (d.nama_desa) desaSet.add(d.nama_desa);
-                if (d.nama_kecamatan) kecSet.add(d.nama_kecamatan);
             });
 
             const avgPerDesa = desaSet.size > 0 ? (totalPenerima / desaSet.size).toFixed(1) : 0;
@@ -1249,6 +1072,106 @@
             document.getElementById('s3-val-penerima').innerText = totalPenerima.toLocaleString('id-ID');
             document.getElementById('s3-val-desa').innerText = desaSet.size;
             document.getElementById('s3-val-rata').innerText = parseFloat(avgPerDesa).toLocaleString('id-ID');
+
+            // === CHART BARU: Tren Total Penerima Tahunan (locked - pakai rawDesa) ===
+            let trenTahunan = {};
+            rawDesa.forEach(d => {
+                if (!trenTahunan[d.tahun]) trenTahunan[d.tahun] = 0;
+                trenTahunan[d.tahun] += parseFloat(d.jumlah_penerima_manfaat_kk || 0);
+            });
+            const trenYears = Object.keys(trenTahunan).sort();
+            const trenValues = trenYears.map(y => trenTahunan[y]);
+
+            if (c6) c6.destroy();
+
+            const chartCtx = document.getElementById('chart-s3-tren-tahunan').getContext('2d');
+
+            // Create gradient fill matching the image
+            const gradientFill = chartCtx.createLinearGradient(0, 0, 0, 250);
+            gradientFill.addColorStop(0, 'rgba(59, 130, 246, 0.22)');
+            gradientFill.addColorStop(1, 'rgba(59, 130, 246, 0.00)');
+
+            // Plugin to draw blue rounded boxes as data labels above points
+            const boxDataLabelsPlugin = {
+                id: 'boxDataLabels',
+                afterDatasetsDraw(chart) {
+                    const { ctx, data } = chart;
+                    chart.getDatasetMeta(0).data.forEach((point, i) => {
+                        const val = data.datasets[0].data[i];
+                        if (val === undefined || val === null) return;
+
+                        ctx.save();
+                        ctx.font = 'bold 11px Outfit, sans-serif';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+
+                        const text = val.toLocaleString('id-ID');
+                        const textWidth = ctx.measureText(text).width;
+                        const paddingX = 8;
+                        const paddingY = 4;
+                        const boxWidth = textWidth + paddingX * 2;
+                        const boxHeight = 16 + paddingY * 2;
+
+                        const x = point.x;
+                        const y = point.y - 18;
+
+                        ctx.shadowColor = 'rgba(0, 0, 0, 0.1)';
+                        ctx.shadowBlur = 4;
+                        ctx.shadowOffsetY = 2;
+
+                        ctx.fillStyle = '#3b82f6'; // Blue background box matching the image
+                        ctx.beginPath();
+                        ctx.roundRect(x - boxWidth / 2, y - boxHeight / 2, boxWidth, boxHeight, 4);
+                        ctx.fill();
+
+                        ctx.shadowColor = 'transparent';
+                        ctx.fillStyle = '#ffffff'; // White text inside box
+                        ctx.fillText(text, x, y);
+
+                        ctx.restore();
+                    });
+                }
+            };
+
+            c6 = new Chart(chartCtx, {
+                type: 'line',
+                data: {
+                    labels: trenYears,
+                    datasets: [{
+                        label: 'Total Penerima Manfaat (KK)',
+                        data: trenValues,
+                        borderColor: '#3b82f6',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#ffffff',
+                        pointBorderColor: '#3b82f6',
+                        pointBorderWidth: 3,
+                        pointRadius: 6,
+                        pointHoverRadius: 8,
+                        tension: 0.4,
+                        fill: true,
+                        backgroundColor: gradientFill
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { callbacks: { label: ctx => `${ctx.raw.toLocaleString('id-ID')} KK` } }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false }
+                        },
+                        y: {
+                            beginAtZero: false,
+                            grace: '20%',
+                            ticks: { callback: v => v.toLocaleString('id-ID') }
+                        }
+                    }
+                },
+                plugins: [boxDataLabelsPlugin]
+            });
 
             // Chart 7: Sebaran per Kecamatan
             let kecDist = {};
@@ -1265,25 +1188,23 @@
             c7 = new Chart(document.getElementById('chart-s3-kecamatan'), {
                 type: 'bar',
                 data: {
-                    labels: kecLabels.slice(0, 10), // Limit top 10
-                    datasets: [{
-                        label: 'Penerima Manfaat (KK)',
-                        data: kecData.slice(0, 10),
-                        backgroundColor: 'rgba(5, 150, 105, 0.8)',
-                        borderRadius: 4
-                    }]
+                    labels: kecLabels.slice(0, 10),
+                    datasets: [{ label: 'Penerima Manfaat (KK)', data: kecData.slice(0, 10), backgroundColor: 'rgba(5, 150, 105, 0.8)', borderRadius: 4 }]
                 },
                 options: {
                     indexAxis: 'y',
-                    maintainAspectRatio: false
+                    maintainAspectRatio: false,
+                    plugins: { tooltip: { callbacks: { label: ctx => `${ctx.raw.toLocaleString('id-ID')} KK` } } }
                 }
             });
 
-            // Chart 8: Top 10 Desa dengan Penerima Terbanyak
+            // Chart 8: Top 10 Desa — label "Kecamatan – Desa", sorted largest to smallest
             let desaDist = {};
             filtered.forEach(d => {
                 if (d.nama_desa) {
-                    desaDist[d.nama_desa] = parseFloat(d.jumlah_penerima_manfaat_kk || 0);
+                    const label = `${d.nama_kecamatan || '?'} \u2013 ${d.nama_desa}`;
+                    if (!desaDist[label]) desaDist[label] = 0;
+                    desaDist[label] += parseFloat(d.jumlah_penerima_manfaat_kk || 0);
                 }
             });
             const desaLabels = Object.keys(desaDist).sort((a, b) => desaDist[b] - desaDist[a]).slice(0, 10);
@@ -1294,36 +1215,38 @@
                 type: 'bar',
                 data: {
                     labels: desaLabels,
-                    datasets: [{
-                        label: 'Penerima Manfaat (KK)',
-                        data: desaData,
-                        backgroundColor: 'rgba(220, 38, 38, 0.8)',
-                        borderRadius: 4
-                    }]
+                    datasets: [{ label: 'Penerima Manfaat (KK)', data: desaData, backgroundColor: 'rgba(220, 38, 38, 0.8)', borderRadius: 4 }]
                 },
                 options: {
-                    maintainAspectRatio: false
+                    indexAxis: 'y',
+                    maintainAspectRatio: false,
+                    plugins: { tooltip: { callbacks: { label: ctx => `${ctx.raw.toLocaleString('id-ID')} KK` } } }
                 }
             });
 
-            // Populate Table
+            // Tabel Section 3: sorted largest to smallest, format "Kecamatan – Desa"
             const tbody = document.getElementById('s3-table-body');
             tbody.innerHTML = '';
-            filtered.forEach((d, index) => {
+
+            const sortedFiltered = [...filtered].sort((a, b) =>
+                parseFloat(b.jumlah_penerima_manfaat_kk || 0) - parseFloat(a.jumlah_penerima_manfaat_kk || 0)
+            );
+
+            sortedFiltered.forEach((d, index) => {
+                const penerima = parseFloat(d.jumlah_penerima_manfaat_kk || 0);
+                const kecDesa = `${d.nama_kecamatan || '-'} \u2013 ${d.nama_desa || '-'}`;
                 tbody.innerHTML += `
                     <tr>
                         <td>${index + 1}</td>
-                        <td style="font-weight: 500;">${d.nama_kecamatan || '-'}</td>
-                        <td>${d.nama_desa || '-'}</td>
-                        <td style="font-weight: 600; color: var(--primary);">${parseFloat(d.jumlah_penerima_manfaat_kk || 0).toLocaleString('id-ID')} KK</td>
+                        <td style="font-weight:500;color:var(--text-main);">${kecDesa}</td>
+                        <td style="font-weight:600;color:var(--primary);">${penerima.toLocaleString('id-ID')} KK</td>
                         <td>${d.tahun || '-'}</td>
-                        <td><span style="background: var(--primary-glow); color: var(--primary); padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.75rem; border: 1px solid var(--card-border);">${d.status || '-'}</span></td>
+                        <td><span style="background:var(--primary-glow);color:var(--primary);padding:0.15rem 0.5rem;border-radius:4px;font-size:0.75rem;border:1px solid var(--card-border);">${d.status || '-'}</span></td>
                     </tr>
                 `;
             });
         }
 
-        // Event listener for Refresh/Sync button
         document.getElementById('refresh-btn').addEventListener('click', init);
 
         window.onload = init;
