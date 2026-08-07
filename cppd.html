@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard CPPD - Bandung Bedas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            /* Default: Light Theme */
+            --bg-color: #f1f5f9;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --card-border: rgba(16, 185, 129, 0.25);
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+
+            /* Bandung Bedas Vibes */
+            --primary: #059669;
+            /* Bandung Bedas Green (contrast optimized) */
+            --accent: #dc2626;
+            /* Bandung Bedas Red (contrast optimized) */
+            --accent-glow: rgba(220, 38, 38, 0.1);
+            --primary-glow: rgba(5, 150, 105, 0.1);
+            --success: #059669;
+            --font-family: 'Outfit', sans-serif;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(20, 27, 45, 0.6);
+            --card-border: rgba(16, 185, 129, 0.15);
+            /* Green glow border */
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+
+            --primary: #10b981;
+            /* Bandung Bedas Green */
+            --accent: #ef4444;
+            /* Bandung Bedas Red */
+            --accent-glow: rgba(239, 68, 68, 0.15);
+            --primary-glow: rgba(16, 185, 129, 0.15);
+            --success: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            font-size: 0.875rem;
+            background-image:
+                radial-gradient(circle at 10% 20%, var(--primary-glow), transparent 30%),
+                radial-gradient(circle at 90% 80%, var(--accent-glow), transparent 30%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Loading Overlay */
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-color);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(16, 185, 129, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.25rem;
+        }
+
+        header {
+            text-align: left;
+            margin-bottom: 2rem;
+            padding-top: 1rem;
+            position: relative;
+        }
+
+        .dept-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--text-main), var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.25rem;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .section-title::before {
+            content: '';
+            display: block;
+            width: 6px;
+            height: 24px;
+            background: linear-gradient(to bottom, var(--primary), var(--accent));
+            border-radius: 3px;
+        }
+
+        .section-desc {
+            color: var(--text-muted);
+            margin-bottom: 1.25rem;
+            line-height: 1.5;
+            max-width: 900px;
+            font-size: 0.85rem;
+        }
+
+        .glass-panel {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1rem;
+            box-shadow: 0 4px 20px -1px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s, border-color 0.3s;
+        }
+
+        .glass-panel:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px -1px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Layout Grids */
+        .grid-filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .grid-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .grid-charts {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .grid-charts-equal {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        @media (max-width: 1024px) {
+
+            .grid-charts,
+            .grid-charts-equal {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Controls */
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .control-group label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        select {
+            appearance: none;
+            background: rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            color: var(--text-main);
+            padding: 0.5rem 0.75rem;
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.3s;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23059669'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 0.85rem;
+        }
+
+        [data-theme="dark"] select {
+            background: rgba(0, 0, 0, 0.2);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2310b981'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+        }
+
+        select:focus {
+            border-color: var(--primary);
+        }
+
+        select option {
+            background: var(--bg-color);
+            color: var(--text-main);
+        }
+
+        /* Summary Cards */
+        .summary-card {
+            text-align: left;
+            padding: 1rem 1.25rem;
+        }
+
+        .summary-card .title {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+        }
+
+        .summary-card .value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 0.15rem;
+        }
+
+        .summary-card .subtitle {
+            font-size: 0.8rem;
+            color: var(--primary);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 260px;
+            width: 100%;
+        }
+
+        .chart-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            text-align: center;
+        }
+
+        /* Themes Switcher & Refresh buttons */
+        #theme-toggle,
+        #refresh-btn {
+            cursor: pointer;
+            padding: 0.4rem 0.8rem;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-weight: 600;
+            font-size: 0.8rem;
+            background: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--card-border);
+            transition: all 0.3s;
+            outline: none;
+        }
+
+        #theme-toggle:hover,
+        #refresh-btn:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+        }
+
+        /* Tables styling */
+        .table-wrapper {
+            overflow-x: auto;
+            margin-top: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            max-height: 350px;
+            overflow-y: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.85rem;
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--text-main);
+            font-weight: 600;
+            padding: 0.75rem 1rem;
+            border-bottom: 2px solid var(--card-border);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            backdrop-filter: blur(16px);
+        }
+
+        [data-theme="dark"] th {
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--card-border);
+            color: var(--text-muted);
+        }
+
+        tr:hover td {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        [data-theme="dark"] tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .info-banner {
+            background: rgba(5, 150, 105, 0.08);
+            /* 8% Bedas Green */
+            border-left: 4px solid var(--primary);
+            border-radius: 8px;
+            padding: 0.85rem 1.1rem;
+            margin-bottom: 1.25rem;
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-start;
+            color: var(--text-main);
+            line-height: 1.5;
+            font-size: 0.85rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+            border: 1px solid var(--card-border);
+            border-left-width: 4px;
+        }
+
+        [data-theme="dark"] .info-banner {
+            background: rgba(16, 185, 129, 0.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-banner-icon {
+            color: var(--primary);
+            flex-shrink: 0;
+            margin-top: 0.1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="loading-overlay">
+        <div style="text-align: center;">
+            <div class="spinner" style="margin: 0 auto 1.5rem auto;"></div>
+            <h3
+                style="font-size: 1.2rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem; letter-spacing: -0.5px;">
+                Dashboard CPPD</h3>
+            <p id="loading-status" style="color: var(--text-muted); font-size: 0.85rem; font-family: monospace;">
+                Menghubungkan ke server...</p>
+        </div>
+    </div>
+
+    <div class="container" id="app" style="opacity: 0; transition: opacity 0.5s ease;">
+        <header>
+            <div style="position: absolute; top: 0rem; right: 0rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span id="sync-time"
+                    style="font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.25rem; margin-right: 0.5rem;">
+                    <!-- Auto-populated date icon and info -->
+                </span>
+                <button id="refresh-btn">
+                    <i data-lucide="refresh-cw" style="width: 14px; height: 14px;"></i>
+                    <span>Sinkronisasi</span>
+                </button>
+                <button id="theme-toggle">
+                    <span id="theme-icon">☀️</span> <span id="theme-text">Light Mode</span>
+                </button>
+            </div>
+
+            <!-- Flex container for side-by-side Logo and Dept Title -->
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                <!-- Iconic Header Icon -->
+                <div class="logo-area"
+                    style="display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; background: var(--card-bg); border: 1px solid var(--card-border); box-shadow: 0 4px 15px var(--primary-glow); color: var(--primary); flex-shrink: 0;">
+                    <i data-lucide="wheat" style="width: 22px; height: 22px;"></i>
+                </div>
+
+                <div class="dept-title"
+                    style="margin-bottom: 0; line-height: 1.3; max-width: 700px; font-size: 0.8rem;">
+                    Dinas Ketahanan Pangan dan Perikanan Kabupaten Bandung (DISPAKAN)
+                </div>
+            </div>
+            <h1>Laporan Bulanan CPPD</h1>
+            <p style="margin-bottom: 0.5rem;">Cadangan Pangan Pemerintah Daerah - Kabupaten Bandung</p>
+        </header>
+
+        <!-- SECTION 1 -->
+        <section>
+            <h2 class="section-title">Laporan Tren Penyaluran Bulanan CPPD</h2>
+            <div class="info-banner">
+                <i data-lucide="info" class="info-banner-icon" style="width: 18px; height: 18px;"></i>
+                <div>
+                    Tujuan utama penyediaan dan penyaluran Cadangan Pangan Pemerintah Daerah (CPPD) adalah untuk
+                    mitigasi kerawanan pangan masyarakat, khususnya yang terdampak bencana alam atau situasi darurat
+                    lainnya. Laporan ini menyajikan informasi cadangan pangan secara berkala, mulai dari volume stok
+                    yang tersedia hingga realisasi pengadaan atau penambahan stok.
+                </div>
+            </div>
+
+            <div class="glass-panel" style="margin-bottom: 1.25rem;">
+                <div class="grid-filters">
+                    <div class="control-group">
+                        <label>Tahun</label>
+                        <select id="s1-tahun"></select>
+                    </div>
+                    <div class="control-group">
+                        <label>Bulan</label>
+                        <select id="s1-bulan"></select>
+                    </div>
+                    <div class="control-group">
+                        <label>Komoditas</label>
+                        <select id="s1-komoditas"></select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-summary">
+                <div class="glass-panel summary-card">
+                    <div class="title">Total Pengadaan</div>
+                    <div class="value" id="s1-val-pengadaan">0</div>
+                    <div class="subtitle">Kg</div>
+                </div>
+                <div class="glass-panel summary-card">
+                    <div class="title">Total Penyaluran</div>
+                    <div class="value" id="s1-val-penyaluran">0</div>
+                    <div class="subtitle">Kg</div>
+                </div>
+                <div class="glass-panel summary-card">
+                    <div class="title">Total Stok</div>
+                    <div class="value" id="s1-val-stok">0</div>
+                    <div class="subtitle">Kg</div>
+                </div>
+            </div>
+
+            <div class="grid-charts">
+                <div class="glass-panel">
+                    <div class="chart-title">Tren Tahunan Pengadaan & Penyaluran</div>
+                    <div class="chart-container">
+                        <canvas id="chart-s1-tren-tahunan"></canvas>
+                    </div>
+                </div>
+                <div class="glass-panel">
+                    <div class="chart-title">Distribusi Penyaluran (Komoditas)</div>
+                    <div class="chart-container">
+                        <canvas id="chart-s1-distribusi"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel" style="margin-bottom: 2.5rem;">
+                <div class="chart-title">Tren Bulanan Stok & Penyaluran</div>
+                <div class="chart-container" style="height: 300px;">
+                    <canvas id="chart-s1-tren-bulanan"></canvas>
+                </div>
+            </div>
+
+            <!-- Table for Section 1 -->
+            <div class="glass-panel" style="margin-bottom: 2.5rem;">
+                <div class="chart-title">Tabel Detail Stok & Penyaluran Bulanan</div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Bulan</th>
+                                <th>Tahun</th>
+                                <th>Komoditas</th>
+                                <th>Stok Awal</th>
+                                <th>Pengadaan</th>
+                                <th>Penyaluran</th>
+                                <th>Unit</th>
+                            </tr>
+                        </thead>
+                        <tbody id="s1-table-body">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2 -->
+        <section>
+            <h2 class="section-title">Penyaluran Kategori Bulanan CPPD</h2>
+            <div class="info-banner">
+                <i data-lucide="info" class="info-banner-icon" style="width: 18px; height: 18px;"></i>
+                <div>
+                    Laporan ini merinci alokasi cadangan pangan yang disalurkan kepada kelompok masyarakat sasaran
+                    prioritas. Klasifikasi dilakukan berdasarkan tujuan strategis program, mencakup penanganan kerawanan
+                    pangan, pengendalian inflasi, penurunan angka stunting, serta penanggulangan dampak bencana alam.
+                </div>
+            </div>
+
+            <div class="glass-panel" style="margin-bottom: 1.25rem;">
+                <div class="grid-filters">
+                    <div class="control-group">
+                        <label>Tahun</label>
+                        <select id="s2-tahun"></select>
+                    </div>
+                    <div class="control-group">
+                        <label>Bulan</label>
+                        <select id="s2-bulan"></select>
+                    </div>
+                    <div class="control-group">
+                        <label>Kategori</label>
+                        <select id="s2-kategori"></select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-summary">
+                <div class="glass-panel summary-card">
+                    <div class="title">Total Penerima</div>
+                    <div class="value" id="s2-val-penerima">0</div>
+                    <div class="subtitle">Kepala Keluarga (KK)</div>
+                </div>
+                <div class="glass-panel summary-card" style="grid-column: span 2;">
+                    <div class="title">Prioritas Alokasi Utama</div>
+                    <div class="value" id="s2-val-prioritas" style="font-size: 1.3rem;">-</div>
+                    <div class="subtitle" id="s2-val-prioritas-sub">-</div>
+                </div>
+                <div class="glass-panel summary-card">
+                    <div class="title">Jenis Kategori</div>
+                    <div class="value" id="s2-val-jenis">0</div>
+                    <div class="subtitle">Kategori Bantuan</div>
+                </div>
+            </div>
+
+            <div class="grid-charts">
+                <div class="glass-panel">
+                    <div class="chart-title">Tren Penyaluran Bulanan (KK)</div>
+                    <div class="chart-container">
+                        <canvas id="chart-s2-bulanan"></canvas>
+                    </div>
+                </div>
+                <div class="glass-panel">
+                    <div class="chart-title">Alokasi Penerima Manfaat (Kategori)</div>
+                    <div class="chart-container">
+                        <canvas id="chart-s2-alokasi"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel" style="margin-bottom: 2.5rem;">
+                <div class="chart-title">Tren Penyaluran Tahunan per Kategori</div>
+                <div class="chart-container" style="height: 300px;">
+                    <canvas id="chart-s2-tahunan"></canvas>
+                </div>
+            </div>
+
+            <!-- Table for Section 2 -->
+            <div class="glass-panel" style="margin-bottom: 2.5rem;">
+                <div class="chart-title">Tabel Detail Penyaluran Kategori Bulanan</div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Bulan</th>
+                                <th>Tahun</th>
+                                <th>Kategori</th>
+                                <th>Penerima Manfaat</th>
+                            </tr>
+                        </thead>
+                        <tbody id="s2-table-body">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3 -->
+        <section>
+            <h2 class="section-title">Penerima Manfaat CPPD Tahunan per Desa</h2>
+            <div class="info-banner">
+                <i data-lucide="info" class="info-banner-icon" style="width: 18px; height: 18px;"></i>
+                <div>
+                    Laporan ini menyajikan sebaran penerima manfaat Cadangan Pangan Pemerintah Daerah (CPPD) secara
+                    tahunan di tingkat desa dan kecamatan seluruh Kabupaten Bandung.
+                </div>
+            </div>
+
+            <div class="glass-panel" style="margin-bottom: 1.25rem;">
+                <div class="grid-filters">
+                    <div class="control-group">
+                        <label>Tahun</label>
+                        <select id="s3-tahun"></select>
+                    </div>
+                    <div class="control-group">
+                        <label>Kecamatan</label>
+                        <select id="s3-kecamatan"></select>
+                    </div>
+                    <div class="control-group">
+                        <label>Desa / Kelurahan</label>
+                        <select id="s3-desa"></select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-summary">
+                <div class="glass-panel summary-card">
+                    <div class="title">Total Penerima Manfaat</div>
+                    <div class="value" id="s3-val-penerima">0</div>
+                    <div class="subtitle">Kepala Keluarga (KK)</div>
+                </div>
+                <div class="glass-panel summary-card">
+                    <div class="title">Desa Terjangkau</div>
+                    <div class="value" id="s3-val-desa">0</div>
+                    <div class="subtitle">Desa / Kelurahan</div>
+                </div>
+                <div class="glass-panel summary-card">
+                    <div class="title">Rata-rata Penerima per Desa</div>
+                    <div class="value" id="s3-val-rata">0</div>
+                    <div class="subtitle">KK / Desa</div>
+                </div>
+            </div>
+
+            <div class="grid-charts-equal">
+                <div class="glass-panel">
+                    <div class="chart-title">Sebaran Penerima Manfaat per Kecamatan (KK)</div>
+                    <div class="chart-container">
+                        <canvas id="chart-s3-kecamatan"></canvas>
+                    </div>
+                </div>
+                <div class="glass-panel">
+                    <div class="chart-title">Top 10 Desa dengan Penerima Terbanyak</div>
+                    <div class="chart-container">
+                        <canvas id="chart-s3-top-desa"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel" style="margin-bottom: 2.5rem;">
+                <div class="chart-title">Tabel Detail Penerima Manfaat Tahunan</div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Kecamatan</th>
+                                <th>Desa</th>
+                                <th>Penerima Manfaat</th>
+                                <th>Tahun</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="s3-table-body">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // State Variables
+        let rawStok = [];
+        let rawKategori = [];
+        let rawDesa = [];
+
+        // Chart instances
+        let c1, c2, c3, c4, c5, c6, c7, c8;
+
+        const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+        function getMonthIndex(bulanStr) {
+            if (bulanStr === undefined || bulanStr === null) return -1;
+            const str = String(bulanStr).trim().toLowerCase();
+            const num = parseInt(str, 10);
+            if (!isNaN(num)) {
+                return num - 1;
+            }
+            const indMonths = ['januari', 'februari', 'maret', 'april', 'mei', 'juni', 'juli', 'agustus', 'september', 'oktober', 'november', 'desember'];
+            const idx = indMonths.indexOf(str);
+            if (idx !== -1) return idx;
+            const engMonths = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+            return engMonths.indexOf(str);
+        }
+
+        // Default Chart.js settings
+        Chart.defaults.font.family = "'Outfit', sans-serif";
+
+        // Themes Toggle Logic
+        const themeBtn = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const themeText = document.getElementById('theme-text');
+
+        let currentTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        updateThemeUI(currentTheme);
+
+        themeBtn.addEventListener('click', () => {
+            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            localStorage.setItem('theme', currentTheme);
+            updateThemeUI(currentTheme);
+
+            // Re-render all sections for grid contrast updates
+            updateSection1();
+            updateSection2();
+            updateSection3();
+        });
+
+        function updateThemeUI(theme) {
+            if (theme === 'dark') {
+                themeIcon.innerText = '🌙';
+                themeText.innerText = 'Dark Mode';
+                Chart.defaults.color = '#94a3b8';
+                Chart.defaults.scale.grid.color = 'rgba(255, 255, 255, 0.05)';
+            } else {
+                themeIcon.innerText = '☀️';
+                themeText.innerText = 'Light Mode';
+                Chart.defaults.color = '#64748b';
+                Chart.defaults.scale.grid.color = 'rgba(15, 23, 42, 0.05)';
+            }
+        }
+
+        async function init() {
+            const overlay = document.getElementById('loading-overlay');
+            const status = document.getElementById('loading-status');
+            overlay.style.display = 'flex';
+            overlay.style.opacity = '1';
+
+            try {
+                status.innerText = "Menghubungkan ke API CPPD Bulanan...";
+                const resStok = await fetch('https://api.bandungkab.go.id/api/data/stok-penyaluran-cppd-bulanan-M675Q').then(r => r.json());
+
+                status.innerText = "Mengunduh Kategori Penerima Bantuan...";
+                const resKategori = await fetch('https://api.bandungkab.go.id/api/data/kategori-penerima-bantuan-cppd-bulanan').then(r => r.json());
+
+                status.innerText = "Mengunduh Data Tahunan Penerima per Desa...";
+                const resDesa = await fetch('https://api.bandungkab.go.id/api/data/penerima-cppd-tahunan-per-desa').then(r => r.json());
+
+                status.innerText = "Memproses & mengindeks data...";
+                rawStok = resStok.data ? resStok.data.map(d => d.detail) : [];
+                rawKategori = resKategori.data ? resKategori.data.map(d => d.detail) : [];
+                rawDesa = resDesa.data ? resDesa.data.filter(d => d && d.detail).map(d => d.detail) : [];
+
+                initFilters1();
+                initFilters2();
+                initFilters3();
+
+                updateSection1();
+                updateSection2();
+                updateSection3();
+
+                // Format current time and update
+                const now = new Date();
+                const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+                const dayName = days[now.getDay()];
+                const dateStr = `${dayName}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+                document.getElementById('sync-time').innerHTML = `
+                    <i data-lucide="clock" style="width: 12px; height: 12px;"></i>
+                    <span>Terakhir sinkronisasi: ${dateStr}</span>
+                `;
+
+                // Initialize Lucide icons
+                if (window.lucide) {
+                    lucide.createIcons();
+                }
+
+                status.innerText = "Selesai!";
+                overlay.style.opacity = '0';
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                    document.getElementById('app').style.opacity = '1';
+                }, 500);
+
+            } catch (e) {
+                console.error("Error fetching data:", e);
+                status.innerText = "Koneksi gagal! Silakan periksa jaringan Anda.";
+                alert("Gagal memuat data API. Silakan coba lagi.");
+            }
+        }
+
+        // ====== SECTION 1 LOGIC ======
+        function initFilters1() {
+            const tahunSet = new Set(rawStok.map(d => d.tahun));
+            const tahunSelect = document.getElementById('s1-tahun');
+            tahunSelect.innerHTML = '<option value="all">Semua Tahun</option>';
+            [...tahunSet].sort().forEach(t => tahunSelect.innerHTML += `<option value="${t}">${t}</option>`);
+
+            const bulanSelect = document.getElementById('s1-bulan');
+            bulanSelect.innerHTML = '<option value="all">Semua Bulan</option>';
+            months.forEach((m, i) => bulanSelect.innerHTML += `<option value="${i + 1}">${m}</option>`);
+
+            updateKomoditasFilter();
+
+            document.getElementById('s1-tahun').addEventListener('change', () => { updateKomoditasFilter(); updateSection1(); });
+            document.getElementById('s1-bulan').addEventListener('change', () => { updateKomoditasFilter(); updateSection1(); });
+            document.getElementById('s1-komoditas').addEventListener('change', updateSection1);
+        }
+
+        function updateKomoditasFilter() {
+            const t = document.getElementById('s1-tahun').value;
+            const b = document.getElementById('s1-bulan').value;
+
+            let filtered = rawStok;
+            if (t !== 'all') filtered = filtered.filter(d => d.tahun == t);
+            if (b !== 'all') filtered = filtered.filter(d => getMonthIndex(d.bulan) === (parseInt(b) - 1));
+
+            const komoditasSet = new Set(filtered.map(d => d.jenis));
+            const sel = document.getElementById('s1-komoditas');
+            const currentVal = sel.value;
+
+            sel.innerHTML = '<option value="all">Semua Komoditas</option>';
+            [...komoditasSet].sort().forEach(k => sel.innerHTML += `<option value="${k}">${k}</option>`);
+
+            if ([...komoditasSet].includes(currentVal)) {
+                sel.value = currentVal;
+            }
+        }
+
+        function updateSection1() {
+            const t = document.getElementById('s1-tahun').value;
+            const b = document.getElementById('s1-bulan').value;
+            const k = document.getElementById('s1-komoditas').value;
+
+            let filtered = rawStok;
+            if (t !== 'all') filtered = filtered.filter(d => d.tahun == t);
+            if (b !== 'all') filtered = filtered.filter(d => getMonthIndex(d.bulan) === (parseInt(b) - 1));
+            if (k !== 'all') filtered = filtered.filter(d => d.jenis == k);
+
+            // Summary
+            let sumPengadaan = 0, sumPenyaluran = 0, sumStok = 0;
+            filtered.forEach(d => {
+                sumPengadaan += parseFloat(d.pengadaan || 0);
+                sumPenyaluran += parseFloat(d.penyaluran || 0);
+                sumStok += parseFloat(d.stock || 0);
+            });
+
+            document.getElementById('s1-val-pengadaan').innerText = sumPengadaan.toLocaleString('id-ID');
+            document.getElementById('s1-val-penyaluran').innerText = sumPenyaluran.toLocaleString('id-ID');
+            document.getElementById('s1-val-stok').innerText = sumStok.toLocaleString('id-ID');
+
+            // Chart 1: Tren Tahunan
+            let yearly = {};
+            (k !== 'all' ? rawStok.filter(d => d.jenis == k) : rawStok).forEach(d => {
+                if (!yearly[d.tahun]) yearly[d.tahun] = { p: 0, s: 0 };
+                yearly[d.tahun].p += parseFloat(d.pengadaan || 0);
+                yearly[d.tahun].s += parseFloat(d.penyaluran || 0);
+            });
+            const years = Object.keys(yearly).sort();
+
+            if (c1) c1.destroy();
+            c1 = new Chart(document.getElementById('chart-s1-tren-tahunan'), {
+                type: 'bar',
+                data: {
+                    labels: years,
+                    datasets: [
+                        { label: 'Pengadaan', data: years.map(y => yearly[y].p), backgroundColor: 'rgba(5, 150, 105, 0.8)' },
+                        { label: 'Penyaluran', data: years.map(y => yearly[y].s), backgroundColor: 'rgba(220, 38, 38, 0.8)' }
+                    ]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    responsive: true
+                }
+            });
+
+            // Chart 2: Distribusi
+            let dist = {};
+            filtered.forEach(d => {
+                if (!dist[d.jenis]) dist[d.jenis] = 0;
+                dist[d.jenis] += parseFloat(d.penyaluran || 0);
+            });
+
+            if (c2) c2.destroy();
+            c2 = new Chart(document.getElementById('chart-s1-distribusi'), {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(dist),
+                    datasets: [{
+                        data: Object.values(dist),
+                        backgroundColor: ['#059669', '#dc2626', '#d97706', '#2563eb', '#7c3aed', '#0891b2'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                boxWidth: 12,
+                                padding: 8
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Chart 3: Tren Bulanan
+            let monthly = Array(12).fill(0).map(() => ({ s: 0, p: 0 }));
+            let bulananData = filtered;
+            bulananData.forEach(d => {
+                let mIdx = getMonthIndex(d.bulan);
+                if (mIdx >= 0 && mIdx < 12) {
+                    monthly[mIdx].s += parseFloat(d.stock || 0);
+                    monthly[mIdx].p += parseFloat(d.penyaluran || 0);
+                }
+            });
+
+            if (c3) c3.destroy();
+            c3 = new Chart(document.getElementById('chart-s1-tren-bulanan'), {
+                type: 'line',
+                data: {
+                    labels: months,
+                    datasets: [
+                        { label: 'Stok', data: monthly.map(m => m.s), borderColor: '#d97706', tension: 0.4, fill: true, backgroundColor: 'rgba(217, 119, 6, 0.1)' },
+                        { label: 'Penyaluran', data: monthly.map(m => m.p), borderColor: '#059669', tension: 0.4, fill: true, backgroundColor: 'rgba(5, 150, 105, 0.1)' }
+                    ]
+                },
+                options: { maintainAspectRatio: false }
+            });
+
+            // Populate Table
+            const tbody = document.getElementById('s1-table-body');
+            tbody.innerHTML = '';
+            filtered.forEach((d, index) => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${months[getMonthIndex(d.bulan)] || d.bulan}</td>
+                        <td>${d.tahun || '-'}</td>
+                        <td style="font-weight: 500; color: var(--text-main);">${d.jenis || '-'}</td>
+                        <td>${parseFloat(d.stock || 0).toLocaleString('id-ID')}</td>
+                        <td>${parseFloat(d.pengadaan || 0).toLocaleString('id-ID')}</td>
+                        <td style="font-weight: 600; color: var(--accent);">${parseFloat(d.penyaluran || 0).toLocaleString('id-ID')}</td>
+                        <td>${d.unit || 'Kg'}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        // ====== SECTION 2 LOGIC ======
+        function initFilters2() {
+            const tahunSet = new Set(rawKategori.map(d => d.tahun));
+            const tahunSelect = document.getElementById('s2-tahun');
+            tahunSelect.innerHTML = '<option value="all">Semua Tahun</option>';
+            [...tahunSet].sort().forEach(t => tahunSelect.innerHTML += `<option value="${t}">${t}</option>`);
+
+            const bulanSelect = document.getElementById('s2-bulan');
+            bulanSelect.innerHTML = '<option value="all">Semua Bulan</option>';
+            months.forEach((m, i) => bulanSelect.innerHTML += `<option value="${i + 1}">${m}</option>`);
+
+            updateKategoriFilter();
+
+            document.getElementById('s2-tahun').addEventListener('change', () => { updateKategoriFilter(); updateSection2(); });
+            document.getElementById('s2-bulan').addEventListener('change', () => { updateKategoriFilter(); updateSection2(); });
+            document.getElementById('s2-kategori').addEventListener('change', updateSection2);
+        }
+
+        function updateKategoriFilter() {
+            const t = document.getElementById('s2-tahun').value;
+            const b = document.getElementById('s2-bulan').value;
+
+            let filtered = rawKategori;
+            if (t !== 'all') filtered = filtered.filter(d => d.tahun == t);
+            if (b !== 'all') filtered = filtered.filter(d => getMonthIndex(d.bulan) === (parseInt(b) - 1));
+
+            const katSet = new Set(filtered.map(d => d.kategori));
+            const sel = document.getElementById('s2-kategori');
+            const currentVal = sel.value;
+
+            sel.innerHTML = '<option value="all">Semua Kategori</option>';
+            [...katSet].sort().forEach(k => sel.innerHTML += `<option value="${k}">${k}</option>`);
+
+            if ([...katSet].includes(currentVal)) {
+                sel.value = currentVal;
+            }
+        }
+
+        function updateSection2() {
+            const t = document.getElementById('s2-tahun').value;
+            const b = document.getElementById('s2-bulan').value;
+            const k = document.getElementById('s2-kategori').value;
+
+            let filtered = rawKategori;
+            if (t !== 'all') filtered = filtered.filter(d => d.tahun == t);
+            if (b !== 'all') filtered = filtered.filter(d => getMonthIndex(d.bulan) === (parseInt(b) - 1));
+            if (k !== 'all') filtered = filtered.filter(d => d.kategori == k);
+
+            // Summary
+            let totalPenerima = 0;
+            let katDist = {};
+            filtered.forEach(d => {
+                let val = parseFloat(d.jumlah_penerima_manfaat_kk || 0);
+                totalPenerima += val;
+                if (!katDist[d.kategori]) katDist[d.kategori] = 0;
+                katDist[d.kategori] += val;
+            });
+
+            document.getElementById('s2-val-penerima').innerText = totalPenerima.toLocaleString('id-ID');
+            document.getElementById('s2-val-jenis').innerText = Object.keys(katDist).length;
+
+            let topKat = '-';
+            let topVal = 0;
+            for (let key in katDist) {
+                if (katDist[key] > topVal) { topVal = katDist[key]; topKat = key; }
+            }
+            document.getElementById('s2-val-prioritas').innerText = topKat;
+            let pct = totalPenerima > 0 ? ((topVal / totalPenerima) * 100).toFixed(1) : 0;
+            document.getElementById('s2-val-prioritas-sub').innerText = `${topVal.toLocaleString('id-ID')} KK (${pct}% dari total)`;
+
+            // Chart 4: Alokasi Doughnut
+            if (c4) c4.destroy();
+            c4 = new Chart(document.getElementById('chart-s2-alokasi'), {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(katDist),
+                    datasets: [{
+                        data: Object.values(katDist),
+                        backgroundColor: ['#059669', '#dc2626', '#d97706', '#2563eb', '#7c3aed'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                boxWidth: 12,
+                                padding: 8
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Chart 5: Bulanan Line
+            let monthly = Array(12).fill(0);
+            filtered.forEach(d => {
+                let mIdx = getMonthIndex(d.bulan);
+                if (mIdx >= 0 && mIdx < 12) {
+                    monthly[mIdx] += parseFloat(d.jumlah_penerima_manfaat_kk || 0);
+                }
+            });
+            if (c5) c5.destroy();
+            c5 = new Chart(document.getElementById('chart-s2-bulanan'), {
+                type: 'bar',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: 'Penerima Manfaat (KK)',
+                        data: monthly,
+                        backgroundColor: 'rgba(5, 150, 105, 0.8)',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    responsive: true
+                }
+            });
+
+            // Chart 6: Tahunan Stacked
+            let years = [...new Set(rawKategori.map(d => d.tahun))].sort();
+            let allKats = [...new Set(rawKategori.map(d => d.kategori))].sort();
+
+            let datasetMap = {};
+            allKats.forEach(kat => {
+                datasetMap[kat] = Array(years.length).fill(0);
+            });
+
+            (k !== 'all' ? rawKategori.filter(d => d.kategori == k) : rawKategori).forEach(d => {
+                let yIdx = years.indexOf(d.tahun);
+                if (yIdx >= 0 && datasetMap[d.kategori]) {
+                    datasetMap[d.kategori][yIdx] += parseFloat(d.jumlah_penerima_manfaat_kk || 0);
+                }
+            });
+
+            let colors = ['#059669', '#dc2626', '#d97706', '#2563eb', '#7c3aed', '#0891b2'];
+            let datasets = allKats.map((kat, i) => ({
+                label: kat,
+                data: datasetMap[kat],
+                backgroundColor: colors[i % colors.length]
+            }));
+
+            if (c6) c6.destroy();
+            c6 = new Chart(document.getElementById('chart-s2-tahunan'), {
+                type: 'bar',
+                data: { labels: years, datasets: datasets },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { stacked: true },
+                        y: { stacked: true }
+                    }
+                }
+            });
+
+            // Populate Table
+            const tbody = document.getElementById('s2-table-body');
+            tbody.innerHTML = '';
+            filtered.forEach((d, index) => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${months[getMonthIndex(d.bulan)] || d.bulan}</td>
+                        <td>${d.tahun || '-'}</td>
+                        <td style="font-weight: 500; color: var(--text-main);">${d.kategori || '-'}</td>
+                        <td style="font-weight: 600; color: var(--primary);">${parseFloat(d.jumlah_penerima_manfaat_kk || 0).toLocaleString('id-ID')} KK</td>
+                    </tr>
+                `;
+            });
+        }
+
+        // ====== SECTION 3 LOGIC ======
+        function initFilters3() {
+            const tahunSet = new Set(rawDesa.map(d => d.tahun));
+            const tahunSelect = document.getElementById('s3-tahun');
+            tahunSelect.innerHTML = '<option value="all">Semua Tahun</option>';
+            [...tahunSet].sort().forEach(t => tahunSelect.innerHTML += `<option value="${t}">${t}</option>`);
+
+            updateKecamatanFilter();
+
+            document.getElementById('s3-tahun').addEventListener('change', () => { updateKecamatanFilter(); updateSection3(); });
+            document.getElementById('s3-kecamatan').addEventListener('change', () => { updateDesaFilter(); updateSection3(); });
+            document.getElementById('s3-desa').addEventListener('change', updateSection3);
+        }
+
+        function updateKecamatanFilter() {
+            const t = document.getElementById('s3-tahun').value;
+            let filtered = rawDesa;
+            if (t !== 'all') filtered = filtered.filter(d => d.tahun == t);
+
+            const kecSet = new Set(filtered.map(d => d.nama_kecamatan));
+            const sel = document.getElementById('s3-kecamatan');
+            const currentVal = sel.value;
+
+            sel.innerHTML = '<option value="all">Semua Kecamatan</option>';
+            [...kecSet].sort().forEach(k => {
+                if (k) sel.innerHTML += `<option value="${k}">${k}</option>`;
+            });
+
+            if ([...kecSet].includes(currentVal)) {
+                sel.value = currentVal;
+            }
+            updateDesaFilter();
+        }
+
+        function updateDesaFilter() {
+            const t = document.getElementById('s3-tahun').value;
+            const k = document.getElementById('s3-kecamatan').value;
+            let filtered = rawDesa;
+            if (t !== 'all') filtered = filtered.filter(d => d.tahun == t);
+            if (k !== 'all') filtered = filtered.filter(d => d.nama_kecamatan == k);
+
+            const desaSet = new Set(filtered.map(d => d.nama_desa));
+            const sel = document.getElementById('s3-desa');
+            const currentVal = sel.value;
+
+            sel.innerHTML = '<option value="all">Semua Desa</option>';
+            [...desaSet].sort().forEach(d => {
+                if (d) sel.innerHTML += `<option value="${d}">${d}</option>`;
+            });
+
+            if ([...desaSet].includes(currentVal)) {
+                sel.value = currentVal;
+            }
+        }
+
+        function updateSection3() {
+            const t = document.getElementById('s3-tahun').value;
+            const k = document.getElementById('s3-kecamatan').value;
+            const ds = document.getElementById('s3-desa').value;
+
+            let filtered = rawDesa;
+            if (t !== 'all') filtered = filtered.filter(d => d.tahun == t);
+            if (k !== 'all') filtered = filtered.filter(d => d.nama_kecamatan == k);
+            if (ds !== 'all') filtered = filtered.filter(d => d.nama_desa == ds);
+
+            // Summary calculations
+            let totalPenerima = 0;
+            let desaSet = new Set();
+            let kecSet = new Set();
+
+            filtered.forEach(d => {
+                totalPenerima += parseFloat(d.jumlah_penerima_manfaat_kk || 0);
+                if (d.nama_desa) desaSet.add(d.nama_desa);
+                if (d.nama_kecamatan) kecSet.add(d.nama_kecamatan);
+            });
+
+            const avgPerDesa = desaSet.size > 0 ? (totalPenerima / desaSet.size).toFixed(1) : 0;
+
+            document.getElementById('s3-val-penerima').innerText = totalPenerima.toLocaleString('id-ID');
+            document.getElementById('s3-val-desa').innerText = desaSet.size;
+            document.getElementById('s3-val-rata').innerText = parseFloat(avgPerDesa).toLocaleString('id-ID');
+
+            // Chart 7: Sebaran per Kecamatan
+            let kecDist = {};
+            filtered.forEach(d => {
+                if (d.nama_kecamatan) {
+                    if (!kecDist[d.nama_kecamatan]) kecDist[d.nama_kecamatan] = 0;
+                    kecDist[d.nama_kecamatan] += parseFloat(d.jumlah_penerima_manfaat_kk || 0);
+                }
+            });
+            const kecLabels = Object.keys(kecDist).sort((a, b) => kecDist[b] - kecDist[a]);
+            const kecData = kecLabels.map(l => kecDist[l]);
+
+            if (c7) c7.destroy();
+            c7 = new Chart(document.getElementById('chart-s3-kecamatan'), {
+                type: 'bar',
+                data: {
+                    labels: kecLabels.slice(0, 10), // Limit top 10
+                    datasets: [{
+                        label: 'Penerima Manfaat (KK)',
+                        data: kecData.slice(0, 10),
+                        backgroundColor: 'rgba(5, 150, 105, 0.8)',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    maintainAspectRatio: false
+                }
+            });
+
+            // Chart 8: Top 10 Desa dengan Penerima Terbanyak
+            let desaDist = {};
+            filtered.forEach(d => {
+                if (d.nama_desa) {
+                    desaDist[d.nama_desa] = parseFloat(d.jumlah_penerima_manfaat_kk || 0);
+                }
+            });
+            const desaLabels = Object.keys(desaDist).sort((a, b) => desaDist[b] - desaDist[a]).slice(0, 10);
+            const desaData = desaLabels.map(l => desaDist[l]);
+
+            if (c8) c8.destroy();
+            c8 = new Chart(document.getElementById('chart-s3-top-desa'), {
+                type: 'bar',
+                data: {
+                    labels: desaLabels,
+                    datasets: [{
+                        label: 'Penerima Manfaat (KK)',
+                        data: desaData,
+                        backgroundColor: 'rgba(220, 38, 38, 0.8)',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false
+                }
+            });
+
+            // Populate Table
+            const tbody = document.getElementById('s3-table-body');
+            tbody.innerHTML = '';
+            filtered.forEach((d, index) => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td style="font-weight: 500;">${d.nama_kecamatan || '-'}</td>
+                        <td>${d.nama_desa || '-'}</td>
+                        <td style="font-weight: 600; color: var(--primary);">${parseFloat(d.jumlah_penerima_manfaat_kk || 0).toLocaleString('id-ID')} KK</td>
+                        <td>${d.tahun || '-'}</td>
+                        <td><span style="background: var(--primary-glow); color: var(--primary); padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.75rem; border: 1px solid var(--card-border);">${d.status || '-'}</span></td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Event listener for Refresh/Sync button
+        document.getElementById('refresh-btn').addEventListener('click', init);
+
+        window.onload = init;
+    </script>
+</body>
+
+</html>

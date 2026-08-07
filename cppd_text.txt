@@ -1,0 +1,30 @@
+Laporan bulanan CPPD
+Headline 
+Laporan Tren Penyaluran Bulanan CPPD
+Penjelasan
+Tujuan utama penyediaan dan penyaluran Cadangan Pangan Pemerintah Daerah (CPPD) adalah untuk mitigasi kerawanan pangan masyarakat, khususnya yang terdampak bencana alam atau situasi darurat lainnya. Informasi strategis yang tersaji dalam data CPPD meliputi Laporan Tren Penyaluran Bulanan CPPD. Laporan ini menyajikan informasi cadangan pangan secara berkala, mulai dari volume stok yang tersedia hingga realisasi pengadaan atau penambahan stok.
+Summary
+sesuai dengan di web
+Filter data: tahun, bulan, dan komoditas
+pada kategori pilihan semua komoditas, mohon ditampilkan hanya komoditas yang terdapat pada filter tahun/bulan yang dituju. contohnya jika ingin melihat data pada januari 2022, komoditas yang ditampilkan hanya beras premium dan ikan tuna yang terdapat valuenya.
+contoh:
+Grafik yang ditampilkan
+Tren tahunan total pengadaan dan penyaluran CPPD
+Distribusi penyaluran berdasarkan komoditas 
+Tren bulanan stock dan penyaluran [nama komoditas]
+Penyaluran Kategori Bulanan CPPD
+Headline
+Distribusi Cadangan Pangan Berdasarkan Kategori Prioritas 
+Penjelasan
+Laporan ini merinci alokasi cadangan pangan yang disalurkan kepada kelompok masyarakat sasaran prioritas. Klasifikasi dilakukan berdasarkan tujuan strategis program, mencakup penanganan kerawanan pangan, pengendalian inflasi, penurunan angka stunting, serta penanggulangan dampak bencana alam (kondisi transien). 
+Summary
+Total Penerima: XXX Kepala Keluarga (KK)
+Prioritas Alokasi Utama: Pengendalian Inflasi (yang paling banyak, mungkin bisa disertakan data juga seperti XXX KK, XX% dari total bantuan)
+Jenis Kategori: 4 Kategori Bantuan
+Sisanya bisa dihapus, disesuaikan urutannya seperti di atas
+Filter data
+pada kategori pilihan kategori penanganan kerawanan pangan, mohon ditampilkan hanya kategori yang terdapat pada filter tahun/bulan yang dituju. contohnya jika ingin melihat data pada februari 2024, kategori yang ditampilkan hanya yang terdapat valuenya. contoh di bawah menunjukkan tidak adanya data penanganan kerawanan pangan pada bulan februari 2024.
+Grafik
+Alokasi Penerima Manfaat
+Tren Penyaluran Bulanan
+Tren Penyaluran Tahunan per Kategori

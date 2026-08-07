@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard SIP - Dispakan Kab. Bandung</title>
+
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Konfigurasi Tailwind -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        emerald: {
+                            50: '#ecfdf5', 100: '#d1fae5', 400: '#34d399', 500: '#10b981',
+                            600: '#059669', 700: '#047857', 800: '#065f46', 900: '#064e3b', 950: '#022c22',
+                        }
+                    },
+                    animation: {
+                        'blob': 'blob 10s infinite',
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* Transisi Background Global */
+        .bg-transition {
+            transition: background-color 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .no-tap-highlight {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Efek Kaca (Glassmorphism) Premium */
+        .glass {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+        }
+
+        .glass-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.3) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        .dark .glass {
+            background: rgba(2, 44, 34, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .dark .glass-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.8) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        }
+
+        /* Utilitas Delay Animasi untuk Staggering */
+        .delay-100 {
+            animation-delay: 100ms;
+        }
+
+        .delay-200 {
+            animation-delay: 200ms;
+        }
+
+        .delay-300 {
+            animation-delay: 300ms;
+        }
+
+        .delay-400 {
+            animation-delay: 400ms;
+        }
+
+        .delay-2000 {
+            animation-delay: 2s;
+        }
+
+        .delay-4000 {
+            animation-delay: 4s;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(16, 185, 129, 0.3);
+            border-radius: 10px;
+        }
+
+        .dark ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+
+    <script>
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+</head>
+
+<body
+    class="min-h-screen bg-slate-50 dark:bg-neutral-950 font-sans selection:bg-emerald-500/30 transition-colors duration-700 m-0 p-0 overflow-x-hidden overflow-y-auto">
+
+    <!-- ========================================== -->
+    <!-- BACKGROUND ANIMASI (BLOBS)                 -->
+    <!-- ========================================== -->
+    <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+        <div
+            class="absolute top-[-10%] left-[-10%] w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full bg-emerald-200/50 dark:bg-emerald-900/30 mix-blend-multiply dark:mix-blend-screen filter blur-[80px] md:blur-[120px] animate-blob">
+        </div>
+        <div
+            class="absolute top-[20%] right-[-10%] w-[350px] h-[350px] md:w-[500px] md:h-[500px] rounded-full bg-teal-200/50 dark:bg-teal-900/20 mix-blend-multiply dark:mix-blend-screen filter blur-[80px] md:blur-[120px] animate-blob delay-2000">
+        </div>
+        <div
+            class="absolute bottom-[-20%] left-[20%] w-[400px] h-[400px] md:w-[700px] md:h-[700px] rounded-full bg-green-200/40 dark:bg-green-900/20 mix-blend-multiply dark:mix-blend-screen filter blur-[80px] md:blur-[120px] animate-blob delay-4000">
+        </div>
+    </div>
+
+    <!-- Kontainer Utama -->
+    <div class="w-full min-h-screen relative z-10 flex flex-col justify-between">
+
+        <!-- ========================================== -->
+        <!-- HEADER NAVIGASI                            -->
+        <!-- ========================================== -->
+        <header
+            class="w-full px-6 md:px-12 pt-8 md:pt-10 flex justify-between items-center opacity-0 animate-fade-in-up delay-100">
+
+            <!-- Toggle Dark Mode -->
+            <button id="darkModeToggle"
+                class="w-12 h-12 md:w-14 md:h-14 rounded-[1.2rem] glass flex items-center justify-center text-emerald-900 dark:text-emerald-100 transition-all duration-300 hover:scale-110 active:scale-95 hover:shadow-emerald-500/20">
+                <i data-lucide="moon" id="moonIcon" class="hidden w-5 h-5 md:w-6 md:h-6"></i>
+                <i data-lucide="sun" id="sunIcon" class="hidden w-5 h-5 md:w-6 md:h-6"></i>
+            </button>
+
+            <!-- Lencana Tengah -->
+            <div
+                class="flex items-center gap-3 glass px-5 md:px-6 py-2.5 md:py-3 rounded-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+                <div
+                    class="w-8 h-8 rounded-full bg-gradient-to-tr from-emerald-600 to-emerald-400 flex items-center justify-center shadow-inner">
+                    <i data-lucide="sprout" class="text-white w-4 h-4"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span
+                        class="text-[0.6rem] md:text-[0.7rem] font-extrabold tracking-[0.2em] uppercase text-emerald-950 dark:text-white leading-none mb-0.5">Dispakan</span>
+                    <span
+                        class="text-[0.55rem] md:text-[0.6rem] font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider leading-none">Kab.
+                        Bandung</span>
+                </div>
+            </div>
+
+            <!-- Tombol Toggle Auto Swipe -->
+            <button id="autoPlayToggle"
+                class="w-12 h-12 md:w-14 md:h-14 rounded-[1.2rem] glass flex items-center justify-center text-emerald-900 dark:text-emerald-100 transition-all duration-300 hover:scale-110 active:scale-95 hover:shadow-emerald-500/20 group">
+                <!-- Ikon Pause (Menandakan sedang auto-play) -->
+                <i data-lucide="pause" id="pauseIcon"
+                    class="block w-5 h-5 md:w-6 md:h-6 transition-transform group-hover:scale-110"></i>
+                <!-- Ikon Play (Menandakan auto-play mati) -->
+                <i data-lucide="play" id="playIcon"
+                    class="hidden w-5 h-5 md:w-6 md:h-6 transition-transform group-hover:scale-110 pl-1"></i>
+            </button>
+        </header>
+
+        <!-- ========================================== -->
+        <!-- AREA JUDUL (HERO)                          -->
+        <!-- ========================================== -->
+        <main class="flex-grow flex flex-col items-center justify-start pt-12 md:pt-16 px-6">
+
+            <!-- Badge Live -->
+            <div
+                class="inline-flex items-center gap-2 px-4 py-1.5 mb-6 rounded-full glass opacity-0 animate-fade-in-up delay-200">
+                <span class="relative flex h-2 w-2">
+                    <span
+                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-600 dark:bg-emerald-400"></span>
+                </span>
+                <p
+                    class="text-emerald-800 dark:text-emerald-200 font-bold tracking-[0.15em] text-[0.65rem] md:text-xs uppercase">
+                    Dashboard Pimpinan
+                </p>
+            </div>
+
+            <!-- Judul Utama -->
+            <div class="text-center opacity-0 animate-fade-in-up delay-300">
+                <h1
+                    class="text-[3.2rem] md:text-7xl font-extrabold text-neutral-900 dark:text-white tracking-tight leading-[1] drop-shadow-sm">
+                    Sistem <br />
+                    <span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500 dark:from-emerald-400 dark:to-teal-300">
+                        Informasi Pangan v2.0
+                    </span>
+                </h1>
+                <p
+                    class="mt-6 text-sm md:text-lg text-neutral-600 dark:text-neutral-400 font-medium max-w-xs md:max-w-md mx-auto leading-relaxed">
+                    Pusat layanan data ketahanan pangan terpadu Kabupaten Bandung.
+                </p>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- KAROUSEL MENU (ARC PORTAL)                 -->
+            <!-- ========================================== -->
+            <div id="carouselContainer"
+                class="w-full h-[260px] md:h-[350px] mt-4 md:mt-8 flex items-center justify-center relative cursor-grab active:cursor-grabbing no-tap-highlight opacity-0 animate-fade-in-up delay-400">
+                <div id="cardWrapper" class="relative w-full flex items-center justify-center h-full"
+                    style="perspective: 1400px;">
+                    <!-- Kartu dirender melalui JavaScript -->
+                </div>
+            </div>
+        </main>
+
+        <!-- ========================================== -->
+        <!-- TOMBOL PENCARIAN & COUNTER PENGUNJUNG      -->
+        <!-- ========================================== -->
+        <footer class="w-full pb-8 md:pb-10 flex flex-col items-center gap-6 opacity-0 animate-fade-in-up delay-400">
+
+            <!-- Tombol Pencarian -->
+            <div class="p-2 md:p-2.5 rounded-[2rem] glass transition-all hover:scale-105 active:scale-95 cursor-pointer hover:shadow-emerald-500/30 group animate-float"
+                id="searchBtn">
+                <div
+                    class="w-[72px] h-[72px] md:w-[84px] md:h-[84px] bg-gradient-to-tr from-emerald-600 to-teal-500 rounded-[1.5rem] flex items-center justify-center text-white shadow-lg shadow-emerald-600/30 transition-transform duration-300 group-hover:rotate-12">
+                    <i data-lucide="search" class="w-7 h-7 md:w-8 md:h-8"></i>
+                </div>
+            </div>
+
+            <!-- Counter Pengunjung -->
+            <div
+                class="glass px-6 py-2.5 rounded-2xl flex items-center gap-6 text-xs text-slate-700 dark:text-slate-300 font-semibold shadow-sm border border-white/40 dark:border-white/10">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="eye" class="w-4 h-4 text-emerald-500"></i>
+                    <span>Total: <strong id="totalVisitors"
+                            class="text-emerald-600 dark:text-emerald-400 font-extrabold">0</strong></span>
+                </div>
+                <div class="h-4 w-[1px] bg-slate-300 dark:bg-slate-700"></div>
+                <div class="flex items-center gap-2">
+                    <i data-lucide="users" class="w-4 h-4 text-blue-500"></i>
+                    <span>Hari ini: <strong id="todayVisitors"
+                            class="text-blue-600 dark:text-blue-400 font-extrabold">0</strong></span>
+                </div>
+            </div>
+
+        </footer>
+
+        <!-- ========================================== -->
+        <!-- MODAL PENCARIAN (SEARCH OVERLAY)           -->
+        <!-- ========================================== -->
+        <div id="searchOverlay"
+            class="fixed inset-0 z-50 bg-neutral-900/20 dark:bg-black/60 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-500 flex flex-col justify-end md:justify-center md:items-center p-0 md:p-6">
+            <div id="searchModal"
+                class="bg-white/90 dark:bg-[#0f172a]/90 backdrop-blur-3xl h-[85%] md:h-[80vh] w-full md:max-w-3xl rounded-t-[2.5rem] md:rounded-[3rem] shadow-2xl p-6 md:p-10 transform translate-y-full md:translate-y-10 md:scale-95 transition-all duration-500 ease-[cubic-bezier(0.2,1,0.3,1)] border-t md:border border-white/50 dark:border-white/10 flex flex-col">
+
+                <!-- Handle & Header -->
+                <div class="w-16 h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full mx-auto mb-8 md:hidden"></div>
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h3 class="text-2xl md:text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+                            Cari Layanan</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 font-medium">Temukan modul dan laporan
+                            pangan</p>
+                    </div>
+                    <button id="closeSearchBtn"
+                        class="w-12 h-12 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/10 hover:rotate-90 transition-all duration-300 active:scale-90">
+                        <i data-lucide="x" class="w-6 h-6"></i>
+                    </button>
+                </div>
+
+                <!-- Input Pencarian -->
+                <div class="relative mb-8 group">
+                    <i data-lucide="search"
+                        class="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-400 dark:text-gray-500 transition-colors group-focus-within:text-emerald-500"></i>
+                    <input type="text" id="searchInput" placeholder="Ketik kata kunci pencarian..."
+                        class="w-full bg-gray-100/80 dark:bg-black/40 border border-transparent focus:border-emerald-500/50 text-gray-900 dark:text-white rounded-[1.5rem] py-5 pl-16 pr-6 outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all font-semibold md:text-lg placeholder-gray-400 dark:placeholder-gray-600 shadow-inner">
+                </div>
+
+                <!-- Hasil Pencarian -->
+                <div id="searchResults" class="flex flex-col gap-3 overflow-y-auto pb-8 flex-grow pr-2"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // ==========================================
+        // INISIALISASI & DARK MODE LOGIC
+        // ==========================================
+        lucide.createIcons();
+
+        const htmlEl = document.documentElement;
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const moonIcon = document.getElementById('moonIcon');
+        const sunIcon = document.getElementById('sunIcon');
+
+        function updateDarkModeIcons() {
+            if (htmlEl.classList.contains('dark')) {
+                moonIcon.classList.add('hidden');
+                sunIcon.classList.remove('hidden');
+                sunIcon.classList.add('block');
+            } else {
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+                moonIcon.classList.add('block');
+            }
+        }
+        updateDarkModeIcons();
+
+        darkModeToggle.addEventListener('click', () => {
+            htmlEl.classList.toggle('dark');
+            updateDarkModeIcons();
+            localStorage.setItem('theme', htmlEl.classList.contains('dark') ? 'dark' : 'light');
+        });
+
+        // ==========================================
+        // DATA MENU (Termasuk Pedoman Teknis SIP & PSAT)
+        // ==========================================
+        const menuItems = [
+            { id: 'pedoman_tek', label: 'Buku Pedoman Teknis SIP', icon: 'book-open', color: 'text-emerald-500', url: 'https://drive.google.com/file/d/1F1UIh8LIF7YUBVRcAwxyUPR4dg_CEy7i/view?usp=sharing' },
+            { id: 'keamanan_psat', label: 'Keamanan Pangan (PSAT)', icon: 'shield-check', color: 'text-emerald-500', url: 'https://aplikasi.bandungkab.go.id/publik/dispakan-keamanan-pangan-segar-asal-tumbuhan-psat' },
+            { id: 'fsva', label: 'FSVA (Atlas Pangan)', icon: 'map', color: 'text-emerald-500', url: 'https://aplikasi.bandungkab.go.id/publik/dispakan-food-security-and-vulnerability-atlas-fsva' },
+            { id: 'dashboard_cppd', label: 'Dashboard CPPD', icon: 'package-check', color: 'text-blue-500', url: 'https://aplikasi.bandungkab.go.id/publik/dashboard-cppd-diskpakan' },
+            { id: 'pph_konsumsi', label: 'Skor PPH Konsumsi', icon: 'trending-up', color: 'text-amber-500', url: 'https://aplikasi.bandungkab.go.id/publik/dispakan-perkembangan-skor-pph-konsumsi' },
+            { id: 'trx_lumbung', label: 'Trx Lumbung Pangan', icon: 'arrow-left-right', color: 'text-teal-500', url: 'https://aplikasi.bandungkab.go.id/publik/dispakan-data-transaksi-lumbung-pangan-masyarakat' },
+            { id: 'data_lumbung', label: 'Data Lumbung', icon: 'warehouse', color: 'text-orange-500', url: 'https://aplikasi.bandungkab.go.id/publik/dispakan-data-lumbung-pangan-masyarakat' },
+            { id: 'pph_susenas', label: 'PPH (Susenas)', icon: 'bar-chart-2', color: 'text-cyan-500', url: 'https://aplikasi.bandungkab.go.id/publik/dispakan-perbandingan-skor-pph-survey-susenas' },
+            { id: 'pph_kecamatan', label: 'PPH Konsumsi (Kec)', icon: 'map-pin', color: 'text-purple-500', url: 'https://aplikasi.bandungkab.go.id/publik/dispakan-skor-pola-pangan-harapan-pph-konsumsi-per-kecamatan' },
+            { id: 'kecukupan_energi', label: 'Kecukupan Energi', icon: 'zap', color: 'text-yellow-500', url: 'https://aplikasi.bandungkab.go.id/publik/dispakan-perkembangan-angka-kecukupan-energi-protein-lemak-dan-skor-pph-ketersediaan' },
+            { id: 'pph_ketersediaan', label: 'PPH Ketersediaan', icon: 'line-chart', color: 'text-emerald-600', url: 'https://aplikasi.bandungkab.go.id/publik/dispakan-skor-pola-pangan-harapan-pph-ketersediaan' },
+            { id: 'ketersediaan_11', label: 'Energi (11 Klp)', icon: 'pie-chart', color: 'text-red-500', url: 'https://aplikasi.bandungkab.go.id/publik/dispakan-ketersediaan-energi-protein-dan-lemak-berdasarkan-11-kelompok-pangan' },
+            { id: 'ketersediaan_makro', label: 'Ketersediaan Makro', icon: 'activity', color: 'text-blue-600', url: 'https://aplikasi.bandungkab.go.id/publik/dispakan-ketersediaan-energi-protein-dan-lemak' },
+            { id: 'skpg', label: 'SKPG (Warning)', icon: 'alert-triangle', color: 'text-red-600', url: 'https://aplikasi.bandungkab.go.id/publik/dispakan-sistem-peringatan-dini-kerawanan-pangan-dan-gizi-skpg' }
+        ];
+
+        // ==========================================
+        // LOGIKA COUNTER PENGUNJUNG
+        // ==========================================
+        function initVisitorCounter() {
+            const todayDate = new Date().toISOString().split('T')[0];
+
+            let total = parseInt(localStorage.getItem('sip_total_visitors') || '1420');
+            let today = parseInt(localStorage.getItem('sip_today_visitors') || '35');
+            let lastVisitDate = localStorage.getItem('sip_last_visit_date');
+
+            if (lastVisitDate !== todayDate) {
+                today = 1;
+                localStorage.setItem('sip_last_visit_date', todayDate);
+            } else {
+                today += 1;
+            }
+
+            total += 1;
+
+            localStorage.setItem('sip_total_visitors', total);
+            localStorage.setItem('sip_today_visitors', today);
+
+            document.getElementById('totalVisitors').innerText = total.toLocaleString('id-ID');
+            document.getElementById('todayVisitors').innerText = today.toLocaleString('id-ID');
+        }
+        initVisitorCounter();
+
+        // ==========================================
+        // LOGIKA AUTO SWIPE & RENDER KAROUSEL
+        // ==========================================
+        let activeIndex = 0;
+        const cardWrapper = document.getElementById('cardWrapper');
+        let autoPlayInterval;
+        let isAutoPlay = true;
+
+        function startAutoPlay() {
+            if (!isAutoPlay) return;
+            clearInterval(autoPlayInterval);
+            autoPlayInterval = setInterval(() => {
+                activeIndex = (activeIndex + 1) % menuItems.length;
+                updateCards();
+            }, 3000);
+        }
+
+        function stopAutoPlay() {
+            clearInterval(autoPlayInterval);
+        }
+
+        const autoPlayToggle = document.getElementById('autoPlayToggle');
+        const playIcon = document.getElementById('playIcon');
+        const pauseIcon = document.getElementById('pauseIcon');
+
+        function updateAutoPlayUI() {
+            if (isAutoPlay) {
+                pauseIcon.classList.remove('hidden');
+                pauseIcon.classList.add('block');
+                playIcon.classList.remove('block');
+                playIcon.classList.add('hidden');
+            } else {
+                playIcon.classList.remove('hidden');
+                playIcon.classList.add('block');
+                pauseIcon.classList.remove('block');
+                pauseIcon.classList.add('hidden');
+            }
+        }
+
+        autoPlayToggle.addEventListener('click', () => {
+            isAutoPlay = !isAutoPlay;
+            updateAutoPlayUI();
+            if (isAutoPlay) {
+                startAutoPlay();
+            } else {
+                stopAutoPlay();
+            }
+        });
+
+        menuItems.forEach((item, index) => {
+            const card = document.createElement('div');
+            card.className = `menu-card absolute w-[130px] h-[160px] md:w-[160px] md:h-[200px] glass-card rounded-[2.5rem] flex flex-col items-center justify-center gap-3 md:gap-4 transition-all duration-700 origin-bottom select-none z-0 opacity-0 pointer-events-none group`;
+            card.style.transitionTimingFunction = 'cubic-bezier(0.25, 1, 0.3, 1)';
+            card.innerHTML = `
+        <div class="w-[56px] h-[56px] md:w-[70px] md:h-[70px] rounded-[1.2rem] flex items-center justify-center bg-white/80 dark:bg-black/30 shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:-translate-y-1">
+          <i data-lucide="${item.icon}" class="w-[28px] h-[28px] md:w-[32px] md:h-[32px] ${item.color} transition-colors" stroke-width="2.2"></i>
+        </div>
+        <span class="text-[12px] md:text-[14px] font-bold text-slate-800 dark:text-slate-100 tracking-tight text-center px-3 leading-snug">
+          ${item.label}
+        </span>
+      `;
+            card.addEventListener('click', () => {
+                if (activeIndex === index) window.open(item.url, '_blank');
+                else {
+                    activeIndex = index;
+                    updateCards();
+                    startAutoPlay();
+                }
+            });
+            cardWrapper.appendChild(card);
+        });
+
+        lucide.createIcons();
+        const cards = document.querySelectorAll('.menu-card');
+
+        function updateCards() {
+            const total = menuItems.length;
+            cards.forEach((card, index) => {
+                let diff = index - activeIndex;
+                if (diff < -Math.floor(total / 2)) diff += total;
+                if (diff > Math.floor(total / 2)) diff -= total;
+
+                const isDesktop = window.innerWidth >= 768;
+
+                const translateXOffset1 = isDesktop ? 160 : 125;
+                const rotateOffset1 = isDesktop ? 12 : 15;
+                const scale1 = isDesktop ? 0.9 : 0.85;
+
+                const translateXOffset2 = isDesktop ? 300 : 0;
+                const rotateOffset2 = isDesktop ? 25 : 0;
+                const scale2 = isDesktop ? 0.7 : 0.5;
+
+                card.className = "menu-card absolute w-[130px] h-[160px] md:w-[160px] md:h-[200px] glass-card rounded-[2.5rem] flex flex-col items-center justify-center gap-3 md:gap-4 transition-all duration-700 origin-bottom select-none no-tap-highlight group";
+
+                if (diff === 0) {
+                    card.classList.add('z-30', 'cursor-pointer', 'shadow-[0_20px_40px_-10px_rgba(16,185,129,0.3)]', 'dark:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.6)]', 'hover:-translate-y-8');
+                    card.style.transform = 'translateY(-20px) scale(1.15)';
+                    card.style.opacity = '1';
+                    card.style.pointerEvents = 'auto';
+                } else if (diff === -1) {
+                    card.classList.add('z-20', 'cursor-pointer', 'shadow-xl');
+                    card.style.transform = `translateX(-${translateXOffset1}px) translateY(30px) rotate(-${rotateOffset1}deg) scale(${scale1})`;
+                    card.style.opacity = '0.9';
+                    card.style.pointerEvents = 'auto';
+                } else if (diff === 1) {
+                    card.classList.add('z-20', 'cursor-pointer', 'shadow-xl');
+                    card.style.transform = `translateX(${translateXOffset1}px) translateY(30px) rotate(${rotateOffset1}deg) scale(${scale1})`;
+                    card.style.opacity = '0.9';
+                    card.style.pointerEvents = 'auto';
+                } else if (diff === -2 && isDesktop) {
+                    card.classList.add('z-10', 'cursor-pointer', 'shadow-md');
+                    card.style.transform = `translateX(-${translateXOffset2}px) translateY(65px) rotate(-${rotateOffset2}deg) scale(${scale2})`;
+                    card.style.opacity = '0.5';
+                    card.style.pointerEvents = 'auto';
+                } else if (diff === 2 && isDesktop) {
+                    card.classList.add('z-10', 'cursor-pointer', 'shadow-md');
+                    card.style.transform = `translateX(${translateXOffset2}px) translateY(65px) rotate(${rotateOffset2}deg) scale(${scale2})`;
+                    card.style.opacity = '0.5';
+                    card.style.pointerEvents = 'auto';
+                } else {
+                    card.classList.add('z-0', 'pointer-events-none');
+                    card.style.transform = 'translateY(100px) scale(0.4)';
+                    card.style.opacity = '0';
+                }
+            });
+        }
+
+        window.addEventListener('resize', updateCards);
+        setTimeout(() => {
+            updateCards();
+            startAutoPlay();
+        }, 500);
+
+        // ==========================================
+        // LOGIKA SWIPE
+        // ==========================================
+        const carouselContainer = document.getElementById('carouselContainer');
+        let touchStartX = null, isDragging = false;
+
+        const handleStart = (clientX) => {
+            touchStartX = clientX;
+            isDragging = true;
+            stopAutoPlay();
+        };
+
+        const handleEnd = (clientX) => {
+            if (!isDragging || touchStartX === null) {
+                startAutoPlay();
+                return;
+            }
+            const distance = touchStartX - clientX;
+            if (Math.abs(distance) > 40) {
+                activeIndex = (distance > 0) ? (activeIndex + 1) % menuItems.length : (activeIndex - 1 + menuItems.length) % menuItems.length;
+                updateCards();
+            }
+            isDragging = false;
+            startAutoPlay();
+        };
+
+        carouselContainer.addEventListener('touchstart', (e) => handleStart(e.touches[0].clientX), { passive: true });
+        carouselContainer.addEventListener('touchend', (e) => handleEnd(e.changedTouches[0].clientX));
+        carouselContainer.addEventListener('mousedown', (e) => handleStart(e.clientX));
+        carouselContainer.addEventListener('mouseup', (e) => handleEnd(e.clientX));
+        carouselContainer.addEventListener('mouseleave', () => {
+            isDragging = false;
+            startAutoPlay();
+        });
+
+        // ==========================================
+        // LOGIKA MODAL PENCARIAN
+        // ==========================================
+        const searchBtn = document.getElementById('searchBtn'),
+            searchOverlay = document.getElementById('searchOverlay'),
+            searchModal = document.getElementById('searchModal'),
+            closeSearchBtn = document.getElementById('closeSearchBtn'),
+            searchInput = document.getElementById('searchInput'),
+            searchResults = document.getElementById('searchResults');
+
+        function toggleSearchModal(show) {
+            if (show) {
+                stopAutoPlay();
+                searchOverlay.classList.remove('opacity-0', 'pointer-events-none');
+                if (window.innerWidth >= 768) {
+                    searchModal.classList.remove('translate-y-10', 'scale-95');
+                } else {
+                    searchModal.classList.remove('translate-y-full');
+                }
+                renderSearchResults('');
+                setTimeout(() => searchInput.focus(), 300);
+            } else {
+                startAutoPlay();
+                searchOverlay.classList.add('opacity-0', 'pointer-events-none');
+                if (window.innerWidth >= 768) {
+                    searchModal.classList.add('translate-y-10', 'scale-95');
+                } else {
+                    searchModal.classList.add('translate-y-full');
+                }
+            }
+        }
+
+        searchBtn.addEventListener('click', () => toggleSearchModal(true));
+        closeSearchBtn.addEventListener('click', () => toggleSearchModal(false));
+        searchOverlay.addEventListener('click', (e) => { if (e.target === searchOverlay) toggleSearchModal(false); });
+
+        function renderSearchResults(query) {
+            searchResults.innerHTML = '';
+            const filteredItems = menuItems.filter(item => item.label.toLowerCase().includes(query.toLowerCase()));
+
+            if (filteredItems.length === 0) {
+                searchResults.innerHTML = `
+          <div class="py-16 flex flex-col items-center justify-center text-center opacity-50">
+            <i data-lucide="search-x" class="w-12 h-12 mb-4 text-gray-400"></i>
+            <p class="font-medium text-lg">Tidak ada layanan ditemukan</p>
+          </div>`;
+                lucide.createIcons();
+                return;
+            }
+
+            filteredItems.forEach(item => {
+                const originalIndex = menuItems.findIndex(m => m.id === item.id);
+                const itemEl = document.createElement('div');
+                itemEl.className = 'group flex items-center gap-5 p-4 md:p-5 rounded-[1.5rem] bg-gray-50/50 dark:bg-white/5 hover:bg-emerald-500 hover:text-white transition-all cursor-pointer border border-transparent hover:border-emerald-400 hover:shadow-lg hover:shadow-emerald-500/20 active:scale-[0.98]';
+                itemEl.innerHTML = `
+          <div class="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-white dark:bg-black/30 flex items-center justify-center shadow-sm group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
+            <i data-lucide="${item.icon}" class="w-5 h-5 md:w-6 md:h-6 ${item.color} group-hover:text-emerald-600 transition-colors"></i>
+          </div>
+          <div class="flex flex-col">
+            <span class="font-bold text-[15px] md:text-[17px] text-gray-900 dark:text-gray-100 group-hover:text-white transition-colors">${item.label}</span>
+            <span class="text-[11px] md:text-[12px] opacity-60 font-semibold uppercase tracking-wider mt-0.5 group-hover:text-emerald-100">Layanan Publik</span>
+          </div>
+          <div class="ml-auto w-8 h-8 rounded-full bg-white/20 flex items-center justify-center opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+            <i data-lucide="chevron-right" class="w-4 h-4 text-white"></i>
+          </div>
+        `;
+                itemEl.addEventListener('click', () => {
+                    activeIndex = originalIndex;
+                    updateCards();
+                    toggleSearchModal(false);
+                });
+                searchResults.appendChild(itemEl);
+            });
+            lucide.createIcons();
+        }
+
+        searchInput.addEventListener('input', (e) => renderSearchResults(e.target.value));
+    </script>
+</body>
+
+</html>
