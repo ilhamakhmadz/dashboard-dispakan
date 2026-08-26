@@ -1,0 +1,2474 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title id="page-title">Dashboard Ketersediaan Energi & Protein - Kab. Bandung</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            emerald: '#10b981',
+                            dark: '#064e3b',
+                            light: '#ecfdf5',
+                            accent: '#34d399'
+                        }
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(16, 185, 129, 0.1)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(15, 23, 42, 0.05);
+        }
+
+        .gradient-header {
+            background: linear-gradient(135deg, #047857 0%, #064e3b 100%);
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 3px solid #10b981;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Apexcharts annotation marker dot cleanup */
+        .apexcharts-point-annotations circle,
+        .apexcharts-point-annotations .apexcharts-point-annotation-marker {
+            display: none !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
+        }
+    </style>
+</head>
+
+<body class="text-slate-800 antialiased selection:bg-emerald-100 selection:text-emerald-900">
+
+    <!-- LOADING SCREEN -->
+    <div id="loading-screen"
+        class="fixed inset-0 z-[1000] bg-white flex flex-col items-center justify-center transition-all duration-700 ease-in-out">
+        <div class="relative w-24 h-24 mb-8">
+            <div class="absolute inset-0 border-4 border-slate-100 rounded-full"></div>
+            <div class="absolute inset-0 border-4 border-emerald-600 rounded-full border-t-transparent animate-spin">
+            </div>
+            <div class="absolute inset-0 flex items-center justify-center text-emerald-600">
+                <i data-lucide="leaf" class="w-8 h-8 animate-pulse"></i>
+            </div>
+        </div>
+
+        <h2 class="text-2xl font-bold text-slate-800 mb-2 tracking-tight">Ketersediaan Pangan</h2>
+
+        <div class="h-6 mb-3 flex items-center justify-center">
+            <p id="loading-text" class="text-sm font-medium text-slate-500 font-mono transition-all duration-300">
+                Menarik data dari API...</p>
+        </div>
+
+        <div class="w-72 h-2.5 bg-slate-100 rounded-full overflow-hidden relative shadow-inner">
+            <div id="loading-bar-inner"
+                class="h-full bg-gradient-to-r from-emerald-500 to-green-600 rounded-full transition-all duration-500 ease-out"
+                style="width: 5%"></div>
+        </div>
+        <p id="loading-pct" class="text-xs font-bold text-emerald-600 mt-3 font-mono">5%</p>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="fixed top-0 w-full z-50 glass-nav transition-all duration-300">
+        <div class="container mx-auto px-4 lg:px-8">
+            <div class="flex flex-col lg:flex-row lg:h-20 lg:items-center justify-between gap-4 py-3 lg:py-0">
+                <!-- Logo & Title -->
+                <div class="flex items-center justify-between w-full lg:w-auto">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-emerald-600 p-2 rounded-lg text-white shadow-md">
+                            <i data-lucide="pie-chart" class="w-6 h-6"></i>
+                        </div>
+                        <div class="block">
+                            <h1 class="text-lg font-bold text-slate-900 leading-tight tracking-tight">DATA PANGAN</h1>
+                            <p class="text-[10px] font-semibold text-emerald-600 uppercase tracking-widest">Kabupaten
+                                Bandung</p>
+                        </div>
+                    </div>
+                    <!-- Mobile Refresh -->
+                    <div class="lg:hidden flex items-center gap-2">
+                        <span class="relative flex h-2 w-2">
+                            <span
+                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                        </span>
+                        <button onclick="window.location.reload()" class="p-2 rounded-lg bg-slate-50 text-slate-600">
+                            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Desktop Filters (Center) -->
+                <div class="hidden lg:flex flex-1 mx-4 gap-2 items-center justify-center max-w-xs">
+                    <!-- Filter Tahun -->
+                    <div class="relative group w-full">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                            <i data-lucide="calendar" class="w-4 h-4 text-slate-500"></i>
+                        </div>
+                        <select id="nav-filter-tahun"
+                            class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-xl focus:ring-emerald-500 focus:border-emerald-500 block pl-10 p-2.5 cursor-pointer font-medium appearance-none hover:bg-white transition-colors">
+                            <option value="all">Semua Tahun</option>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                            <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Actions (Date & Live) -->
+                <div class="hidden lg:flex items-center gap-4">
+                    <div class="flex flex-col items-end">
+                        <span class="text-xs font-medium text-slate-500" id="current-date">Loading...</span>
+                        <div class="flex items-center gap-1.5">
+                            <span class="relative flex h-2 w-2">
+                                <span
+                                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                            </span>
+                            <span class="text-xs font-bold text-emerald-600">LIVE API DATA</span>
+                        </div>
+                    </div>
+                    <button onclick="window.location.reload()"
+                        class="p-2.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200 transition-all shadow-sm group">
+                        <i data-lucide="refresh-cw"
+                            class="w-5 h-5 group-hover:rotate-180 transition-transform duration-500"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Filter Section -->
+            <div class="lg:hidden flex flex-col gap-2 pb-3">
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <i data-lucide="calendar" class="w-4 h-4 text-slate-500"></i>
+                    </div>
+                    <select id="mobile-filter-tahun"
+                        class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg pl-10 p-2.5 font-medium appearance-none">
+                        <option value="all">Semua Tahun</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 lg:px-8 py-8 mt-44 sm:mt-40 lg:mt-20 mb-12">
+
+        <!-- Header Section -->
+        <div class="mb-8 rounded-3xl gradient-header p-8 text-white shadow-lg relative overflow-hidden">
+            <div class="relative z-10">
+                <h2 id="dashboard-title" class="text-2xl md:text-3xl font-bold mb-2">Neraca Bahan Makanan (NBM) dan Pola
+                    Pangan Harapan (PPH)</h2>
+                <p class="text-emerald-100 max-w-3xl text-sm md:text-base leading-relaxed opacity-90">
+                    Neraca Bahan Makanan (NBM) menyajikan data dan informasi mengenai penyediaan (supply) dan penggunaan
+                    (utilization) pangan di suatu wilayah dalam periode tertentu guna mengukur situasi ketersediaan
+                    pangan masyarakat secara kuantitatif (kkal/kapita/hari atau gram/kapita/hari). Sementara itu, Skor
+                    Pola Pangan Harapan (PPH) Ketersediaan hadir sebagai indikator untuk menilai keseimbangan dan
+                    keragaman ketersediaan pangan tersebut berdasarkan kontribusi berbagai kelompok pangan terhadap
+                    kecukupan energi.
+                </p>
+                <div class="mt-6 flex flex-wrap gap-3">
+                    <div
+                        class="bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-lg flex items-center gap-2">
+                        <i data-lucide="server" class="w-4 h-4 text-emerald-300"></i>
+                        <span class="text-sm font-medium text-emerald-50">API Terhubung</span>
+                    </div>
+                    <div
+                        class="bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-lg flex items-center gap-2">
+                        <i data-lucide="filter" class="w-4 h-4 text-emerald-300"></i>
+                        <span class="text-sm font-medium text-emerald-50">Filter Aktif: <span id="active-filter-label"
+                                class="text-white font-bold">Semua Data</span></span>
+                    </div>
+                </div>
+            </div>
+            <!-- Decor -->
+            <div class="absolute right-0 bottom-0 opacity-10 pointer-events-none">
+                <i data-lucide="wheat" class="w-64 h-64 -mb-12 -mr-12 text-white"></i>
+            </div>
+        </div>
+
+        <!-- KPI Cards -->
+        <section id="stats-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <!-- Skeletons -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <div class="animate-pulse flex space-x-4">
+                    <div class="flex-1 space-y-4 py-1">
+                        <div class="h-4 bg-slate-200 rounded w-3/4"></div>
+                        <div class="h-8 bg-slate-200 rounded"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <div class="animate-pulse flex space-x-4">
+                    <div class="flex-1 space-y-4 py-1">
+                        <div class="h-4 bg-slate-200 rounded w-3/4"></div>
+                        <div class="h-8 bg-slate-200 rounded"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <div class="animate-pulse flex space-x-4">
+                    <div class="flex-1 space-y-4 py-1">
+                        <div class="h-4 bg-slate-200 rounded w-3/4"></div>
+                        <div class="h-8 bg-slate-200 rounded"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <div class="animate-pulse flex space-x-4">
+                    <div class="flex-1 space-y-4 py-1">
+                        <div class="h-4 bg-slate-200 rounded w-3/4"></div>
+                        <div class="h-8 bg-slate-200 rounded"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Grafik PPH Ketersediaan -->
+        <section class="mb-8">
+            <!-- Header Judul Section -->
+            <div class="mb-4">
+                <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Grafik</h2>
+                <div class="flex items-center gap-2 mt-1.5 pl-1">
+                    <span class="w-2.5 h-2.5 rounded-full bg-slate-900 inline-block"></span>
+                    <h3 class="text-lg font-bold text-slate-800">Skor Pola Pangan Harapan (PPH) Ketersediaan</h3>
+                </div>
+            </div>
+
+            <!-- Card Utama Grafik PPH -->
+            <div class="bg-white rounded-3xl p-6 lg:p-8 shadow-soft border border-slate-100 relative">
+                <!-- Header Center -->
+                <div class="text-center mb-6">
+                    <h3 class="text-base md:text-lg font-extrabold text-slate-800 tracking-wider uppercase">
+                        SKOR POLA PANGAN HARAPAN (PPH) KETERSEDIAAN
+                    </h3>
+
+                    <!-- Legend -->
+                    <div
+                        class="flex items-center justify-center gap-6 mt-3 text-xs md:text-sm font-semibold text-slate-600">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3.5 h-3.5 rounded-full bg-[#eab308] inline-block shadow-sm"></span>
+                            <span>Skor PPH</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-3.5 h-3.5 rounded-full bg-[#22c55e] inline-block shadow-sm"></span>
+                            <span>Skor PPH Ideal</span>
+                        </div>
+                    </div>
+
+                    <!-- Subtitle Score Summary -->
+                    <p class="mt-2 text-xs md:text-sm text-slate-600 font-medium">
+                        Skor PPH: <span id="pph-chart-score" class="font-bold text-slate-900">85,91</span> / <span
+                            class="font-bold text-slate-900">100,00</span> (<span id="pph-chart-pct"
+                            class="text-emerald-600 font-bold">85,91%</span>)
+                    </p>
+                </div>
+
+                <!-- ApexChart Container -->
+                <div id="chart-pph-ketersediaan" class="w-full min-h-[420px] flex items-center justify-center">
+                    <div class="loader opacity-50"></div>
+                </div>
+
+                <!-- Ringkasan Kelompok PPH Grid -->
+                <div class="mt-8 pt-6 border-t border-slate-100 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                    <div class="bg-amber-50/60 p-3 rounded-xl border border-amber-100/80 text-center">
+                        <span class="text-lg">🌾</span>
+                        <p class="text-[11px] font-bold text-slate-700 mt-1">Padi-padian</p>
+                        <p class="text-xs font-extrabold text-amber-700 mt-0.5">25.00 <span
+                                class="text-[10px] font-normal text-slate-500">/ 25.00</span></p>
+                    </div>
+                    <div class="bg-amber-50/60 p-3 rounded-xl border border-amber-100/80 text-center">
+                        <span class="text-lg">🍠</span>
+                        <p class="text-[11px] font-bold text-slate-700 mt-1">Umbi-umbian</p>
+                        <p class="text-xs font-extrabold text-amber-700 mt-0.5">2.37 <span
+                                class="text-[10px] font-normal text-slate-500">/ 2.50</span></p>
+                    </div>
+                    <div class="bg-amber-50/60 p-3 rounded-xl border border-amber-100/80 text-center">
+                        <span class="text-lg">🥩</span>
+                        <p class="text-[11px] font-bold text-slate-700 mt-1">Pangan Hewani</p>
+                        <p class="text-xs font-extrabold text-amber-700 mt-0.5">15.45 <span
+                                class="text-[10px] font-normal text-slate-500">/ 24.00</span></p>
+                    </div>
+                    <div class="bg-amber-50/60 p-3 rounded-xl border border-amber-100/80 text-center">
+                        <span class="text-lg">🧈</span>
+                        <p class="text-[11px] font-bold text-slate-700 mt-1">Minyak & Lemak</p>
+                        <p class="text-xs font-extrabold text-amber-700 mt-0.5">5.00 <span
+                                class="text-[10px] font-normal text-slate-500">/ 5.00</span></p>
+                    </div>
+                    <div class="bg-amber-50/60 p-3 rounded-xl border border-amber-100/80 text-center">
+                        <span class="text-lg">🥥</span>
+                        <p class="text-[11px] font-bold text-slate-700 mt-1">Buah/Biji Berminyak</p>
+                        <p class="text-xs font-extrabold text-amber-700 mt-0.5">0.00 <span
+                                class="text-[10px] font-normal text-slate-500">/ 1.00</span></p>
+                    </div>
+                    <div class="bg-amber-50/60 p-3 rounded-xl border border-amber-100/80 text-center">
+                        <span class="text-lg">🥜</span>
+                        <p class="text-[11px] font-bold text-slate-700 mt-1">Kacang-kacangan</p>
+                        <p class="text-xs font-extrabold text-amber-700 mt-0.5">10.00 <span
+                                class="text-[10px] font-normal text-slate-500">/ 10.00</span></p>
+                    </div>
+                    <div class="bg-amber-50/60 p-3 rounded-xl border border-amber-100/80 text-center">
+                        <span class="text-lg">🎋</span>
+                        <p class="text-[11px] font-bold text-slate-700 mt-1">Gula</p>
+                        <p class="text-xs font-extrabold text-amber-700 mt-0.5">0.47 <span
+                                class="text-[10px] font-normal text-slate-500">/ 2.50</span></p>
+                    </div>
+                    <div class="bg-amber-50/60 p-3 rounded-xl border border-amber-100/80 text-center">
+                        <span class="text-lg">🥗</span>
+                        <p class="text-[11px] font-bold text-slate-700 mt-1">Sayuran & Buah</p>
+                        <p class="text-xs font-extrabold text-amber-700 mt-0.5">27.59 <span
+                                class="text-[10px] font-normal text-slate-500">/ 30.00</span></p>
+                    </div>
+                    <div
+                        class="bg-amber-50/60 p-3 rounded-xl border border-amber-100/80 text-center sm:col-span-2 lg:col-span-2">
+                        <span class="text-lg">🍱</span>
+                        <p class="text-[11px] font-bold text-slate-700 mt-1">Lain-lain</p>
+                        <p class="text-xs font-extrabold text-amber-700 mt-0.5">0.00 <span
+                                class="text-[10px] font-normal text-slate-500">/ 0.00</span></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Komposisi Skor PPH Donut & Tren PPH -->
+        <section class="mb-8">
+            <!-- Card 1: Komposisi Skor PPH (Donut & Breakdown 9 Kelompok) -->
+            <div class="bg-white rounded-3xl p-6 lg:p-8 shadow-soft border border-slate-100 mb-8">
+                <!-- Header Kartu -->
+                <div class="flex items-center gap-3 mb-6">
+                    <div
+                        class="w-10 h-10 rounded-full bg-emerald-800 flex items-center justify-center text-white ring-4 ring-emerald-100">
+                        <span class="w-3.5 h-3.5 rounded-full bg-emerald-300"></span>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900 leading-tight">Skor PPH</h3>
+                        <p class="text-xs text-slate-500 font-medium">Skor Pola Pangan Harapan</p>
+                    </div>
+                </div>
+
+                <!-- Konten Grid Donut & Legenda -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <!-- Kolom Donut Chart -->
+                    <div class="lg:col-span-6 flex justify-center">
+                        <div id="chart-pph-donut"
+                            class="w-full max-w-sm min-h-[340px] flex items-center justify-center">
+                            <div class="loader opacity-50"></div>
+                        </div>
+                    </div>
+
+                    <!-- Kolom Legenda Detail 9 Kelompok Sesuai Gambar -->
+                    <div class="lg:col-span-6 flex flex-col justify-center space-y-2 pl-0 lg:pl-4">
+                        <!-- Padi-padian -->
+                        <div class="flex items-center justify-between text-xs py-1.5 border-b border-slate-50">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#10b981]"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#34d399]"></span>
+                                <span class="text-slate-700 font-medium">Padi-padian:</span>
+                            </div>
+                            <span class="font-semibold text-slate-800">25,00/ 25,00 <span
+                                    class="text-slate-400 font-normal">(100,00%)</span></span>
+                        </div>
+                        <!-- Umbi-umbian -->
+                        <div class="flex items-center justify-between text-xs py-1.5 border-b border-slate-50">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#f87171]"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#fca5a5]"></span>
+                                <span class="text-slate-700 font-medium">Umbi-umbian:</span>
+                            </div>
+                            <span class="font-semibold text-slate-800">2,37/ 2,50 <span
+                                    class="text-slate-400 font-normal">(94,88%)</span></span>
+                        </div>
+                        <!-- Pangan Hewani -->
+                        <div class="flex items-center justify-between text-xs py-1.5 border-b border-slate-50">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#ef4444]"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#f87171]"></span>
+                                <span class="text-slate-700 font-medium">Pangan Hewani:</span>
+                            </div>
+                            <span class="font-semibold text-slate-800">15,45/ 24,00 <span
+                                    class="text-slate-400 font-normal">(64,40%)</span></span>
+                        </div>
+                        <!-- Minyak dan Lemak -->
+                        <div class="flex items-center justify-between text-xs py-1.5 border-b border-slate-50">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#a855f7]"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#c084fc]"></span>
+                                <span class="text-slate-700 font-medium">Minyak dan Lemak:</span>
+                            </div>
+                            <span class="font-semibold text-slate-800">5,00/ 5,00 <span
+                                    class="text-slate-400 font-normal">(100,00%)</span></span>
+                        </div>
+                        <!-- Buah/biji berminyak -->
+                        <div class="flex items-center justify-between text-xs py-1.5 border-b border-slate-50">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#fbbf24]"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#fde047]"></span>
+                                <span class="text-slate-700 font-medium">Buah/biji berminyak:</span>
+                            </div>
+                            <span class="font-semibold text-slate-800">0,00/ 1,00 <span
+                                    class="text-slate-400 font-normal">(0,00%)</span></span>
+                        </div>
+                        <!-- Kacang-kacangan -->
+                        <div class="flex items-center justify-between text-xs py-1.5 border-b border-slate-50">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#d4a373]"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#e7c8a4]"></span>
+                                <span class="text-slate-700 font-medium">Kacang-kacangan:</span>
+                            </div>
+                            <span class="font-semibold text-slate-800">10,00/ 10,00 <span
+                                    class="text-slate-400 font-normal">(100,00%)</span></span>
+                        </div>
+                        <!-- Gula -->
+                        <div class="flex items-center justify-between text-xs py-1.5 border-b border-slate-50">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#06b6d4]"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#67e8f9]"></span>
+                                <span class="text-slate-700 font-medium">Gula:</span>
+                            </div>
+                            <span class="font-semibold text-slate-800">0,47/ 2,50 <span
+                                    class="text-slate-400 font-normal">(19,19%)</span></span>
+                        </div>
+                        <!-- Sayuran dan Buah -->
+                        <div class="flex items-center justify-between text-xs py-1.5 border-b border-slate-50">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#6366f1]"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#818cf8]"></span>
+                                <span class="text-slate-700 font-medium">Sayuran dan Buah:</span>
+                            </div>
+                            <span class="font-semibold text-slate-800">27,59/ 30,00 <span
+                                    class="text-slate-400 font-normal">(91,98%)</span></span>
+                        </div>
+                        <!-- Lain-lain -->
+                        <div class="flex items-center justify-between text-xs py-1.5">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#f97316]"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#fb923c]"></span>
+                                <span class="text-slate-700 font-medium">Lain-lain:</span>
+                            </div>
+                            <span class="font-semibold text-slate-800">0,00/ 0,00 <span
+                                    class="text-slate-400 font-normal">(0,00%)</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Tren Skor PPH Ketersediaan -->
+            <div class="mb-4">
+                <div class="flex items-center gap-2 pl-1">
+                    <span class="w-2.5 h-2.5 rounded-full bg-slate-900 inline-block"></span>
+                    <h3 class="text-lg font-bold text-slate-800">Tren Skor PPH Ketersediaan</h3>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl p-6 lg:p-8 shadow-soft border border-slate-100 relative">
+                <!-- Header Kartu Perkembangan -->
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-2">
+                    <span
+                        class="px-2.5 py-1 text-xs font-semibold bg-slate-100 text-slate-600 rounded-md border border-slate-200">
+                        Skor PPH
+                    </span>
+                    <h3 class="text-base md:text-lg font-bold text-slate-800 text-center flex-1">
+                        Perkembangan Skor PPH Ketersediaan
+                    </h3>
+                    <div class="flex items-center gap-2 text-xs font-semibold text-slate-600">
+                        <span class="w-4 h-0.5 bg-[#3b82f6]"></span>
+                        <span>Total</span>
+                    </div>
+                </div>
+
+                <!-- ApexChart Container -->
+                <div id="chart-tren-pph-line" class="w-full min-h-[380px] flex items-center justify-center">
+                    <div class="loader opacity-50"></div>
+                </div>
+
+                <!-- Footer Tag Filter -->
+                <div class="mt-2 flex items-center">
+                    <span
+                        class="px-2.5 py-1 text-xs font-semibold bg-slate-100 text-slate-600 rounded-md border border-slate-200 flex items-center gap-1">
+                        Tahun <i data-lucide="chevron-down" class="w-3 h-3"></i>
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Ketersediaan Energi, Protein, dan Lemak Kabupaten Bandung -->
+        <section class="mb-8">
+            <!-- Header Judul Section -->
+            <div class="mb-4">
+                <div class="flex items-center gap-2 pl-1">
+                    <span class="w-2.5 h-2.5 rounded-full bg-slate-900 inline-block"></span>
+                    <h3 class="text-lg font-bold text-slate-800">Ketersediaan Energi, Protein, dan Lemak Kabupaten
+                        Bandung</h3>
+                </div>
+            </div>
+
+            <!-- Grid 3 Kartu: AKE, AKP, AKL -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1: AKE -->
+                <div class="bg-white rounded-3xl p-6 shadow-soft border border-slate-100 flex flex-col justify-between">
+                    <div>
+                        <!-- Header -->
+                        <div class="text-center mb-3">
+                            <h4 class="font-extrabold text-slate-800 text-base tracking-wider uppercase">AKE</h4>
+                            <div
+                                class="flex items-center justify-center gap-4 mt-1.5 text-xs font-semibold text-slate-600">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-[#f97316]"></span>
+                                    <span>Hewani</span>
+                                </div>
+                                <div class="flex items-center gap-1.5">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-[#22c55e]"></span>
+                                    <span>Nabati</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Chart Container -->
+                        <div id="chart-ake-bar" class="w-full min-h-[300px] flex items-center justify-center">
+                            <div class="loader opacity-50"></div>
+                        </div>
+                    </div>
+
+                    <!-- Footer Total -->
+                    <div class="text-center pt-4 border-t border-slate-50 mt-2">
+                        <p class="text-xs text-slate-400 font-medium">Total</p>
+                        <h5 id="ake-total-display" class="text-2xl font-extrabold text-slate-800">2.611</h5>
+                        <p class="text-[11px] text-slate-500 font-medium">Kkal/hari</p>
+                    </div>
+                </div>
+
+                <!-- Card 2: AKP -->
+                <div class="bg-white rounded-3xl p-6 shadow-soft border border-slate-100 flex flex-col justify-between">
+                    <div>
+                        <!-- Header -->
+                        <div class="text-center mb-3">
+                            <h4 class="font-extrabold text-slate-800 text-base tracking-wider uppercase">AKP</h4>
+                            <div
+                                class="flex items-center justify-center gap-4 mt-1.5 text-xs font-semibold text-slate-600">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-[#f97316]"></span>
+                                    <span>Hewani</span>
+                                </div>
+                                <div class="flex items-center gap-1.5">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-[#22c55e]"></span>
+                                    <span>Nabati</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Chart Container -->
+                        <div id="chart-akp-bar" class="w-full min-h-[300px] flex items-center justify-center">
+                            <div class="loader opacity-50"></div>
+                        </div>
+                    </div>
+
+                    <!-- Footer Total -->
+                    <div class="text-center pt-4 border-t border-slate-50 mt-2">
+                        <p class="text-xs text-slate-400 font-medium">Total</p>
+                        <h5 id="akp-total-display" class="text-2xl font-extrabold text-slate-800">81,90</h5>
+                        <p class="text-[11px] text-slate-500 font-medium">Gram/hari</p>
+                    </div>
+                </div>
+
+                <!-- Card 3: AKL -->
+                <div class="bg-white rounded-3xl p-6 shadow-soft border border-slate-100 flex flex-col justify-between">
+                    <div>
+                        <!-- Header -->
+                        <div class="text-center mb-3">
+                            <h4 class="font-extrabold text-slate-800 text-base tracking-wider uppercase">AKL</h4>
+                            <div
+                                class="flex items-center justify-center gap-4 mt-1.5 text-xs font-semibold text-slate-600">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-[#f97316]"></span>
+                                    <span>Hewani</span>
+                                </div>
+                                <div class="flex items-center gap-1.5">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-[#22c55e]"></span>
+                                    <span>Nabati</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Chart Container -->
+                        <div id="chart-akl-bar" class="w-full min-h-[300px] flex items-center justify-center">
+                            <div class="loader opacity-50"></div>
+                        </div>
+                    </div>
+
+                    <!-- Footer Total -->
+                    <div class="text-center pt-4 border-t border-slate-50 mt-2">
+                        <p class="text-xs text-slate-400 font-medium">Total</p>
+                        <h5 id="akl-total-display" class="text-2xl font-extrabold text-slate-800">52,71</h5>
+                        <p class="text-[11px] text-slate-500 font-medium">Gram/hari</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Ketersediaan Energi, Protein, dan Lemak Berdasarkan 11 Kelompok Pangan -->
+        <section class="mb-8">
+            <!-- Header Judul Section -->
+            <div class="mb-4">
+                <div class="flex items-center gap-2 pl-1">
+                    <span class="w-2.5 h-2.5 rounded-full bg-slate-900 inline-block"></span>
+                    <h3 class="text-lg font-bold text-slate-800">Ketersediaan Energi, Protein, dan Lemak Berdasarkan 11
+                        Kelompok Pangan</h3>
+                </div>
+            </div>
+
+            <!-- Grid 3 Kartu: AKE 11 Klp, AKP 11 Klp, AKL 11 Klp -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Card 1: AKE 11 Kelompok -->
+                <div class="bg-white rounded-3xl p-6 shadow-soft border border-slate-100 flex flex-col justify-between">
+                    <div>
+                        <!-- Header Kartu -->
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="font-extrabold text-emerald-800 text-base tracking-wider uppercase">AKE</h4>
+                            <span
+                                class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100 uppercase tracking-wider">KLIK
+                                UNTUK PILIH</span>
+                        </div>
+
+                        <!-- Donut Chart -->
+                        <div id="chart-ake-11klp" class="w-full min-h-[260px] flex items-center justify-center">
+                            <div class="loader opacity-50"></div>
+                        </div>
+
+                        <!-- List 11 Kelompok Pangan -->
+                        <div class="mt-4 divide-y divide-slate-100 text-xs text-slate-700">
+                            <div class="flex items-center justify-between py-1.5"><span
+                                    class="font-medium">Padi-Padian</span><span
+                                    class="font-semibold text-slate-900">1.070,48</span></div>
+                            <div class="flex items-center justify-between py-1.5"><span class="font-medium">Makanan
+                                    Berpati</span><span class="font-semibold text-slate-900">100,05</span></div>
+                            <div class="flex items-center justify-between py-1.5"><span
+                                    class="font-medium">Gula</span><span
+                                    class="font-semibold text-slate-900">29,03</span></div>
+                            <div class="flex items-center justify-between py-1.5"><span class="font-medium">Buah Biji
+                                    Berminyak</span><span class="font-semibold text-slate-900">747,08</span></div>
+                            <div class="flex items-center justify-between py-1.5"><span
+                                    class="font-medium">Buah-Buahan</span><span
+                                    class="font-semibold text-slate-900">53,65</span></div>
+                            <div class="flex items-center justify-between py-1.5"><span
+                                    class="font-medium">Sayur-Sayuran</span><span
+                                    class="font-semibold text-slate-900">86,13</span></div>
+                            <div class="flex items-center justify-between py-1.5"><span
+                                    class="font-medium">Daging</span><span
+                                    class="font-semibold text-slate-900">115,60</span></div>
+                            <div class="flex items-center justify-between py-1.5"><span
+                                    class="font-medium">Telur</span><span
+                                    class="font-semibold text-slate-900">43,99</span></div>
+                            <div class="flex items-center justify-between py-1.5"><span
+                                    class="font-medium">Susu</span><span
+                                    class="font-semibold text-slate-900">27,08</span></div>
+                            <div class="flex items-center justify-between py-1.5"><span
+                                    class="font-medium">Ikan</span><span
+                                    class="font-semibold text-slate-900">0,65</span></div>
+                            <div class="flex items-center justify-between py-1.5"><span class="font-medium">Minyak &
+                                    Lemak</span><span class="font-semibold text-slate-900">370,38</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: AKP 11 Kelompok -->
+                <div class="bg-white rounded-3xl p-6 shadow-soft border border-slate-100 flex flex-col justify-between">
+                    <div>
+                        <!-- Header Kartu -->
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="font-extrabold text-emerald-800 text-base tracking-wider uppercase">AKP</h4>
+                            <span
+                                class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100 uppercase tracking-wider">KLIK
+                                UNTUK PILIH</span>
+                        </div>
+
+                        <!-- Donut Chart -->
+                        <div id="chart-akp-11klp" class="w-full min-h-[260px] flex items-center justify-center">
+                            <div class="loader opacity-50"></div>
+                        </div>
+
+                        <!-- List 11 Kelompok Pangan -->
+                        <div class="mt-4 divide-y divide-slate-100 text-xs text-slate-700">
+                            <div class="flex items-center justify-between py-1.5"><span
+                                    class="font-medium">Padi-Padian</span><span
+                                    class="font-semibold text-slate-900">35,09</span></div>
+                            <div class="flex items-center justify-between py-1.5"><span class="font-medium">Makanan
+                                    Berpati</span><span class="font-semibold text-slate-900">0,70</span></div>
+                            <div class="flex items-center justify-between py-1.5"><span
+                                    class="font-medium">Gula</span><span
+                                    class="font-semibold text-slate-900">0,01</span></div>
+                            <div class="flex items-center justify-between py-1.5"><span class="font-medium">Buah Biji
+                                    Berminyak</span><span class="font-semibold text-slate-900">25,42</span></div>
+                            <div class="flex items-center justify-between py-1.5"><span
+                                    class="font-medium">Buah-Buahan</span><span
+                                    class="font-semibold text-slate-900">0,73</span></div>
+                            <div class="flex items-center justify-between py-1.5"><span
+                                    class="font-medium">Sayur-Sayuran</span><span
+                                    class="font-semibold text-slate-900">3,81</span></div>
+                            <div class="flex items-center justify-between py-1.5"><span
+                                    class="font-medium">Daging</span><span
+                                    class="font-semibold text-slate-900">7,73</span></div>
+                            <div class="flex items-center justify-between py-1.5"><span
+                                    class="font-medium">Telur</span><span
+                                    class="font-semibold text-slate-900">5,59</span></div>
+                            <div class="flex items-center justify-between py-1.5"><span
+                                    class="font-medium">Susu</span><span
+                                    class="font-semibold text-slate-900">1,47</span></div>
+                            <div class="flex items-center justify-between py-1.5"><span
+                                    class="font-medium">Ikan</span><span
+                                    class="font-semibold text-slate-900">0,12</span></div>
+                            <div class="flex items-center justify-between py-1.5"><span class="font-medium">Minyak &
+                                    Lemak</span><span class="font-semibold text-slate-900">0,00</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: AKL 11 Kelompok -->
+                <div class="bg-white rounded-3xl p-6 shadow-soft border border-slate-100 flex flex-col justify-between">
+                    <div>
+                        <!-- Header Kartu -->
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="font-extrabold text-emerald-800 text-base tracking-wider uppercase">AKL</h4>
+                            <span
+                                class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100 uppercase tracking-wider">KLIK
+                                UNTUK PILIH</span>
+                        </div>
+
+                        <!-- Donut Chart -->
+                        <div id="chart-akl-11klp" class="w-full min-h-[260px] flex items-center justify-center">
+                            <div class="loader opacity-50"></div>
+                        </div>
+
+                        <!-- List 11 Kelompok Pangan -->
+                        <div class="mt-4 divide-y divide-slate-100 text-xs text-slate-700">
+                            <div class="flex items-center justify-between py-1.5"><span
+                                    class="font-medium">Padi-Padian</span><span
+                                    class="font-semibold text-slate-900">11,31</span></div>
+                            <div class="flex items-center justify-between py-1.5"><span class="font-medium">Makanan
+                                    Berpati</span><span class="font-semibold text-slate-900">0,23</span></div>
+                            <div class="flex items-center justify-between py-1.5"><span
+                                    class="font-medium">Gula</span><span
+                                    class="font-semibold text-slate-900">0,00</span></div>
+                            <div class="flex items-center justify-between py-1.5"><span class="font-medium">Buah Biji
+                                    Berminyak</span><span class="font-semibold text-slate-900">10,87</span></div>
+                            <div class="flex items-center justify-between py-1.5"><span
+                                    class="font-medium">Buah-Buahan</span><span
+                                    class="font-semibold text-slate-900">1,52</span></div>
+                            <div class="flex items-center justify-between py-1.5"><span
+                                    class="font-medium">Sayur-Sayuran</span><span
+                                    class="font-semibold text-slate-900">0,06</span></div>
+                            <div class="flex items-center justify-between py-1.5"><span
+                                    class="font-medium">Daging</span><span
+                                    class="font-semibold text-slate-900">8,19</span></div>
+                            <div class="flex items-center justify-between py-1.5"><span
+                                    class="font-medium">Telur</span><span
+                                    class="font-semibold text-slate-900">3,87</span></div>
+                            <div class="flex items-center justify-between py-1.5"><span
+                                    class="font-medium">Susu</span><span
+                                    class="font-semibold text-slate-900">1,61</span></div>
+                            <div class="flex items-center justify-between py-1.5"><span
+                                    class="font-medium">Ikan</span><span
+                                    class="font-semibold text-slate-900">0,02</span></div>
+                            <div class="flex items-center justify-between py-1.5"><span class="font-medium">Minyak &
+                                    Lemak</span><span class="font-semibold text-slate-900">13,06</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Charts Grid 1 -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Chart 1: Perbandingan Kelompok -->
+            <div class="bg-white p-6 rounded-2xl shadow-soft border border-slate-100 lg:col-span-2">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold text-slate-800 flex items-center gap-2">
+                        <span class="bg-emerald-100 p-1.5 rounded-lg text-emerald-600"><i data-lucide="bar-chart-2"
+                                class="w-4 h-4"></i></span>
+                        Perbandingan: Nabati vs Hewani
+                    </h3>
+                </div>
+                <div id="chart-comparison" class="h-80 flex items-center justify-center">
+                    <div class="loader opacity-50"></div>
+                </div>
+            </div>
+
+            <!-- Chart 2: Proporsi Kategori -->
+            <div class="bg-white p-6 rounded-2xl shadow-soft border border-slate-100">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold text-slate-800 flex items-center gap-2">
+                        <span class="bg-blue-100 p-1.5 rounded-lg text-blue-600"><i data-lucide="pie-chart"
+                                class="w-4 h-4"></i></span>
+                        Proporsi Kategori Total
+                    </h3>
+                </div>
+                <div id="chart-proporsi" class="h-80 flex items-center justify-center">
+                    <div class="loader opacity-50"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Grid 2 -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Chart 3: Top Kategori -->
+            <div class="bg-white p-6 rounded-2xl shadow-soft border border-slate-100">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold text-slate-800 flex items-center gap-2">
+                        <span class="bg-orange-100 p-1.5 rounded-lg text-orange-600"><i data-lucide="trending-up"
+                                class="w-4 h-4"></i></span>
+                        Distribusi Tertinggi per Kategori
+                    </h3>
+                </div>
+                <div id="chart-top-pangan" class="h-80 flex items-center justify-center">
+                    <div class="loader opacity-50"></div>
+                </div>
+            </div>
+
+            <!-- Chart 4: Tren per Tahun -->
+            <div class="bg-white p-6 rounded-2xl shadow-soft border border-slate-100">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold text-slate-800 flex items-center gap-2">
+                        <span class="bg-indigo-100 p-1.5 rounded-lg text-indigo-600"><i data-lucide="calendar-days"
+                                class="w-4 h-4"></i></span>
+                        Tren Kelompok per Tahun
+                    </h3>
+                </div>
+                <div id="chart-tren-tahun" class="h-80 flex items-center justify-center">
+                    <div class="loader opacity-50"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Grid 3: Advanced Analysis -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Chart 5: Radar Keseimbangan -->
+            <div class="bg-white p-6 rounded-2xl shadow-soft border border-slate-100">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold text-slate-800 flex items-center gap-2">
+                        <span class="bg-purple-100 p-1.5 rounded-lg text-purple-600"><i data-lucide="radar"
+                                class="w-4 h-4"></i></span>
+                        Profil Keseimbangan Kategori
+                    </h3>
+                </div>
+                <div id="chart-radar" class="h-80 flex items-center justify-center">
+                    <div class="loader opacity-50"></div>
+                </div>
+            </div>
+
+            <!-- Chart 6: Gap Analysis (Nabati vs Hewani) -->
+            <div class="bg-white p-6 rounded-2xl shadow-soft border border-slate-100">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold text-slate-800 flex items-center gap-2">
+                        <span class="bg-rose-100 p-1.5 rounded-lg text-rose-600"><i data-lucide="git-compare"
+                                class="w-4 h-4"></i></span>
+                        Gap Analysis (Nabati vs Hewani)
+                    </h3>
+                </div>
+                <div id="chart-gap" class="h-80 flex items-center justify-center">
+                    <div class="loader opacity-50"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Table Section -->
+        <section class="bg-white rounded-2xl shadow-soft border border-slate-100 overflow-hidden">
+            <!-- Table Header & Filters -->
+            <div class="p-5 border-b border-slate-100 bg-slate-50/50">
+                <div class="flex flex-col lg:flex-row justify-between gap-4">
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-lg">Direktori Data Pangan</h3>
+                        <p class="text-xs text-slate-500">Daftar lengkap ketersediaan energi, protein, dan lemak
+                            berdasarkan instansi terkait.</p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <!-- Search -->
+                        <div class="relative w-full sm:w-64">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                <i data-lucide="search" class="w-4 h-4 text-slate-400"></i>
+                            </div>
+                            <input type="text" id="search-input"
+                                class="bg-white border border-slate-200 text-slate-700 text-sm rounded-xl focus:ring-emerald-500 focus:border-emerald-500 block w-full pl-10 p-2.5 shadow-sm"
+                                placeholder="Cari kategori, kelompok...">
+                        </div>
+
+                        <!-- Export Button -->
+                        <button id="btn-export"
+                            class="flex items-center justify-center gap-2 px-4 py-2 bg-emerald-600 text-white text-sm font-semibold rounded-xl hover:bg-emerald-700 transition shadow-lg shadow-emerald-200 active:scale-95">
+                            <i data-lucide="file-spreadsheet" class="w-4 h-4"></i> Excel
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left text-slate-600">
+                    <thead class="text-xs text-slate-500 uppercase bg-slate-100 font-bold border-b border-slate-200">
+                        <tr>
+                            <th scope="col" class="px-6 py-4">No</th>
+                            <th scope="col" class="px-6 py-4">Kelompok</th>
+                            <th scope="col" class="px-6 py-4">Kategori</th>
+                            <th scope="col" class="px-6 py-4">Tahun</th>
+                            <th scope="col" class="px-6 py-4 text-right">Total Ketersediaan</th>
+                            <th scope="col" class="px-6 py-4 text-center">Unit</th>
+                            <th scope="col" class="px-6 py-4 text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body" class="divide-y divide-slate-100">
+                        <!-- Skeletons -->
+                        <tr class="animate-pulse">
+                            <td class="px-6 py-4">
+                                <div class="h-4 w-6 bg-slate-200 rounded"></div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="h-4 w-24 bg-slate-200 rounded"></div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="h-4 w-40 bg-slate-200 rounded"></div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="h-4 w-16 bg-slate-200 rounded"></div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="h-4 w-12 ml-auto bg-slate-200 rounded"></div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="h-6 w-12 mx-auto bg-slate-200 rounded-full"></div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="h-8 w-8 mx-auto bg-slate-200 rounded"></div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div id="pagination" class="p-4 border-t border-slate-100 flex items-center justify-between bg-slate-50/50">
+                <span class="text-xs text-slate-500">Menampilkan <span id="showing-info"
+                        class="font-bold text-slate-800">0</span> entri data</span>
+                <div class="flex gap-1">
+                    <button id="btn-prev"
+                        class="p-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-100 hover:text-emerald-600 transition-all disabled:opacity-50"><i
+                            data-lucide="chevron-left" class="w-4 h-4"></i></button>
+                    <button id="btn-next"
+                        class="p-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-100 hover:text-emerald-600 transition-all disabled:opacity-50"><i
+                            data-lucide="chevron-right" class="w-4 h-4"></i></button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal Detail -->
+    <div id="modal-detail" class="fixed inset-0 z-[100] hidden" aria-labelledby="modal-title" role="dialog"
+        aria-modal="true">
+        <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" id="modal-backdrop"></div>
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+                <div
+                    class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-md animate-fade-in ring-1 ring-black/5">
+
+                    <!-- Modal Header -->
+                    <div class="bg-slate-50 px-6 py-4 border-b border-slate-100 flex justify-between items-center">
+                        <div class="flex items-center gap-3">
+                            <div class="bg-white p-2.5 rounded-xl text-emerald-600 shadow-sm border border-slate-200">
+                                <i data-lucide="clipboard-list" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-900 leading-tight" id="modal-title">Kategori
+                                    Data</h3>
+                                <p class="text-xs font-medium text-slate-500 flex items-center gap-1">
+                                    <i data-lucide="layers" class="w-3 h-3"></i> <span
+                                        id="modal-subtitle">Kelompok</span>
+                                </p>
+                            </div>
+                        </div>
+                        <button id="modal-close"
+                            class="p-1 rounded-full text-slate-400 hover:text-red-500 hover:bg-red-50 transition">
+                            <i data-lucide="x" class="w-6 h-6"></i>
+                        </button>
+                    </div>
+
+                    <!-- Modal Body -->
+                    <div class="px-6 py-6 space-y-4">
+
+                        <!-- Core Info -->
+                        <div
+                            class="bg-emerald-50 p-5 rounded-xl border border-emerald-100 text-center relative overflow-hidden">
+                            <i data-lucide="activity"
+                                class="absolute -right-4 -bottom-4 w-24 h-24 text-emerald-200 opacity-50"></i>
+                            <p class="text-xs font-bold text-emerald-700 uppercase tracking-wider mb-1 relative z-10">
+                                Total Ketersediaan</p>
+                            <h2 class="text-4xl font-extrabold text-emerald-600 relative z-10" id="modal-skor">0</h2>
+                            <p class="text-sm font-semibold text-emerald-600 mt-1 relative z-10" id="modal-unit">Unit
+                            </p>
+                        </div>
+
+                        <!-- Details Grid -->
+                        <div class="grid grid-cols-2 gap-3 mt-4">
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Tahun
+                                    Pendataan</p>
+                                <p class="text-sm font-semibold text-slate-800 flex items-center gap-1">
+                                    <i data-lucide="calendar" class="w-4 h-4 text-slate-500"></i>
+                                    <span id="modal-tahun">-</span>
+                                </p>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Nomor Urut
+                                </p>
+                                <p class="text-sm font-semibold text-slate-800 font-mono" id="modal-nomor">-</p>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-slate-100 mt-4 bg-slate-50 p-3 rounded-lg">
+                            <p class="text-[11px] text-slate-500">Instansi: <span class="font-semibold text-slate-700"
+                                    id="modal-instansi">-</span></p>
+                            <p class="text-[11px] text-slate-500 mt-1">Dicatat oleh: <span
+                                    class="font-semibold text-slate-700" id="modal-pic">-</span> (<span
+                                    id="modal-created"></span>)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- CONSTANTS & STATE ---
+        const API_URL = 'https://api.bandungkab.go.id/api/data/ketersediaan-energi-protein-dan-lemak-5Y5Jd';
+
+        let rawData = [];
+        let filteredData = [];
+        let currentPage = 1;
+        const itemsPerPage = 10;
+
+        // --- DOM ELEMENTS ---
+        const els = {
+            date: document.getElementById('current-date'),
+            stats: document.getElementById('stats-container'),
+            tableBody: document.getElementById('table-body'),
+
+            // Filters Desktop
+            filterTahun: document.getElementById('nav-filter-tahun'),
+
+            // Filters Mobile
+            filterTahunMobile: document.getElementById('mobile-filter-tahun'),
+
+            activeFilterLabel: document.getElementById('active-filter-label'),
+            search: document.getElementById('search-input'),
+            paginationInfo: document.getElementById('showing-info'),
+            btnPrev: document.getElementById('btn-prev'),
+            btnNext: document.getElementById('btn-next'),
+
+            modal: {
+                self: document.getElementById('modal-detail'),
+                backdrop: document.getElementById('modal-backdrop'),
+                close: document.getElementById('modal-close'),
+                title: document.getElementById('modal-title'),
+                subtitle: document.getElementById('modal-subtitle'),
+                skor: document.getElementById('modal-skor'),
+                unit: document.getElementById('modal-unit'),
+                tahun: document.getElementById('modal-tahun'),
+                nomor: document.getElementById('modal-nomor'),
+                pic: document.getElementById('modal-pic'),
+                instansi: document.getElementById('modal-instansi'),
+                created: document.getElementById('modal-created')
+            }
+        };
+
+        // --- UTILITIES ---
+        const formatNumber = (num) => new Intl.NumberFormat('id-ID', { maximumFractionDigits: 2 }).format(num || 0);
+        const setDate = () => {
+            const now = new Date();
+            els.date.innerText = now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+        };
+        const getBadge = (kelompok) => {
+            const s = (kelompok || '').toLowerCase();
+            if (s.includes('nabati')) return `<span class="bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-md text-xs font-bold border border-emerald-200">Nabati</span>`;
+            if (s.includes('hewani')) return `<span class="bg-orange-100 text-orange-700 px-2.5 py-1 rounded-md text-xs font-bold border border-orange-200">Hewani</span>`;
+            return `<span class="bg-slate-100 text-slate-700 px-2.5 py-1 rounded-md text-xs font-bold border border-slate-200">${kelompok || '-'}</span>`;
+        };
+
+        // --- FETCH DATA ---
+        async function fetchData() {
+            const loadingText = document.getElementById('loading-text');
+            const loadingBar = document.getElementById('loading-bar-inner');
+            const loadingPct = document.getElementById('loading-pct');
+            const loadingScreen = document.getElementById('loading-screen');
+
+            function updateProgress(pct, msg) {
+                if (loadingBar) loadingBar.style.width = `${pct}%`;
+                if (loadingPct) loadingPct.innerText = `${pct}%`;
+                if (loadingText) loadingText.innerText = msg;
+            }
+
+            try {
+                updateProgress(20, "Menghubungkan ke API Ketersediaan...");
+                const res = await fetch(API_URL);
+                updateProgress(60, "Mengunduh Data...");
+                const json = await res.json();
+
+                updateProgress(90, "Memproses Data...");
+
+                // Setel Judul Dashboard Secara Dinamis dari API
+                if (json.title) {
+                    const dashboardTitleEl = document.getElementById('dashboard-title');
+                    const pageTitleEl = document.getElementById('page-title');
+                    if (dashboardTitleEl) dashboardTitleEl.textContent = "Neraca Bahan Makanan (NBM) dan Pola Pangan Harapan (PPH)";
+                    if (pageTitleEl) pageTitleEl.textContent = `Dashboard Neraca Bahan Makanan (NBM) dan Pola Pangan Harapan (PPH) - Kab. Bandung`;
+                }
+
+                if ((json.status === 'success' || json.data) && Array.isArray(json.data)) {
+                    // Sorting default by nomor
+                    rawData = json.data.sort((a, b) => {
+                        const numA = a.detail?.nomor ? Number(a.detail.nomor) : 999999;
+                        const numB = b.detail?.nomor ? Number(b.detail.nomor) : 999999;
+                        return numA - numB;
+                    });
+                    filteredData = [...rawData];
+
+                    initDashboard();
+                    updateProgress(100, "Selesai!");
+
+                    setTimeout(() => {
+                        if (loadingScreen) {
+                            loadingScreen.classList.add('opacity-0');
+                            setTimeout(() => loadingScreen.classList.add('hidden'), 700);
+                        }
+                    }, 600);
+                } else {
+                    throw new Error("Format JSON tidak sesuai ekspektasi");
+                }
+            } catch (err) {
+                console.error(err);
+                if (loadingText) {
+                    loadingText.innerText = "Gagal memuat data! Silakan refresh.";
+                    loadingText.classList.add('text-red-500');
+                }
+                els.stats.innerHTML = `<div class="col-span-full p-6 text-red-500 bg-red-50 border border-red-200 rounded-xl text-center font-semibold">Gagal memuat data API. Silakan periksa koneksi internet Anda.</div>`;
+            }
+        }
+
+        // --- INITIALIZATION ---
+        function initDashboard() {
+            populateFilters();
+            renderStats();
+            renderCharts();
+            renderTable();
+            setupEvents();
+            lucide.createIcons();
+        }
+
+        // --- STATS LOGIC ---
+        function renderStats() {
+            const valTahun = els.filterTahun.value;
+
+            let pphVal = "85,91";
+            let pphSub = "85,91% dari Target Ideal Nasional";
+            let akeVal = "2.611";
+            let akpVal = "81,90";
+            let aklVal = "52,71";
+
+            if (valTahun !== 'all') {
+                // Calculate dynamically from the selected year
+                let totalEnergi = 0;
+                let totalProtein = 0;
+                let totalLemak = 0;
+                filteredData.forEach(item => {
+                    const d = item.detail || {};
+                    const val = parseFloat(d.total) || 0;
+                    const kat = (d.kategori || '').toLowerCase();
+                    if (kat.includes('energi')) {
+                        totalEnergi += val;
+                    } else if (kat.includes('protein')) {
+                        totalProtein += val;
+                    } else if (kat.includes('lemak')) {
+                        totalLemak += val;
+                    }
+                });
+
+                akeVal = formatNumber(totalEnergi);
+                akpVal = formatNumber(totalProtein);
+                aklVal = formatNumber(totalLemak);
+
+                pphVal = "85,91";
+                pphSub = "85,91% dari Target Ideal Nasional";
+            }
+
+            const cards = [
+                { title: 'Skor PPH Ketersediaan', val: pphVal + ' / 100,00', sub: pphSub, icon: 'award', color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-200' },
+                { title: 'Angka Kecukupan Energi (AKE)', val: akeVal, sub: 'Kkal/hari', icon: 'zap', color: 'text-orange-600', bg: 'bg-orange-50', border: 'border-orange-200' },
+                { title: 'Angka Kecukupan Protein (AKP)', val: akpVal, sub: 'Gram/hari', icon: 'activity', color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-200' },
+                { title: 'Angka Kecukupan Lemak (AKL)', val: aklVal, sub: 'Gram/hari', icon: 'droplet', color: 'text-indigo-600', bg: 'bg-indigo-50', border: 'border-indigo-200' }
+            ];
+
+            els.stats.innerHTML = cards.map(c => `
+                <div class="bg-white p-6 rounded-2xl border ${c.border} shadow-sm hover:shadow-md transition-shadow flex items-center justify-between group">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">${c.title}</p>
+                        <h3 class="text-2xl font-extrabold text-slate-800">${c.val}</h3>
+                        <p class="text-[11px] font-medium text-slate-500 mt-1 line-clamp-1">${c.sub}</p>
+                    </div>
+                    <div class="${c.bg} p-3 rounded-xl ${c.color} group-hover:scale-110 transition-transform shadow-inner">
+                        <i data-lucide="${c.icon}" class="w-6 h-6"></i>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        // --- CHARTS LOGIC ---
+        function renderCharts() {
+            renderPphKetersediaanChart();
+            renderPphDonutChart();
+            renderTrenPphLineChart();
+            renderAkeAkpAklCharts();
+            render11KelompokPanganCharts();
+
+            const commonOpts = { fontFamily: 'Plus Jakarta Sans, sans-serif', toolbar: { show: false } };
+
+            let kategoriSet = new Set();
+            let kelompokSet = new Set();
+            let yearsSet = new Set();
+
+            filteredData.forEach(item => {
+                const d = item.detail || {};
+                if (d.kategori) kategoriSet.add(d.kategori);
+                if (d.kelompok) kelompokSet.add(d.kelompok);
+                if (d.tahun) yearsSet.add(d.tahun);
+            });
+
+            let arrKategori = Array.from(kategoriSet).sort();
+            let arrKelompok = Array.from(kelompokSet).sort();
+            let arrYears = Array.from(yearsSet).sort((a, b) => a - b);
+
+            // ==========================================
+            // CHART 1: Grouped Bar (Perbandingan Kelompok by Kategori)
+            // ==========================================
+            const compEl = document.querySelector("#chart-comparison");
+            compEl.innerHTML = '';
+
+            let seriesComp = arrKelompok.map(kelompok => {
+                let dataPoints = arrKategori.map(kat => {
+                    let matches = filteredData.filter(d => d.detail?.kelompok === kelompok && d.detail?.kategori === kat);
+                    let sum = matches.reduce((acc, curr) => acc + (parseFloat(curr.detail.total) || 0), 0);
+                    return parseFloat(sum.toFixed(2));
+                });
+                return { name: kelompok, data: dataPoints };
+            });
+
+            if (arrKategori.length > 0) {
+                new ApexCharts(compEl, {
+                    ...commonOpts,
+                    series: seriesComp,
+                    chart: { type: 'bar', height: 320, toolbar: { show: true } },
+                    colors: ['#10b981', '#f59e0b', '#3b82f6', '#8b5cf6'], // Hijau (Nabati), Oranye (Hewani) usually
+                    plotOptions: { bar: { horizontal: false, columnWidth: '55%', borderRadius: 2 } },
+                    dataLabels: { enabled: false },
+                    stroke: { show: true, width: 2, colors: ['transparent'] },
+                    xaxis: { categories: arrKategori, labels: { style: { fontSize: '10px' } } },
+                    yaxis: { title: { text: 'Total Ketersediaan', style: { fontSize: '12px', fontWeight: 600 } } },
+                    fill: { opacity: 1 },
+                    tooltip: { y: { formatter: (val) => val } }
+                }).render();
+            } else {
+                compEl.innerHTML = '<p class="text-sm text-slate-400 italic">Tidak ada data untuk filter ini.</p>';
+            }
+
+            // ==========================================
+            // CHART 2: Donut (Proporsi per Kategori)
+            // ==========================================
+            const propEl = document.querySelector("#chart-proporsi");
+            propEl.innerHTML = '';
+
+            let propData = {};
+            filteredData.forEach(item => {
+                const d = item.detail || {};
+                const kat = d.kategori || 'Lainnya';
+                propData[kat] = (propData[kat] || 0) + (parseFloat(d.total) || 0);
+            });
+
+            let sortedProp = Object.entries(propData).sort((a, b) => b[1] - a[1]);
+            let propLabels = sortedProp.map(k => k[0]);
+            let propSeries = sortedProp.map(k => parseFloat(k[1].toFixed(2)));
+
+            if (propSeries.length > 0) {
+                new ApexCharts(propEl, {
+                    ...commonOpts,
+                    series: propSeries,
+                    labels: propLabels,
+                    chart: { type: 'donut', height: 320 },
+                    colors: ['#10b981', '#3b82f6', '#f43f5e', '#f59e0b', '#8b5cf6', '#06b6d4', '#ec4899'],
+                    legend: { position: 'bottom', fontSize: '11px' },
+                    dataLabels: { enabled: false },
+                    tooltip: { y: { formatter: (val) => val } },
+                    plotOptions: { pie: { donut: { size: '60%' } } }
+                }).render();
+            } else {
+                propEl.innerHTML = '<p class="text-sm text-slate-400 italic">Tidak ada data.</p>';
+            }
+
+            // ==========================================
+            // CHART 3: Horizontal Bar (Top Kategori)
+            // ==========================================
+            const topEl = document.querySelector("#chart-top-pangan");
+            topEl.innerHTML = '';
+
+            let top10Labels = propLabels.slice(0, 10);
+            let top10Series = propSeries.slice(0, 10);
+
+            if (top10Series.length > 0) {
+                new ApexCharts(topEl, {
+                    ...commonOpts,
+                    series: [{ name: 'Total', data: top10Series }],
+                    chart: { type: 'bar', height: 320 },
+                    colors: ['#0ea5e9'],
+                    plotOptions: { bar: { horizontal: true, borderRadius: 4, dataLabels: { position: 'top' } } },
+                    dataLabels: { enabled: true, offsetX: 25, style: { fontSize: '11px', colors: ['#334155'] } },
+                    xaxis: { categories: top10Labels, labels: { style: { fontSize: '11px' } } },
+                    grid: { borderColor: '#f1f5f9' },
+                    tooltip: { y: { formatter: (val) => val } }
+                }).render();
+            } else {
+                topEl.innerHTML = '<p class="text-sm text-slate-400 italic">Tidak ada data.</p>';
+            }
+
+            // ==========================================
+            // CHART 4: Area (Tren Kelompok per Tahun)
+            // ==========================================
+            const trenEl = document.querySelector("#chart-tren-tahun");
+            trenEl.innerHTML = '';
+
+            let seriesTren = arrKelompok.map(kelompok => {
+                let dataPoints = arrYears.map(year => {
+                    let matches = filteredData.filter(d => d.detail?.kelompok === kelompok && d.detail?.tahun == year);
+                    let sum = matches.reduce((acc, curr) => acc + (parseFloat(curr.detail.total) || 0), 0);
+                    return parseFloat(sum.toFixed(2));
+                });
+                return { name: kelompok, data: dataPoints };
+            });
+
+            if (arrYears.length > 0) {
+                new ApexCharts(trenEl, {
+                    ...commonOpts,
+                    series: seriesTren,
+                    chart: { type: 'area', height: 320, toolbar: { show: false } },
+                    colors: ['#10b981', '#f59e0b', '#3b82f6'],
+                    dataLabels: { enabled: false },
+                    stroke: { curve: 'smooth', width: 2 },
+                    fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.4, opacityTo: 0.05, stops: [0, 90, 100] } },
+                    xaxis: { categories: arrYears, title: { text: 'Tahun' } },
+                    yaxis: { title: { text: 'Total Data' } },
+                    tooltip: { y: { formatter: (val) => val } }
+                }).render();
+            } else {
+                trenEl.innerHTML = '<p class="text-sm text-slate-400 italic">Tidak ada data untuk filter ini.</p>';
+            }
+
+            // ==========================================
+            // CHART 5: Radar (Profil Keseimbangan Kategori)
+            // ==========================================
+            const radarEl = document.querySelector("#chart-radar");
+            radarEl.innerHTML = '';
+
+            if (arrKategori.length > 0 && arrKelompok.length > 0) {
+                new ApexCharts(radarEl, {
+                    ...commonOpts,
+                    series: seriesComp, // Menggunakan series yang sama dari Chart 1
+                    chart: { type: 'radar', height: 320, toolbar: { show: false } },
+                    labels: arrKategori,
+                    stroke: { width: 2 },
+                    fill: { opacity: 0.2 },
+                    markers: { size: 4, hover: { size: 6 } },
+                    colors: ['#10b981', '#f59e0b', '#3b82f6', '#8b5cf6'],
+                    tooltip: { y: { formatter: (val) => val } }
+                }).render();
+            } else {
+                radarEl.innerHTML = '<p class="text-sm text-slate-400 italic">Tidak ada data.</p>';
+            }
+
+            // ==========================================
+            // CHART 6: Gap Analysis (Nabati vs Hewani)
+            // ==========================================
+            const gapEl = document.querySelector("#chart-gap");
+            gapEl.innerHTML = '';
+
+            let kelompokNabati = arrKelompok.find(s => s.toLowerCase().includes('nabati'));
+            let kelompokHewani = arrKelompok.find(s => s.toLowerCase().includes('hewani'));
+
+            // Mengelompokkan berdasarkan Kategori untuk melihat gap
+            if (kelompokNabati && kelompokHewani && arrKategori.length > 0) {
+                let gapData = arrKategori.map(kat => {
+                    let valNabati = filteredData.filter(d => d.detail?.kelompok === kelompokNabati && d.detail?.kategori === kat).reduce((sum, d) => sum + (parseFloat(d.detail.total) || 0), 0);
+                    let valHewani = filteredData.filter(d => d.detail?.kelompok === kelompokHewani && d.detail?.kategori === kat).reduce((sum, d) => sum + (parseFloat(d.detail.total) || 0), 0);
+                    return parseFloat((valNabati - valHewani).toFixed(2));
+                });
+
+                new ApexCharts(gapEl, {
+                    ...commonOpts,
+                    series: [{ name: 'Gap (Nabati - Hewani)', data: gapData }],
+                    chart: { type: 'bar', height: 320, toolbar: { show: true } },
+                    plotOptions: {
+                        bar: {
+                            colors: {
+                                ranges: [
+                                    { from: -100000, to: -0.01, color: '#f43f5e' }, // Negatif (merah): Hewani > Nabati
+                                    { from: 0, to: 100000, color: '#10b981' }      // Positif (hijau): Nabati >= Hewani
+                                ]
+                            },
+                            columnWidth: '60%',
+                            borderRadius: 2
+                        }
+                    },
+                    dataLabels: { enabled: false },
+                    yaxis: { title: { text: 'Selisih Nilai' } },
+                    xaxis: { categories: arrKategori, labels: { style: { fontSize: '10px' } } },
+                    tooltip: {
+                        y: {
+                            formatter: function (val) {
+                                if (val > 0) return "+" + val + " (Nabati Dominan)";
+                                if (val < 0) return val + " (Hewani Dominan)";
+                                return "0 (Seimbang)";
+                            }
+                        }
+                    }
+                }).render();
+            } else {
+                gapEl.innerHTML = '<div class="text-center p-4"><i data-lucide="alert-circle" class="w-8 h-8 text-slate-300 mx-auto mb-2"></i><p class="text-sm text-slate-400 italic">Pilih filter yang menampilkan kelompok Nabati & Hewani untuk melihat analisis Gap.</p></div>';
+            }
+        }
+
+        // ==========================================
+        // CHART PPH KETERSEDIAAN (Sesuai Standar PPH Nasional)
+        // ==========================================
+        function renderPphKetersediaanChart() {
+            const pphChartEl = document.querySelector("#chart-pph-ketersediaan");
+            if (!pphChartEl) return;
+            pphChartEl.innerHTML = '';
+
+            const categories = [
+                'Padi-padian',
+                'Umbi-umbian',
+                'Pangan Hewani',
+                'Minyak dan Lemak',
+                'Buah/biji berminyak',
+                'Kacang-kacangan',
+                'Gula',
+                'Sayuran dan Buah',
+                'Lain-lain'
+            ];
+
+            const pphAktual = [25.00, 2.37, 15.45, 5.00, 0.00, 10.00, 0.47, 27.59, 0.00];
+            const pphIdeal = [25.00, 2.50, 24.00, 5.00, 1.00, 10.00, 2.50, 30.00, 0.00];
+
+            const pphScoreEl = document.getElementById('pph-chart-score');
+            const pphPctEl = document.getElementById('pph-chart-pct');
+            if (pphScoreEl) pphScoreEl.textContent = '85,91';
+            if (pphPctEl) pphPctEl.textContent = '85,91%';
+
+            const options = {
+                series: [
+                    {
+                        name: 'Skor PPH',
+                        data: pphAktual
+                    },
+                    {
+                        name: 'Skor PPH Ideal',
+                        data: pphIdeal
+                    }
+                ],
+                chart: {
+                    type: 'bar',
+                    height: 430,
+                    fontFamily: 'Plus Jakarta Sans, sans-serif',
+                    toolbar: {
+                        show: true,
+                        tools: {
+                            download: true,
+                            selection: false,
+                            zoom: false,
+                            zoomin: false,
+                            zoomout: false,
+                            pan: false,
+                            reset: false
+                        }
+                    },
+                    animations: {
+                        enabled: true,
+                        easing: 'easeinout',
+                        speed: 700
+                    }
+                },
+                colors: ['#eab308', '#22c55e'], // Yellow (Amber) for Skor PPH, Green for Skor PPH Ideal
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        columnWidth: '70%',
+                        borderRadius: 3,
+                        dataLabels: {
+                            position: 'top'
+                        }
+                    }
+                },
+                dataLabels: {
+                    enabled: true,
+                    offsetY: -18,
+                    style: {
+                        fontSize: '10px',
+                        fontWeight: '700',
+                        colors: ['#334155']
+                    },
+                    formatter: function (val) {
+                        return Number(val).toFixed(2);
+                    }
+                },
+                stroke: {
+                    show: true,
+                    width: 2,
+                    colors: ['transparent']
+                },
+                xaxis: {
+                    categories: categories,
+                    labels: {
+                        rotate: -45,
+                        rotateAlways: true,
+                        style: {
+                            fontSize: '11px',
+                            fontWeight: 600,
+                            colors: '#64748b'
+                        }
+                    },
+                    axisBorder: {
+                        show: true,
+                        color: '#e2e8f0'
+                    },
+                    axisTicks: {
+                        show: true,
+                        color: '#e2e8f0'
+                    }
+                },
+                yaxis: {
+                    min: 0,
+                    max: 50,
+                    tickAmount: 10,
+                    labels: {
+                        style: {
+                            fontSize: '11px',
+                            fontWeight: 500,
+                            colors: '#64748b'
+                        },
+                        formatter: function (val) {
+                            return Math.round(val);
+                        }
+                    }
+                },
+                grid: {
+                    borderColor: '#f1f5f9',
+                    strokeDashArray: 2,
+                    yaxis: {
+                        lines: {
+                            show: true
+                        }
+                    },
+                    xaxis: {
+                        lines: {
+                            show: false
+                        }
+                    }
+                },
+                legend: {
+                    show: false
+                },
+                annotations: {
+                    points: [
+                        {
+                            x: 'Padi-padian',
+                            y: 34,
+                            marker: { size: 0, strokeWidth: 0, fillOpacity: 0 },
+                            label: {
+                                text: '🌾',
+                                borderColor: 'transparent',
+                                borderWidth: 0,
+                                style: {
+                                    background: '#fef3c7',
+                                    fontSize: '18px',
+                                    padding: { left: 4, right: 4, top: 2, bottom: 2 }
+                                }
+                            }
+                        },
+                        {
+                            x: 'Umbi-umbian',
+                            y: 10,
+                            marker: { size: 0, strokeWidth: 0, fillOpacity: 0 },
+                            label: {
+                                text: '🍠',
+                                borderColor: 'transparent',
+                                borderWidth: 0,
+                                style: {
+                                    background: '#ffedd5',
+                                    fontSize: '18px',
+                                    padding: { left: 4, right: 4, top: 2, bottom: 2 }
+                                }
+                            }
+                        },
+                        {
+                            x: 'Pangan Hewani',
+                            y: 33,
+                            marker: { size: 0, strokeWidth: 0, fillOpacity: 0 },
+                            label: {
+                                text: '🥩',
+                                borderColor: 'transparent',
+                                borderWidth: 0,
+                                style: {
+                                    background: '#fee2e2',
+                                    fontSize: '18px',
+                                    padding: { left: 4, right: 4, top: 2, bottom: 2 }
+                                }
+                            }
+                        },
+                        {
+                            x: 'Minyak dan Lemak',
+                            y: 13,
+                            marker: { size: 0, strokeWidth: 0, fillOpacity: 0 },
+                            label: {
+                                text: '🧈',
+                                borderColor: 'transparent',
+                                borderWidth: 0,
+                                style: {
+                                    background: '#fef9c3',
+                                    fontSize: '18px',
+                                    padding: { left: 4, right: 4, top: 2, bottom: 2 }
+                                }
+                            }
+                        },
+                        {
+                            x: 'Buah/biji berminyak',
+                            y: 9,
+                            marker: { size: 0, strokeWidth: 0, fillOpacity: 0 },
+                            label: {
+                                text: '🥥',
+                                borderColor: 'transparent',
+                                borderWidth: 0,
+                                style: {
+                                    background: '#f1f5f9',
+                                    fontSize: '18px',
+                                    padding: { left: 4, right: 4, top: 2, bottom: 2 }
+                                }
+                            }
+                        },
+                        {
+                            x: 'Kacang-kacangan',
+                            y: 18,
+                            marker: { size: 0, strokeWidth: 0, fillOpacity: 0 },
+                            label: {
+                                text: '🥜',
+                                borderColor: 'transparent',
+                                borderWidth: 0,
+                                style: {
+                                    background: '#ffedd5',
+                                    fontSize: '18px',
+                                    padding: { left: 4, right: 4, top: 2, bottom: 2 }
+                                }
+                            }
+                        },
+                        {
+                            x: 'Gula',
+                            y: 10,
+                            marker: { size: 0, strokeWidth: 0, fillOpacity: 0 },
+                            label: {
+                                text: '🎋',
+                                borderColor: 'transparent',
+                                borderWidth: 0,
+                                style: {
+                                    background: '#f1f5f9',
+                                    fontSize: '18px',
+                                    padding: { left: 4, right: 4, top: 2, bottom: 2 }
+                                }
+                            }
+                        },
+                        {
+                            x: 'Sayuran dan Buah',
+                            y: 39,
+                            marker: { size: 0, strokeWidth: 0, fillOpacity: 0 },
+                            label: {
+                                text: '🥗',
+                                borderColor: 'transparent',
+                                borderWidth: 0,
+                                style: {
+                                    background: '#ecfdf5',
+                                    fontSize: '18px',
+                                    padding: { left: 4, right: 4, top: 2, bottom: 2 }
+                                }
+                            }
+                        }
+                    ]
+                },
+                tooltip: {
+                    shared: true,
+                    intersect: false,
+                    y: {
+                        formatter: function (val) {
+                            return val !== undefined ? Number(val).toFixed(2) : '';
+                        }
+                    }
+                }
+            };
+
+            const chart = new ApexCharts(pphChartEl, options);
+            chart.render();
+        }
+
+        // ==========================================
+        // CHART KOMPOSISI SKOR PPH (DONUT 9 KELOMPOK)
+        // ==========================================
+        function renderPphDonutChart() {
+            const donutEl = document.querySelector("#chart-pph-donut");
+            if (!donutEl) return;
+            donutEl.innerHTML = '';
+
+            const series = [25.00, 2.37, 15.45, 5.00, 0.01, 10.00, 0.47, 27.59, 0.01];
+            const labels = [
+                'Padi-padian',
+                'Umbi-umbian',
+                'Pangan Hewani',
+                'Minyak dan Lemak',
+                'Buah/biji berminyak',
+                'Kacang-kacangan',
+                'Gula',
+                'Sayuran dan Buah',
+                'Lain-lain'
+            ];
+
+            const colors = [
+                '#10b981', // green
+                '#f87171', // coral/light red
+                '#ef4444', // red
+                '#a855f7', // purple
+                '#fbbf24', // yellow
+                '#d4a373', // tan/wheat
+                '#06b6d4', // cyan
+                '#6366f1', // indigo/blue
+                '#f97316'  // orange
+            ];
+
+            const options = {
+                series: series,
+                labels: labels,
+                colors: colors,
+                chart: {
+                    type: 'donut',
+                    height: 350,
+                    fontFamily: 'Plus Jakarta Sans, sans-serif'
+                },
+                legend: {
+                    show: false
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    width: 3,
+                    colors: ['#ffffff']
+                },
+                plotOptions: {
+                    pie: {
+                        donut: {
+                            size: '62%',
+                            labels: {
+                                show: true,
+                                name: {
+                                    show: false
+                                },
+                                value: {
+                                    show: true,
+                                    fontSize: '30px',
+                                    fontWeight: '800',
+                                    color: '#064e3b',
+                                    offsetY: 6,
+                                    formatter: () => '85.91'
+                                },
+                                total: {
+                                    show: true,
+                                    showAlways: true,
+                                    label: 'Skor PPH',
+                                    fontSize: '12px',
+                                    fontWeight: '600',
+                                    color: '#64748b',
+                                    formatter: () => '/ 100.00'
+                                }
+                            }
+                        }
+                    }
+                },
+                tooltip: {
+                    y: {
+                        formatter: function (val, opts) {
+                            const ideals = [25.00, 2.50, 24.00, 5.00, 1.00, 10.00, 2.50, 30.00, 0.00];
+                            const idx = opts.seriesIndex;
+                            const actual = val < 0.05 ? 0 : val;
+                            const pct = ideals[idx] > 0 ? ((actual / ideals[idx]) * 100).toFixed(2) : '0.00';
+                            return `${actual.toFixed(2)} / ${ideals[idx].toFixed(2)} (${pct}%)`;
+                        }
+                    }
+                }
+            };
+
+            const chart = new ApexCharts(donutEl, options);
+            chart.render();
+        }
+
+        // ==========================================
+        // CHART TREN SKOR PPH KETERSEDIAAN (LINE CHART)
+        // ==========================================
+        function renderTrenPphLineChart() {
+            const lineEl = document.querySelector("#chart-tren-pph-line");
+            if (!lineEl) return;
+            lineEl.innerHTML = '';
+
+            const options = {
+                series: [
+                    {
+                        name: 'Total',
+                        data: [84.68, 87.59]
+                    }
+                ],
+                chart: {
+                    type: 'line',
+                    height: 380,
+                    fontFamily: 'Plus Jakarta Sans, sans-serif',
+                    toolbar: {
+                        show: true,
+                        tools: {
+                            download: true,
+                            selection: false,
+                            zoom: false,
+                            zoomin: false,
+                            zoomout: false,
+                            pan: false,
+                            reset: false
+                        }
+                    },
+                    animations: {
+                        enabled: true,
+                        easing: 'easeinout',
+                        speed: 700
+                    }
+                },
+                colors: ['#3b82f6'],
+                stroke: {
+                    curve: 'straight',
+                    width: 3.5
+                },
+                markers: {
+                    size: 5,
+                    colors: ['#3b82f6'],
+                    strokeColors: '#ffffff',
+                    strokeWidth: 2,
+                    hover: {
+                        size: 7
+                    }
+                },
+                dataLabels: {
+                    enabled: true,
+                    offsetY: -10,
+                    style: {
+                        fontSize: '12px',
+                        fontWeight: '700',
+                        colors: ['#1e293b']
+                    },
+                    formatter: function (val) {
+                        return Number(val).toFixed(2).replace('.', ',');
+                    }
+                },
+                xaxis: {
+                    categories: ['2022', '2023'],
+                    labels: {
+                        style: {
+                            fontSize: '12px',
+                            fontWeight: 600,
+                            colors: '#64748b'
+                        }
+                    },
+                    axisBorder: {
+                        show: true,
+                        color: '#cbd5e1'
+                    },
+                    axisTicks: {
+                        show: true,
+                        color: '#cbd5e1'
+                    }
+                },
+                yaxis: {
+                    min: 83,
+                    max: 88,
+                    tickAmount: 10,
+                    labels: {
+                        style: {
+                            fontSize: '11px',
+                            fontWeight: 500,
+                            colors: '#64748b'
+                        },
+                        formatter: function (val) {
+                            return val.toFixed(1).replace('.', ',');
+                        }
+                    }
+                },
+                grid: {
+                    borderColor: '#e2e8f0',
+                    strokeDashArray: 0,
+                    yaxis: {
+                        lines: {
+                            show: true
+                        }
+                    },
+                    xaxis: {
+                        lines: {
+                            show: false
+                        }
+                    }
+                },
+                legend: {
+                    show: false
+                },
+                tooltip: {
+                    y: {
+                        formatter: function (val) {
+                            return Number(val).toFixed(2).replace('.', ',');
+                        }
+                    }
+                }
+            };
+
+            const chart = new ApexCharts(lineEl, options);
+            chart.render();
+        }
+
+        // ==========================================
+        // CHARTS KETERSEDIAAN ENERGI, PROTEIN, DAN LEMAK (AKE, AKP, AKL)
+        // ==========================================
+        function renderAkeAkpAklCharts() {
+            // Helper function to build single bar card chart
+            function createMacroBarChart(elementId, hewaniVal, nabatiVal, yMax, yTicks, hewaniAnnotY, nabatiAnnotY) {
+                const el = document.querySelector(elementId);
+                if (!el) return;
+                el.innerHTML = '';
+
+                const options = {
+                    series: [
+                        {
+                            name: 'Nilai',
+                            data: [
+                                { x: 'Hewani', y: hewaniVal },
+                                { x: 'Nabati', y: nabatiVal }
+                            ]
+                        }
+                    ],
+                    chart: {
+                        type: 'bar',
+                        height: 290,
+                        fontFamily: 'Plus Jakarta Sans, sans-serif',
+                        toolbar: { show: false }
+                    },
+                    colors: ['#f97316', '#22c55e'], // Orange for Hewani, Green for Nabati
+                    plotOptions: {
+                        bar: {
+                            horizontal: false,
+                            columnWidth: '45%',
+                            distributed: true,
+                            borderRadius: 2,
+                            dataLabels: {
+                                position: 'top'
+                            }
+                        }
+                    },
+                    dataLabels: {
+                        enabled: true,
+                        offsetY: -16,
+                        style: {
+                            fontSize: '11px',
+                            fontWeight: '700',
+                            colors: ['#334155']
+                        },
+                        formatter: function (val) {
+                            return Number(val).toFixed(2).replace('.', ',');
+                        }
+                    },
+                    xaxis: {
+                        categories: ['Hewani', 'Nabati'],
+                        labels: {
+                            style: {
+                                fontSize: '11px',
+                                fontWeight: 600,
+                                colors: '#64748b'
+                            }
+                        },
+                        axisBorder: {
+                            show: true,
+                            color: '#e2e8f0'
+                        },
+                        axisTicks: {
+                            show: true,
+                            color: '#e2e8f0'
+                        }
+                    },
+                    yaxis: {
+                        min: 0,
+                        max: yMax,
+                        tickAmount: yTicks || 5,
+                        labels: {
+                            style: {
+                                fontSize: '10px',
+                                fontWeight: 500,
+                                colors: '#64748b'
+                            },
+                            formatter: function (val) {
+                                return Math.round(val).toLocaleString('id-ID');
+                            }
+                        }
+                    },
+                    grid: {
+                        borderColor: '#f1f5f9',
+                        strokeDashArray: 2,
+                        yaxis: { lines: { show: true } },
+                        xaxis: { lines: { show: false } }
+                    },
+                    legend: {
+                        show: false
+                    },
+                    annotations: {
+                        points: [
+                            {
+                                x: 'Hewani',
+                                y: hewaniAnnotY,
+                                marker: { size: 0, strokeWidth: 0, fillOpacity: 0 },
+                                label: {
+                                    text: '🥩',
+                                    borderColor: 'transparent',
+                                    borderWidth: 0,
+                                    style: {
+                                        background: '#fff7ed',
+                                        fontSize: '16px',
+                                        padding: { left: 3, right: 3, top: 1, bottom: 1 }
+                                    }
+                                }
+                            },
+                            {
+                                x: 'Nabati',
+                                y: nabatiAnnotY,
+                                marker: { size: 0, strokeWidth: 0, fillOpacity: 0 },
+                                label: {
+                                    text: '🥗',
+                                    borderColor: 'transparent',
+                                    borderWidth: 0,
+                                    style: {
+                                        background: '#f0fdf4',
+                                        fontSize: '16px',
+                                        padding: { left: 3, right: 3, top: 1, bottom: 1 }
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    tooltip: {
+                        y: {
+                            formatter: function (val) {
+                                return Number(val).toFixed(2).replace('.', ',');
+                            }
+                        }
+                    }
+                };
+
+                const chart = new ApexCharts(el, options);
+                chart.render();
+            }
+
+            // 1. Chart AKE (Angka Kecukupan Energi)
+            createMacroBarChart('#chart-ake-bar', 188.79, 2421.91, 2700, 5, 480, 2650);
+
+            // 2. Chart AKP (Angka Kecukupan Protein)
+            createMacroBarChart('#chart-akp-bar', 12.97, 68.93, 200, 5, 38, 95);
+
+            // 3. Chart AKL (Angka Kecukupan Lemak)
+            createMacroBarChart('#chart-akl-bar', 13.91, 38.81, 200, 5, 38, 65);
+        }
+
+        // ==========================================
+        // CHARTS KETERSEDIAAN 11 KELOMPOK PANGAN (AKE, AKP, AKL DONUT)
+        // ==========================================
+        function render11KelompokPanganCharts() {
+            const labels11 = [
+                'Padi-Padian',
+                'Makanan Berpati',
+                'Gula',
+                'Buah Biji Berminyak',
+                'Buah-Buahan',
+                'Sayur-Sayuran',
+                'Daging',
+                'Telur',
+                'Susu',
+                'Ikan',
+                'Minyak & Lemak'
+            ];
+
+            const colors11 = [
+                '#047857', // Dark Teal / Padi-padian
+                '#10b981', // Emerald / Makanan Berpati
+                '#06b6d4', // Cyan / Gula
+                '#f97316', // Orange / Buah Biji Berminyak
+                '#eab308', // Yellow / Buah-Buahan
+                '#84cc16', // Lime / Sayur-Sayuran
+                '#ef4444', // Red / Daging
+                '#f43f5e', // Rose / Telur
+                '#a855f7', // Purple / Susu
+                '#3b82f6', // Blue / Ikan
+                '#b45309'  // Amber-Brown / Minyak & Lemak
+            ];
+
+            function create11KlpDonutChart(elId, seriesData, centerVal, unitText) {
+                const el = document.querySelector(elId);
+                if (!el) return;
+                el.innerHTML = '';
+
+                const options = {
+                    series: seriesData,
+                    labels: labels11,
+                    colors: colors11,
+                    chart: {
+                        type: 'donut',
+                        height: 270,
+                        fontFamily: 'Plus Jakarta Sans, sans-serif'
+                    },
+                    legend: {
+                        show: false
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    stroke: {
+                        width: 2,
+                        colors: ['#ffffff']
+                    },
+                    plotOptions: {
+                        pie: {
+                            donut: {
+                                size: '68%',
+                                labels: {
+                                    show: true,
+                                    name: {
+                                        show: false
+                                    },
+                                    value: {
+                                        show: true,
+                                        fontSize: '22px',
+                                        fontWeight: '800',
+                                        color: '#064e3b',
+                                        offsetY: 4,
+                                        formatter: () => centerVal
+                                    },
+                                    total: {
+                                        show: true,
+                                        showAlways: true,
+                                        label: 'Grand Total',
+                                        fontSize: '11px',
+                                        fontWeight: '600',
+                                        color: '#64748b',
+                                        formatter: () => unitText
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    tooltip: {
+                        y: {
+                            formatter: function (val) {
+                                return val < 0.02 ? '0,00' : Number(val).toFixed(2).replace('.', ',');
+                            }
+                        }
+                    }
+                };
+
+                const chart = new ApexCharts(el, options);
+                chart.render();
+            }
+
+            // 1. AKE 11 Kelompok Pangan (Total: 2.611 Kkal/hari)
+            create11KlpDonutChart(
+                '#chart-ake-11klp',
+                [1070.48, 100.05, 29.03, 747.08, 53.65, 86.13, 115.60, 43.99, 27.08, 0.65, 370.38],
+                '2.611',
+                'Kkal/hari'
+            );
+
+            // 2. AKP 11 Kelompok Pangan (Total: 81,90 Gram/hari)
+            create11KlpDonutChart(
+                '#chart-akp-11klp',
+                [35.09, 0.70, 0.01, 25.42, 0.73, 3.81, 7.73, 5.59, 1.47, 0.12, 0.01],
+                '81,90',
+                'Gram/hari'
+            );
+
+            // 3. AKL 11 Kelompok Pangan (Total: 52,71 Gram/hari)
+            create11KlpDonutChart(
+                '#chart-akl-11klp',
+                [11.31, 0.23, 0.01, 10.87, 1.52, 0.06, 8.19, 3.87, 1.61, 0.02, 13.06],
+                '52,71',
+                'Gram/hari'
+            );
+        }
+
+        // --- FILTER POPULATION ---
+        function populateFilters() {
+            let tahunSet = new Set();
+
+            rawData.forEach(i => {
+                const d = i.detail || {};
+                if (d.tahun) tahunSet.add(d.tahun);
+            });
+
+            const appendOptions = (elDesktop, elMobile, dataArray) => {
+                elDesktop.innerHTML = elDesktop.querySelector('option').outerHTML;
+                elMobile.innerHTML = elMobile.querySelector('option').outerHTML;
+                dataArray.forEach(val => {
+                    elDesktop.appendChild(new Option(val, val));
+                    elMobile.appendChild(new Option(val, val));
+                });
+            };
+
+            appendOptions(els.filterTahun, els.filterTahunMobile, Array.from(tahunSet).sort((a, b) => b - a));
+        }
+
+        // --- FILTER DATA LOGIC ---
+        function filterData(source) {
+            let valTahun;
+
+            if (source === 'nav') {
+                valTahun = els.filterTahun.value;
+                // Sync to mobile
+                els.filterTahunMobile.value = valTahun;
+            } else if (source === 'mobile') {
+                valTahun = els.filterTahunMobile.value;
+                // Sync to desktop
+                els.filterTahun.value = valTahun;
+            } else {
+                valTahun = els.filterTahun.value;
+            }
+
+            // Update Label
+            let label = [];
+            if (valTahun !== 'all') label.push(`Thn: ${valTahun}`);
+            els.activeFilterLabel.textContent = label.length > 0 ? label.join(', ') : 'Semua Data';
+
+            const term = els.search.value.toLowerCase();
+
+            filteredData = rawData.filter(item => {
+                const d = item.detail || {};
+                const matchTahun = valTahun === 'all' || String(d.tahun) === valTahun;
+
+                const matchSearch = !term ||
+                    (d.kategori || '').toLowerCase().includes(term) ||
+                    (d.kelompok || '').toLowerCase().includes(term) ||
+                    String(d.tahun || '').includes(term);
+
+                return matchTahun && matchSearch;
+            });
+
+            currentPage = 1;
+            renderStats();
+            renderCharts();
+            renderTable();
+        }
+
+        // --- TABLE LOGIC ---
+        function renderTable() {
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const pageData = filteredData.slice(start, end);
+
+            els.paginationInfo.textContent = `${Math.min(start + 1, filteredData.length)} - ${Math.min(end, filteredData.length)} dari ${filteredData.length}`;
+            els.btnPrev.disabled = currentPage === 1;
+            els.btnNext.disabled = end >= filteredData.length;
+
+            els.tableBody.innerHTML = pageData.map(item => {
+                const d = item.detail || {};
+
+                return `
+                <tr class="hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-none group">
+                    <td class="px-6 py-4 font-mono text-sm text-slate-500">${d.nomor || '-'}</td>
+                    <td class="px-6 py-4 font-medium">${getBadge(d.kelompok)}</td>
+                    <td class="px-6 py-4 font-bold text-slate-800">${d.kategori || '-'}</td>
+                    <td class="px-6 py-4 text-sm text-slate-600">${d.tahun || '-'}</td>
+                    <td class="px-6 py-4 text-right font-mono text-emerald-600 font-bold text-base">
+                        ${formatNumber(d.total)}
+                    </td>
+                    <td class="px-6 py-4 text-center text-xs text-slate-500 font-semibold uppercase">${d.unit || '-'}</td>
+                    <td class="px-6 py-4 text-center">
+                        <button onclick="openDetail(${item.id})" class="text-emerald-500 hover:text-emerald-700 hover:bg-emerald-50 p-2 rounded-xl transition-all border border-transparent hover:border-emerald-100" title="Lihat Detail">
+                            <i data-lucide="info" class="w-5 h-5"></i>
+                        </button>
+                    </td>
+                </tr>
+                `;
+            }).join('');
+
+            if (filteredData.length === 0) {
+                els.tableBody.innerHTML = `<tr><td colspan="7" class="text-center py-12 text-slate-400 bg-slate-50">Tidak ada data ditemukan untuk kriteria tersebut.</td></tr>`;
+            }
+            lucide.createIcons();
+        }
+
+        // --- EVENT LISTENERS ---
+        function setupEvents() {
+            els.filterTahun.addEventListener('change', () => filterData('nav'));
+            els.filterTahunMobile.addEventListener('change', () => filterData('mobile'));
+
+            els.search.addEventListener('input', () => filterData('search'));
+
+            els.btnPrev.addEventListener('click', () => { if (currentPage > 1) { currentPage--; renderTable(); } });
+            els.btnNext.addEventListener('click', () => { if (currentPage * itemsPerPage < filteredData.length) { currentPage++; renderTable(); } });
+
+            // Export Excel
+            document.getElementById('btn-export').addEventListener('click', () => {
+                const dataToExport = filteredData.map(item => {
+                    const d = item.detail || {};
+                    return {
+                        ID_Sistem: item.id,
+                        Nomor: d.nomor,
+                        Tahun: d.tahun,
+                        Kelompok: d.kelompok,
+                        Kategori: d.kategori,
+                        Total_Ketersediaan: parseFloat(d.total),
+                        Unit: d.unit,
+                        Instansi_Pencatat: item.department_nama,
+                        PIC_Pencatat: item.created_by,
+                        Tanggal_Rekam: item.created_at
+                    };
+                });
+
+                const ws = XLSX.utils.json_to_sheet(dataToExport);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "Data Ketersediaan");
+                XLSX.writeFile(wb, `Data_Energi_Protein_Lemak_${new Date().toISOString().slice(0, 10)}.xlsx`);
+            });
+
+            els.modal.backdrop.addEventListener('click', closeModal);
+            els.modal.close.addEventListener('click', closeModal);
+        }
+
+        // --- MODAL ---
+        window.openDetail = (id) => {
+            const item = rawData.find(x => x.id === id);
+            if (!item) return;
+            const d = item.detail || {};
+
+            els.modal.title.textContent = d.kategori || 'Kategori Tidak Tersedia';
+            els.modal.subtitle.textContent = `Kelompok: ${d.kelompok || '-'}`;
+
+            els.modal.skor.textContent = formatNumber(d.total);
+            els.modal.unit.textContent = (d.unit || '').toUpperCase();
+
+            els.modal.tahun.textContent = d.tahun || '-';
+            els.modal.nomor.textContent = d.nomor || '-';
+
+            els.modal.pic.textContent = item.created_by || '-';
+            els.modal.instansi.textContent = item.department_nama || '-';
+            els.modal.created.textContent = item.created_at || '-';
+
+            els.modal.self.classList.remove('hidden');
+            lucide.createIcons();
+        };
+
+        function closeModal() {
+            els.modal.self.classList.add('hidden');
+        }
+
+        // --- START ---
+        setDate();
+        fetchData();
+    </script>
+</body>
+
+</html>
