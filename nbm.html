@@ -211,7 +211,7 @@
             <!-- Dashboard Title -->
             <h1 id="dashboard-title"
                 class="text-2xl md:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight mb-2">
-                Neraca Bahan Makanan (NBM) dan Pola Pangan Harapan (PPH)
+                Neraca Bahan Makanan (NBM)
             </h1>
 
             <!-- Description / Info Banner -->
@@ -220,14 +220,7 @@
                 <i data-lucide="info" class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5"></i>
                 <div class="flex-1">
                     <p class="mb-3 text-slate-700 leading-relaxed">
-                        Neraca Bahan Makanan (NBM) menyajikan data dan informasi mengenai penyediaan (supply) dan
-                        penggunaan
-                        (utilization) pangan di suatu wilayah dalam periode tertentu guna mengukur situasi ketersediaan
-                        pangan masyarakat secara kuantitatif (kkal/kapita/hari atau gram/kapita/hari). Sementara itu,
-                        Skor
-                        Pola Pangan Harapan (PPH) Ketersediaan hadir sebagai indikator untuk menilai keseimbangan dan
-                        keragaman ketersediaan pangan tersebut berdasarkan kontribusi berbagai kelompok pangan terhadap
-                        kecukupan energi.
+                        Neraca Bahan Makanan (NBM) merupakan instrumen yang menyajikan data ketersediaan dan pemanfaatan pangan di suatu wilayah dalam periode tertentu. NBM digunakan untuk menganalisis kondisi ketersediaan pangan serta menghasilkan Skor Pola Pangan Harapan (PPH) Ketersediaan sebagai indikator keragaman dan keseimbangan pangan.
                     </p>
                     <div class="flex flex-wrap gap-2 pt-2 border-t border-emerald-200/60">
                         <div
@@ -1011,7 +1004,7 @@
                         const match = yrItems.find(it => {
                             const name = (it.detail?.kelompok_bahan_pangan || '').toLowerCase().trim();
                             return name === tmpl.name.toLowerCase().trim() ||
-                                   (tmpl.name.toLowerCase().includes('sayuran') && name.includes('sayur'));
+                                (tmpl.name.toLowerCase().includes('sayuran') && name.includes('sayur'));
                         });
                         const aktualVal = match ? parseFloat(match.detail?.total || 0) : tmpl.aktual;
                         calculatedSum += aktualVal;
