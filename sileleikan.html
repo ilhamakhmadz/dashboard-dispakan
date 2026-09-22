@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SI LELE IKAN | Layanan & Edukasi Perikanan Kab. Bandung</title>
+    <meta name="description" content="Sistem Informasi Layanan & Edukasi Pelaku Perikanan (SI LELE IKAN) - Dinas Ketahanan Pangan dan Perikanan Kabupaten Bandung">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        emerald: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            200: '#a7f3d0',
+                            300: '#6ee7b7',
+                            400: '#34d399',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                            950: '#022c22',
+                        },
+                        cyan: {
+                            50: '#ecfeff',
+                            100: '#cffafe',
+                            200: '#a5f3fc',
+                            300: '#67e8f9',
+                            400: '#22d3ee',
+                            500: '#06b6d4',
+                            600: '#0891b2',
+                            700: '#0e7490',
+                            800: '#155e75',
+                            900: '#164e63',
+                        },
+                        gold: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        }
+                    },
+                    boxShadow: {
+                        'glow-emerald': '0 0 25px -5px rgba(16, 185, 129, 0.3)',
+                        'glow-cyan': '0 0 25px -5px rgba(6, 182, 212, 0.3)',
+                        'card-hover': '0 20px 35px -10px rgba(4, 120, 87, 0.12), 0 0 1px 1px rgba(16, 185, 129, 0.1)',
+                    },
+                    animation: {
+                        'float-slow': 'float 6s ease-in-out infinite',
+                        'pulse-gentle': 'pulseGentle 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        pulseGentle: {
+                            '0%, 100%': { opacity: '1', transform: 'scale(1)' },
+                            '50%': { opacity: '0.9', transform: 'scale(1.02)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .dark .glass-nav {
+            background: rgba(15, 23, 42, 0.88);
+            border-bottom: 1px solid rgba(30, 41, 59, 0.8);
+        }
+        .gradient-mesh {
+            background-color: #f8fafc;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.10) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.12) 0px, transparent 50%),
+                radial-gradient(at 50% 50%, rgba(245, 158, 11, 0.05) 0px, transparent 60%);
+        }
+        .dark .gradient-mesh {
+            background-color: #0b1320;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(6, 95, 70, 0.25) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(8, 145, 178, 0.20) 0px, transparent 50%),
+                radial-gradient(at 50% 50%, rgba(217, 119, 6, 0.08) 0px, transparent 60%);
+        }
+        .water-wave-pattern {
+            background-image: radial-gradient(rgba(16, 185, 129, 0.12) 1px, transparent 0);
+            background-size: 24px 24px;
+        }
+    </style>
+</head>
+
+<body class="gradient-mesh text-slate-800 dark:text-slate-100 font-sans antialiased selection:bg-emerald-500 selection:text-white transition-colors duration-300 min-h-screen"
+      x-data="sileleApp()">
+
+    <!-- ================= NAVBAR ================= -->
+    <header class="sticky top-0 z-50 glass-nav transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Brand / Logo -->
+                <a href="#beranda" class="flex items-center space-x-3.5 group">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-600 via-emerald-500 to-cyan-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/25 group-hover:scale-105 transition-transform duration-300">
+                        <i data-lucide="fish" class="w-7 h-7"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-1.5">
+                            <span class="font-display font-extrabold text-xl sm:text-2xl tracking-tight text-slate-900 dark:text-white">SI LELE</span>
+                            <span class="font-display font-black text-xl sm:text-2xl tracking-tight bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">IKAN</span>
+                            <span class="px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 rounded-full border border-emerald-200 dark:border-emerald-800">DISPAKAN</span>
+                        </div>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-medium tracking-wide">Layanan & Edukasi Perikanan Kab. Bandung</p>
+                    </div>
+                </a>
+
+                <!-- Desktop Navigation Menu (4 Main Items) -->
+                <nav class="hidden md:flex items-center space-x-1 lg:space-x-2 bg-slate-100/80 dark:bg-slate-800/80 p-1.5 rounded-full border border-slate-200/60 dark:border-slate-700/60 backdrop-blur-md">
+                    <a href="#beranda" 
+                       :class="activeSection === 'beranda' ? 'bg-white dark:bg-emerald-600 text-emerald-700 dark:text-white shadow-sm font-bold' : 'text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium'"
+                       class="px-4 py-2 rounded-full text-sm transition-all duration-200 flex items-center space-x-1.5">
+                        <i data-lucide="home" class="w-4 h-4"></i>
+                        <span>Beranda</span>
+                    </a>
+                    <a href="#visi-misi" 
+                       :class="activeSection === 'visi-misi' ? 'bg-white dark:bg-emerald-600 text-emerald-700 dark:text-white shadow-sm font-bold' : 'text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium'"
+                       class="px-4 py-2 rounded-full text-sm transition-all duration-200 flex items-center space-x-1.5">
+                        <i data-lucide="target" class="w-4 h-4"></i>
+                        <span>Visi dan Misi</span>
+                    </a>
+                    <a href="#fasilitas" 
+                       :class="activeSection === 'fasilitas' ? 'bg-white dark:bg-emerald-600 text-emerald-700 dark:text-white shadow-sm font-bold' : 'text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium'"
+                       class="px-4 py-2 rounded-full text-sm transition-all duration-200 flex items-center space-x-1.5">
+                        <i data-lucide="building-2" class="w-4 h-4"></i>
+                        <span>Fasilitas</span>
+                    </a>
+                    <a href="#layanan" 
+                       :class="activeSection === 'layanan' ? 'bg-white dark:bg-emerald-600 text-emerald-700 dark:text-white shadow-sm font-bold' : 'text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium'"
+                       class="px-4 py-2 rounded-full text-sm transition-all duration-200 flex items-center space-x-1.5">
+                        <i data-lucide="sparkles" class="w-4 h-4"></i>
+                        <span>Layanan</span>
+                    </a>
+                </nav>
+
+                <!-- Actions / Controls -->
+                <div class="flex items-center space-x-3">
+                    <!-- Dark Mode Toggle -->
+                    <button @click="toggleTheme()" 
+                            class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors duration-200"
+                            title="Ganti Tema">
+                        <i x-show="!darkMode" data-lucide="moon" class="w-5 h-5"></i>
+                        <i x-show="darkMode" data-lucide="sun" class="w-5 h-5"></i>
+                    </button>
+
+                    <!-- Back to Main Portal -->
+                    <a href="index.html" class="hidden sm:inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold shadow-md shadow-emerald-600/20 hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5">
+                        <span>Portal Utama</span>
+                        <i data-lucide="external-link" class="w-4 h-4"></i>
+                    </a>
+
+                    <!-- Mobile Menu Button -->
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" 
+                            class="md:hidden p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200">
+                        <i x-show="!mobileMenuOpen" data-lucide="menu" class="w-6 h-6"></i>
+                        <i x-show="mobileMenuOpen" data-lucide="x" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Drawer Navigation -->
+        <div x-show="mobileMenuOpen" 
+             x-transition:enter="transition ease-out duration-200"
+             x-transition:enter-start="opacity-0 -translate-y-4"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             x-transition:leave="transition ease-in duration-150"
+             x-transition:leave-start="opacity-100 translate-y-0"
+             x-transition:leave-end="opacity-0 -translate-y-4"
+             class="md:hidden border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl px-4 pt-3 pb-6 space-y-2">
+            
+            <a href="#beranda" @click="mobileMenuOpen = false"
+               class="flex items-center space-x-3 px-4 py-3 rounded-xl text-base font-semibold text-slate-700 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 hover:text-emerald-600 transition-colors">
+                <i data-lucide="home" class="w-5 h-5 text-emerald-600"></i>
+                <span>Beranda</span>
+            </a>
+            
+            <a href="#visi-misi" @click="mobileMenuOpen = false"
+               class="flex items-center space-x-3 px-4 py-3 rounded-xl text-base font-semibold text-slate-700 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 hover:text-emerald-600 transition-colors">
+                <i data-lucide="target" class="w-5 h-5 text-emerald-600"></i>
+                <span>Visi dan Misi</span>
+            </a>
+            
+            <a href="#fasilitas" @click="mobileMenuOpen = false"
+               class="flex items-center space-x-3 px-4 py-3 rounded-xl text-base font-semibold text-slate-700 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 hover:text-emerald-600 transition-colors">
+                <i data-lucide="building-2" class="w-5 h-5 text-emerald-600"></i>
+                <span>Fasilitas</span>
+            </a>
+            
+            <a href="#layanan" @click="mobileMenuOpen = false"
+               class="flex items-center space-x-3 px-4 py-3 rounded-xl text-base font-semibold text-slate-700 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 hover:text-emerald-600 transition-colors">
+                <i data-lucide="sparkles" class="w-5 h-5 text-emerald-600"></i>
+                <span>Layanan</span>
+            </a>
+
+            <div class="pt-3 border-t border-slate-200 dark:border-slate-800">
+                <a href="index.html" class="w-full flex items-center justify-center space-x-2 px-4 py-3 rounded-xl bg-emerald-600 text-white font-bold">
+                    <span>Kembali ke Portal DISPAKAN</span>
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+
+    <main>
+        <!-- ================= 1. BERANDA (HERO & LEADERSHIP MATCHING REFERENCE) ================= -->
+        <section id="beranda" class="relative pt-8 pb-16 lg:py-20 overflow-hidden">
+            <!-- Subtle Watermark & Glow Background -->
+            <div class="absolute inset-0 water-wave-pattern opacity-40 pointer-events-none -z-10"></div>
+            <div class="absolute top-1/3 right-10 w-[500px] h-[500px] bg-gradient-to-tr from-amber-400/15 via-emerald-500/15 to-cyan-500/15 blur-3xl rounded-full pointer-events-none -z-10"></div>
+            
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <!-- Main 2-Column Hero Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+                    
+                    <!-- LEFT COLUMN: Headline & Action Buttons -->
+                    <div class="lg:col-span-6 xl:col-span-6 space-y-6 text-center lg:text-left">
+                        
+                        <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-emerald-100/90 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 text-xs font-bold border border-emerald-200 dark:border-emerald-800 shadow-sm">
+                            <i data-lucide="award" class="w-4 h-4 text-emerald-600"></i>
+                            <span>SI LELE IKAN • DISPAKAN KAB. BANDUNG</span>
+                        </div>
+
+                        <h1 class="font-display text-4xl sm:text-5xl xl:text-6xl font-black tracking-tight text-slate-900 dark:text-white leading-[1.15]">
+                            Penguatan Sektor <span class="bg-gradient-to-r from-emerald-600 via-teal-500 to-cyan-600 bg-clip-text text-transparent">Perikanan Modern</span>, Melayani Masyarakat.
+                        </h1>
+
+                        <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed max-w-xl mx-auto lg:mx-0 font-normal">
+                            Dinas Ketahanan Pangan dan Perikanan Kabupaten Bandung berkomitmen mewujudkan kemandirian pangan, peningkatan produksi budidaya air tawar, serta jaminan mutu perikanan yang berdaya saing menuju terwujudnya Kabupaten Bandung <strong>BEDAS</strong>.
+                        </p>
+
+                        <!-- Action Buttons like Reference Banner -->
+                        <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
+                            <a href="#layanan" 
+                               class="inline-flex items-center space-x-2 px-7 py-3.5 rounded-full bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-700 hover:to-cyan-700 text-white font-bold text-sm sm:text-base shadow-lg shadow-emerald-600/25 hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5">
+                                <span>Informasi Layanan</span>
+                                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                            </a>
+                            
+                            <a href="#fasilitas" 
+                               class="inline-flex items-center space-x-2.5 px-6 py-3.5 rounded-full bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-sm sm:text-base border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow transition-all duration-200">
+                                <i data-lucide="play-circle" class="w-5 h-5 text-emerald-600 dark:text-emerald-400"></i>
+                                <span>Fasilitas & Balai</span>
+                            </a>
+                        </div>
+
+                    </div>
+
+                    <!-- RIGHT COLUMN: Side-by-Side Leaders with Golden Emblem Backdrop -->
+                    <div class="lg:col-span-6 xl:col-span-6 relative flex flex-col items-center justify-center">
+                        
+                        <!-- Golden Circular Emblem Backdrop (Like Reference Image) -->
+                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none -z-10">
+                            <div class="w-72 h-72 sm:w-96 sm:h-96 rounded-full border-4 border-amber-400/30 bg-gradient-to-b from-amber-300/10 via-amber-400/5 to-transparent flex items-center justify-center animate-pulse-gentle">
+                                <div class="w-56 h-56 sm:w-72 sm:h-72 rounded-full border-2 border-dashed border-amber-400/40"></div>
+                            </div>
+                        </div>
+
+                        <!-- 2 Leaders Side by Side -->
+                        <div class="grid grid-cols-2 gap-4 sm:gap-6 w-full max-w-lg items-end">
+                            
+                            <!-- Leader 1: Bupati -->
+                            <div class="flex flex-col items-center text-center group">
+                                <div class="relative w-36 h-48 sm:w-44 sm:h-60 rounded-3xl overflow-hidden bg-gradient-to-b from-emerald-500/10 to-emerald-600/30 border-2 border-emerald-500/40 shadow-xl group-hover:scale-105 transition-transform duration-300">
+                                    <img src="https://lh3.googleusercontent.com/d/1XGw1VYHTrTud5Wc2FLbQooQonx7jNmzh" 
+                                         alt="Dr. H.M. Dadang Supriatna, S.I.P., M.Si. - Bupati Bandung" 
+                                         class="w-full h-full object-cover object-top filter contrast-105"
+                                         onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80'">
+                                    <div class="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-slate-900/60 to-transparent"></div>
+                                </div>
+
+                                <!-- Name Label (Matching Reference Style) -->
+                                <div class="mt-3.5 space-y-0.5">
+                                    <h4 class="font-display font-extrabold text-sm sm:text-base text-slate-900 dark:text-white leading-tight">
+                                        Dr. H.M. Dadang Supriatna, S.I.P., M.Si
+                                    </h4>
+                                    <div class="inline-block relative">
+                                        <p class="text-xs sm:text-sm font-bold text-emerald-600 dark:text-emerald-400 italic">
+                                            Bupati Bandung
+                                        </p>
+                                        <div class="h-0.5 w-full bg-emerald-500 rounded-full mt-0.5"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Leader 2: Kepala Dinas DISPAKAN -->
+                            <div class="flex flex-col items-center text-center group">
+                                <div class="relative w-36 h-48 sm:w-44 sm:h-60 rounded-3xl overflow-hidden bg-gradient-to-b from-cyan-500/10 to-cyan-600/30 border-2 border-cyan-500/40 shadow-xl group-hover:scale-105 transition-transform duration-300">
+                                    <img src="https://lh3.googleusercontent.com/d/1BmpUFr__tw4EcRomCMRZd5fDpi1cI26D" 
+                                         alt="Drs. H. Uka Suska Puji Utama, M.Si. - Kepala Dinas DISPAKAN" 
+                                         class="w-full h-full object-cover object-top filter contrast-105"
+                                         onerror="this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&auto=format&fit=crop&q=80'">
+                                    <div class="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-slate-900/60 to-transparent"></div>
+                                </div>
+
+                                <!-- Name Label (Matching Reference Style) -->
+                                <div class="mt-3.5 space-y-0.5">
+                                    <h4 class="font-display font-extrabold text-sm sm:text-base text-slate-900 dark:text-white leading-tight">
+                                        Drs. H. Uka Suska Puji Utama, M.Si
+                                    </h4>
+                                    <div class="inline-block relative">
+                                        <p class="text-xs sm:text-sm font-bold text-cyan-600 dark:text-cyan-400 italic">
+                                            Kepala Dinas DISPAKAN
+                                        </p>
+                                        <div class="h-0.5 w-full bg-cyan-500 rounded-full mt-0.5"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Quick Highlight Numbers Ribbon Below -->
+                <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-6xl mx-auto">
+                    <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 text-center shadow-sm">
+                        <div class="text-2xl sm:text-3xl font-display font-black text-emerald-600">31</div>
+                        <div class="text-xs font-semibold text-slate-600 dark:text-slate-400 mt-1">Kecamatan Binaan</div>
+                    </div>
+                    <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 text-center shadow-sm">
+                        <div class="text-2xl sm:text-3xl font-display font-black text-teal-600">450+</div>
+                        <div class="text-xs font-semibold text-slate-600 dark:text-slate-400 mt-1">Kelompok Pokdakan</div>
+                    </div>
+                    <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 text-center shadow-sm">
+                        <div class="text-2xl sm:text-3xl font-display font-black text-cyan-600">1.2 Juta+</div>
+                        <div class="text-xs font-semibold text-slate-600 dark:text-slate-400 mt-1">Benih Ikan Unggul/Thn</div>
+                    </div>
+                    <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 text-center shadow-sm">
+                        <div class="text-2xl sm:text-3xl font-display font-black text-amber-500">100%</div>
+                        <div class="text-xs font-semibold text-slate-600 dark:text-slate-400 mt-1">Layanan Gratis & Terbuka</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ================= 2. VISI DAN MISI ================= -->
+        <section id="visi-misi" class="py-20 relative bg-slate-50/70 dark:bg-slate-900/50 border-y border-slate-200/80 dark:border-slate-800/80">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <!-- Section Header -->
+                <div class="text-center max-w-2xl mx-auto mb-14 space-y-3">
+                    <div class="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 text-xs font-bold uppercase tracking-wider">
+                        <i data-lucide="compass" class="w-3.5 h-3.5"></i>
+                        <span>Arah Kebijakan Daerah</span>
+                    </div>
+                    <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">
+                        Visi & Misi Kabupaten Bandung
+                    </h2>
+                    <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400">
+                        Landasan strategis pembangunan menuju terwujudnya masyarakat Kabupaten Bandung yang Bangkit, Edukatif, Dinamis, Agamis, dan Sejahtera.
+                    </p>
+                </div>
+
+                <!-- Visi Card Highlight -->
+                <div class="max-w-4xl mx-auto mb-12 bg-gradient-to-br from-emerald-800 via-emerald-900 to-teal-950 text-white rounded-3xl p-8 sm:p-10 shadow-2xl relative overflow-hidden border border-emerald-700/50">
+                    <div class="absolute -right-12 -bottom-12 w-64 h-64 bg-emerald-500/10 rounded-full blur-2xl"></div>
+                    
+                    <div class="relative z-10 flex flex-col md:flex-row items-center md:items-start gap-6">
+                        <div class="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-emerald-300 flex-shrink-0">
+                            <i data-lucide="sparkle" class="w-10 h-10"></i>
+                        </div>
+                        <div class="space-y-2 text-center md:text-left">
+                            <span class="text-xs font-bold uppercase tracking-widest text-emerald-400">Visi Kabupaten Bandung</span>
+                            <h3 class="font-display text-2xl sm:text-3xl font-extrabold leading-snug">
+                                "Terwujudnya Kabupaten Bandung Lebih Bangkit, Edukatif, Dinamis, Agamis, dan Sejahtera (<span class="text-amber-400 underline decoration-amber-400/40">BEDAS</span>), Maju, serta Berkelanjutan Menuju Indonesia Emas."
+                            </h3>
+                            <p class="text-sm text-emerald-100/90 pt-2 leading-relaxed">
+                                Mewujudkan ketahanan pangan daerah yang tangguh, inklusif, dan berkelanjutan melalui penguatan sektor budidaya serta hilirisasi perikanan lokal.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5 Misi Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                    
+                    <!-- Misi 1 -->
+                    <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200/80 dark:border-slate-700/80 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200 font-display font-black flex items-center justify-center">
+                                01
+                            </div>
+                            <h4 class="font-bold text-slate-900 dark:text-white text-base">SDM Unggul & Kesetaraan</h4>
+                        </div>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Meningkatkan Kualitas Sumber Daya Manusia yang Unggul, Kompetitif, dan Berakhlak serta Penguatan Kesetaraan Gender melalui Pemberdayaan Perempuan dan Mendorong Perlindungan bagi Anak.
+                        </p>
+                    </div>
+
+                    <!-- Misi 2 (Primary Highlight for DISPAKAN) -->
+                    <div class="bg-gradient-to-br from-emerald-50 to-teal-50/50 dark:from-emerald-950/40 dark:to-slate-800 rounded-2xl p-6 border-2 border-emerald-500/50 dark:border-emerald-500/40 shadow-lg relative lg:scale-105">
+                        <div class="absolute -top-3 right-4 px-2.5 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-bold uppercase tracking-wider">
+                            Fokus Utama DISPAKAN
+                        </div>
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white font-display font-black flex items-center justify-center shadow-md">
+                                02
+                            </div>
+                            <h4 class="font-bold text-emerald-950 dark:text-emerald-300 text-base">Ekonomi & Ketahanan Pangan</h4>
+                        </div>
+                        <p class="text-sm text-emerald-900 dark:text-emerald-100/90 leading-relaxed font-medium">
+                            Meningkatkan Pembangunan Ekonomi yang Inklusif dan Mendorong Ketahanan Pangan melalui Produksi Pangan Lokal yang Berkelanjutan.
+                        </p>
+                    </div>
+
+                    <!-- Misi 3 -->
+                    <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200/80 dark:border-slate-700/80 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200 font-display font-black flex items-center justify-center">
+                                03
+                            </div>
+                            <h4 class="font-bold text-slate-900 dark:text-white text-base">Tata Kelola & Layanan Publik</h4>
+                        </div>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Mengoptimalkan Tata Kelola Pemerintahan dan Pelayanan Publik yang Partisipatif, Transparan, dan Akuntabel.
+                        </p>
+                    </div>
+
+                    <!-- Misi 4 -->
+                    <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200/80 dark:border-slate-700/80 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200 font-display font-black flex items-center justify-center">
+                                04
+                            </div>
+                            <h4 class="font-bold text-slate-900 dark:text-white text-base">Lingkungan & Infrastruktur</h4>
+                        </div>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Meningkatkan Kualitas Lingkungan Hidup dan Pembangunan Infrastruktur yang Tertinggal.
+                        </p>
+                    </div>
+
+                    <!-- Misi 5 -->
+                    <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200/80 dark:border-slate-700/80 shadow-sm hover:shadow-md transition-shadow md:col-span-2 lg:col-span-2">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200 font-display font-black flex items-center justify-center">
+                                05
+                            </div>
+                            <h4 class="font-bold text-slate-900 dark:text-white text-base">Ketentraman & Ketertiban</h4>
+                        </div>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Menjaga Stabilitas Ketentraman dan Ketertiban Umum.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ================= 3. FASILITAS ================= -->
+        <section id="fasilitas" class="py-24 relative overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <!-- Section Header -->
+                <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
+                    <div class="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-cyan-100 dark:bg-cyan-950 text-cyan-800 dark:text-cyan-300 text-xs font-bold uppercase tracking-wider">
+                        <i data-lucide="landmark" class="w-3.5 h-3.5"></i>
+                        <span>Sarana & Prasarana</span>
+                    </div>
+                    <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">
+                        Fasilitas Unggulan Perikanan
+                    </h2>
+                    <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400">
+                        Infrastruktur strategis penyediaan benih berkualitas dan rantai distribusi perikanan Kabupaten Bandung.
+                    </p>
+                </div>
+
+                <!-- Facilities Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                    
+                    <!-- Fasilitas 1: BBI Ciparay -->
+                    <div class="group bg-white dark:bg-slate-800 rounded-3xl overflow-hidden border border-slate-200/80 dark:border-slate-700/80 shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col">
+                        <div class="relative h-64 sm:h-72 overflow-hidden bg-slate-900">
+                            <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&auto=format&fit=crop&q=80" 
+                                 alt="Balai Benih Ikan (BBI) Ciparay" 
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+                            
+                            <div class="absolute top-4 left-4 px-3 py-1 rounded-full bg-emerald-600 text-white text-xs font-bold tracking-wide">
+                                UPTD DISPAKAN
+                            </div>
+
+                            <div class="absolute bottom-4 left-4 right-4">
+                                <span class="text-xs font-semibold text-emerald-400 uppercase tracking-widest">Pusat Pembibitan</span>
+                                <h3 class="font-display text-2xl font-bold text-white leading-tight">
+                                    UPTD Balai Benih Ikan (BBI) Ciparay
+                                </h3>
+                            </div>
+                        </div>
+
+                        <div class="p-6 sm:p-8 flex-1 flex flex-col justify-between space-y-6">
+                            <div class="space-y-4">
+                                <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                                    Pusat pemuliaan, seleksi induk unggul, dan distribusi benih air tawar (Nila Nirwana, Lele Mutiara/Sangkuriang, Patin, Mas, dan Gurame) berstandar CPIB (Cara Pembenihan Ikan yang Baik).
+                                </p>
+
+                                <div class="grid grid-cols-2 gap-3 pt-2">
+                                    <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200/60 dark:border-slate-700/60">
+                                        <div class="text-xs text-slate-500 dark:text-slate-400">Kapasitas Kolam</div>
+                                        <div class="text-base font-bold text-slate-900 dark:text-white">24+ Kolam Induk</div>
+                                    </div>
+                                    <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200/60 dark:border-slate-700/60">
+                                        <div class="text-xs text-slate-500 dark:text-slate-400">Sertifikasi</div>
+                                        <div class="text-base font-bold text-emerald-600 dark:text-emerald-400">CPIB Grade A</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="pt-4 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between">
+                                <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+                                    <i data-lucide="map-pin" class="w-4 h-4 text-emerald-600"></i>
+                                    Kec. Ciparay, Kab. Bandung
+                                </span>
+                                <button @click="openModal('bbi')" class="text-xs font-bold text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 flex items-center gap-1">
+                                    <span>Detail Layanan BBI</span>
+                                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fasilitas 2: Pasar Ikan Modern (PIM) -->
+                    <div class="group bg-white dark:bg-slate-800 rounded-3xl overflow-hidden border border-slate-200/80 dark:border-slate-700/80 shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col">
+                        <div class="relative h-64 sm:h-72 overflow-hidden bg-slate-900">
+                            <img src="https://images.unsplash.com/photo-1534483509719-3feaee7c30da?w=800&auto=format&fit=crop&q=80" 
+                                 alt="Pasar Ikan Modern (PIM) Soreang" 
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+                            
+                            <div class="absolute top-4 left-4 px-3 py-1 rounded-full bg-cyan-600 text-white text-xs font-bold tracking-wide">
+                                Sentra Pemasaran
+                            </div>
+
+                            <div class="absolute bottom-4 left-4 right-4">
+                                <span class="text-xs font-semibold text-cyan-400 uppercase tracking-widest">Higiene & Rantai Dingin</span>
+                                <h3 class="font-display text-2xl font-bold text-white leading-tight">
+                                    Pasar Ikan Modern (PIM) Soreang
+                                </h3>
+                            </div>
+                        </div>
+
+                        <div class="p-6 sm:p-8 flex-1 flex flex-col justify-between space-y-6">
+                            <div class="space-y-4">
+                                <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                                    Sentra niaga ikan segar dan olahan perikanan higienis berstandar modern yang menghubungkan langsung pembudidaya/nelayan lokal dengan konsumen dan pelaku UMKM kuliner.
+                                </p>
+
+                                <div class="grid grid-cols-2 gap-3 pt-2">
+                                    <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200/60 dark:border-slate-700/60">
+                                        <div class="text-xs text-slate-500 dark:text-slate-400">Fasilitas Utama</div>
+                                        <div class="text-base font-bold text-slate-900 dark:text-white">Cold Storage & Kios Basah</div>
+                                    </div>
+                                    <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200/60 dark:border-slate-700/60">
+                                        <div class="text-xs text-slate-500 dark:text-slate-400">Zona Kuliner</div>
+                                        <div class="text-base font-bold text-cyan-600 dark:text-cyan-400">Food Court Ikan Segar</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="pt-4 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between">
+                                <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+                                    <i data-lucide="map-pin" class="w-4 h-4 text-cyan-600"></i>
+                                    Komp. Soreang, Kab. Bandung
+                                </span>
+                                <button @click="openModal('pim')" class="text-xs font-bold text-cyan-600 hover:text-cyan-700 dark:text-cyan-400 flex items-center gap-1">
+                                    <span>Detail Fasilitas PIM</span>
+                                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ================= 4. LAYANAN ================= -->
+        <section id="layanan" class="py-24 relative bg-slate-50/70 dark:bg-slate-900/50 border-t border-slate-200/80 dark:border-slate-800/80">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <!-- Section Header -->
+                <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
+                    <div class="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 text-xs font-bold uppercase tracking-wider">
+                        <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+                        <span>Pelayanan Publik & Edukasi</span>
+                    </div>
+                    <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">
+                        Layanan Pelaku Perikanan
+                    </h2>
+                    <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400">
+                        Pilihan layanan terpadu dari pendampingan kelompok, sertifikasi budidaya, perizinan, hingga uji kualitas air.
+                    </p>
+                </div>
+
+                <!-- 4 Master Service Modules -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto mb-16">
+                    
+                    <!-- Layanan 1: Pokdakan -->
+                    <div class="group bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-7 border border-slate-200/80 dark:border-slate-700/80 shadow-md hover:shadow-card-hover hover:border-emerald-500/60 transition-all duration-300 flex flex-col justify-between">
+                        <div>
+                            <div class="w-14 h-14 rounded-2xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300">
+                                <i data-lucide="users" class="w-7 h-7"></i>
+                            </div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Modul 01</span>
+                            <h3 class="font-display text-xl font-bold text-slate-900 dark:text-white mt-1 mb-3">
+                                Pembinaan Pokdakan & Poklahsar
+                            </h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                                Pendaftaran legalitas kelompok pembudidaya & pengolah ikan, pelatihan teknis, serta akses bantuan sarana produksi perikanan.
+                            </p>
+                        </div>
+                        <div class="pt-6 mt-6 border-t border-slate-100 dark:border-slate-700/60">
+                            <button @click="openModal('pokdakan')" class="w-full py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-emerald-600 text-slate-700 hover:text-white dark:bg-slate-700/80 dark:hover:bg-emerald-600 dark:text-slate-200 text-xs font-bold transition-all duration-200 flex items-center justify-center gap-2">
+                                <span>Alur & Syarat Pokdakan</span>
+                                <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Layanan 2: Sertifikasi CBIB/CPIB -->
+                    <div class="group bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-7 border border-slate-200/80 dark:border-slate-700/80 shadow-md hover:shadow-card-hover hover:border-teal-500/60 transition-all duration-300 flex flex-col justify-between">
+                        <div>
+                            <div class="w-14 h-14 rounded-2xl bg-teal-100 dark:bg-teal-950 text-teal-600 dark:text-teal-400 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-teal-600 group-hover:text-white transition-all duration-300">
+                                <i data-lucide="badge-check" class="w-7 h-7"></i>
+                            </div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400">Modul 02</span>
+                            <h3 class="font-display text-xl font-bold text-slate-900 dark:text-white mt-1 mb-3">
+                                Sertifikasi Mutu CBIB & CPIB
+                            </h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                                Pendampingan sertifikasi Cara Budidaya Ikan yang Baik (CBIB) dan Cara Pembenihan Ikan yang Baik (CPIB) standar KKP RI.
+                            </p>
+                        </div>
+                        <div class="pt-6 mt-6 border-t border-slate-100 dark:border-slate-700/60">
+                            <button @click="openModal('cbib')" class="w-full py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-teal-600 text-slate-700 hover:text-white dark:bg-slate-700/80 dark:hover:bg-teal-600 dark:text-slate-200 text-xs font-bold transition-all duration-200 flex items-center justify-center gap-2">
+                                <span>Syarat Sertifikasi</span>
+                                <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Layanan 3: Perizinan & NIB/TDKP -->
+                    <div class="group bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-7 border border-slate-200/80 dark:border-slate-700/80 shadow-md hover:shadow-card-hover hover:border-cyan-500/60 transition-all duration-300 flex flex-col justify-between">
+                        <div>
+                            <div class="w-14 h-14 rounded-2xl bg-cyan-100 dark:bg-cyan-950 text-cyan-600 dark:text-cyan-400 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-cyan-600 group-hover:text-white transition-all duration-300">
+                                <i data-lucide="file-signature" class="w-7 h-7"></i>
+                            </div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">Modul 03</span>
+                            <h3 class="font-display text-xl font-bold text-slate-900 dark:text-white mt-1 mb-3">
+                                Rekomendasi NIB & TDKP
+                            </h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                                Rekomendasi teknis Tanda Daftar Usaha Perikanan (TDUP) dan Tanda Daftar Kapal Perikanan (TDKP) skala kecil perairan darat.
+                            </p>
+                        </div>
+                        <div class="pt-6 mt-6 border-t border-slate-100 dark:border-slate-700/60">
+                            <button @click="openModal('izin')" class="w-full py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-cyan-600 text-slate-700 hover:text-white dark:bg-slate-700/80 dark:hover:bg-cyan-600 dark:text-slate-200 text-xs font-bold transition-all duration-200 flex items-center justify-center gap-2">
+                                <span>Panduan OSS & TDKP</span>
+                                <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Layanan 4: Diagnostik Kualitas Air -->
+                    <div class="group bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-7 border border-slate-200/80 dark:border-slate-700/80 shadow-md hover:shadow-card-hover hover:border-blue-500/60 transition-all duration-300 flex flex-col justify-between">
+                        <div>
+                            <div class="w-14 h-14 rounded-2xl bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                                <i data-lucide="flask-conical" class="w-7 h-7"></i>
+                            </div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Modul 04</span>
+                            <h3 class="font-display text-xl font-bold text-slate-900 dark:text-white mt-1 mb-3">
+                                Laboratorium Kualitas Air
+                            </h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                                Konsultasi dan pengujian sampel air kolam (pH, Oksigen Terlarut, Suhu, Amonia) serta rekomendasi pencegahan penyakit ikan.
+                            </p>
+                        </div>
+                        <div class="pt-6 mt-6 border-t border-slate-100 dark:border-slate-700/60">
+                            <a href="#kalkulator-air" class="w-full py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-blue-600 text-slate-700 hover:text-white dark:bg-slate-700/80 dark:hover:bg-blue-600 dark:text-slate-200 text-xs font-bold transition-all duration-200 flex items-center justify-center gap-2">
+                                <span>Cek Kalkulator Air Live</span>
+                                <i data-lucide="calculator" class="w-4 h-4"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- INTERACTIVE TOOL: DIAGNOSTIK KUALITAS AIR KOLAM -->
+                <div id="kalkulator-air" class="max-w-4xl mx-auto bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-10 border border-slate-200/80 dark:border-slate-700/80 shadow-xl">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100 dark:border-slate-700/80">
+                        <div class="flex items-center space-x-3">
+                            <div class="p-3 rounded-2xl bg-gradient-to-tr from-emerald-600 to-cyan-600 text-white shadow-md">
+                                <i data-lucide="calculator" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-display text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+                                    Simulasi & Diagnostik Kualitas Air Kolam
+                                </h3>
+                                <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+                                    Evaluasi parameter ideal budidaya ikan air tawar (Nila, Lele, Patin, Mas)
+                                </p>
+                            </div>
+                        </div>
+
+                        <span class="inline-flex items-center px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 text-xs font-bold">
+                            Live Evaluator
+                        </span>
+                    </div>
+
+                    <!-- Input Controls -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 py-8">
+                        
+                        <!-- pH Slider -->
+                        <div class="space-y-3 bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-700/60">
+                            <div class="flex justify-between items-center">
+                                <label class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide">Derajat Keasaman (pH)</label>
+                                <span class="text-lg font-display font-black text-emerald-600 dark:text-emerald-400" x-text="waterParams.ph"></span>
+                            </div>
+                            <input type="range" min="4.0" max="10.0" step="0.1" x-model.number="waterParams.ph" 
+                                   class="w-full accent-emerald-600 cursor-pointer">
+                            <div class="flex justify-between text-[10px] text-slate-400 font-medium">
+                                <span>4.0 (Asam)</span>
+                                <span>7.0 (Netral)</span>
+                                <span>10.0 (Basa)</span>
+                            </div>
+                        </div>
+
+                        <!-- Suhu Slider -->
+                        <div class="space-y-3 bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-700/60">
+                            <div class="flex justify-between items-center">
+                                <label class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide">Suhu Air (°C)</label>
+                                <span class="text-lg font-display font-black text-teal-600 dark:text-teal-400" x-text="waterParams.temp + ' °C'"></span>
+                            </div>
+                            <input type="range" min="18" max="38" step="0.5" x-model.number="waterParams.temp" 
+                                   class="w-full accent-teal-600 cursor-pointer">
+                            <div class="flex justify-between text-[10px] text-slate-400 font-medium">
+                                <span>18°C (Dingin)</span>
+                                <span>28°C (Optimal)</span>
+                                <span>38°C (Panas)</span>
+                            </div>
+                        </div>
+
+                        <!-- DO (Oksigen Terlarut) Slider -->
+                        <div class="space-y-3 bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-700/60">
+                            <div class="flex justify-between items-center">
+                                <label class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide">Oksigen Terlarut (DO)</label>
+                                <span class="text-lg font-display font-black text-cyan-600 dark:text-cyan-400" x-text="waterParams.do + ' mg/L'"></span>
+                            </div>
+                            <input type="range" min="1.0" max="10.0" step="0.5" x-model.number="waterParams.do" 
+                                   class="w-full accent-cyan-600 cursor-pointer">
+                            <div class="flex justify-between text-[10px] text-slate-400 font-medium">
+                                <span>1.0 (Kritis)</span>
+                                <span>5.0 (Baik)</span>
+                                <span>10.0 (Tinggi)</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Output Diagnosis Box -->
+                    <div :class="getDiagnosticClass()" class="p-6 rounded-2xl border transition-all duration-300">
+                        <div class="flex items-start space-x-4">
+                            <div class="p-2.5 rounded-xl bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm shadow-sm flex-shrink-0">
+                                <i :data-lucide="getDiagnosticIcon()" class="w-6 h-6"></i>
+                            </div>
+                            <div class="space-y-1.5 flex-1">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="font-display text-lg font-bold" x-text="getDiagnosticTitle()"></h4>
+                                    <span class="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider" x-text="getDiagnosticStatus()"></span>
+                                </div>
+                                <p class="text-sm leading-relaxed" x-text="getDiagnosticRecommendation()"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="bg-slate-900 text-slate-300 pt-16 pb-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-slate-800">
+                
+                <!-- Col 1: Brand Info -->
+                <div class="space-y-4 md:col-span-2">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-cyan-500 flex items-center justify-center text-white shadow-md">
+                            <i data-lucide="fish" class="w-6 h-6"></i>
+                        </div>
+                        <span class="font-display font-extrabold text-2xl tracking-tight text-white">SI LELE <span class="text-emerald-400">IKAN</span></span>
+                    </div>
+                    <p class="text-sm text-slate-400 leading-relaxed max-w-md">
+                        Sistem Informasi Layanan & Edukasi Pelaku Perikanan - Dinas Ketahanan Pangan dan Perikanan (DISPAKAN) Pemerintah Kabupaten Bandung.
+                    </p>
+                    <div class="text-xs text-slate-500 space-y-1">
+                        <p class="flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4 text-emerald-400"></i> Kompleks Perkantoran Pemkab Bandung, Jl. Raya Soreang Km. 17, Soreang</p>
+                        <p class="flex items-center gap-2"><i data-lucide="phone" class="w-4 h-4 text-emerald-400"></i> (022) 5891176 | dispakan@bandungkab.go.id</p>
+                    </div>
+                </div>
+
+                <!-- Col 2: Menu Cepat -->
+                <div class="space-y-3">
+                    <h4 class="font-display font-bold text-white text-base">Navigasi Halaman</h4>
+                    <ul class="space-y-2 text-sm text-slate-400">
+                        <li><a href="#beranda" class="hover:text-emerald-400 transition-colors">Beranda</a></li>
+                        <li><a href="#visi-misi" class="hover:text-emerald-400 transition-colors">Visi dan Misi</a></li>
+                        <li><a href="#fasilitas" class="hover:text-emerald-400 transition-colors">Fasilitas Perikanan</a></li>
+                        <li><a href="#layanan" class="hover:text-emerald-400 transition-colors">Layanan & Edukasi</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Portal Terkait -->
+                <div class="space-y-3">
+                    <h4 class="font-display font-bold text-white text-base">Portal Terkait</h4>
+                    <ul class="space-y-2 text-sm text-slate-400">
+                        <li><a href="index.html" class="hover:text-emerald-400 transition-colors">Portal Utama DISPAKAN</a></li>
+                        <li><a href="survei.html" class="hover:text-emerald-400 transition-colors">Survei Skor PPH Konsumsi</a></li>
+                        <li><a href="cppd.html" class="hover:text-emerald-400 transition-colors">Cadangan Pangan (CPPD)</a></li>
+                        <li><a href="https://bandungkab.go.id" target="_blank" class="hover:text-emerald-400 transition-colors">Pemerintah Kab. Bandung</a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+                <p>&copy; 2026 Dinas Ketahanan Pangan dan Perikanan Kabupaten Bandung. Seluruh Hak Cipta Dilindungi.</p>
+                <div class="flex items-center space-x-4">
+                    <span>Bedas Berkelanjutan</span>
+                    <span>•</span>
+                    <span>Pelayanan Prima</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- ================= MODAL DETAIL / DRAWER ================= -->
+    <div x-show="activeModal !== null" 
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4"
+         style="display: none;">
+        
+        <div @click.away="activeModal = null" 
+             class="bg-white dark:bg-slate-800 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-700 relative overflow-hidden transform transition-all">
+            
+            <button @click="activeModal = null" class="absolute top-5 right-5 p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-500 dark:text-slate-300 transition-colors">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <!-- Modal Content Dinamis -->
+            <template x-if="activeModal === 'pokdakan'">
+                <div class="space-y-4">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 flex items-center justify-center">
+                        <i data-lucide="users" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-display text-2xl font-bold text-slate-900 dark:text-white">Pendaftaran & Pembinaan Kelompok (Pokdakan)</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                        Kelompok Pembudidaya Ikan (Pokdakan) dan Kelompok Pengolah & Pemasar Ikan (Poklahsar) binaan DISPAKAN Kab. Bandung berhak mendapatkan akses pembinaan teknis penyuluh perikanan, bantuan sarana prasarana budidaya, serta sertifikasi kompetensi.
+                    </p>
+                    <div class="bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-2">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200">Persyaratan Registrasi:</h4>
+                        <ul class="text-xs text-slate-600 dark:text-slate-400 space-y-1.5 list-disc list-inside">
+                            <li>Beranggotakan minimal 10 orang pelaku usaha budidaya aktif.</li>
+                            <li>Berita Acara Pembentukan Kelompok yang diketahui Kepala Desa/Lurah setempat.</li>
+                            <li>Surat Pengukuhan Kelompok oleh Camat.</li>
+                            <li>Memiliki susunan pengurus lengkap (Ketua, Sekretaris, Bendahara, Anggota).</li>
+                        </ul>
+                    </div>
+                </div>
+            </template>
+
+            <template x-if="activeModal === 'cbib'">
+                <div class="space-y-4">
+                    <div class="w-12 h-12 rounded-2xl bg-teal-100 dark:bg-teal-950 text-teal-600 flex items-center justify-center">
+                        <i data-lucide="badge-check" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-display text-2xl font-bold text-slate-900 dark:text-white">Sertifikasi CBIB & CPIB</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                        Standarisasi Cara Budidaya Ikan yang Baik (CBIB) menjamin hasil panen aman dikonsumsi, bebas cemaran kimia/biologis, ramah lingkungan, dan memiliki nilai jual tinggi di pasar modern & ekspor.
+                    </p>
+                    <div class="bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-2">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200">Tahapan Penilaian:</h4>
+                        <ul class="text-xs text-slate-600 dark:text-slate-400 space-y-1.5 list-disc list-inside">
+                            <li>Pemeriksaan sumber air dan sanitasi lingkungan kolam.</li>
+                            <li>Verifikasi penggunaan pakan bersertifikat dan riwayat kesehatan ikan.</li>
+                            <li>Audit fasilitas penyimpanan dan penanganan pasca panen oleh Tim Penilai Mutu.</li>
+                        </ul>
+                    </div>
+                </div>
+            </template>
+
+            <template x-if="activeModal === 'izin'">
+                <div class="space-y-4">
+                    <div class="w-12 h-12 rounded-2xl bg-cyan-100 dark:bg-cyan-950 text-cyan-600 flex items-center justify-center">
+                        <i data-lucide="file-signature" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-display text-2xl font-bold text-slate-900 dark:text-white">Rekomendasi NIB & TDKP</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                        Layanan pendampingan penerbitan Nomor Induk Berusaha (NIB) berbasis risiko sektor perikanan melalui sistem OSS-RBA dan rekomendasi Tanda Daftar Kapal Perikanan (TDKP) penangkapan perairan umum darat (waduk/danau).
+                    </p>
+                    <div class="bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-2">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200">Dokumen yang Disiapkan:</h4>
+                        <ul class="text-xs text-slate-600 dark:text-slate-400 space-y-1.5 list-disc list-inside">
+                            <li>KTP & NPWP Pemilik Usaha / Pengurus Kelompok.</li>
+                            <li>Titik Koordinat Lokasi Usaha Budidaya / Tambak / Perahu.</li>
+                            <li>Foto Dokumentasi Sarana Usaha & Surat Pernyataan Kesanggupan Lingkungan (SPPL).</li>
+                        </ul>
+                    </div>
+                </div>
+            </template>
+
+            <template x-if="activeModal === 'bbi'">
+                <div class="space-y-4">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 flex items-center justify-center">
+                        <i data-lucide="building-2" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-display text-2xl font-bold text-slate-900 dark:text-white">UPTD Balai Benih Ikan (BBI) Ciparay</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                        Balai Benih Ikan Ciparay melayani penyediaan bibit ikan air tawar unggulan bersertifikat untuk kelompok pembudidaya maupun penebaran perairan umum (restocking) di waduk, embung, dan sungai Kabupaten Bandung.
+                    </p>
+                    <div class="bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-2">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200">Komoditas Tersedia:</h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-400">
+                            Benih Ikan Nila Nirwana, Ikan Mas Rajadanu, Lele Sangkuriang & Mutiara, Patin Siam, serta Gurame Soang.
+                        </p>
+                    </div>
+                </div>
+            </template>
+
+            <template x-if="activeModal === 'pim'">
+                <div class="space-y-4">
+                    <div class="w-12 h-12 rounded-2xl bg-cyan-100 dark:bg-cyan-950 text-cyan-600 flex items-center justify-center">
+                        <i data-lucide="store" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-display text-2xl font-bold text-slate-900 dark:text-white">Pasar Ikan Modern (PIM) Soreang</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                        Pasar Ikan Modern menyediakan sarana perdagangan komprehensif mulai dari lapak basah dengan sistem drainase terpadu, ruang pendingin (cold storage), display produk olahan bernilai tambah, hingga pusat edukasi gemar makan ikan (GEMARIKAN).
+                    </p>
+                </div>
+            </template>
+
+            <div class="pt-6 mt-6 border-t border-slate-100 dark:border-slate-700 flex justify-end">
+                <button @click="activeModal = null" class="px-5 py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 transition-colors">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Alpine Application State Script -->
+    <script>
+        function sileleApp() {
+            return {
+                darkMode: localStorage.getItem('silele_theme') === 'dark',
+                mobileMenuOpen: false,
+                activeSection: 'beranda',
+                activeModal: null,
+                waterParams: {
+                    ph: 7.2,
+                    temp: 27.5,
+                    do: 5.5
+                },
+
+                init() {
+                    if (this.darkMode) {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+
+                    // Lucide Icons Initialization
+                    this.$nextTick(() => {
+                        lucide.createIcons();
+                    });
+
+                    // Scrollspy for active section
+                    window.addEventListener('scroll', () => {
+                        const sections = ['beranda', 'visi-misi', 'fasilitas', 'layanan'];
+                        const scrollPosition = window.scrollY + 120;
+
+                        for (const section of sections) {
+                            const el = document.getElementById(section);
+                            if (el) {
+                                const top = el.offsetTop;
+                                const height = el.offsetHeight;
+                                if (scrollPosition >= top && scrollPosition < top + height) {
+                                    this.activeSection = section;
+                                    break;
+                                }
+                            }
+                        }
+                    });
+                },
+
+                toggleTheme() {
+                    this.darkMode = !this.darkMode;
+                    if (this.darkMode) {
+                        document.documentElement.classList.add('dark');
+                        localStorage.setItem('silele_theme', 'dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                        localStorage.setItem('silele_theme', 'light');
+                    }
+                    this.$nextTick(() => {
+                        lucide.createIcons();
+                    });
+                },
+
+                openModal(type) {
+                    this.activeModal = type;
+                    this.$nextTick(() => {
+                        lucide.createIcons();
+                    });
+                },
+
+                // Water Quality Evaluator Logic
+                getDiagnosticStatus() {
+                    const { ph, temp, do: dOxy } = this.waterParams;
+                    if (ph >= 6.5 && ph <= 8.5 && temp >= 25 && temp <= 30 && dOxy >= 4.0) {
+                        return 'Kondisi Optimal (Sangat Baik)';
+                    } else if ((ph >= 6.0 && ph <= 9.0) && (temp >= 22 && temp <= 32) && dOxy >= 3.0) {
+                        return 'Kondisi Cukup / Perlu Monitoring';
+                    } else {
+                        return 'Kondisi Kritis / Bahaya Ikan';
+                    }
+                },
+
+                getDiagnosticClass() {
+                    const status = this.getDiagnosticStatus();
+                    if (status.includes('Optimal')) {
+                        return 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-800 text-emerald-900 dark:text-emerald-200';
+                    } else if (status.includes('Cukup')) {
+                        return 'bg-amber-50 dark:bg-amber-950/40 border-amber-300 dark:border-amber-800 text-amber-900 dark:text-amber-200';
+                    } else {
+                        return 'bg-rose-50 dark:bg-rose-950/40 border-rose-300 dark:border-rose-800 text-rose-900 dark:text-rose-200';
+                    }
+                },
+
+                getDiagnosticIcon() {
+                    const status = this.getDiagnosticStatus();
+                    if (status.includes('Optimal')) return 'check-circle-2';
+                    if (status.includes('Cukup')) return 'alert-triangle';
+                    return 'alert-octagon';
+                },
+
+                getDiagnosticTitle() {
+                    const status = this.getDiagnosticStatus();
+                    if (status.includes('Optimal')) return 'Kualitas Air Siap Budidaya Produktif';
+                    if (status.includes('Cukup')) return 'Parameter Membutuhkan Penyesuaian Ringan';
+                    return 'Peringatan: Risiko Kematian & Stres Ikan Tinggi';
+                },
+
+                getDiagnosticRecommendation() {
+                    const { ph, temp, do: dOxy } = this.waterParams;
+                    let notes = [];
+
+                    if (ph < 6.5) notes.push('pH terlalu asam (<6.5): lakukan pengapuran kolam (Kapur Dolomit/CaCO3).');
+                    if (ph > 8.5) notes.push('pH terlalu basa (>8.5): lakukan sirkulasi air baru & kurangi kepadatan alga.');
+                    if (temp < 25) notes.push('Suhu air dingin (<25°C): nafsu makan ikan berkurang, kurangi dosis pakan.');
+                    if (temp > 30) notes.push('Suhu air panas (>30°C): tambahkan naungan atau air baru sejuk.');
+                    if (dOxy < 4.0) notes.push('Oksigen terlarut rendah (<4 mg/L): aktifkan aerator/kincir dan kurangi sisa pakan.');
+
+                    if (notes.length === 0) {
+                        return 'Semua parameter dalam ambang batas ideal untuk benih dan pembesaran ikan air tawar. Pertahankan jadwal pergantian air dan dosis pakan berkala.';
+                    }
+                    return notes.join(' ');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
