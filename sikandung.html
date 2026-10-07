@@ -1,0 +1,2769 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title id="page-title">Dashboard SIKANDUNG - Sistem Informasi Pendataan Perikanan Kab. Bandung</title>
+    <meta name="description" content="Dashboard SIKANDUNG (Sistem Informasi Pendataan Perikanan Kabupaten Bandung) - Perikanan Budidaya, Perikanan Tangkap, dan Pengolahan Hasil Perikanan.">
+
+    <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: ['class', '[data-theme="dark"]'],
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Outfit"', '"Plus Jakarta Sans"', 'sans-serif'],
+                        display: ['"Outfit"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            emerald: '#10b981',
+                            dark: '#064e3b',
+                            light: '#ecfdf5',
+                            accent: '#34d399',
+                            cyan: '#06b6d4',
+                            blue: '#0284c7'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- ApexCharts, SheetJS, Lucide Icons -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Leaflet CSS & JS for Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(16, 185, 129, 0.25);
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --primary: #059669;
+            --accent: #0284c7;
+            --accent-glow: rgba(2, 132, 199, 0.1);
+            --primary-glow: rgba(5, 150, 105, 0.12);
+            --font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(20, 27, 45, 0.7);
+            --card-border: rgba(16, 185, 129, 0.18);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --primary: #10b981;
+            --accent: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.15);
+            --primary-glow: rgba(16, 185, 129, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            font-size: 0.875rem;
+            background-image:
+                radial-gradient(circle at 10% 20%, var(--primary-glow), transparent 30%),
+                radial-gradient(circle at 90% 80%, var(--accent-glow), transparent 30%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+
+        .container-cppd {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.25rem 1.5rem;
+        }
+
+        header.cppd-header {
+            text-align: left;
+            margin-bottom: 1.75rem;
+            padding-top: 0.5rem;
+            position: relative;
+        }
+
+        .dept-title {
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        header.cppd-header h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--text-main), var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.25rem;
+            letter-spacing: -0.5px;
+            line-height: 1.15;
+        }
+
+        header.cppd-header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .section-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            color: var(--text-main);
+        }
+
+        .section-title::before {
+            content: '';
+            display: block;
+            width: 6px;
+            height: 24px;
+            background: linear-gradient(to bottom, var(--primary), var(--accent));
+            border-radius: 3px;
+        }
+
+        .info-banner {
+            background: rgba(5, 150, 105, 0.08);
+            border-left: 4px solid var(--primary);
+            border-radius: 12px;
+            padding: 0.85rem 1.1rem;
+            margin-bottom: 1.25rem;
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-start;
+            color: var(--text-main);
+            line-height: 1.5;
+            font-size: 0.85rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+            border: 1px solid var(--card-border);
+            border-left-width: 4px;
+        }
+
+        [data-theme="dark"] .info-banner {
+            background: rgba(16, 185, 129, 0.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-banner-icon {
+            color: var(--primary);
+            flex-shrink: 0;
+            margin-top: 0.15rem;
+        }
+
+        .glass-panel {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.15rem;
+            box-shadow: 0 4px 20px -1px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s, border-color 0.3s;
+        }
+
+        .glass-panel:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px -1px rgba(0, 0, 0, 0.09);
+        }
+
+        #theme-toggle,
+        #refresh-btn,
+        #export-btn,
+        #portal-btn {
+            cursor: pointer;
+            padding: 0.45rem 0.9rem;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            font-weight: 600;
+            font-size: 0.8rem;
+            background: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--card-border);
+            transition: all 0.25s ease;
+            outline: none;
+            backdrop-filter: blur(8px);
+            text-decoration: none;
+        }
+
+        #theme-toggle:hover,
+        #refresh-btn:hover,
+        #export-btn:hover,
+        #portal-btn:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
+            transform: translateY(-1px);
+        }
+
+        .sector-pill {
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.82rem;
+            transition: all 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid transparent;
+        }
+
+        .sector-pill:hover {
+            color: var(--text-main);
+            background: rgba(0, 0, 0, 0.04);
+        }
+
+        [data-theme="dark"] .sector-pill:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .sector-pill.active {
+            background: var(--card-bg);
+            color: var(--primary);
+            border: 1px solid var(--card-border);
+            box-shadow: 0 4px 15px var(--primary-glow);
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: #ffffff;
+            box-shadow: 0 4px 14px var(--primary-glow);
+        }
+
+        .leaflet-popup-content-wrapper {
+            border-radius: 14px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .leaflet-popup-content {
+            margin: 0;
+            line-height: 1.4;
+        }
+    </style>
+
+    <script>
+        // Init theme before render
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+</head>
+
+<body class="antialiased selection:bg-emerald-500 selection:text-white">
+
+    <!-- ========================================== -->
+    <!-- LOADING SCREEN                             -->
+    <!-- ========================================== -->
+    <div id="loading-screen" class="fixed inset-0 z-[1000] bg-white dark:bg-slate-950 flex flex-col items-center justify-center transition-all duration-700 ease-in-out">
+        <div class="relative w-24 h-24 mb-6">
+            <div class="absolute inset-0 border-4 border-slate-100 dark:border-slate-800 rounded-full"></div>
+            <div class="absolute inset-0 border-4 border-emerald-600 rounded-full border-t-transparent animate-spin"></div>
+            <div class="absolute inset-0 flex items-center justify-center text-emerald-600">
+                <i data-lucide="fish" class="w-10 h-10 animate-pulse"></i>
+            </div>
+        </div>
+
+        <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-1 tracking-tight">SIKANDUNG</h2>
+        <p class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest mb-4">Sistem Informasi Pendataan Perikanan</p>
+
+        <div class="h-6 mb-3 flex items-center justify-center">
+            <p id="loading-text" class="text-sm font-medium text-slate-500 dark:text-slate-400 font-mono transition-all duration-300">Menghubungkan ke API SIKANDUNG...</p>
+        </div>
+
+        <div class="w-72 h-2.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden relative shadow-inner">
+            <div id="loading-bar-inner" class="h-full bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 rounded-full transition-all duration-500 ease-out" style="width: 10%"></div>
+        </div>
+        <p id="loading-pct" class="text-xs font-bold text-emerald-600 dark:text-emerald-400 mt-2 font-mono">10%</p>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MAIN CONTAINER (CPPD DESIGN SYSTEM)       -->
+    <!-- ========================================== -->
+    <div class="container-cppd" id="app">
+
+        <!-- ========================================== -->
+        <!-- ========================================== -->
+        <!-- HEADER CPPD STYLE                          -->
+        <!-- ========================================== -->
+        <header class="cppd-header">
+            <!-- Top Row: Left Brand/Title & Right Action Toolbar -->
+            <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
+                
+                <!-- Left: Logo, Dept Name, Main Title & Badge -->
+                <div class="flex items-start gap-3.5">
+                    <div class="logo-area flex items-center justify-center w-12 h-12 rounded-2xl bg-white dark:bg-slate-800 border border-emerald-500/25 shadow-md shadow-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5">
+                        <i data-lucide="fish" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <div class="dept-title text-xs font-bold text-emerald-600 dark:text-emerald-400 tracking-wider uppercase mb-1">
+                            Dinas Ketahanan Pangan dan Perikanan Kabupaten Bandung (DISPAKAN)
+                        </div>
+                        <div class="flex items-center gap-2.5 flex-wrap">
+                            <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-none">SIKANDUNG</h1>
+                            <span id="currentSectorBadge" class="text-[11px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-100/90 dark:bg-emerald-950/90 px-2.5 py-0.5 rounded-full border border-emerald-300 dark:border-emerald-800 uppercase tracking-wider shadow-sm">
+                                BUDIDAYA
+                            </span>
+                        </div>
+                        <p id="heroSectorSubtitle" class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium mt-1">Sistem Informasi Pendataan Perikanan - Kabupaten Bandung</p>
+                    </div>
+                </div>
+
+                <!-- Right: Actions Toolbar & Live Date Pill -->
+                <div class="flex flex-wrap items-center lg:justify-end gap-2">
+                    <div id="sync-time" class="text-xs text-slate-600 dark:text-slate-300 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 font-mono">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                        </span>
+                        <span id="current-date-nav">-</span>
+                    </div>
+
+                    <a href="dashboardispakan.html" id="portal-btn" title="Kembali ke Portal SIP">
+                        <i data-lucide="arrow-left" class="w-3.5 h-3.5 text-slate-500"></i>
+                        <span>Portal SIP</span>
+                    </a>
+
+                    <button id="refresh-btn" onclick="fetchAllData(true)" title="Sinkronisasi Data API">
+                        <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-emerald-600"></i>
+                        <span>Sinkronisasi</span>
+                    </button>
+
+                    <button id="theme-toggle" onclick="toggleTheme()" title="Ganti Mode Gelap / Terang">
+                        <span id="theme-icon">☀️</span> <span id="theme-text">Light Mode</span>
+                    </button>
+
+                    <button id="export-btn" onclick="exportToExcel()" class="!bg-emerald-600 !text-white !border-emerald-600 hover:!bg-emerald-700 shadow-sm">
+                        <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                        <span>Export Excel</span>
+                    </button>
+
+                    <button onclick="window.print()" id="print-btn" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-emerald-500 transition">
+                        <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+                        <span>Cetak</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 3 Sektors Switcher Pills (CPPD Design) -->
+            <div class="flex items-center gap-2 mt-4 p-1 bg-slate-200/60 dark:bg-slate-800/60 rounded-2xl border border-emerald-500/20 w-max max-w-full overflow-x-auto">
+                <button onclick="switchSector('budidaya')" id="sector-btn-budidaya" class="sector-pill active">
+                    <i data-lucide="waves" class="w-4 h-4 text-emerald-600"></i>
+                    <span>Perikanan Budidaya</span>
+                </button>
+                <button onclick="switchSector('tangkap')" id="sector-btn-tangkap" class="sector-pill">
+                    <i data-lucide="anchor" class="w-4 h-4 text-sky-500"></i>
+                    <span>Perikanan Tangkap</span>
+                </button>
+                <button onclick="switchSector('pengolahan')" id="sector-btn-pengolahan" class="sector-pill">
+                    <i data-lucide="package-check" class="w-4 h-4 text-teal-500"></i>
+                    <span>Pengolahan Hasil Perikanan</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- INFO BANNER (CPPD STYLE) -->
+        <div class="info-banner">
+            <i data-lucide="info" class="info-banner-icon w-5 h-5 text-emerald-600 flex-shrink-0"></i>
+            <div id="sectorInfoBannerText" class="text-xs leading-relaxed text-slate-700 dark:text-slate-300">
+                Dashboard SIKANDUNG (Sistem Informasi Pendataan Perikanan) menyajikan data sensus By Name By Address (BNBA) terintegrasi perikanan budidaya, perikanan tangkap, dan unit pengolahan hasil perikanan (UPI) Kabupaten Bandung.
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- FILTER BAR CARD (CPPD GLASS-PANEL)        -->
+        <!-- ========================================== -->
+        <div class="glass-panel mb-6">
+            <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+                <div class="flex items-center gap-2 text-slate-700 dark:text-slate-300 text-xs font-bold">
+                    <i data-lucide="sliders-horizontal" class="w-4 h-4 text-emerald-600"></i>
+                    <span>Filter & Pencarian Data Sektor</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 flex-1 max-w-4xl">
+                    <!-- Search Input -->
+                    <div class="relative">
+                        <i data-lucide="search" class="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <input type="text" id="globalSearchInput" placeholder="Cari nama, kelompok, NIK, desa..." 
+                            class="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 text-xs rounded-xl pl-9 pr-3 py-2.5 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                    </div>
+
+                    <!-- Filter Tahun -->
+                    <div>
+                        <select id="filterTahun" class="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-xs rounded-xl py-2.5 px-3 focus:ring-2 focus:ring-emerald-500 font-medium">
+                            <option value="all">Semua Tahun</option>
+                        </select>
+                    </div>
+
+                    <!-- Filter Kecamatan -->
+                    <div>
+                        <select id="filterKecamatan" class="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-xs rounded-xl py-2.5 px-3 focus:ring-2 focus:ring-emerald-500 font-medium">
+                            <option value="all">Semua Kecamatan</option>
+                        </select>
+                    </div>
+
+                    <!-- Reset Filter Button -->
+                    <button onclick="resetAllFilters()" class="flex items-center justify-center gap-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 px-3 py-2.5 rounded-xl text-xs font-semibold transition">
+                        <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                        <span>Reset Filter</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Active Filter Chips -->
+            <div id="activeFilterChips" class="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-500 hidden">
+                <span class="font-medium text-slate-400">Filter Aktif:</span>
+                <div id="chipsContainer" class="flex flex-wrap gap-1.5"></div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- EXECUTIVE KPI SUMMARY CARDS (6 CARDS)     -->
+        <!-- ========================================== -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4" id="kpiContainer">
+            
+            <!-- KPI 1: Responden -->
+            <div class="glass-card rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-300 border-l-4 border-emerald-500">
+                <div class="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
+                    <span class="text-[11px] font-bold uppercase tracking-wider" id="kpiLabel1">Pembudidaya</span>
+                    <div class="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                        <i data-lucide="users" class="w-4 h-4"></i>
+                    </div>
+                </div>
+                <h3 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white" id="kpiValue1">0</h3>
+                <p class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold mt-1 flex items-center gap-1" id="kpiSub1">
+                    <i data-lucide="check-circle" class="w-3 h-3"></i> Terdata BNBA
+                </p>
+            </div>
+
+            <!-- KPI 2: Total Nilai Produksi -->
+            <div class="glass-card rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-300 border-l-4 border-cyan-500">
+                <div class="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
+                    <span class="text-[11px] font-bold uppercase tracking-wider">Nilai Produksi</span>
+                    <div class="w-8 h-8 rounded-xl bg-cyan-50 dark:bg-cyan-950/60 text-cyan-600 dark:text-cyan-400 flex items-center justify-center">
+                        <i data-lucide="coins" class="w-4 h-4"></i>
+                    </div>
+                </div>
+                <h3 class="text-lg sm:text-xl font-black text-slate-900 dark:text-white truncate" id="kpiValue2">Rp 0</h3>
+                <p class="text-[10px] text-cyan-600 dark:text-cyan-400 font-semibold mt-1 flex items-center gap-1" id="kpiSub2">
+                    <i data-lucide="trending-up" class="w-3 h-3"></i> Omset Komoditas
+                </p>
+            </div>
+
+            <!-- KPI 3: Total Biaya Produksi -->
+            <div class="glass-card rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-300 border-l-4 border-rose-500">
+                <div class="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
+                    <span class="text-[11px] font-bold uppercase tracking-wider">Biaya & Input</span>
+                    <div class="w-8 h-8 rounded-xl bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 flex items-center justify-center">
+                        <i data-lucide="receipt" class="w-4 h-4"></i>
+                    </div>
+                </div>
+                <h3 class="text-lg sm:text-xl font-black text-slate-900 dark:text-white truncate" id="kpiValue3">Rp 0</h3>
+                <p class="text-[10px] text-rose-600 dark:text-rose-400 font-semibold mt-1 flex items-center gap-1" id="kpiSub3">
+                    <i data-lucide="shopping-cart" class="w-3 h-3"></i> Biaya Operasional
+                </p>
+            </div>
+
+            <!-- KPI 4: Luas Lahan / Bangunan -->
+            <div class="glass-card rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-300 border-l-4 border-amber-500">
+                <div class="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
+                    <span class="text-[11px] font-bold uppercase tracking-wider" id="kpiLabel4">Luas Lahan</span>
+                    <div class="w-8 h-8 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+                        <i data-lucide="maximize" class="w-4 h-4"></i>
+                    </div>
+                </div>
+                <h3 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white" id="kpiValue4">0 m²</h3>
+                <p class="text-[10px] text-amber-600 dark:text-amber-400 font-semibold mt-1" id="kpiSub4">≈ 0 Ha</p>
+            </div>
+
+            <!-- KPI 5: Rata-rata Panen / Siklus -->
+            <div class="glass-card rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-300 border-l-4 border-blue-500">
+                <div class="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
+                    <span class="text-[11px] font-bold uppercase tracking-wider" id="kpiLabel5">Frekuensi</span>
+                    <div class="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+                        <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                    </div>
+                </div>
+                <h3 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white" id="kpiValue5">0x</h3>
+                <p class="text-[10px] text-blue-600 dark:text-blue-400 font-semibold mt-1" id="kpiSub5">Rata-rata per Tahun</p>
+            </div>
+
+            <!-- KPI 6: Sebaran Wilayah -->
+            <div class="glass-card rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-300 border-l-4 border-teal-500">
+                <div class="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
+                    <span class="text-[11px] font-bold uppercase tracking-wider">Sebaran Wilayah</span>
+                    <div class="w-8 h-8 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-600 dark:text-teal-400 flex items-center justify-center">
+                        <i data-lucide="map-pin" class="w-4 h-4"></i>
+                    </div>
+                </div>
+                <h3 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white" id="kpiValue6">0</h3>
+                <p class="text-[10px] text-teal-600 dark:text-teal-400 font-semibold mt-1">Kecamatan Aktif</p>
+            </div>
+
+        </div>
+
+        <!-- ========================================== -->
+        <!-- NAVIGATION TABS                            -->
+        <!-- ========================================== -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-2 border-b border-slate-200 dark:border-slate-800">
+            <button onclick="switchTab('analytics')" id="tab-analytics" class="tab-btn active flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition whitespace-nowrap">
+                <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+                <span>Ringkasan & Analitik Visual</span>
+            </button>
+            <button onclick="switchTab('map')" id="tab-map" class="tab-btn bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition whitespace-nowrap">
+                <i data-lucide="map" class="w-4 h-4"></i>
+                <span>Peta Sebaran Geografis</span>
+            </button>
+            <button onclick="switchTab('responden')" id="tab-responden" class="tab-btn bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition whitespace-nowrap">
+                <i data-lucide="users" class="w-4 h-4"></i>
+                <span id="tabLabelResponden">Data Responden (BNBA)</span>
+                <span class="bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-[10px] px-2 py-0.5 rounded-full ml-1" id="badgeCountResponden">0</span>
+            </button>
+            <button onclick="switchTab('nilai')" id="tab-nilai" class="tab-btn bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition whitespace-nowrap">
+                <i data-lucide="coins" class="w-4 h-4"></i>
+                <span>Nilai Produksi</span>
+                <span class="bg-cyan-100 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300 text-[10px] px-2 py-0.5 rounded-full ml-1" id="badgeCountNilai">0</span>
+            </button>
+            <button onclick="switchTab('biaya')" id="tab-biaya" class="tab-btn bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition whitespace-nowrap">
+                <i data-lucide="receipt" class="w-4 h-4"></i>
+                <span>Biaya & Sarana Input</span>
+                <span class="bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300 text-[10px] px-2 py-0.5 rounded-full ml-1" id="badgeCountBiaya">0</span>
+            </button>
+            <button onclick="switchTab('sertifikat')" id="tab-sertifikat" class="tab-btn bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition whitespace-nowrap">
+                <i data-lucide="award" class="w-4 h-4"></i>
+                <span>Sertifikasi & Perijinan</span>
+            </button>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 1: RINGKASAN & ANALITIK (CHARTS)      -->
+        <!-- ========================================== -->
+        <div id="content-analytics" class="tab-content space-y-6 animate-fade-in">
+            <!-- Row 1: Charts -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <!-- Chart 1: Sebaran Kecamatan -->
+                <div class="lg:col-span-2 glass-card rounded-2xl p-5 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                <i data-lucide="bar-chart-2" class="w-4 h-4 text-emerald-600"></i>
+                                <span id="chartKecamatanTitle">Distribusi Responden per Kecamatan (Top 12)</span>
+                            </h3>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400" id="chartKecamatanSubtitle">Konsentrasi pelaku sektor perikanan</p>
+                        </div>
+                    </div>
+                    <div id="chartKecamatan" class="min-h-[300px]"></div>
+                </div>
+
+                <!-- Chart 2: Komposisi Kegiatan / Usaha -->
+                <div class="glass-card rounded-2xl p-5 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                <i data-lucide="pie-chart" class="w-4 h-4 text-cyan-600"></i>
+                                <span id="chartKegiatanTitle">Komposisi Bentuk / Kegiatan Usaha</span>
+                            </h3>
+                        </div>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-4" id="chartKegiatanSubtitle">Proporsi jenis kegiatan</p>
+                        <div id="chartKegiatan" class="min-h-[250px] flex items-center justify-center"></div>
+                    </div>
+                    <div id="kegiatanSummaryList" class="space-y-2 mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs"></div>
+                </div>
+
+            </div>
+
+            <!-- Row 2: Charts -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                <!-- Chart 3: Permodalan -->
+                <div class="glass-card rounded-2xl p-5 shadow-sm">
+                    <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-1 flex items-center gap-2">
+                        <i data-lucide="landmark" class="w-4 h-4 text-amber-600"></i>
+                        <span>Sumber Permodalan</span>
+                    </h3>
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-3">Modal Sendiri vs Modal Bersama</p>
+                    <div id="chartPermodalan" class="min-h-[220px]"></div>
+                </div>
+
+                <!-- Chart 4: Klasifikasi Luas -->
+                <div class="glass-card rounded-2xl p-5 shadow-sm">
+                    <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-1 flex items-center gap-2">
+                        <i data-lucide="layers" class="w-4 h-4 text-blue-600"></i>
+                        <span id="chartLuasTitle">Klasifikasi Luas (m²)</span>
+                    </h3>
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-3" id="chartLuasSubtitle">Ukuran kolam atau bangunan usaha</p>
+                    <div id="chartLuasLahan" class="min-h-[220px]"></div>
+                </div>
+
+                <!-- Chart 5: Komoditas Terbanyak -->
+                <div class="glass-card rounded-2xl p-5 shadow-sm">
+                    <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-1 flex items-center gap-2">
+                        <i data-lucide="scale" class="w-4 h-4 text-emerald-600"></i>
+                        <span id="chartKomoditasTitle">Komoditas / Produk Utama</span>
+                    </h3>
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-3">Nilai produksi tertinggi (Juta Rp)</p>
+                    <div id="chartKomoditas" class="min-h-[220px]"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 2: PETA SEBARAN                        -->
+        <!-- ========================================== -->
+        <div id="content-map" class="tab-content hidden space-y-4 animate-fade-in">
+            <div class="glass-card rounded-2xl p-5 shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            <i data-lucide="map-pinned" class="w-5 h-5 text-emerald-600"></i>
+                            <span id="mapHeaderTitle">Peta Sebaran Pelaku Perikanan Kab. Bandung</span>
+                        </h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Klik titik kecamatan untuk melihat ringkasan responden dan luas sebaran</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs text-slate-500 font-medium">Legenda Kepadatan:</span>
+                        <div class="flex items-center gap-1 text-[10px] font-bold">
+                            <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">&lt; 20</span>
+                            <span class="px-2 py-0.5 rounded bg-emerald-300 text-emerald-900">20 - 50</span>
+                            <span class="px-2 py-0.5 rounded bg-emerald-600 text-white">&gt; 50</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="mapContainer" class="w-full h-[520px] rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 relative z-10"></div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 3: DATA RESPONDEN (BNBA TABLE)         -->
+        <!-- ========================================== -->
+        <div id="content-responden" class="tab-content hidden space-y-4 animate-fade-in">
+            <div class="glass-card rounded-2xl p-5 shadow-sm">
+                
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            <i data-lucide="table-2" class="w-5 h-5 text-emerald-600"></i>
+                            <span id="tableRespondenTitle">Data Responden Pelaku Usaha (By Name By Address)</span>
+                        </h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400" id="tableRespondenSubtitle">Menampilkan data responden terverifikasi</p>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs text-slate-500 font-medium">Tampilkan:</span>
+                        <select id="pageSizeSelect" onchange="changePageSize(this.value)" class="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs rounded-xl p-2 font-semibold">
+                            <option value="15">15 Baris</option>
+                            <option value="25">25 Baris</option>
+                            <option value="50">50 Baris</option>
+                            <option value="100">100 Baris</option>
+                        </select>
+                        <button onclick="exportToExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition">
+                            <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5"></i>
+                            <span>Download .XLSX</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
+                    <table class="w-full text-left text-xs text-slate-700 dark:text-slate-200">
+                        <thead class="bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 uppercase font-extrabold text-[10px] tracking-wider border-b border-slate-200 dark:border-slate-700">
+                            <tr>
+                                <th class="p-3 text-center w-12">No</th>
+                                <th class="p-3">Nama Responden</th>
+                                <th class="p-3">Kelompok / Usaha</th>
+                                <th class="p-3">Kecamatan / Desa</th>
+                                <th class="p-3" id="thKegiatan">Kegiatan Usaha</th>
+                                <th class="p-3 text-right" id="thLuas">Luas (m²)</th>
+                                <th class="p-3 text-center" id="thFreq">Frekuensi</th>
+                                <th class="p-3">Permodalan</th>
+                                <th class="p-3 text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableRespondenBody" class="divide-y divide-slate-100 dark:divide-slate-800">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-3 mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+                    <p class="text-xs text-slate-500 dark:text-slate-400" id="paginationInfo">Menampilkan 0 dari 0 data</p>
+                    <div class="flex items-center gap-1.5" id="paginationControls"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 4: NILAI PRODUKSI                      -->
+        <!-- ========================================== -->
+        <div id="content-nilai" class="tab-content hidden space-y-4 animate-fade-in">
+            <div class="glass-card rounded-2xl p-5 shadow-sm">
+                
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            <i data-lucide="trending-up" class="w-5 h-5 text-cyan-600"></i>
+                            <span id="tableNilaiTitle">Data Nilai Produksi Komoditas / Produk</span>
+                        </h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Rincian komoditas, volume panen/olahan, harga satuan, dan omset nilai produksi</p>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
+                    <table class="w-full text-left text-xs text-slate-700 dark:text-slate-200">
+                        <thead class="bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 uppercase font-extrabold text-[10px] tracking-wider border-b border-slate-200 dark:border-slate-700">
+                            <tr>
+                                <th class="p-3 text-center w-12">No</th>
+                                <th class="p-3">Nama Responden / Kelompok</th>
+                                <th class="p-3">Kecamatan & Desa</th>
+                                <th class="p-3">Uraian / Produk</th>
+                                <th class="p-3">Kategori / Pemasaran</th>
+                                <th class="p-3 text-right">Volume</th>
+                                <th class="p-3 text-right">Harga Satuan (Rp)</th>
+                                <th class="p-3 text-right">Total Nilai (Rp)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableNilaiBody" class="divide-y divide-slate-100 dark:divide-slate-800">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 5: BIAYA, BAHAN BAKU & PERALATAN      -->
+        <!-- ========================================== -->
+        <div id="content-biaya" class="tab-content hidden space-y-6 animate-fade-in">
+            
+            <!-- SECTION KHUSUS PENGOLAHAN (BAHAN BAKU UTAMA, PERALATAN & BAHAN LAINNYA) -->
+            <div id="section-biaya-pengolahan" class="space-y-6 hidden">
+                <!-- Table 1: Bahan Baku Utama Ikan -->
+                <div class="glass-card rounded-2xl p-5 shadow-sm">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                        <div>
+                            <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                <i data-lucide="fish" class="w-5 h-5 text-teal-600"></i>
+                                <span>Bahan Baku Utama Ikan & Pasokan</span>
+                            </h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Rincian komoditas ikan mentah, daerah asal pasokan, volume dan nilai perolehan</p>
+                        </div>
+                        <span class="px-3 py-1 bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-300 rounded-xl text-xs font-bold border border-teal-200 dark:border-teal-800" id="badgeCountBahanBaku">0 Komoditas</span>
+                    </div>
+
+                    <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
+                        <table class="w-full text-left text-xs text-slate-700 dark:text-slate-200">
+                            <thead class="bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 uppercase font-extrabold text-[10px] tracking-wider border-b border-slate-200 dark:border-slate-700">
+                                <tr>
+                                    <th class="p-3 text-center w-12">No</th>
+                                    <th class="p-3">Nama Responden / UPI</th>
+                                    <th class="p-3">Kecamatan & Desa</th>
+                                    <th class="p-3">Uraian Bahan Baku Ikan</th>
+                                    <th class="p-3">Asal Pasokan</th>
+                                    <th class="p-3 text-right">Volume</th>
+                                    <th class="p-3 text-right">Harga Satuan (Rp)</th>
+                                    <th class="p-3 text-right">Total Nilai (Rp)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBahanBakuBody" class="divide-y divide-slate-100 dark:divide-slate-800">
+                                <!-- Populated via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Table 2: Peralatan Produksi -->
+                <div class="glass-card rounded-2xl p-5 shadow-sm">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                        <div>
+                            <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                <i data-lucide="wrench" class="w-5 h-5 text-blue-600"></i>
+                                <span>Peralatan & Mesin Produksi UPI</span>
+                            </h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Daftar sarana mesin, alat pengolahan, kapasitas, dan nilai investasi aset</p>
+                        </div>
+                        <span class="px-3 py-1 bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 rounded-xl text-xs font-bold border border-blue-200 dark:border-blue-800" id="badgeCountPeralatan">0 Alat</span>
+                    </div>
+
+                    <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
+                        <table class="w-full text-left text-xs text-slate-700 dark:text-slate-200">
+                            <thead class="bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 uppercase font-extrabold text-[10px] tracking-wider border-b border-slate-200 dark:border-slate-700">
+                                <tr>
+                                    <th class="p-3 text-center w-12">No</th>
+                                    <th class="p-3">Nama Responden / UPI</th>
+                                    <th class="p-3">Kecamatan & Desa</th>
+                                    <th class="p-3">Jenis Peralatan / Mesin</th>
+                                    <th class="p-3 text-right">Volume / Unit</th>
+                                    <th class="p-3 text-right">Harga Satuan (Rp)</th>
+                                    <th class="p-3 text-right">Nilai Investasi (Rp)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablePeralatanBody" class="divide-y divide-slate-100 dark:divide-slate-800">
+                                <!-- Populated via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION BIAYA STANDARD (BUDIDAYA & TANGKAP) -->
+            <div id="section-biaya-standard" class="space-y-6">
+                <div class="glass-card rounded-2xl p-5 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                <i data-lucide="wallet" class="w-5 h-5 text-rose-600"></i>
+                                <span>Biaya Operasional & Sarana</span>
+                            </h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Rincian pengeluaran operasional (Bibit, Pakan, Pupuk, atau Sarana Tangkap)</p>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
+                        <table class="w-full text-left text-xs text-slate-700 dark:text-slate-200">
+                            <thead class="bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 uppercase font-extrabold text-[10px] tracking-wider border-b border-slate-200 dark:border-slate-700">
+                                <tr>
+                                    <th class="p-3 text-center w-12">No</th>
+                                    <th class="p-3">Nama Responden / Kelompok</th>
+                                    <th class="p-3">Kecamatan & Desa</th>
+                                    <th class="p-3">Uraian Biaya</th>
+                                    <th class="p-3">Jenis / Kategori</th>
+                                    <th class="p-3 text-right">Volume</th>
+                                    <th class="p-3 text-right">Harga Satuan (Rp)</th>
+                                    <th class="p-3 text-right">Total Biaya (Rp)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBiayaBody" class="divide-y divide-slate-100 dark:divide-slate-800">
+                                <!-- Populated via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION BAHAN PENDUKUNG LAINNYA (BUDIDAYA & PENGOLAHAN) -->
+            <div id="section-bahan-pendukung" class="glass-card rounded-2xl p-5 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            <i data-lucide="package" class="w-5 h-5 text-amber-600"></i>
+                            <span id="labelBahanLainnyaTitle">Bahan & Sarana Pendukung Lainnya</span>
+                        </h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400" id="labelBahanLainnyaSubtitle">Pengeluaran bumbu olahan, kemasan, tenaga kerja, dan sarana pendukung</p>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
+                    <table class="w-full text-left text-xs text-slate-700 dark:text-slate-200">
+                        <thead class="bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 uppercase font-extrabold text-[10px] tracking-wider border-b border-slate-200 dark:border-slate-700">
+                            <tr>
+                                <th class="p-3 text-center w-12">No</th>
+                                <th class="p-3">Nama Responden / Kelompok</th>
+                                <th class="p-3">Kecamatan & Desa</th>
+                                <th class="p-3">Uraian Bahan</th>
+                                <th class="p-3 text-right">Volume</th>
+                                <th class="p-3 text-right">Harga Satuan (Rp)</th>
+                                <th class="p-3 text-right">Nilai Total (Rp)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBahanBody" class="divide-y divide-slate-100 dark:divide-slate-800">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 6: SERTIFIKASI & PERIJINAN             -->
+        <!-- ========================================== -->
+        <div id="content-sertifikat" class="tab-content hidden space-y-6 animate-fade-in">
+            <div class="glass-card rounded-2xl p-6 shadow-sm">
+                <div class="text-center max-w-2xl mx-auto mb-6">
+                    <div class="w-14 h-14 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto mb-3">
+                        <i data-lucide="award" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-1" id="sertifTitle">Status Sertifikasi & Perijinan Sektor</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400" id="sertifDesc">
+                        Monitoring sertifikasi CBIB, CPIB, CDOB, P-IRT, Sertifikat Halal, dan Perizinan Berusaha (NIB).
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto text-left mb-6">
+                    <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                            <span class="text-xs font-bold text-slate-800 dark:text-slate-200">Sertifikat Resmi</span>
+                        </div>
+                        <p class="text-2xl font-extrabold text-emerald-600" id="statSertifCount">0</p>
+                        <p class="text-[10px] text-slate-400 mt-0.5">Tercatat dalam basis data</p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-cyan-500"></span>
+                            <span class="text-xs font-bold text-slate-800 dark:text-slate-200">Legalitas / NIB / SIUP</span>
+                        </div>
+                        <p class="text-2xl font-extrabold text-cyan-600" id="statNIBCount">0</p>
+                        <p class="text-[10px] text-slate-400 mt-0.5">Pelaku usaha terdaftar</p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                            <span class="text-xs font-bold text-slate-800 dark:text-slate-200">Status Verifikasi</span>
+                        </div>
+                        <p class="text-2xl font-extrabold text-amber-600" id="statPublishCount">0</p>
+                        <p class="text-[10px] text-slate-400 mt-0.5">Kuisioner terpublish</p>
+                    </div>
+                </div>
+
+                <!-- Table Detail Sertifikat & Perijinan -->
+                <div class="mt-6 pt-6 border-t border-slate-100 dark:border-slate-800">
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="text-sm font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                            <i data-lucide="file-check-2" class="w-4 h-4 text-emerald-600"></i>
+                            <span>Daftar Sertifikat & Izin Terbit</span>
+                        </h4>
+                    </div>
+                    <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
+                        <table class="w-full text-left text-xs text-slate-700 dark:text-slate-200">
+                            <thead class="bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 uppercase font-extrabold text-[10px] tracking-wider border-b border-slate-200 dark:border-slate-700">
+                                <tr>
+                                    <th class="p-3 text-center w-12">No</th>
+                                    <th class="p-3">Nama Responden / Usaha</th>
+                                    <th class="p-3">Kecamatan & Desa</th>
+                                    <th class="p-3">Jenis Perizinan</th>
+                                    <th class="p-3">Nomor Perizinan</th>
+                                    <th class="p-3">Tanggal Izin</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableSertifikatBody" class="divide-y divide-slate-100 dark:divide-slate-800">
+                                <!-- Populated via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ========================================== -->
+    <!-- DETAIL RESPONDEN MODAL (BNBA POPUP)       -->
+    <!-- ========================================== -->
+    <div id="detailModal" class="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-100 dark:border-slate-800">
+            
+            <div id="modalHeaderBg" class="bg-gradient-to-r from-emerald-600 to-teal-600 p-6 text-white flex items-center justify-between rounded-t-3xl">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-white/20 flex items-center justify-center text-white">
+                        <i data-lucide="user-check" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold" id="modalNama">-</h3>
+                        <p class="text-xs text-emerald-100" id="modalNIK">-</p>
+                    </div>
+                </div>
+                <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition">
+                    <i data-lucide="x" class="w-4 h-4 text-white"></i>
+                </button>
+            </div>
+
+            <div class="p-6 space-y-4" id="modalContent"></div>
+
+            <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-b-3xl flex justify-end">
+                <button onclick="closeModal()" class="px-5 py-2 rounded-xl bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 text-xs font-bold text-slate-700 dark:text-slate-200 transition">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    </div> <!-- Close container-cppd -->
+
+    <!-- ========================================== -->
+    <!-- FOOTER                                     -->
+    <!-- ========================================== -->
+    <footer class="mt-12 py-6 border-t border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
+            <div class="flex items-center gap-2">
+                <i data-lucide="fish" class="w-4 h-4 text-emerald-600"></i>
+                <span class="font-bold text-slate-700 dark:text-slate-300">SIKANDUNG</span>
+                <span>&bull; Dinas Ketahanan Pangan dan Perikanan Kabupaten Bandung</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="dashboardispakan.html" class="hover:text-emerald-600 transition">Portal Dispakan</a>
+                <a href="sileleikan.html" class="hover:text-emerald-600 transition">SI LELE IKAN</a>
+                <a href="fsva.html" class="hover:text-emerald-600 transition">FSVA Atlas</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========================================== -->
+    <!-- JAVASCRIPT MULTI-SECTOR APP LOGIC          -->
+    <!-- ========================================== -->
+    <script>
+        // API REGISTRY BY SECTOR
+        const SECTOR_APIS = {
+            budidaya: {
+                title: 'Perikanan Budidaya',
+                badge: 'BUDIDAYA',
+                heroClass: 'gradient-header-budidaya',
+                heroSubtitle: 'Sistem Informasi Pendataan Perikanan Budidaya: Data Pembudidaya BNBA, Luas Lahan Kolam, Nilai & Biaya Produksi, serta Distribusi Geografis.',
+                kpiLabel1: 'Pembudidaya',
+                kpiLabel4: 'Luas Kolam / Lahan',
+                kpiLabel5: 'Frekuensi Panen',
+                kpiSub5: 'Rata-rata per Tahun',
+                thKegiatan: 'Kegiatan Usaha',
+                thLuas: 'Luas Kolam (m²)',
+                thFreq: 'Panen/Thn',
+                urls: {
+                    responden: 'https://api.bandungkab.go.id/api/bnba/sikandung-budidaya---data-responden?per_page=2000',
+                    sertifikat: 'https://api.bandungkab.go.id/api/bnba/sikandung-budidaya---sertifikat--perijinan?per_page=2000',
+                    bahanLainnya: 'https://api.bandungkab.go.id/api/bnba/sikandung-budidaya---bahan-lainnya?per_page=2000',
+                    biayaProduksi: 'https://api.bandungkab.go.id/api/bnba/sikandung-budidaya---biaya-produksi?per_page=2000',
+                    nilaiProduksi: 'https://api.bandungkab.go.id/api/bnba/sikandung-budidaya---nilai-produksi?per_page=2000'
+                }
+            },
+            tangkap: {
+                title: 'Perikanan Tangkap',
+                badge: 'TANGKAP',
+                heroClass: 'gradient-header-tangkap',
+                heroSubtitle: 'Sistem Informasi Pendataan Perikanan Tangkap: Data Nelayan Perairan Umum Darat (PUD) / Waduk Cirata & Saguling, Sertifikat & Izin Kapal, Estimasi Nilai Hasil Tangkapan, dan Biaya Operasional.',
+                kpiLabel1: 'Nelayan Tangkap',
+                kpiLabel4: 'Wilayah / Armada',
+                kpiLabel5: 'Trip Melaut',
+                kpiSub5: 'Frekuensi per Bulan',
+                thKegiatan: 'Alat Tangkap / Armada',
+                thLuas: 'Kapasitas / Alat',
+                thFreq: 'Trip/Bln',
+                urls: {
+                    responden: 'https://api.bandungkab.go.id/api/bnba/sikandung-tangkap---data-responden?per_page=2000',
+                    sertifikat: 'https://api.bandungkab.go.id/api/bnba/sikandung-tangkap---sertifikat--perijinan?per_page=2000',
+                    nilaiProduksi: 'https://api.bandungkab.go.id/api/bnba/sikandung-tangkap---nilai-produksi?per_page=2000',
+                    biayaProduksi: 'https://api.bandungkab.go.id/api/bnba/sikandung-tangkap---biaya-produksi?per_page=2000'
+                }
+            },
+            pengolahan: {
+                title: 'Pengolahan Hasil Perikanan',
+                badge: 'PENGOLAHAN',
+                heroClass: 'gradient-header-pengolahan',
+                heroSubtitle: 'Sistem Informasi Pendataan Pengolahan Hasil Perikanan: Unit Pengolah Ikan (UPI), Produk Olahan (Bandeng, Pindang, Abon, Bakso), Bahan Baku Utama, Peralatan, dan Legalitas.',
+                kpiLabel1: 'Unit Pengolah (UPI)',
+                kpiLabel4: 'Luas Bangunan UPI',
+                kpiLabel5: 'Siklus Olahan',
+                kpiSub5: 'Produksi per Minggu',
+                thKegiatan: 'Jenis Olahan',
+                thLuas: 'Luas Bangunan (m²)',
+                thFreq: 'Produksi/Mgg',
+                urls: {
+                    responden: 'https://api.bandungkab.go.id/api/bnba/sikandung-pengolahan---data-responden?per_page=2000',
+                    sertifikat: 'https://api.bandungkab.go.id/api/bnba/sikandung-pengolahan---sertifikat--perijinan?per_page=2000',
+                    nilaiProduksi: 'https://api.bandungkab.go.id/api/bnba/sikandung-pengolahan---nilai-produksi?per_page=2000',
+                    bahanLainnya: 'https://api.bandungkab.go.id/api/bnba/sikandung-pengolahan---bahan-lainnya?per_page=2000',
+                    bahanBaku: 'https://api.bandungkab.go.id/api/bnba/sikandung-pengolahan---bahan-baku-utama?per_page=2000',
+                    peralatan: 'https://api.bandungkab.go.id/api/bnba/sikandung-pengolahan---peralatan-produksi?per_page=2000'
+                }
+            }
+        };
+
+        // KECAMATAN COORDINATES DI KABUPATEN BANDUNG (FOR LEAFLET MAP)
+        const KECAMATAN_COORDS = {
+            "KERTASARI": [-7.1994, 107.6978],
+            "MAJALAYA": [-7.0514, 107.7558],
+            "CIPARAY": [-7.0398, 107.7128],
+            "BOJONGSOANG": [-6.9856, 107.6322],
+            "CIKANCUNG": [-7.0210, 107.8236],
+            "BANJARAN": [-7.0456, 107.5925],
+            "CILEUNYI": [-6.9422, 107.7475],
+            "IBUN": [-7.1064, 107.7786],
+            "BALEENDAH": [-7.0053, 107.6300],
+            "CICALENGKA": [-6.9850, 107.8389],
+            "RANCAEKEK": [-6.9683, 107.7667],
+            "NAGREG": [-7.0353, 107.8933],
+            "DAYEUHKOLOT": [-6.9867, 107.6186],
+            "ARJASARI": [-7.0583, 107.6250],
+            "SOREANG": [-7.0278, 107.5186],
+            "MARGAASIH": [-6.9536, 107.5456],
+            "PASIRJAMBU": [-7.1122, 107.4811],
+            "CIMAUNG": [-7.0867, 107.5528],
+            "CIMENYAN": [-6.8778, 107.6833],
+            "KATAPANG": [-7.0008, 107.5544],
+            "PASEH": [-7.0722, 107.7750],
+            "CILENGKRANG": [-6.8917, 107.7167],
+            "PANGALENGAN": [-7.1750, 107.5667],
+            "CANGKUANG": [-7.0522, 107.5417],
+            "KUTAWARINGIN": [-6.9889, 107.5111],
+            "PACET": [-7.1056, 107.7194],
+            "SOLOKANJERUK": [-7.0250, 107.7500],
+            "PAMEUNGPEUK": [-7.0250, 107.5833],
+            "MARGAHAYU": [-6.9750, 107.5694],
+            "CIWIDEY": [-7.0861, 107.4583],
+            "RANCABALI": [-7.1472, 107.3889]
+        };
+
+        // GLOBAL MULTI-SECTOR APP STATE DENGAN IN-MEMORY CACHE
+        const state = {
+            currentSector: 'budidaya', // 'budidaya' | 'tangkap' | 'pengolahan'
+            cache: {
+                budidaya: null,
+                tangkap: null,
+                pengolahan: null
+            },
+            raw: {
+                responden: [],
+                sertifikat: [],
+                bahanLainnya: [],
+                biayaProduksi: [],
+                nilaiProduksi: [],
+                bahanBaku: [],
+                peralatan: []
+            },
+            filtered: {
+                responden: [],
+                bahanLainnya: [],
+                biayaProduksi: [],
+                nilaiProduksi: [],
+                bahanBaku: [],
+                peralatan: [],
+                sertifikat: []
+            },
+            filters: {
+                tahun: 'all',
+                kecamatan: 'all',
+                search: ''
+            },
+            pagination: {
+                page: 1,
+                pageSize: 15
+            },
+            charts: {},
+            map: null,
+            mapMarkers: []
+        };
+
+        // INITIALIZATION
+        document.addEventListener('DOMContentLoaded', () => {
+            initDate();
+            initThemeToggle();
+            initFilterEvents();
+            loadInitialData();
+        });
+
+        function initDate() {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('id-ID', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+            const dateEl = document.getElementById('current-date-nav');
+            if (dateEl) dateEl.innerText = dateStr;
+        }
+
+        function initThemeToggle() {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            const themeIcon = document.getElementById('theme-icon');
+            const themeText = document.getElementById('theme-text');
+            if (themeIcon) themeIcon.innerText = isDark ? '🌙' : '☀️';
+            if (themeText) themeText.innerText = isDark ? 'Dark Mode' : 'Light Mode';
+        }
+
+        function toggleTheme() {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            const newTheme = isDark ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            if (newTheme === 'dark') document.documentElement.classList.add('dark');
+            else document.documentElement.classList.remove('dark');
+            localStorage.setItem('theme', newTheme);
+
+            const themeIcon = document.getElementById('theme-icon');
+            const themeText = document.getElementById('theme-text');
+            if (themeIcon) themeIcon.innerText = newTheme === 'dark' ? '🌙' : '☀️';
+            if (themeText) themeText.innerText = newTheme === 'dark' ? 'Dark Mode' : 'Light Mode';
+
+            if (state.charts) {
+                setTimeout(() => updateChartsTheme(newTheme === 'dark'), 100);
+            }
+        }
+
+        // SWITCH SECTOR TANPA LOADING SCREEN (INSTANT ZERO-DELAY SWITCHING)
+        async function switchSector(sectorKey) {
+            if (!SECTOR_APIS[sectorKey] || state.currentSector === sectorKey) return;
+            state.currentSector = sectorKey;
+
+            // 1. Update Sector Buttons UI Langsung
+            ['budidaya', 'tangkap', 'pengolahan'].forEach(k => {
+                const btn = document.getElementById(`sector-btn-${k}`);
+                if (btn) {
+                    if (k === sectorKey) {
+                        btn.className = 'sector-pill active';
+                    } else {
+                        btn.className = 'sector-pill';
+                    }
+                }
+            });
+
+            // 2. Update Header, Banner, dan Label
+            const secInfo = SECTOR_APIS[sectorKey];
+            const heroSubtitle = document.getElementById('heroSectorSubtitle');
+            const sectorBadge = document.getElementById('currentSectorBadge');
+            const bannerText = document.getElementById('sectorInfoBannerText');
+
+            if (heroSubtitle) heroSubtitle.innerText = `Sistem Informasi Pendataan ${secInfo.title} - Kabupaten Bandung`;
+            if (sectorBadge) sectorBadge.innerText = secInfo.badge;
+            
+            if (bannerText) {
+                if (sectorKey === 'budidaya') {
+                    bannerText.innerText = 'Dashboard SIKANDUNG (Perikanan Budidaya) menyajikan data sensus By Name By Address (BNBA) pembudidaya ikan kolam air tenang, pembenihan, pembesaran, dan ikan hias di wilayah Kabupaten Bandung.';
+                } else if (sectorKey === 'tangkap') {
+                    bannerText.innerText = 'Dashboard SIKANDUNG (Perikanan Tangkap) menyajikan data sensus nelayan tangkap perairan umum darat (sungai Citarum, waduk Saguling/Cirata, situ) terintegrasi dengan 4 API resmi: Data Responden BNBA, Sertifikat & Izin Kapal, Estimasi Nilai Tangkapan, dan Biaya Operasional Melaut.';
+                } else if (sectorKey === 'pengolahan') {
+                    bannerText.innerText = 'Dashboard SIKANDUNG (Pengolahan Hasil Perikanan) menyajikan data Unit Pengolah Ikan (UPI), produk hilirisasi (Bandeng, Bakso Ikan, Abon, Tongkol, Deles), nilai omset, serta bahan penolong.';
+                }
+            }
+
+            // 3. Update Table & KPI headers
+            const kpiLabel1 = document.getElementById('kpiLabel1');
+            const kpiLabel4 = document.getElementById('kpiLabel4');
+            const kpiLabel5 = document.getElementById('kpiLabel5');
+            const kpiSub5 = document.getElementById('kpiSub5');
+            const thKegiatan = document.getElementById('thKegiatan');
+            const thLuas = document.getElementById('thLuas');
+            const thFreq = document.getElementById('thFreq');
+            const tableRespondenTitle = document.getElementById('tableRespondenTitle');
+            const tableNilaiTitle = document.getElementById('tableNilaiTitle');
+            const tabLabelResponden = document.getElementById('tabLabelResponden');
+            const sertifTitle = document.getElementById('sertifTitle');
+            const sertifDesc = document.getElementById('sertifDesc');
+
+            if (kpiLabel1) kpiLabel1.innerText = secInfo.kpiLabel1;
+            if (kpiLabel4) kpiLabel4.innerText = secInfo.kpiLabel4;
+            if (kpiLabel5) kpiLabel5.innerText = secInfo.kpiLabel5;
+            if (kpiSub5) kpiSub5.innerText = secInfo.kpiSub5;
+            if (thKegiatan) thKegiatan.innerText = secInfo.thKegiatan;
+            if (thLuas) thLuas.innerText = secInfo.thLuas;
+            if (thFreq) thFreq.innerText = secInfo.thFreq;
+
+            if (sectorKey === 'tangkap') {
+                if (tableRespondenTitle) tableRespondenTitle.innerText = 'Data Responden Nelayan Tangkap (By Name By Address)';
+                if (tableNilaiTitle) tableNilaiTitle.innerText = 'Data Nilai Hasil Tangkapan Nelayan (Komoditas Ikan)';
+                if (tabLabelResponden) tabLabelResponden.innerText = 'Data Nelayan (BNBA)';
+                if (sertifTitle) sertifTitle.innerText = 'Status Sertifikasi, KUSUKA & Perijinan Nelayan Tangkap';
+                if (sertifDesc) sertifDesc.innerText = 'Monitoring tanda daftar kapal perikanan (TDKP/BKP), pas kecil, kartu KUSUKA, dan sertifikasi kecakapan nelayan.';
+            } else if (sectorKey === 'pengolahan') {
+                if (tableRespondenTitle) tableRespondenTitle.innerText = 'Data Responden Unit Pengolah Ikan / UPI (By Name By Address)';
+                if (tableNilaiTitle) tableNilaiTitle.innerText = 'Data Nilai Produksi Olahan Hasil Perikanan';
+                if (tabLabelResponden) tabLabelResponden.innerText = 'Data UPI (BNBA)';
+                if (sertifTitle) sertifTitle.innerText = 'Status Sertifikasi P-IRT, Halal & Legalitas UPI';
+                if (sertifDesc) sertifDesc.innerText = 'Monitoring sertifikasi Cara Pengolahan Ikan yang Baik (CPIB/SKP), P-IRT, Sertifikat Halal, dan NIB UPI.';
+            } else {
+                if (tableRespondenTitle) tableRespondenTitle.innerText = 'Data Responden Pembudidaya Ikan (By Name By Address)';
+                if (tableNilaiTitle) tableNilaiTitle.innerText = 'Data Nilai Produksi Komoditas Perikanan Budidaya';
+                if (tabLabelResponden) tabLabelResponden.innerText = 'Data Responden (BNBA)';
+                if (sertifTitle) sertifTitle.innerText = 'Status Sertifikasi CBIB & Perijinan Budidaya';
+                if (sertifDesc) sertifDesc.innerText = 'Monitoring sertifikasi Cara Budidaya Ikan yang Baik (CBIB), CPIB, CDOB, P-IRT, dan Perizinan Berusaha (NIB).';
+            }
+
+            // 4. Reset Filter Value
+            state.filters.tahun = 'all';
+            state.filters.kecamatan = 'all';
+            state.filters.search = '';
+            state.pagination.page = 1;
+
+            const filterTahun = document.getElementById('filterTahun');
+            const filterKec = document.getElementById('filterKecamatan');
+            const searchInput = document.getElementById('globalSearchInput');
+            if (filterTahun) filterTahun.value = 'all';
+            if (filterKec) filterKec.value = 'all';
+            if (searchInput) searchInput.value = '';
+
+            // 5. Load Data dari Cache Memory Secara Instan (0ms Loading)
+            if (state.cache[sectorKey]) {
+                state.raw = state.cache[sectorKey];
+                populateDropdownOptions();
+                applyFilters();
+            } else {
+                await fetchSectorData(sectorKey);
+                if (state.currentSector === sectorKey) {
+                    state.raw = state.cache[sectorKey];
+                    populateDropdownOptions();
+                    applyFilters();
+                }
+            }
+        }
+
+        // LOAD INITIAL DATA (HANYA MUNCUL PADA AWAL BUKA HALAMAN)
+        async function loadInitialData() {
+            const loadingScreen = document.getElementById('loading-screen');
+            const loadingBar = document.getElementById('loading-bar-inner');
+            const loadingText = document.getElementById('loading-text');
+            const loadingPct = document.getElementById('loading-pct');
+
+            const updateProgress = (pct, text) => {
+                if (loadingBar) loadingBar.style.width = pct + '%';
+                if (loadingPct) loadingPct.innerText = pct + '%';
+                if (loadingText) loadingText.innerText = text;
+            };
+
+            try {
+                updateProgress(30, 'Memuat Data Perikanan Budidaya...');
+                await fetchSectorData('budidaya');
+
+                updateProgress(75, 'Menyiapkan Analitik SIKANDUNG...');
+                state.raw = state.cache.budidaya;
+                populateDropdownOptions();
+                applyFilters();
+
+                updateProgress(100, 'Selesai!');
+
+                setTimeout(() => {
+                    if (loadingScreen) {
+                        loadingScreen.classList.add('opacity-0', 'pointer-events-none');
+                        setTimeout(() => { loadingScreen.style.display = 'none'; }, 400);
+                    }
+                    lucide.createIcons();
+                }, 200);
+
+                // Pre-fetch sektor Pengolahan & Tangkap di background agar saat klik menu langsung instan 0ms
+                setTimeout(() => {
+                    fetchSectorData('pengolahan');
+                    fetchSectorData('tangkap');
+                }, 300);
+
+            } catch (err) {
+                console.error('Initial load error:', err);
+                if (loadingText) loadingText.innerText = 'Gagal memuat API. Silakan coba muat ulang.';
+            }
+        }
+
+        // FETCH SINGLE SECTOR DATA & SIMPAN KE CACHE
+        async function fetchSectorData(sectorKey) {
+            const secInfo = SECTOR_APIS[sectorKey];
+            if (!secInfo) return;
+            const urls = secInfo.urls;
+
+            try {
+                const [resResp, resNilai, resBiaya, resBahan, resSertif, resBahanBaku, resPeralatan] = await Promise.all([
+                    urls.responden ? fetch(urls.responden).then(r => r.json()).catch(() => ({ data: [] })) : Promise.resolve({ data: [] }),
+                    urls.nilaiProduksi ? fetch(urls.nilaiProduksi).then(r => r.json()).catch(() => ({ data: [] })) : Promise.resolve({ data: [] }),
+                    urls.biayaProduksi ? fetch(urls.biayaProduksi).then(r => r.json()).catch(() => ({ data: [] })) : Promise.resolve({ data: [] }),
+                    urls.bahanLainnya ? fetch(urls.bahanLainnya).then(r => r.json()).catch(() => ({ data: [] })) : Promise.resolve({ data: [] }),
+                    urls.sertifikat ? fetch(urls.sertifikat).then(r => r.json()).catch(() => ({ data: [] })) : Promise.resolve({ data: [] }),
+                    urls.bahanBaku ? fetch(urls.bahanBaku).then(r => r.json()).catch(() => ({ data: [] })) : Promise.resolve({ data: [] }),
+                    urls.peralatan ? fetch(urls.peralatan).then(r => r.json()).catch(() => ({ data: [] })) : Promise.resolve({ data: [] })
+                ]);
+
+                state.cache[sectorKey] = {
+                    responden: resResp.data || [],
+                    nilaiProduksi: resNilai.data || [],
+                    biayaProduksi: resBiaya.data || [],
+                    bahanLainnya: resBahan.data || [],
+                    sertifikat: resSertif.data || [],
+                    bahanBaku: resBahanBaku.data || [],
+                    peralatan: resPeralatan.data || []
+                };
+            } catch (e) {
+                console.warn(`Error caching sector ${sectorKey}:`, e);
+                state.cache[sectorKey] = { responden: [], nilaiProduksi: [], biayaProduksi: [], bahanLainnya: [], sertifikat: [], bahanBaku: [], peralatan: [] };
+            }
+        }
+
+        // MANUAL RELOAD BUTTON ACTION
+        async function fetchAllData(isManual = true) {
+            state.cache[state.currentSector] = null;
+            await fetchSectorData(state.currentSector);
+            state.raw = state.cache[state.currentSector];
+            populateDropdownOptions();
+            applyFilters();
+        }
+
+        // POPULATE FILTER DROPDOWNS DYNAMICALLY
+        function populateDropdownOptions() {
+            const tahunSet = new Set();
+            const kecSet = new Set();
+
+            state.raw.responden.forEach(item => {
+                const d = item.detail || {};
+                if (d.tahun) tahunSet.add(d.tahun);
+                if (d.kecamatan) kecSet.add(d.kecamatan.trim().toUpperCase());
+            });
+
+            // Populate Tahun
+            const filterTahun = document.getElementById('filterTahun');
+            if (filterTahun) {
+                filterTahun.innerHTML = '<option value="all">Semua Tahun</option>';
+                Array.from(tahunSet).sort((a, b) => b - a).forEach(t => {
+                    filterTahun.innerHTML += `<option value="${t}">Tahun ${t}</option>`;
+                });
+            }
+
+            // Populate Kecamatan
+            const filterKec = document.getElementById('filterKecamatan');
+            if (filterKec) {
+                filterKec.innerHTML = '<option value="all">Semua Kecamatan</option>';
+                Array.from(kecSet).sort().forEach(k => {
+                    filterKec.innerHTML += `<option value="${k}">${k}</option>`;
+                });
+            }
+        }
+
+        // FILTER EVENTS
+        function initFilterEvents() {
+            const filterTahun = document.getElementById('filterTahun');
+            const filterKec = document.getElementById('filterKecamatan');
+            const searchInput = document.getElementById('globalSearchInput');
+
+            if (filterTahun) filterTahun.addEventListener('change', (e) => { state.filters.tahun = e.target.value; applyFilters(); });
+            if (filterKec) filterKec.addEventListener('change', (e) => { state.filters.kecamatan = e.target.value; applyFilters(); });
+
+            let debounceTimer;
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    clearTimeout(debounceTimer);
+                    debounceTimer = setTimeout(() => {
+                        state.filters.search = e.target.value.toLowerCase().trim();
+                        applyFilters();
+                    }, 250);
+                });
+            }
+        }
+
+        function resetAllFilters() {
+            state.filters = { tahun: 'all', kecamatan: 'all', search: '' };
+            const filterTahun = document.getElementById('filterTahun');
+            const filterKec = document.getElementById('filterKecamatan');
+            const searchInput = document.getElementById('globalSearchInput');
+            if (filterTahun) filterTahun.value = 'all';
+            if (filterKec) filterKec.value = 'all';
+            if (searchInput) searchInput.value = '';
+            applyFilters();
+        }
+
+        // MAIN FILTER LOGIC
+        function applyFilters() {
+            const { tahun, kecamatan, search } = state.filters;
+
+            // Filter Responden
+            state.filtered.responden = (state.raw.responden || []).filter(item => {
+                const d = item.detail || {};
+                if (tahun !== 'all' && String(d.tahun) !== String(tahun)) return false;
+                if (kecamatan !== 'all' && (d.kecamatan || '').trim().toUpperCase() !== kecamatan.toUpperCase()) return false;
+
+                if (search) {
+                    const matchName = (d.nama_responden || '').toLowerCase().includes(search);
+                    const matchKel = (d.nama_kelompok || d.kelompok || '').toLowerCase().includes(search);
+                    const matchDesa = (d.desa || '').toLowerCase().includes(search);
+                    const matchKec = (d.kecamatan || '').toLowerCase().includes(search);
+                    const matchNIK = String(d.nik || '').includes(search);
+                    if (!matchName && !matchKel && !matchDesa && !matchKec && !matchNIK) return false;
+                }
+                return true;
+            });
+
+            // Filter Nilai Produksi
+            state.filtered.nilaiProduksi = (state.raw.nilaiProduksi || []).filter(item => {
+                const d = item.detail || {};
+                if (tahun !== 'all' && String(d.tahun) !== String(tahun)) return false;
+                if (kecamatan !== 'all' && (d.kecamatan || '').trim().toUpperCase() !== kecamatan.toUpperCase()) return false;
+                if (search) {
+                    const matchName = (d.nama_responden || '').toLowerCase().includes(search);
+                    const matchKel = (d.kelompok || '').toLowerCase().includes(search);
+                    const matchJenis = (d.jenis || d.uraian || '').toLowerCase().includes(search);
+                    const matchNIK = String(d.nik || '').includes(search);
+                    if (!matchName && !matchKel && !matchJenis && !matchNIK) return false;
+                }
+                return true;
+            });
+
+            // Filter Biaya Produksi (Budidaya & Tangkap)
+            state.filtered.biayaProduksi = (state.raw.biayaProduksi || []).filter(item => {
+                const d = item.detail || {};
+                if (tahun !== 'all' && String(d.tahun) !== String(tahun)) return false;
+                if (kecamatan !== 'all' && (d.kecamatan || '').trim().toUpperCase() !== kecamatan.toUpperCase()) return false;
+                if (search) {
+                    const matchName = (d.nama_responden || '').toLowerCase().includes(search);
+                    const matchJenis = (d.jenis || d.uraian || '').toLowerCase().includes(search);
+                    const matchNIK = String(d.nik || '').includes(search);
+                    if (!matchName && !matchJenis && !matchNIK) return false;
+                }
+                return true;
+            });
+
+            // Filter Bahan Lainnya
+            state.filtered.bahanLainnya = (state.raw.bahanLainnya || []).filter(item => {
+                const d = item.detail || {};
+                if (tahun !== 'all' && String(d.tahun) !== String(tahun)) return false;
+                if (kecamatan !== 'all' && (d.kecamatan || '').trim().toUpperCase() !== kecamatan.toUpperCase()) return false;
+                if (search) {
+                    const matchName = (d.nama_responden || '').toLowerCase().includes(search);
+                    const matchUraian = (d.uraian || '').toLowerCase().includes(search);
+                    const matchNIK = String(d.nik || '').includes(search);
+                    if (!matchName && !matchUraian && !matchNIK) return false;
+                }
+                return true;
+            });
+
+            // Filter Bahan Baku Utama (Pengolahan)
+            state.filtered.bahanBaku = (state.raw.bahanBaku || []).filter(item => {
+                const d = item.detail || {};
+                if (tahun !== 'all' && String(d.tahun) !== String(tahun)) return false;
+                if (kecamatan !== 'all' && (d.kecamatan || '').trim().toUpperCase() !== kecamatan.toUpperCase()) return false;
+                if (search) {
+                    const matchName = (d.nama_responden || '').toLowerCase().includes(search);
+                    const matchUraian = (d.uraian || '').toLowerCase().includes(search);
+                    const matchAsal = (d.asal || '').toLowerCase().includes(search);
+                    const matchNIK = String(d.nik || '').includes(search);
+                    if (!matchName && !matchUraian && !matchAsal && !matchNIK) return false;
+                }
+                return true;
+            });
+
+            // Filter Peralatan Produksi (Pengolahan)
+            state.filtered.peralatan = (state.raw.peralatan || []).filter(item => {
+                const d = item.detail || {};
+                if (tahun !== 'all' && String(d.tahun) !== String(tahun)) return false;
+                if (kecamatan !== 'all' && (d.kecamatan || '').trim().toUpperCase() !== kecamatan.toUpperCase()) return false;
+                if (search) {
+                    const matchName = (d.nama_responden || '').toLowerCase().includes(search);
+                    const matchUraian = (d.uraian || '').toLowerCase().includes(search);
+                    const matchNIK = String(d.nik || '').includes(search);
+                    if (!matchName && !matchUraian && !matchNIK) return false;
+                }
+                return true;
+            });
+
+            // Filter Sertifikat & Perijinan
+            state.filtered.sertifikat = (state.raw.sertifikat || []).filter(item => {
+                const d = item.detail || {};
+                if (tahun !== 'all' && String(d.tahun) !== String(tahun)) return false;
+                if (kecamatan !== 'all' && (d.kecamatan || '').trim().toUpperCase() !== kecamatan.toUpperCase()) return false;
+                if (search) {
+                    const matchName = (d.nama_responden || '').toLowerCase().includes(search);
+                    const matchIzin = (d.jenis_perizinan || d.nomor_perizinan || '').toLowerCase().includes(search);
+                    const matchNIK = String(d.nik || '').includes(search);
+                    if (!matchName && !matchIzin && !matchNIK) return false;
+                }
+                return true;
+            });
+
+            // Toggle Section Pengolahan vs Standard vs Tangkap
+            const secPengolahan = document.getElementById('section-biaya-pengolahan');
+            const secStandard = document.getElementById('section-biaya-standard');
+            const secBahanPendukung = document.getElementById('section-bahan-pendukung');
+            const isPengolahan = state.currentSector === 'pengolahan';
+            const isTangkap = state.currentSector === 'tangkap';
+
+            if (secPengolahan) {
+                if (isPengolahan) secPengolahan.classList.remove('hidden');
+                else secPengolahan.classList.add('hidden');
+            }
+            if (secStandard) {
+                if (isPengolahan) secStandard.classList.add('hidden');
+                else secStandard.classList.remove('hidden');
+            }
+            if (secBahanPendukung) {
+                if (isTangkap) secBahanPendukung.classList.add('hidden');
+                else secBahanPendukung.classList.remove('hidden');
+            }
+
+            renderKPIs();
+            renderFilterChips();
+            renderCharts();
+            renderTableResponden();
+            renderTableNilai();
+            renderTableBiaya();
+            renderTableBahan();
+            renderTableBahanBaku();
+            renderTablePeralatan();
+            renderTableSertifikat();
+            renderSertifikasiStats();
+
+            if (state.map) {
+                updateMapMarkers();
+            }
+
+            // Update Badge Counts
+            const badgeResponden = document.getElementById('badgeCountResponden');
+            const badgeNilai = document.getElementById('badgeCountNilai');
+            const badgeBiaya = document.getElementById('badgeCountBiaya');
+            const badgeBahanBaku = document.getElementById('badgeCountBahanBaku');
+            const badgePeralatan = document.getElementById('badgeCountPeralatan');
+
+            if (badgeResponden) badgeResponden.innerText = state.filtered.responden.length;
+            if (badgeNilai) badgeNilai.innerText = state.filtered.nilaiProduksi.length;
+            
+            if (badgeBiaya) {
+                if (isPengolahan) {
+                    badgeBiaya.innerText = state.filtered.bahanBaku.length + state.filtered.peralatan.length + state.filtered.bahanLainnya.length;
+                } else if (isTangkap) {
+                    badgeBiaya.innerText = state.filtered.biayaProduksi.length;
+                } else {
+                    badgeBiaya.innerText = state.filtered.biayaProduksi.length + state.filtered.bahanLainnya.length;
+                }
+            }
+
+            if (badgeBahanBaku) badgeBahanBaku.innerText = `${state.filtered.bahanBaku.length} Komoditas`;
+            if (badgePeralatan) badgePeralatan.innerText = `${state.filtered.peralatan.length} Unit / Alat`;
+
+            lucide.createIcons();
+        }
+
+        // RENDER ACTIVE FILTER CHIPS
+        function renderFilterChips() {
+            const container = document.getElementById('chipsContainer');
+            const parent = document.getElementById('activeFilterChips');
+            if (!container || !parent) return;
+
+            let chips = [];
+            if (state.filters.tahun !== 'all') chips.push(`Tahun: ${state.filters.tahun}`);
+            if (state.filters.kecamatan !== 'all') chips.push(`Kecamatan: ${state.filters.kecamatan}`);
+            if (state.filters.search) chips.push(`Pencarian: "${state.filters.search}"`);
+
+            if (chips.length === 0) {
+                parent.classList.add('hidden');
+            } else {
+                parent.classList.remove('hidden');
+                container.innerHTML = chips.map(c => `
+                    <span class="inline-flex items-center gap-1 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 px-2.5 py-1 rounded-lg text-[11px] font-semibold border border-emerald-200 dark:border-emerald-800">
+                        ${c}
+                    </span>
+                `).join('');
+            }
+        }
+
+        // RENDER KPI SUMMARY CARDS
+        function renderKPIs() {
+            const resp = state.filtered.responden;
+            const totalResponden = resp.length;
+
+            let totalLuas = 0;
+            let totalFrekuensi = 0;
+            let frekuensiCount = 0;
+            const kecSet = new Set();
+
+            resp.forEach(item => {
+                const d = item.detail || {};
+                const luas = parseFloat(d.luas_tempat_m2 || d.luas_bangunan_keseluruhan_m2 || d.luas_bangunan_produksi_m2) || 0;
+                totalLuas += luas;
+
+                const freq = parseFloat(d.frekwensi_produksi_thn || d.frekwensi_produksi_minggu) || 0;
+                if (freq > 0) {
+                    totalFrekuensi += freq;
+                    frekuensiCount++;
+                }
+
+                if (d.kecamatan) kecSet.add(d.kecamatan.trim().toUpperCase());
+            });
+
+            // Total Nilai Produksi
+            let totalNilai = 0;
+            state.filtered.nilaiProduksi.forEach(item => {
+                const d = item.detail || {};
+                totalNilai += parseFloat(d.nilai_rp) || 0;
+            });
+
+            // Total Biaya / Input
+            let totalBiaya = 0;
+            if (state.currentSector === 'pengolahan') {
+                state.filtered.bahanBaku.forEach(item => {
+                    const d = item.detail || {};
+                    totalBiaya += parseFloat(d.nilai_rp) || 0;
+                });
+                state.filtered.peralatan.forEach(item => {
+                    const d = item.detail || {};
+                    totalBiaya += parseFloat(d.nilai_rp) || 0;
+                });
+                state.filtered.bahanLainnya.forEach(item => {
+                    const d = item.detail || {};
+                    totalBiaya += parseFloat(d.nilai_rp) || 0;
+                });
+            } else {
+                state.filtered.biayaProduksi.forEach(item => {
+                    const d = item.detail || {};
+                    totalBiaya += parseFloat(d.nilai_rp) || 0;
+                });
+                state.filtered.bahanLainnya.forEach(item => {
+                    const d = item.detail || {};
+                    totalBiaya += parseFloat(d.nilai_rp) || 0;
+                });
+            }
+
+            const avgFreq = frekuensiCount > 0 ? (totalFrekuensi / frekuensiCount).toFixed(1) : '0';
+            const luasHektar = (totalLuas / 10000).toFixed(2);
+
+            // Update DOM
+            const kpi1 = document.getElementById('kpiValue1');
+            const kpi2 = document.getElementById('kpiValue2');
+            const kpi3 = document.getElementById('kpiValue3');
+            const kpi4 = document.getElementById('kpiValue4');
+            const kpiSub4 = document.getElementById('kpiSub4');
+            const kpi5 = document.getElementById('kpiValue5');
+            const kpi6 = document.getElementById('kpiValue6');
+
+            if (kpi1) kpi1.innerText = totalResponden.toLocaleString('id-ID');
+            if (kpi2) kpi2.innerText = formatRupiahCompact(totalNilai);
+            if (kpi3) kpi3.innerText = formatRupiahCompact(totalBiaya);
+            if (kpi4) kpi4.innerText = totalLuas.toLocaleString('id-ID') + ' m²';
+            if (kpiSub4) kpiSub4.innerText = `≈ ${luasHektar} Ha`;
+            if (kpi5) kpi5.innerText = `${avgFreq}x`;
+            if (kpi6) kpi6.innerText = kecSet.size.toString();
+        }
+
+        // UTILITY: FORMAT RUPIAH
+        function formatRupiahCompact(val) {
+            if (!val || val === 0) return 'Rp 0';
+            if (val >= 1000000000000) {
+                return 'Rp ' + (val / 1000000000000).toFixed(2) + ' T';
+            } else if (val >= 1000000000) {
+                return 'Rp ' + (val / 1000000000).toFixed(2) + ' M';
+            } else if (val >= 1000000) {
+                return 'Rp ' + (val / 1000000).toFixed(1) + ' Jt';
+            }
+            return 'Rp ' + val.toLocaleString('id-ID');
+        }
+
+        function formatRupiahFull(val) {
+            return 'Rp ' + (val || 0).toLocaleString('id-ID');
+        }
+
+        // RENDER CHARTS
+        function renderCharts() {
+            const isDark = document.documentElement.classList.contains('dark');
+            const textColor = isDark ? '#94a3b8' : '#64748b';
+
+            // 1. Chart Kecamatan
+            const kecCount = {};
+            state.filtered.responden.forEach(item => {
+                const kec = (item.detail?.kecamatan || 'LAINNYA').trim().toUpperCase();
+                kecCount[kec] = (kecCount[kec] || 0) + 1;
+            });
+
+            const sortedKec = Object.entries(kecCount).sort((a, b) => b[1] - a[1]).slice(0, 12);
+            const kecLabels = sortedKec.length > 0 ? sortedKec.map(x => x[0]) : ['Kecamatan A', 'Kecamatan B'];
+            const kecSeries = sortedKec.length > 0 ? sortedKec.map(x => x[1]) : [0, 0];
+
+            const optKec = {
+                chart: { type: 'bar', height: 320, toolbar: { show: false }, fontFamily: 'Plus Jakarta Sans' },
+                series: [{ name: 'Pelaku Usaha', data: kecSeries }],
+                colors: [state.currentSector === 'tangkap' ? '#0284c7' : (state.currentSector === 'pengolahan' ? '#0d9488' : '#10b981')],
+                plotOptions: { bar: { borderRadius: 8, columnWidth: '55%' } },
+                dataLabels: { enabled: false },
+                xaxis: { categories: kecLabels, labels: { style: { colors: textColor, fontSize: '10px' }, rotate: -45 } },
+                yaxis: { labels: { style: { colors: textColor } } },
+                grid: { borderColor: isDark ? '#1e293b' : '#f1f5f9' },
+                tooltip: { theme: isDark ? 'dark' : 'light' }
+            };
+
+            if (state.charts.kecamatan) state.charts.kecamatan.destroy();
+            state.charts.kecamatan = new ApexCharts(document.getElementById('chartKecamatan'), optKec);
+            state.charts.kecamatan.render();
+
+            // 2. Chart Kegiatan / Bentuk Usaha
+            const kegCount = {};
+            state.filtered.responden.forEach(item => {
+                const keg = (item.detail?.kegiatan_usaha || item.detail?.bentuk_usaha || item.detail?.jenis_olahan || 'Lainnya').trim();
+                kegCount[keg] = (kegCount[keg] || 0) + 1;
+            });
+
+            const kegLabels = Object.keys(kegCount).length > 0 ? Object.keys(kegCount) : ['Usaha 1', 'Usaha 2'];
+            const kegSeries = Object.values(kegCount).length > 0 ? Object.values(kegCount) : [1, 0];
+
+            const optKeg = {
+                chart: { type: 'donut', height: 240, fontFamily: 'Plus Jakarta Sans' },
+                series: kegSeries,
+                labels: kegLabels,
+                colors: ['#059669', '#06b6d4', '#f59e0b', '#6366f1', '#ec4899'],
+                legend: { position: 'bottom', labels: { colors: textColor } },
+                dataLabels: { enabled: true, formatter: (val) => val.toFixed(0) + '%' },
+                tooltip: { theme: isDark ? 'dark' : 'light' }
+            };
+
+            if (state.charts.kegiatan) state.charts.kegiatan.destroy();
+            state.charts.kegiatan = new ApexCharts(document.getElementById('chartKegiatan'), optKeg);
+            state.charts.kegiatan.render();
+
+            // Summary List
+            const listEl = document.getElementById('kegiatanSummaryList');
+            if (listEl) {
+                const totalKeg = kegSeries.reduce((a, b) => a + b, 0) || 1;
+                listEl.innerHTML = kegLabels.map((lbl, idx) => `
+                    <div class="flex items-center justify-between">
+                        <span class="text-slate-600 dark:text-slate-400">${lbl}</span>
+                        <span class="font-bold text-slate-800 dark:text-slate-200">${kegSeries[idx]} Orang (${((kegSeries[idx]/totalKeg)*100).toFixed(1)}%)</span>
+                    </div>
+                `).join('');
+            }
+
+            // 3. Chart Permodalan
+            const modalCount = {};
+            state.filtered.responden.forEach(item => {
+                const m = (item.detail?.permodalan || 'Modal Sendiri').trim();
+                modalCount[m] = (modalCount[m] || 0) + 1;
+            });
+
+            const optModal = {
+                chart: { type: 'donut', height: 220, fontFamily: 'Plus Jakarta Sans' },
+                series: Object.values(modalCount).length > 0 ? Object.values(modalCount) : [1],
+                labels: Object.keys(modalCount).length > 0 ? Object.keys(modalCount) : ['Modal Sendiri'],
+                colors: ['#10b981', '#6366f1', '#f59e0b'],
+                legend: { position: 'bottom', labels: { colors: textColor } },
+                tooltip: { theme: isDark ? 'dark' : 'light' }
+            };
+
+            if (state.charts.permodalan) state.charts.permodalan.destroy();
+            state.charts.permodalan = new ApexCharts(document.getElementById('chartPermodalan'), optModal);
+            state.charts.permodalan.render();
+
+            // 4. Chart Luas Lahan / Bangunan
+            const luasRanges = { '< 50 m²': 0, '50 - 200 m²': 0, '200 - 500 m²': 0, '> 500 m²': 0 };
+            state.filtered.responden.forEach(item => {
+                const l = parseFloat(item.detail?.luas_tempat_m2 || item.detail?.luas_bangunan_keseluruhan_m2 || item.detail?.luas_bangunan_produksi_m2) || 0;
+                if (l < 50) luasRanges['< 50 m²']++;
+                else if (l <= 200) luasRanges['50 - 200 m²']++;
+                else if (l <= 500) luasRanges['200 - 500 m²']++;
+                else luasRanges['> 500 m²']++;
+            });
+
+            const optLuas = {
+                chart: { type: 'bar', height: 220, toolbar: { show: false }, fontFamily: 'Plus Jakarta Sans' },
+                series: [{ name: 'Pelaku Usaha', data: Object.values(luasRanges) }],
+                colors: ['#0284c7'],
+                plotOptions: { bar: { borderRadius: 6, columnWidth: '50%' } },
+                xaxis: { categories: Object.keys(luasRanges), labels: { style: { colors: textColor, fontSize: '10px' } } },
+                yaxis: { labels: { style: { colors: textColor } } },
+                grid: { borderColor: isDark ? '#1e293b' : '#f1f5f9' },
+                tooltip: { theme: isDark ? 'dark' : 'light' }
+            };
+
+            if (state.charts.luas) state.charts.luas.destroy();
+            state.charts.luas = new ApexCharts(document.getElementById('chartLuasLahan'), optLuas);
+            state.charts.luas.render();
+
+            // 5. Chart Komoditas / Produk Utama
+            const komoditasMap = {};
+            state.filtered.nilaiProduksi.forEach(item => {
+                const d = item.detail || {};
+                const j = (d.uraian || d.jenis || 'Lainnya').trim();
+                komoditasMap[j] = (komoditasMap[j] || 0) + (parseFloat(d.nilai_rp) || 0);
+            });
+
+            const sortedKom = Object.entries(komoditasMap).sort((a, b) => b[1] - a[1]).slice(0, 6);
+            const komLabels = sortedKom.length > 0 ? sortedKom.map(x => x[0]) : ['Komoditas A', 'Komoditas B'];
+            const komSeries = sortedKom.length > 0 ? sortedKom.map(x => (x[1] / 1000000).toFixed(1)) : [0, 0];
+
+            const optKom = {
+                chart: { type: 'bar', height: 220, toolbar: { show: false }, fontFamily: 'Plus Jakarta Sans' },
+                series: [{ name: 'Nilai (Juta Rp)', data: komSeries }],
+                colors: ['#059669'],
+                plotOptions: { bar: { borderRadius: 6, horizontal: true, barHeight: '55%' } },
+                xaxis: { labels: { style: { colors: textColor } } },
+                yaxis: { labels: { style: { colors: textColor, fontSize: '11px' } } },
+                grid: { borderColor: isDark ? '#1e293b' : '#f1f5f9' },
+                tooltip: { theme: isDark ? 'dark' : 'light' }
+            };
+
+            if (state.charts.komoditas) state.charts.komoditas.destroy();
+            state.charts.komoditas = new ApexCharts(document.getElementById('chartKomoditas'), optKom);
+            state.charts.komoditas.render();
+        }
+
+        function updateChartsTheme(isDark) {
+            renderCharts();
+        }
+
+        // RENDER TABLE RESPONDEN WITH PAGINATION & NIK RELATIONS
+        function renderTableResponden() {
+            const tbody = document.getElementById('tableRespondenBody');
+            const paginationInfo = document.getElementById('paginationInfo');
+            const paginationControls = document.getElementById('paginationControls');
+            const subtitle = document.getElementById('tableRespondenSubtitle');
+
+            if (!tbody) return;
+
+            const total = state.filtered.responden.length;
+            if (subtitle) subtitle.innerText = `Menampilkan ${total.toLocaleString('id-ID')} data responden terverifikasi (${SECTOR_APIS[state.currentSector].title})`;
+
+            if (total === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="9" class="p-8 text-center text-slate-400">
+                            <i data-lucide="inbox" class="w-8 h-8 mx-auto mb-2 text-slate-300"></i>
+                            Belum ada data responden untuk sektor ${SECTOR_APIS[state.currentSector].title}.
+                        </td>
+                    </tr>
+                `;
+                if (paginationInfo) paginationInfo.innerText = 'Menampilkan 0 dari 0 data';
+                if (paginationControls) paginationControls.innerHTML = '';
+                return;
+            }
+
+            const page = state.pagination.page;
+            const size = state.pagination.pageSize;
+            const totalPages = Math.ceil(total / size);
+            const startIdx = (page - 1) * size;
+            const endIdx = Math.min(startIdx + size, total);
+            const pageData = state.filtered.responden.slice(startIdx, endIdx);
+
+            tbody.innerHTML = pageData.map((item, idx) => {
+                const d = item.detail || {};
+                const no = startIdx + idx + 1;
+                const nama = d.nama_responden || '-';
+                const kel = d.nama_kelompok || d.kelompok || '-';
+                const jab = d.jabatan || 'Anggota';
+                const kec = d.kecamatan || '-';
+                const desa = d.desa || '-';
+                const usaha = d.kegiatan_usaha || d.bentuk_usaha || d.jenis_olahan || 'Produksi';
+                const luas = (parseFloat(d.luas_tempat_m2 || d.luas_bangunan_keseluruhan_m2 || d.luas_bangunan_produksi_m2) || 0).toLocaleString('id-ID');
+                const freq = (parseFloat(d.frekwensi_produksi_thn || d.frekwensi_produksi_minggu) || 0) + 'x';
+                const modal = d.permodalan || 'Modal Sendiri';
+
+                return `
+                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                        <td class="p-3 text-center text-slate-400 font-bold">${no}</td>
+                        <td class="p-3">
+                            <span class="font-bold text-slate-900 dark:text-white">${nama}</span>
+                            <p class="text-[10px] text-slate-400 font-mono">NIK: ${d.nik ? String(d.nik).slice(0, 8) + '********' : '-'}</p>
+                        </td>
+                        <td class="p-3">
+                            <span class="font-semibold text-slate-700 dark:text-slate-300">${kel}</span>
+                            <p class="text-[10px] text-slate-500">${jab}</p>
+                        </td>
+                        <td class="p-3">
+                            <span class="font-bold text-slate-800 dark:text-slate-200">${kec}</span>
+                            <p class="text-[10px] text-slate-500">Ds. ${desa}</p>
+                        </td>
+                        <td class="p-3">
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">${usaha}</span>
+                        </td>
+                        <td class="p-3 text-right font-bold text-slate-800 dark:text-slate-200">${luas}</td>
+                        <td class="p-3 text-center font-semibold text-blue-600 dark:text-blue-400">${freq}</td>
+                        <td class="p-3 text-slate-600 dark:text-slate-300">${modal}</td>
+                        <td class="p-3 text-center">
+                            <button onclick="openDetailModal('${d.nik || item.id || no}')" class="p-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:hover:bg-emerald-900 dark:text-emerald-300 transition" title="Lihat Profil Lengkap (Relasi NIK)">
+                                <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            // Pagination Controls
+            if (paginationInfo) paginationInfo.innerText = `Menampilkan ${startIdx + 1} - ${endIdx} dari ${total.toLocaleString('id-ID')} data`;
+            if (paginationControls) {
+                let btns = '';
+                btns += `<button onclick="changePage(1)" ${page === 1 ? 'disabled' : ''} class="px-2.5 py-1 rounded-lg border text-xs disabled:opacity-40">&laquo;</button>`;
+                btns += `<button onclick="changePage(${page - 1})" ${page === 1 ? 'disabled' : ''} class="px-2.5 py-1 rounded-lg border text-xs disabled:opacity-40">&lsaquo;</button>`;
+                
+                const startPage = Math.max(1, page - 2);
+                const endPage = Math.min(totalPages, page + 2);
+                for (let p = startPage; p <= endPage; p++) {
+                    btns += `<button onclick="changePage(${p})" class="px-3 py-1 rounded-lg text-xs font-bold ${p === page ? 'bg-emerald-600 text-white' : 'border hover:bg-slate-100 dark:hover:bg-slate-800'}">${p}</button>`;
+                }
+
+                btns += `<button onclick="changePage(${page + 1})" ${page === totalPages ? 'disabled' : ''} class="px-2.5 py-1 rounded-lg border text-xs disabled:opacity-40">&rsaquo;</button>`;
+                btns += `<button onclick="changePage(${totalPages})" ${page === totalPages ? 'disabled' : ''} class="px-2.5 py-1 rounded-lg border text-xs disabled:opacity-40">&raquo;</button>`;
+                paginationControls.innerHTML = btns;
+            }
+        }
+
+        function changePage(p) {
+            state.pagination.page = p;
+            renderTableResponden();
+            lucide.createIcons();
+        }
+
+        function changePageSize(size) {
+            state.pagination.pageSize = parseInt(size);
+            state.pagination.page = 1;
+            renderTableResponden();
+            lucide.createIcons();
+        }
+
+        // RENDER TABLE NILAI PRODUKSI
+        function renderTableNilai() {
+            const tbody = document.getElementById('tableNilaiBody');
+            if (!tbody) return;
+
+            const list = state.filtered.nilaiProduksi;
+            if (list.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-slate-400">Tidak ada data nilai produksi untuk sektor ${SECTOR_APIS[state.currentSector].title}.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = list.map((item, idx) => {
+                const d = item.detail || {};
+                return `
+                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                        <td class="p-3 text-center text-slate-400 font-bold">${idx + 1}</td>
+                        <td class="p-3">
+                            <span class="font-bold text-slate-900 dark:text-white">${d.nama_responden || '-'}</span>
+                            <p class="text-[10px] text-slate-400">${d.kelompok || '-'}</p>
+                        </td>
+                        <td class="p-3">
+                            <span class="font-semibold text-slate-800 dark:text-slate-200">${d.kecamatan || '-'}</span>
+                            <p class="text-[10px] text-slate-500">Ds. ${d.desa || '-'}</p>
+                        </td>
+                        <td class="p-3">
+                            <span class="font-bold text-emerald-600 dark:text-emerald-400">${d.uraian || d.jenis || '-'}</span>
+                        </td>
+                        <td class="p-3"><span class="px-2 py-0.5 rounded-full bg-cyan-100 dark:bg-cyan-950 text-cyan-800 dark:text-cyan-300 text-[10px] font-bold">${d.lokasi_pemasaran || d.kategori || 'Produk'}</span></td>
+                        <td class="p-3 text-right font-bold text-slate-800 dark:text-slate-200">${(parseFloat(d.volume) || 0).toLocaleString('id-ID')}</td>
+                        <td class="p-3 text-right font-mono">${formatRupiahFull(d.harga_rp)}</td>
+                        <td class="p-3 text-right font-mono font-bold text-emerald-600 dark:text-emerald-400">${formatRupiahFull(d.nilai_rp)}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // RENDER TABLE BIAYA PRODUKSI (BUDIDAYA & TANGKAP)
+        function renderTableBiaya() {
+            const tbody = document.getElementById('tableBiayaBody');
+            if (!tbody) return;
+
+            const list = state.filtered.biayaProduksi;
+            if (list.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-slate-400">Tidak ada data biaya operasional untuk sektor ini.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = list.map((item, idx) => {
+                const d = item.detail || {};
+                return `
+                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                        <td class="p-3 text-center text-slate-400 font-bold">${idx + 1}</td>
+                        <td class="p-3">
+                            <span class="font-bold text-slate-900 dark:text-white">${d.nama_responden || '-'}</span>
+                            <p class="text-[10px] text-slate-400">${d.kelompok || '-'}</p>
+                        </td>
+                        <td class="p-3">
+                            <span class="font-semibold text-slate-800 dark:text-slate-200">${d.kecamatan || '-'}</span>
+                            <p class="text-[10px] text-slate-500">Ds. ${d.desa || '-'}</p>
+                        </td>
+                        <td class="p-3">
+                            <span class="font-bold text-rose-600 dark:text-rose-400">${d.uraian || '-'}</span>
+                        </td>
+                        <td class="p-3"><span class="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[10px] font-semibold">${d.jenis || d.kategori || '-'}</span></td>
+                        <td class="p-3 text-right font-bold text-slate-800 dark:text-slate-200">${(parseFloat(d.volume) || 0).toLocaleString('id-ID')}</td>
+                        <td class="p-3 text-right font-mono">${formatRupiahFull(d.harga_rp)}</td>
+                        <td class="p-3 text-right font-mono font-bold text-rose-600 dark:text-rose-400">${formatRupiahFull(d.nilai_rp)}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // RENDER TABLE BAHAN LAINNYA
+        function renderTableBahan() {
+            const tbody = document.getElementById('tableBahanBody');
+            if (!tbody) return;
+
+            const list = state.filtered.bahanLainnya;
+            if (list.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400">Tidak ada data bahan pendukung lainnya untuk sektor ini.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = list.map((item, idx) => {
+                const d = item.detail || {};
+                return `
+                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                        <td class="p-3 text-center text-slate-400 font-bold">${idx + 1}</td>
+                        <td class="p-3">
+                            <span class="font-bold text-slate-900 dark:text-white">${d.nama_responden || '-'}</span>
+                            <p class="text-[10px] text-slate-400">${d.kelompok || '-'}</p>
+                        </td>
+                        <td class="p-3">
+                            <span class="font-semibold text-slate-800 dark:text-slate-200">${d.kecamatan || '-'}</span>
+                            <p class="text-[10px] text-slate-500">Ds. ${d.desa || '-'}</p>
+                        </td>
+                        <td class="p-3">
+                            <span class="font-bold text-amber-600 dark:text-amber-400">${d.uraian || '-'}</span>
+                        </td>
+                        <td class="p-3 text-right font-bold text-slate-800 dark:text-slate-200">${(parseFloat(d.volume) || 0).toLocaleString('id-ID')}</td>
+                        <td class="p-3 text-right font-mono">${formatRupiahFull(d.harga_rp)}</td>
+                        <td class="p-3 text-right font-mono font-bold text-amber-600 dark:text-amber-400">${formatRupiahFull(d.nilai_rp)}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // RENDER TABLE BAHAN BAKU UTAMA (KHUSUS PENGOLAHAN)
+        function renderTableBahanBaku() {
+            const tbody = document.getElementById('tableBahanBakuBody');
+            if (!tbody) return;
+
+            const list = state.filtered.bahanBaku;
+            if (!list || list.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-slate-400">Tidak ada data bahan baku utama ikan untuk filter yang dipilih.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = list.map((item, idx) => {
+                const d = item.detail || {};
+                return `
+                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                        <td class="p-3 text-center text-slate-400 font-bold">${idx + 1}</td>
+                        <td class="p-3">
+                            <span class="font-bold text-slate-900 dark:text-white">${d.nama_responden || '-'}</span>
+                            <p class="text-[10px] text-slate-400">${d.kelompok || '-'}</p>
+                        </td>
+                        <td class="p-3">
+                            <span class="font-semibold text-slate-800 dark:text-slate-200">${d.kecamatan || '-'}</span>
+                            <p class="text-[10px] text-slate-500">Ds. ${d.desa || '-'}</p>
+                        </td>
+                        <td class="p-3">
+                            <span class="font-bold text-teal-600 dark:text-teal-400">${d.uraian || '-'}</span>
+                        </td>
+                        <td class="p-3">
+                            <span class="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[10px] font-semibold">${d.asal || 'Lokal'}</span>
+                        </td>
+                        <td class="p-3 text-right font-bold text-slate-800 dark:text-slate-200">${(parseFloat(d.volume) || 0).toLocaleString('id-ID')}</td>
+                        <td class="p-3 text-right font-mono">${formatRupiahFull(d.harga_rp)}</td>
+                        <td class="p-3 text-right font-mono font-bold text-teal-600 dark:text-teal-400">${formatRupiahFull(d.nilai_rp)}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // RENDER TABLE PERALATAN PRODUKSI (KHUSUS PENGOLAHAN)
+        function renderTablePeralatan() {
+            const tbody = document.getElementById('tablePeralatanBody');
+            if (!tbody) return;
+
+            const list = state.filtered.peralatan;
+            if (!list || list.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400">Tidak ada data peralatan produksi untuk filter yang dipilih.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = list.map((item, idx) => {
+                const d = item.detail || {};
+                return `
+                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                        <td class="p-3 text-center text-slate-400 font-bold">${idx + 1}</td>
+                        <td class="p-3">
+                            <span class="font-bold text-slate-900 dark:text-white">${d.nama_responden || '-'}</span>
+                            <p class="text-[10px] text-slate-400">${d.kelompok || '-'}</p>
+                        </td>
+                        <td class="p-3">
+                            <span class="font-semibold text-slate-800 dark:text-slate-200">${d.kecamatan || '-'}</span>
+                            <p class="text-[10px] text-slate-500">Ds. ${d.desa || '-'}</p>
+                        </td>
+                        <td class="p-3">
+                            <span class="font-bold text-blue-600 dark:text-blue-400">${d.uraian || '-'}</span>
+                        </td>
+                        <td class="p-3 text-right font-bold text-slate-800 dark:text-slate-200">${(parseFloat(d.volume) || 0).toLocaleString('id-ID')} Unit</td>
+                        <td class="p-3 text-right font-mono">${formatRupiahFull(d.harga_rp)}</td>
+                        <td class="p-3 text-right font-mono font-bold text-blue-600 dark:text-blue-400">${formatRupiahFull(d.nilai_rp)}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // RENDER TABLE SERTIFIKAT & PERIJINAN
+        function renderTableSertifikat() {
+            const tbody = document.getElementById('tableSertifikatBody');
+            if (!tbody) return;
+
+            const list = state.filtered.sertifikat || [];
+            if (list.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">Tidak ada data sertifikat perizinan terdaftar untuk sektor ${SECTOR_APIS[state.currentSector].title}.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = list.map((item, idx) => {
+                const d = item.detail || {};
+                return `
+                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                        <td class="p-3 text-center text-slate-400 font-bold">${idx + 1}</td>
+                        <td class="p-3">
+                            <span class="font-bold text-slate-900 dark:text-white">${d.nama_responden || '-'}</span>
+                            <p class="text-[10px] text-slate-400">${d.kelompok || '-'}</p>
+                        </td>
+                        <td class="p-3">
+                            <span class="font-semibold text-slate-800 dark:text-slate-200">${d.kecamatan || '-'}</span>
+                            <p class="text-[10px] text-slate-500">Ds. ${d.desa || '-'}</p>
+                        </td>
+                        <td class="p-3">
+                            <span class="px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 text-[10px] font-bold">${d.jenis_perizinan || 'NIB / P-IRT'}</span>
+                        </td>
+                        <td class="p-3 font-mono font-semibold text-slate-800 dark:text-slate-200">${d.nomor_perizinan || '-'}</td>
+                        <td class="p-3 text-slate-600 dark:text-slate-300">${d.tanggal_perizinan || '-'}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // RENDER STATS SERTIFIKASI
+        function renderSertifikasiStats() {
+            let sertifCount = 0;
+            let nibCount = 0;
+            let publishCount = 0;
+
+            state.raw.responden.forEach(item => {
+                const d = item.detail || {};
+                if (d.sertifikat_perijinan && d.sertifikat_perijinan.trim() !== '-' && d.sertifikat_perijinan.trim() !== '') {
+                    sertifCount++;
+                }
+                if (d.jenis_perusahaan || d.bentuk_usaha) {
+                    nibCount++;
+                }
+                if (d.status_kuisioner && d.status_kuisioner.toLowerCase() === 'publish') {
+                    publishCount++;
+                }
+            });
+
+            // If raw sertifikat API has records
+            if (state.raw.sertifikat && state.raw.sertifikat.length > 0) {
+                sertifCount += state.raw.sertifikat.length;
+            }
+
+            const statS = document.getElementById('statSertifCount');
+            const statN = document.getElementById('statNIBCount');
+            const statP = document.getElementById('statPublishCount');
+
+            if (statS) statS.innerText = sertifCount.toLocaleString('id-ID');
+            if (statN) statN.innerText = nibCount.toLocaleString('id-ID');
+            if (statP) statP.innerText = publishCount.toLocaleString('id-ID');
+        }
+
+        // LEAFLET MAP INITIALIZATION & MARKERS
+        function initMap() {
+            if (state.map) return;
+            const container = document.getElementById('mapContainer');
+            if (!container) return;
+
+            state.map = L.map('mapContainer').setView([-7.025253, 107.608343], 10);
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+                subdomains: 'abcd',
+                maxZoom: 18
+            }).addTo(state.map);
+
+            updateMapMarkers();
+        }
+
+        function updateMapMarkers() {
+            if (!state.map) return;
+
+            state.mapMarkers.forEach(m => state.map.removeLayer(m));
+            state.mapMarkers = [];
+
+            const kecData = {};
+            state.filtered.responden.forEach(item => {
+                const d = item.detail || {};
+                const kec = (d.kecamatan || 'LAINNYA').trim().toUpperCase();
+                if (!kecData[kec]) {
+                    kecData[kec] = { count: 0, luas: 0, usaha: {} };
+                }
+                kecData[kec].count++;
+                kecData[kec].luas += parseFloat(d.luas_tempat_m2 || d.luas_bangunan_keseluruhan_m2 || d.luas_bangunan_produksi_m2) || 0;
+                const u = d.kegiatan_usaha || d.bentuk_usaha || d.jenis_olahan || 'Produksi';
+                kecData[kec].usaha[u] = (kecData[kec].usaha[u] || 0) + 1;
+            });
+
+            Object.entries(kecData).forEach(([kecName, data]) => {
+                const coords = KECAMATAN_COORDS[kecName] || [-7.025, 107.60];
+                const count = data.count;
+                let color = state.currentSector === 'tangkap' ? '#0284c7' : (state.currentSector === 'pengolahan' ? '#0d9488' : '#10b981');
+                let radius = count > 50 ? 22 : (count > 20 ? 16 : 11);
+
+                const marker = L.circleMarker(coords, {
+                    radius: radius,
+                    fillColor: color,
+                    color: '#ffffff',
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.85
+                }).addTo(state.map);
+
+                const popupHtml = `
+                    <div class="p-3 font-sans min-w-[200px]">
+                        <div class="bg-emerald-600 text-white p-2 -m-3 mb-2.5 rounded-t-lg">
+                            <h4 class="font-bold text-xs uppercase">${kecName}</h4>
+                            <p class="text-[10px] text-emerald-100">${SECTOR_APIS[state.currentSector].title}</p>
+                        </div>
+                        <table class="w-full text-xs text-slate-700">
+                            <tr class="border-b border-slate-100">
+                                <td class="py-1 text-slate-500">Jumlah Responden</td>
+                                <td class="py-1 text-right font-bold text-emerald-700">${data.count} Pelaku</td>
+                            </tr>
+                            <tr class="border-b border-slate-100">
+                                <td class="py-1 text-slate-500">Total Luas</td>
+                                <td class="py-1 text-right font-semibold">${data.luas.toLocaleString('id-ID')} m²</td>
+                            </tr>
+                            <tr>
+                                <td class="py-1 text-slate-500" colspan="2">
+                                    <span class="font-semibold block mb-0.5">Kegiatan / Usaha:</span>
+                                    <div class="text-[10px] text-slate-600">
+                                        ${Object.entries(data.usaha).map(([u, c]) => `${u}: ${c}`).join(' | ')}
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                `;
+
+                marker.bindPopup(popupHtml);
+                state.mapMarkers.push(marker);
+            });
+        }
+
+        // TAB SWITCHING
+        function switchTab(tabId) {
+            const tabs = ['analytics', 'map', 'responden', 'nilai', 'biaya', 'sertifikat'];
+            tabs.forEach(t => {
+                const btn = document.getElementById(`tab-${t}`);
+                const content = document.getElementById(`content-${t}`);
+                if (btn) {
+                    if (t === tabId) {
+                        btn.className = 'tab-btn active flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition whitespace-nowrap';
+                    } else {
+                        btn.className = 'tab-btn bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition whitespace-nowrap';
+                    }
+                }
+                if (content) {
+                    if (t === tabId) content.classList.remove('hidden');
+                    else content.classList.add('hidden');
+                }
+            });
+
+            if (tabId === 'map') {
+                setTimeout(() => {
+                    initMap();
+                    if (state.map) state.map.invalidateSize();
+                }, 150);
+            }
+
+            lucide.createIcons();
+        }
+
+        // DETAIL MODAL (BNBA PROFIL DENGAN RELASI BY NIK)
+        function openDetailModal(idOrNik) {
+            const modal = document.getElementById('detailModal');
+            const modalNama = document.getElementById('modalNama');
+            const modalNIK = document.getElementById('modalNIK');
+            const modalContent = document.getElementById('modalContent');
+
+            const item = state.raw.responden.find(x => 
+                String(x.detail?.nik || '').trim() === String(idOrNik).trim() ||
+                x.id === idOrNik || 
+                x.detail?.no === idOrNik
+            ) || state.raw.responden[0];
+            
+            if (!item) return;
+
+            const d = item.detail || {};
+            const nikStr = String(d.nik || '').trim();
+
+            // PENCARIAN DATA RELASIONAL BY NIK DARI SEMUA 6 DATASET
+            const linkedNilai = (state.raw.nilaiProduksi || []).filter(x => String(x.detail?.nik || '').trim() === nikStr);
+            const linkedBiaya = (state.raw.biayaProduksi || []).filter(x => String(x.detail?.nik || '').trim() === nikStr);
+            const linkedBahan = (state.raw.bahanLainnya || []).filter(x => String(x.detail?.nik || '').trim() === nikStr);
+            const linkedBahanBaku = (state.raw.bahanBaku || []).filter(x => String(x.detail?.nik || '').trim() === nikStr);
+            const linkedPeralatan = (state.raw.peralatan || []).filter(x => String(x.detail?.nik || '').trim() === nikStr);
+            const linkedSertif = (state.raw.sertifikat || []).filter(x => String(x.detail?.nik || '').trim() === nikStr);
+
+            let totalOmset = 0;
+            linkedNilai.forEach(n => totalOmset += parseFloat(n.detail?.nilai_rp || 0));
+
+            let totalCost = 0;
+            linkedBiaya.forEach(b => totalCost += parseFloat(b.detail?.nilai_rp || 0));
+            linkedBahan.forEach(bh => totalCost += parseFloat(bh.detail?.nilai_rp || 0));
+            linkedBahanBaku.forEach(bb => totalCost += parseFloat(bb.detail?.nilai_rp || 0));
+            linkedPeralatan.forEach(p => totalCost += parseFloat(p.detail?.nilai_rp || 0));
+
+            if (modalNama) modalNama.innerText = d.nama_responden || 'Tanpa Nama';
+            if (modalNIK) modalNIK.innerText = `NIK: ${d.nik || '-'} • Kuisioner No: ${d.no || '-'} • Ds. ${d.desa || '-'}, Kec. ${d.kecamatan || '-'}`;
+
+            if (modalContent) {
+                const isTangkap = state.currentSector === 'tangkap';
+                const isPengolahan = state.currentSector === 'pengolahan';
+
+                const lblKelompok = isTangkap ? 'Kelompok / KUB' : (isPengolahan ? 'Kelompok / UPI' : 'Kelompok Pembudidaya');
+                const lblKegiatan = isTangkap ? 'Alat Tangkap / Armada' : (isPengolahan ? 'Jenis Olahan' : 'Kegiatan Usaha');
+                const lblLuas = isTangkap ? 'Kapasitas / Ukuran' : (isPengolahan ? 'Luas Bangunan UPI' : 'Luas Lahan Kolam');
+                const lblFreq = isTangkap ? 'Frekuensi Melaut' : (isPengolahan ? 'Siklus Olahan' : 'Frekuensi Panen');
+                const lblNilaiTitle = isTangkap ? 'Total Nilai Hasil Tangkapan' : (isPengolahan ? 'Total Nilai Produksi Olahan' : 'Total Nilai Panen');
+                const lblBiayaTitle = isTangkap ? 'Total Biaya Melaut' : (isPengolahan ? 'Total Biaya & Aset Alat' : 'Total Biaya Operasional');
+
+                let html = `
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <div class="p-3 bg-slate-50 dark:bg-slate-800 rounded-xl">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">${lblKelompok}</span>
+                            <p class="font-bold text-slate-800 dark:text-slate-200 text-sm">${d.nama_kelompok || d.kelompok || '-'}</p>
+                            <span class="text-[10px] text-slate-500">Jabatan: ${d.jabatan || 'Anggota'}</span>
+                        </div>
+                        <div class="p-3 bg-slate-50 dark:bg-slate-800 rounded-xl">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">${lblKegiatan}</span>
+                            <p class="font-bold text-emerald-600 dark:text-emerald-400 text-sm">${d.kegiatan_usaha || d.bentuk_usaha || d.jenis_olahan || '-'}</p>
+                            <span class="text-[10px] text-slate-500">${d.jenis_perusahaan || 'Perseorangan / KUB'}</span>
+                        </div>
+                        <div class="p-3 bg-slate-50 dark:bg-slate-800 rounded-xl">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">${lblLuas}</span>
+                            <p class="font-bold text-slate-800 dark:text-slate-200 text-sm">${(parseFloat(d.luas_tempat_m2 || d.luas_bangunan_keseluruhan_m2 || d.luas_bangunan_produksi_m2) || 0).toLocaleString('id-ID')} ${isTangkap ? 'GT / Unit' : 'm²'}</p>
+                            <span class="text-[10px] text-slate-500">Status: ${d.status_tempat || 'Milik Sendiri'}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl space-y-2">
+                        <h4 class="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-emerald-600"></i>
+                            <span>${isTangkap ? 'Alamat & Pangkalan / PUD' : 'Alamat & Lokasi Usaha'}</span>
+                        </h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-300">${d.alamat || '-'}, RT/RW: ${d.rt_rw || d.rtrw || '-'}</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300 font-semibold">Desa ${d.desa || '-'}, Kecamatan ${d.kecamatan || '-'}</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3 text-xs">
+                        <div class="p-3 bg-slate-50 dark:bg-slate-800 rounded-xl">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">Permodalan</span>
+                            <p class="font-bold text-slate-800 dark:text-slate-200">${d.permodalan || 'Modal Sendiri'}</p>
+                            <p class="text-[10px] text-slate-400 mt-1">Mulai: Thn ${d.mulai_budidaya || d.mulai_berproduksi || '-'}</p>
+                        </div>
+                        <div class="p-3 bg-slate-50 dark:bg-slate-800 rounded-xl">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">${lblFreq}</span>
+                            <p class="font-bold text-blue-600 dark:text-blue-400">${d.frekwensi_produksi_thn || d.frekwensi_produksi_minggu || 0} kali / ${isTangkap ? 'bulan' : (isPengolahan ? 'minggu' : 'tahun')}</p>
+                            <p class="text-[10px] text-slate-400 mt-1">Enumerator: ${d.petugas_enumerator || 'Sistem'}</p>
+                        </div>
+                    </div>
+
+                    <!-- RINGKASAN TRANSAKSI RELASI NIK -->
+                    <div class="p-4 bg-emerald-50/70 dark:bg-emerald-950/40 rounded-2xl border border-emerald-200 dark:border-emerald-800 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="link-2" class="w-4 h-4 text-emerald-600"></i>
+                                <h4 class="text-xs font-bold text-emerald-950 dark:text-emerald-200">Data Terintegrasi Berdasarkan NIK</h4>
+                            </div>
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${linkedNilai.length > 0 || totalCost > 0 ? 'bg-emerald-600 text-white' : 'bg-slate-200 text-slate-600'}">
+                                ${linkedNilai.length > 0 || totalCost > 0 ? 'Data Produksi & Biaya Tersedia' : 'Belum Ada Transaksi Tercatat'}
+                            </span>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3 text-xs">
+                            <div class="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-emerald-100 dark:border-emerald-900/60">
+                                <span class="text-[10px] text-slate-400 font-semibold block">${lblNilaiTitle}</span>
+                                <span class="font-extrabold text-emerald-700 dark:text-emerald-400 text-sm font-mono">${formatRupiahFull(totalOmset)}</span>
+                                <p class="text-[10px] text-slate-500 mt-0.5">${linkedNilai.length} komoditas dicatat</p>
+                            </div>
+                            <div class="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-emerald-100 dark:border-emerald-900/60">
+                                <span class="text-[10px] text-slate-400 font-semibold block">${lblBiayaTitle}</span>
+                                <span class="font-extrabold text-rose-600 dark:text-rose-400 text-sm font-mono">${formatRupiahFull(totalCost)}</span>
+                                <p class="text-[10px] text-slate-500 mt-0.5">${linkedBiaya.length + linkedBahan.length + linkedBahanBaku.length + linkedPeralatan.length} item transaksi</p>
+                            </div>
+                        </div>
+
+                        <!-- RINCIAN KOMODITAS NILAI PRODUKSI / TANGKAPAN -->
+                        ${linkedNilai.length > 0 ? `
+                            <div class="mt-2 pt-2 border-t border-emerald-100 dark:border-emerald-900/60">
+                                <span class="text-[10px] font-bold text-slate-500 uppercase block mb-1">Rincian Komoditas / Hasil Tangkapan:</span>
+                                <div class="space-y-1 text-xs">
+                                    ${linkedNilai.map(n => `
+                                        <div class="flex items-center justify-between bg-white/70 dark:bg-slate-900/70 p-1.5 rounded-lg text-[11px]">
+                                            <span class="font-semibold text-slate-800 dark:text-slate-200">${n.detail?.uraian || n.detail?.jenis || '-'} (${n.detail?.volume || 0} kg)</span>
+                                            <span class="font-bold text-emerald-600 font-mono">${formatRupiahFull(n.detail?.nilai_rp)}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        <!-- RINCIAN BIAYA OPERASIONAL (TANGKAP & BUDIDAYA) -->
+                        ${linkedBiaya.length > 0 ? `
+                            <div class="mt-2 pt-2 border-t border-emerald-100 dark:border-emerald-900/60">
+                                <span class="text-[10px] font-bold text-rose-700 dark:text-rose-300 uppercase block mb-1">Rincian Biaya Operasional ${isTangkap ? 'Melaut' : 'Produksi'}:</span>
+                                <div class="space-y-1 text-xs">
+                                    ${linkedBiaya.map(b => `
+                                        <div class="flex items-center justify-between bg-white/70 dark:bg-slate-900/70 p-1.5 rounded-lg text-[11px]">
+                                            <span class="font-semibold text-slate-800 dark:text-slate-200">${b.detail?.uraian || b.detail?.jenis || '-'} (${b.detail?.volume || 0})</span>
+                                            <span class="font-bold text-rose-600 font-mono">${formatRupiahFull(b.detail?.nilai_rp)}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        <!-- RINCIAN BAHAN BAKU UTAMA (IF PENGOLAHAN) -->
+                        ${linkedBahanBaku.length > 0 ? `
+                            <div class="mt-2 pt-2 border-t border-emerald-100 dark:border-emerald-900/60">
+                                <span class="text-[10px] font-bold text-teal-700 dark:text-teal-300 uppercase block mb-1">Bahan Baku Utama Ikan:</span>
+                                <div class="space-y-1 text-xs">
+                                    ${linkedBahanBaku.map(bb => `
+                                        <div class="flex items-center justify-between bg-white/70 dark:bg-slate-900/70 p-1.5 rounded-lg text-[11px]">
+                                            <span class="font-semibold text-slate-800 dark:text-slate-200">${bb.detail?.uraian || '-'} • Asal: ${bb.detail?.asal || 'Lokal'} (${bb.detail?.volume || 0} kg)</span>
+                                            <span class="font-bold text-teal-600 font-mono">${formatRupiahFull(bb.detail?.nilai_rp)}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        <!-- RINCIAN PERALATAN PRODUKSI (IF PENGOLAHAN) -->
+                        ${linkedPeralatan.length > 0 ? `
+                            <div class="mt-2 pt-2 border-t border-emerald-100 dark:border-emerald-900/60">
+                                <span class="text-[10px] font-bold text-blue-700 dark:text-blue-300 uppercase block mb-1">Peralatan / Mesin UPI:</span>
+                                <div class="space-y-1 text-xs">
+                                    ${linkedPeralatan.map(p => `
+                                        <div class="flex items-center justify-between bg-white/70 dark:bg-slate-900/70 p-1.5 rounded-lg text-[11px]">
+                                            <span class="font-semibold text-slate-800 dark:text-slate-200">${p.detail?.uraian || '-'} (${p.detail?.volume || 0} unit)</span>
+                                            <span class="font-bold text-blue-600 font-mono">${formatRupiahFull(p.detail?.nilai_rp)}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+
+                    <!-- SERTIFIKAT & LEGALITAS -->
+                    <div class="p-3 bg-slate-50 dark:bg-slate-800 rounded-xl text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">Sertifikat & Perijinan</span>
+                            <p class="font-semibold text-slate-700 dark:text-slate-300">
+                                ${linkedSertif.length > 0 ? linkedSertif.map(s => `${s.detail?.jenis_perizinan || 'Izin'}: ${s.detail?.nomor_perizinan || '-'}`).join(' | ') : (d.sertifikat_perijinan || d.sertifikat__perijinan || 'Belum Ada / Proses')}
+                            </p>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 self-start sm:self-auto">${d.status_kuisioner || 'Publish'}</span>
+                    </div>
+                `;
+
+                modalContent.innerHTML = html;
+            }
+
+            modal.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('detailModal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        // EXPORT TO EXCEL (SECTOR-AWARE INCLUDING ALL 6 DATASETS)
+        function exportToExcel() {
+            if (!state.filtered.responden || state.filtered.responden.length === 0) {
+                alert('Tidak ada data untuk diexport!');
+                return;
+            }
+
+            const secName = SECTOR_APIS[state.currentSector].title;
+            const wb = XLSX.utils.book_new();
+
+            // Sheet 1: Responden
+            const exportRows = state.filtered.responden.map((item, idx) => {
+                const d = item.detail || {};
+                return {
+                    'No': idx + 1,
+                    'Sektor': secName,
+                    'Tahun': d.tahun || '',
+                    'NIK': d.nik || '',
+                    'Nama Responden': d.nama_responden || '',
+                    'Kelompok / Usaha': d.nama_kelompok || d.kelompok || '',
+                    'Jabatan': d.jabatan || '',
+                    'Alamat': d.alamat || '',
+                    'Desa': d.desa || '',
+                    'Kecamatan': d.kecamatan || '',
+                    'Kegiatan / Usaha': d.kegiatan_usaha || d.bentuk_usaha || d.jenis_olahan || '',
+                    'Luas (m2)': d.luas_tempat_m2 || d.luas_bangunan_keseluruhan_m2 || d.luas_bangunan_produksi_m2 || 0,
+                    'Frekuensi Produksi': d.frekwensi_produksi_thn || d.frekwensi_produksi_minggu || 0,
+                    'Permodalan': d.permodalan || '',
+                    'Sertifikasi / Perijinan': d.sertifikat_perijinan || '',
+                    'Petugas Enumerator': d.petugas_enumerator || ''
+                };
+            });
+            const ws = XLSX.utils.json_to_sheet(exportRows);
+            XLSX.utils.book_append_sheet(wb, ws, `Responden`);
+
+            // Sheet 2: Nilai Produksi
+            if (state.filtered.nilaiProduksi && state.filtered.nilaiProduksi.length > 0) {
+                const nilaiRows = state.filtered.nilaiProduksi.map((item, idx) => {
+                    const d = item.detail || {};
+                    return {
+                        'No': idx + 1,
+                        'NIK': d.nik || '',
+                        'Nama Responden': d.nama_responden || '',
+                        'Kelompok': d.kelompok || '',
+                        'Kecamatan': d.kecamatan || '',
+                        'Desa': d.desa || '',
+                        'Uraian / Produk': d.uraian || d.jenis || '',
+                        'Kategori / Pemasaran': d.kategori || d.lokasi_pemasaran || '',
+                        'Volume': d.volume || 0,
+                        'Harga Satuan (Rp)': d.harga_rp || 0,
+                        'Nilai Total (Rp)': d.nilai_rp || 0
+                    };
+                });
+                const wsNilai = XLSX.utils.json_to_sheet(nilaiRows);
+                XLSX.utils.book_append_sheet(wb, wsNilai, "Nilai Produksi");
+            }
+
+            // Sheet 3: Bahan Baku Utama (Pengolahan)
+            if (state.filtered.bahanBaku && state.filtered.bahanBaku.length > 0) {
+                const bbRows = state.filtered.bahanBaku.map((item, idx) => {
+                    const d = item.detail || {};
+                    return {
+                        'No': idx + 1,
+                        'NIK': d.nik || '',
+                        'Nama Responden / UPI': d.nama_responden || '',
+                        'Kelompok': d.kelompok || '',
+                        'Kecamatan': d.kecamatan || '',
+                        'Desa': d.desa || '',
+                        'Bahan Baku Ikan': d.uraian || '',
+                        'Asal Pasokan': d.asal || '',
+                        'Volume': d.volume || 0,
+                        'Harga Satuan (Rp)': d.harga_rp || 0,
+                        'Total Nilai (Rp)': d.nilai_rp || 0
+                    };
+                });
+                const wsBB = XLSX.utils.json_to_sheet(bbRows);
+                XLSX.utils.book_append_sheet(wb, wsBB, "Bahan Baku Utama");
+            }
+
+            // Sheet 4: Peralatan Produksi (Pengolahan)
+            if (state.filtered.peralatan && state.filtered.peralatan.length > 0) {
+                const alatRows = state.filtered.peralatan.map((item, idx) => {
+                    const d = item.detail || {};
+                    return {
+                        'No': idx + 1,
+                        'NIK': d.nik || '',
+                        'Nama Responden / UPI': d.nama_responden || '',
+                        'Kelompok': d.kelompok || '',
+                        'Kecamatan': d.kecamatan || '',
+                        'Desa': d.desa || '',
+                        'Jenis Peralatan': d.uraian || '',
+                        'Volume / Unit': d.volume || 0,
+                        'Harga Satuan (Rp)': d.harga_rp || 0,
+                        'Total Investasi (Rp)': d.nilai_rp || 0
+                    };
+                });
+                const wsAlat = XLSX.utils.json_to_sheet(alatRows);
+                XLSX.utils.book_append_sheet(wb, wsAlat, "Peralatan Produksi");
+            }
+
+            // Sheet 5: Biaya Produksi (Budidaya / Tangkap)
+            if (state.filtered.biayaProduksi && state.filtered.biayaProduksi.length > 0) {
+                const biayaRows = state.filtered.biayaProduksi.map((item, idx) => {
+                    const d = item.detail || {};
+                    return {
+                        'No': idx + 1,
+                        'NIK': d.nik || '',
+                        'Nama Responden': d.nama_responden || '',
+                        'Kelompok': d.kelompok || '',
+                        'Kecamatan': d.kecamatan || '',
+                        'Desa': d.desa || '',
+                        'Uraian Biaya': d.uraian || '',
+                        'Jenis / Kategori': d.jenis || d.kategori || '',
+                        'Volume': d.volume || 0,
+                        'Harga Satuan (Rp)': d.harga_rp || 0,
+                        'Total Biaya (Rp)': d.nilai_rp || 0
+                    };
+                });
+                const wsBiaya = XLSX.utils.json_to_sheet(biayaRows);
+                XLSX.utils.book_append_sheet(wb, wsBiaya, "Biaya Operasional");
+            }
+
+            // Sheet 6: Bahan Lainnya
+            if (state.filtered.bahanLainnya && state.filtered.bahanLainnya.length > 0) {
+                const bahanRows = state.filtered.bahanLainnya.map((item, idx) => {
+                    const d = item.detail || {};
+                    return {
+                        'No': idx + 1,
+                        'NIK': d.nik || '',
+                        'Nama Responden': d.nama_responden || '',
+                        'Kelompok': d.kelompok || '',
+                        'Kecamatan': d.kecamatan || '',
+                        'Desa': d.desa || '',
+                        'Uraian Bahan': d.uraian || '',
+                        'Volume': d.volume || 0,
+                        'Harga Satuan (Rp)': d.harga_rp || 0,
+                        'Nilai Total (Rp)': d.nilai_rp || 0
+                    };
+                });
+                const wsBahan = XLSX.utils.json_to_sheet(bahanRows);
+                XLSX.utils.book_append_sheet(wb, wsBahan, "Bahan Pendukung");
+            }
+
+            // Sheet 7: Sertifikat & Perijinan
+            if (state.filtered.sertifikat && state.filtered.sertifikat.length > 0) {
+                const sertifRows = state.filtered.sertifikat.map((item, idx) => {
+                    const d = item.detail || {};
+                    return {
+                        'No': idx + 1,
+                        'NIK': d.nik || '',
+                        'Nama Responden': d.nama_responden || '',
+                        'Kelompok': d.kelompok || '',
+                        'Kecamatan': d.kecamatan || '',
+                        'Desa': d.desa || '',
+                        'Jenis Perizinan': d.jenis_perizinan || '',
+                        'Nomor Perizinan': d.nomor_perizinan || '',
+                        'Tanggal Perizinan': d.tanggal_perizinan || ''
+                    };
+                });
+                const wsSertif = XLSX.utils.json_to_sheet(sertifRows);
+                XLSX.utils.book_append_sheet(wb, wsSertif, "Sertifikat Perizinan");
+            }
+
+            XLSX.writeFile(wb, `SIKANDUNG_${state.currentSector}_${new Date().toISOString().split('T')[0]}.xlsx`);
+        }
+    </script>
+</body>
+
+</html>
