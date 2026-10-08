@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title id="page-title">Dashboard SIKANDUNG - Sistem Informasi Pendataan Perikanan Kab. Bandung</title>
-    <meta name="description" content="Dashboard SIKANDUNG (Sistem Informasi Pendataan Perikanan Kabupaten Bandung) - Perikanan Budidaya, Perikanan Tangkap, dan Pengolahan Hasil Perikanan.">
+    <meta name="description" content="Dashboard SIKANDUNG (Sistem Informasi Pendataan Perikanan Kabupaten Bandung) - Perikanan Budidaya dan Pengolahan Hasil Perikanan.">
 
     <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -399,15 +399,11 @@
                 </div>
             </div>
 
-            <!-- 3 Sektors Switcher Pills (CPPD Design) -->
+            <!-- Sektors Switcher Pills (CPPD Design) -->
             <div class="flex items-center gap-2 mt-4 p-1 bg-slate-200/60 dark:bg-slate-800/60 rounded-2xl border border-emerald-500/20 w-max max-w-full overflow-x-auto">
                 <button onclick="switchSector('budidaya')" id="sector-btn-budidaya" class="sector-pill active">
                     <i data-lucide="waves" class="w-4 h-4 text-emerald-600"></i>
                     <span>Perikanan Budidaya</span>
-                </button>
-                <button onclick="switchSector('tangkap')" id="sector-btn-tangkap" class="sector-pill">
-                    <i data-lucide="anchor" class="w-4 h-4 text-sky-500"></i>
-                    <span>Perikanan Tangkap</span>
                 </button>
                 <button onclick="switchSector('pengolahan')" id="sector-btn-pengolahan" class="sector-pill">
                     <i data-lucide="package-check" class="w-4 h-4 text-teal-500"></i>
@@ -420,7 +416,7 @@
         <div class="info-banner">
             <i data-lucide="info" class="info-banner-icon w-5 h-5 text-emerald-600 flex-shrink-0"></i>
             <div id="sectorInfoBannerText" class="text-xs leading-relaxed text-slate-700 dark:text-slate-300">
-                Dashboard SIKANDUNG (Sistem Informasi Pendataan Perikanan) menyajikan data sensus By Name By Address (BNBA) terintegrasi perikanan budidaya, perikanan tangkap, dan unit pengolahan hasil perikanan (UPI) Kabupaten Bandung.
+                Dashboard SIKANDUNG (Sistem Informasi Pendataan Perikanan) menyajikan data sensus By Name By Address (BNBA) terintegrasi perikanan budidaya dan unit pengolahan hasil perikanan (UPI) Kabupaten Bandung.
             </div>
         </div>
 
@@ -429,34 +425,41 @@
         <!-- ========================================== -->
         <div class="glass-panel mb-6">
             <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
-                <div class="flex items-center gap-2 text-slate-700 dark:text-slate-300 text-xs font-bold">
+                <div class="flex items-center gap-2 text-slate-700 dark:text-slate-300 text-xs font-bold whitespace-nowrap">
                     <i data-lucide="sliders-horizontal" class="w-4 h-4 text-emerald-600"></i>
                     <span>Filter & Pencarian Data Sektor</span>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 flex-1 max-w-4xl">
-                    <!-- Search Input -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 flex-1 max-w-5xl">
+                    <!-- 1. Search Input -->
                     <div class="relative">
                         <i data-lucide="search" class="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                        <input type="text" id="globalSearchInput" placeholder="Cari nama, kelompok, NIK, desa..." 
+                        <input type="text" id="globalSearchInput" placeholder="Cari..." 
                             class="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 text-xs rounded-xl pl-9 pr-3 py-2.5 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
                     </div>
 
-                    <!-- Filter Tahun -->
+                    <!-- 2. Filter Tahun -->
                     <div>
                         <select id="filterTahun" class="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-xs rounded-xl py-2.5 px-3 focus:ring-2 focus:ring-emerald-500 font-medium">
                             <option value="all">Semua Tahun</option>
                         </select>
                     </div>
 
-                    <!-- Filter Kecamatan -->
+                    <!-- 3. Filter Kecamatan -->
                     <div>
                         <select id="filterKecamatan" class="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-xs rounded-xl py-2.5 px-3 focus:ring-2 focus:ring-emerald-500 font-medium">
                             <option value="all">Semua Kecamatan</option>
                         </select>
                     </div>
 
-                    <!-- Reset Filter Button -->
+                    <!-- 4. Filter Kategori -->
+                    <div>
+                        <select id="filterKategori" class="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-xs rounded-xl py-2.5 px-3 focus:ring-2 focus:ring-emerald-500 font-medium">
+                            <option value="all">Semua Kategori</option>
+                        </select>
+                    </div>
+
+                    <!-- 5. Reset Filter Button -->
                     <button onclick="resetAllFilters()" class="flex items-center justify-center gap-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 px-3 py-2.5 rounded-xl text-xs font-semibold transition">
                         <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
                         <span>Reset Filter</span>
@@ -551,7 +554,7 @@
                     </div>
                 </div>
                 <h3 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white" id="kpiValue6">0</h3>
-                <p class="text-[10px] text-teal-600 dark:text-teal-400 font-semibold mt-1">Kecamatan Aktif</p>
+                <p class="text-[10px] text-teal-600 dark:text-teal-400 font-semibold mt-1" id="kpiSub6">Kecamatan Aktif</p>
             </div>
 
         </div>
@@ -593,71 +596,70 @@
         <!-- TAB 1: RINGKASAN & ANALITIK (CHARTS)      -->
         <!-- ========================================== -->
         <div id="content-analytics" class="tab-content space-y-6 animate-fade-in">
-            <!-- Row 1: Charts -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Row 1: Bar Charts (1 chart saat Budidaya, 2 charts berdampingan saat Pengolahan) -->
+            <div id="analyticsRow1" class="grid grid-cols-1 gap-6">
                 
-                <!-- Chart 1: Sebaran Kecamatan -->
-                <div class="lg:col-span-2 glass-card rounded-2xl p-5 shadow-sm">
-                    <div class="flex items-center justify-between mb-4">
+                <!-- Chart 1: Sebaran Kecamatan (Top 10) -->
+                <div class="glass-card rounded-2xl p-5 sm:p-6 shadow-sm">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
                         <div>
-                            <h3 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
                                 <i data-lucide="bar-chart-2" class="w-4 h-4 text-emerald-600"></i>
-                                <span id="chartKecamatanTitle">Distribusi Responden per Kecamatan (Top 12)</span>
+                                <span id="chartKecamatanTitle">Sebaran Pembudidaya per Kecamatan (Top 10)</span>
                             </h3>
-                            <p class="text-[11px] text-slate-500 dark:text-slate-400" id="chartKecamatanSubtitle">Konsentrasi pelaku sektor perikanan</p>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400" id="chartKecamatanSubtitle">Wilayah dengan jumlah pembudidaya perikanan tertinggi</p>
                         </div>
                     </div>
-                    <div id="chartKecamatan" class="min-h-[300px]"></div>
+                    <div id="chartKecamatan" class="min-h-[320px]"></div>
                 </div>
 
-                <!-- Chart 2: Komposisi Kegiatan / Usaha -->
-                <div class="glass-card rounded-2xl p-5 shadow-sm flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between mb-2">
-                            <h3 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                                <i data-lucide="pie-chart" class="w-4 h-4 text-cyan-600"></i>
-                                <span id="chartKegiatanTitle">Komposisi Bentuk / Kegiatan Usaha</span>
+                <!-- Chart b (Khusus Pengolahan): Jangkauan Pemasaran (Top 10) -->
+                <div id="containerChartPemasaran" class="glass-card rounded-2xl p-5 sm:p-6 shadow-sm hidden">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                        <div>
+                            <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                <i data-lucide="map-pin" class="w-4 h-4 text-sky-600"></i>
+                                <span id="chartPemasaranTitle">Jangkauan Pemasaran (Top 10)</span>
                             </h3>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400" id="chartPemasaranSubtitle">Wilayah dengan tujuan penjualan produk olahan tertinggi</p>
                         </div>
-                        <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-4" id="chartKegiatanSubtitle">Proporsi jenis kegiatan</p>
-                        <div id="chartKegiatan" class="min-h-[250px] flex items-center justify-center"></div>
                     </div>
-                    <div id="kegiatanSummaryList" class="space-y-2 mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs"></div>
+                    <div id="chartPemasaran" class="min-h-[320px]"></div>
                 </div>
 
             </div>
 
-            <!-- Row 2: Charts -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Row 2: 2 Donut Charts (Komposisi Jenis Produk/Kegiatan & Kapasitas Luas) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 
-                <!-- Chart 3: Permodalan -->
-                <div class="glass-card rounded-2xl p-5 shadow-sm">
-                    <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-1 flex items-center gap-2">
-                        <i data-lucide="landmark" class="w-4 h-4 text-amber-600"></i>
-                        <span>Sumber Permodalan</span>
-                    </h3>
-                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-3">Modal Sendiri vs Modal Bersama</p>
-                    <div id="chartPermodalan" class="min-h-[220px]"></div>
+                <!-- Chart 2/3 (Donut): Komposisi Produk / Kegiatan -->
+                <div class="glass-card rounded-2xl p-5 sm:p-6 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                <i data-lucide="pie-chart" class="w-4 h-4 text-emerald-600"></i>
+                                <span id="chartKegiatanTitle">Komposisi Jenis Kegiatan Usaha Budidaya</span>
+                            </h3>
+                        </div>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-4" id="chartKegiatanSubtitle">Proporsi pembudidaya berdasarkan jenis kegiatan</p>
+                        <div id="chartKegiatan" class="min-h-[260px] flex items-center justify-center"></div>
+                    </div>
+                    <div id="kegiatanSummaryList" class="space-y-2 mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs max-h-48 overflow-y-auto"></div>
                 </div>
 
-                <!-- Chart 4: Klasifikasi Luas -->
-                <div class="glass-card rounded-2xl p-5 shadow-sm">
-                    <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-1 flex items-center gap-2">
-                        <i data-lucide="layers" class="w-4 h-4 text-blue-600"></i>
-                        <span id="chartLuasTitle">Klasifikasi Luas (m²)</span>
-                    </h3>
-                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-3" id="chartLuasSubtitle">Ukuran kolam atau bangunan usaha</p>
-                    <div id="chartLuasLahan" class="min-h-[220px]"></div>
-                </div>
-
-                <!-- Chart 5: Komoditas Terbanyak -->
-                <div class="glass-card rounded-2xl p-5 shadow-sm">
-                    <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-1 flex items-center gap-2">
-                        <i data-lucide="scale" class="w-4 h-4 text-emerald-600"></i>
-                        <span id="chartKomoditasTitle">Komoditas / Produk Utama</span>
-                    </h3>
-                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-3">Nilai produksi tertinggi (Juta Rp)</p>
-                    <div id="chartKomoditas" class="min-h-[220px]"></div>
+                <!-- Chart 3/4 (Donut): Kapasitas Luas Lahan / Bangunan Produksi -->
+                <div class="glass-card rounded-2xl p-5 sm:p-6 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                <i data-lucide="layers" class="w-4 h-4 text-cyan-600"></i>
+                                <span id="chartLuasTitle">Kapasitas Luas Lahan Pembudidaya</span>
+                            </h3>
+                        </div>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-4" id="chartLuasSubtitle">Distribusi jumlah pembudidaya berdasarkan rentang ukuran kolam operasional (m²)</p>
+                        <div id="chartLuasLahan" class="min-h-[260px] flex items-center justify-center"></div>
+                    </div>
+                    <div id="luasSummaryList" class="space-y-2 mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs max-h-48 overflow-y-auto"></div>
                 </div>
 
             </div>
@@ -1084,34 +1086,15 @@
                     nilaiProduksi: 'https://api.bandungkab.go.id/api/bnba/sikandung-budidaya---nilai-produksi?per_page=2000'
                 }
             },
-            tangkap: {
-                title: 'Perikanan Tangkap',
-                badge: 'TANGKAP',
-                heroClass: 'gradient-header-tangkap',
-                heroSubtitle: 'Sistem Informasi Pendataan Perikanan Tangkap: Data Nelayan Perairan Umum Darat (PUD) / Waduk Cirata & Saguling, Sertifikat & Izin Kapal, Estimasi Nilai Hasil Tangkapan, dan Biaya Operasional.',
-                kpiLabel1: 'Nelayan Tangkap',
-                kpiLabel4: 'Wilayah / Armada',
-                kpiLabel5: 'Trip Melaut',
-                kpiSub5: 'Frekuensi per Bulan',
-                thKegiatan: 'Alat Tangkap / Armada',
-                thLuas: 'Kapasitas / Alat',
-                thFreq: 'Trip/Bln',
-                urls: {
-                    responden: 'https://api.bandungkab.go.id/api/bnba/sikandung-tangkap---data-responden?per_page=2000',
-                    sertifikat: 'https://api.bandungkab.go.id/api/bnba/sikandung-tangkap---sertifikat--perijinan?per_page=2000',
-                    nilaiProduksi: 'https://api.bandungkab.go.id/api/bnba/sikandung-tangkap---nilai-produksi?per_page=2000',
-                    biayaProduksi: 'https://api.bandungkab.go.id/api/bnba/sikandung-tangkap---biaya-produksi?per_page=2000'
-                }
-            },
             pengolahan: {
                 title: 'Pengolahan Hasil Perikanan',
                 badge: 'PENGOLAHAN',
                 heroClass: 'gradient-header-pengolahan',
                 heroSubtitle: 'Sistem Informasi Pendataan Pengolahan Hasil Perikanan: Unit Pengolah Ikan (UPI), Produk Olahan (Bandeng, Pindang, Abon, Bakso), Bahan Baku Utama, Peralatan, dan Legalitas.',
-                kpiLabel1: 'Unit Pengolah (UPI)',
-                kpiLabel4: 'Luas Bangunan UPI',
-                kpiLabel5: 'Siklus Olahan',
-                kpiSub5: 'Produksi per Minggu',
+                kpiLabel1: 'Pelaku Usaha',
+                kpiLabel4: 'Luas Bangunan Produksi',
+                kpiLabel5: 'Frekuensi Produksi',
+                kpiSub5: 'Rata-rata per Minggu',
                 thKegiatan: 'Jenis Olahan',
                 thLuas: 'Luas Bangunan (m²)',
                 thFreq: 'Produksi/Mgg',
@@ -1163,10 +1146,9 @@
 
         // GLOBAL MULTI-SECTOR APP STATE DENGAN IN-MEMORY CACHE
         const state = {
-            currentSector: 'budidaya', // 'budidaya' | 'tangkap' | 'pengolahan'
+            currentSector: 'budidaya', // 'budidaya' | 'pengolahan'
             cache: {
                 budidaya: null,
-                tangkap: null,
                 pengolahan: null
             },
             raw: {
@@ -1190,6 +1172,7 @@
             filters: {
                 tahun: 'all',
                 kecamatan: 'all',
+                kategori: 'all',
                 search: ''
             },
             pagination: {
@@ -1253,7 +1236,7 @@
             state.currentSector = sectorKey;
 
             // 1. Update Sector Buttons UI Langsung
-            ['budidaya', 'tangkap', 'pengolahan'].forEach(k => {
+            ['budidaya', 'pengolahan'].forEach(k => {
                 const btn = document.getElementById(`sector-btn-${k}`);
                 if (btn) {
                     if (k === sectorKey) {
@@ -1276,8 +1259,6 @@
             if (bannerText) {
                 if (sectorKey === 'budidaya') {
                     bannerText.innerText = 'Dashboard SIKANDUNG (Perikanan Budidaya) menyajikan data sensus By Name By Address (BNBA) pembudidaya ikan kolam air tenang, pembenihan, pembesaran, dan ikan hias di wilayah Kabupaten Bandung.';
-                } else if (sectorKey === 'tangkap') {
-                    bannerText.innerText = 'Dashboard SIKANDUNG (Perikanan Tangkap) menyajikan data sensus nelayan tangkap perairan umum darat (sungai Citarum, waduk Saguling/Cirata, situ) terintegrasi dengan 4 API resmi: Data Responden BNBA, Sertifikat & Izin Kapal, Estimasi Nilai Tangkapan, dan Biaya Operasional Melaut.';
                 } else if (sectorKey === 'pengolahan') {
                     bannerText.innerText = 'Dashboard SIKANDUNG (Pengolahan Hasil Perikanan) menyajikan data Unit Pengolah Ikan (UPI), produk hilirisasi (Bandeng, Bakso Ikan, Abon, Tongkol, Deles), nilai omset, serta bahan penolong.';
                 }
@@ -1305,37 +1286,60 @@
             if (thLuas) thLuas.innerText = secInfo.thLuas;
             if (thFreq) thFreq.innerText = secInfo.thFreq;
 
-            if (sectorKey === 'tangkap') {
-                if (tableRespondenTitle) tableRespondenTitle.innerText = 'Data Responden Nelayan Tangkap (By Name By Address)';
-                if (tableNilaiTitle) tableNilaiTitle.innerText = 'Data Nilai Hasil Tangkapan Nelayan (Komoditas Ikan)';
-                if (tabLabelResponden) tabLabelResponden.innerText = 'Data Nelayan (BNBA)';
-                if (sertifTitle) sertifTitle.innerText = 'Status Sertifikasi, KUSUKA & Perijinan Nelayan Tangkap';
-                if (sertifDesc) sertifDesc.innerText = 'Monitoring tanda daftar kapal perikanan (TDKP/BKP), pas kecil, kartu KUSUKA, dan sertifikasi kecakapan nelayan.';
-            } else if (sectorKey === 'pengolahan') {
+            // Update Chart Titles & Subtitles
+            const chartKecTitle = document.getElementById('chartKecamatanTitle');
+            const chartKecSubtitle = document.getElementById('chartKecamatanSubtitle');
+            const chartPemasaranTitle = document.getElementById('chartPemasaranTitle');
+            const chartPemasaranSubtitle = document.getElementById('chartPemasaranSubtitle');
+            const chartKegTitle = document.getElementById('chartKegiatanTitle');
+            const chartKegSubtitle = document.getElementById('chartKegiatanSubtitle');
+            const chartLuasTitle = document.getElementById('chartLuasTitle');
+            const chartLuasSubtitle = document.getElementById('chartLuasSubtitle');
+
+            if (sectorKey === 'pengolahan') {
                 if (tableRespondenTitle) tableRespondenTitle.innerText = 'Data Responden Unit Pengolah Ikan / UPI (By Name By Address)';
                 if (tableNilaiTitle) tableNilaiTitle.innerText = 'Data Nilai Produksi Olahan Hasil Perikanan';
                 if (tabLabelResponden) tabLabelResponden.innerText = 'Data UPI (BNBA)';
                 if (sertifTitle) sertifTitle.innerText = 'Status Sertifikasi P-IRT, Halal & Legalitas UPI';
                 if (sertifDesc) sertifDesc.innerText = 'Monitoring sertifikasi Cara Pengolahan Ikan yang Baik (CPIB/SKP), P-IRT, Sertifikat Halal, dan NIB UPI.';
+
+                if (chartKecTitle) chartKecTitle.innerText = 'Sebaran Pelaku Usaha per Kecamatan (Top 10)';
+                if (chartKecSubtitle) chartKecSubtitle.innerText = 'Wilayah dengan jumlah pelaku usaha pengolahan ikan tertinggi';
+                if (chartPemasaranTitle) chartPemasaranTitle.innerText = 'Jangkauan Pemasaran (Top 10)';
+                if (chartPemasaranSubtitle) chartPemasaranSubtitle.innerText = 'Wilayah dengan tujuan penjualan produk olahan tertinggi';
+                if (chartKegTitle) chartKegTitle.innerText = 'Komposisi Jenis Produk Olahan Ikan';
+                if (chartKegSubtitle) chartKegSubtitle.innerText = 'Proporsi pelaku usaha berdasarkan komoditas olahan utama';
+                if (chartLuasTitle) chartLuasTitle.innerText = 'Kapasitas Bangunan Produksi';
+                if (chartLuasSubtitle) chartLuasSubtitle.innerText = 'Distribusi pelaku usaha berdasarkan klasifikasi luas tempat pengolahan (m²)';
             } else {
                 if (tableRespondenTitle) tableRespondenTitle.innerText = 'Data Responden Pembudidaya Ikan (By Name By Address)';
                 if (tableNilaiTitle) tableNilaiTitle.innerText = 'Data Nilai Produksi Komoditas Perikanan Budidaya';
                 if (tabLabelResponden) tabLabelResponden.innerText = 'Data Responden (BNBA)';
                 if (sertifTitle) sertifTitle.innerText = 'Status Sertifikasi CBIB & Perijinan Budidaya';
                 if (sertifDesc) sertifDesc.innerText = 'Monitoring sertifikasi Cara Budidaya Ikan yang Baik (CBIB), CPIB, CDOB, P-IRT, dan Perizinan Berusaha (NIB).';
+
+                if (chartKecTitle) chartKecTitle.innerText = 'Sebaran Pembudidaya per Kecamatan (Top 10)';
+                if (chartKecSubtitle) chartKecSubtitle.innerText = 'Wilayah dengan jumlah pembudidaya perikanan tertinggi';
+                if (chartKegTitle) chartKegTitle.innerText = 'Komposisi Jenis Kegiatan Usaha Budidaya';
+                if (chartKegSubtitle) chartKegSubtitle.innerText = 'Proporsi pembudidaya berdasarkan jenis kegiatan';
+                if (chartLuasTitle) chartLuasTitle.innerText = 'Kapasitas Luas Lahan Pembudidaya';
+                if (chartLuasSubtitle) chartLuasSubtitle.innerText = 'Distribusi jumlah pembudidaya berdasarkan rentang ukuran kolam operasional (m²)';
             }
 
             // 4. Reset Filter Value
             state.filters.tahun = 'all';
             state.filters.kecamatan = 'all';
+            state.filters.kategori = 'all';
             state.filters.search = '';
             state.pagination.page = 1;
 
             const filterTahun = document.getElementById('filterTahun');
             const filterKec = document.getElementById('filterKecamatan');
+            const filterKat = document.getElementById('filterKategori');
             const searchInput = document.getElementById('globalSearchInput');
             if (filterTahun) filterTahun.value = 'all';
             if (filterKec) filterKec.value = 'all';
+            if (filterKat) filterKat.value = 'all';
             if (searchInput) searchInput.value = '';
 
             // 5. Load Data dari Cache Memory Secara Instan (0ms Loading)
@@ -1385,10 +1389,9 @@
                     lucide.createIcons();
                 }, 200);
 
-                // Pre-fetch sektor Pengolahan & Tangkap di background agar saat klik menu langsung instan 0ms
+                // Pre-fetch sektor Pengolahan di background agar saat klik menu langsung instan 0ms
                 setTimeout(() => {
                     fetchSectorData('pengolahan');
-                    fetchSectorData('tangkap');
                 }, 300);
 
             } catch (err) {
@@ -1442,12 +1445,24 @@
         function populateDropdownOptions() {
             const tahunSet = new Set();
             const kecSet = new Set();
+            const katSet = new Set();
 
             state.raw.responden.forEach(item => {
                 const d = item.detail || {};
                 if (d.tahun) tahunSet.add(d.tahun);
                 if (d.kecamatan) kecSet.add(d.kecamatan.trim().toUpperCase());
+                const usaha = (d.kegiatan_usaha || d.bentuk_usaha || d.jenis_olahan || '').trim();
+                if (usaha) katSet.add(usaha);
             });
+
+            if (state.currentSector === 'pengolahan') {
+                state.raw.nilaiProduksi.forEach(item => {
+                    const u = (item.detail?.uraian || item.detail?.jenis || '').trim();
+                    if (u && u !== '-') {
+                        katSet.add(u.charAt(0).toUpperCase() + u.slice(1));
+                    }
+                });
+            }
 
             // Populate Tahun
             const filterTahun = document.getElementById('filterTahun');
@@ -1466,16 +1481,27 @@
                     filterKec.innerHTML += `<option value="${k}">${k}</option>`;
                 });
             }
+
+            // Populate Kategori
+            const filterKat = document.getElementById('filterKategori');
+            if (filterKat) {
+                filterKat.innerHTML = '<option value="all">Semua Kategori</option>';
+                Array.from(katSet).sort().forEach(k => {
+                    filterKat.innerHTML += `<option value="${k}">${k}</option>`;
+                });
+            }
         }
 
         // FILTER EVENTS
         function initFilterEvents() {
             const filterTahun = document.getElementById('filterTahun');
             const filterKec = document.getElementById('filterKecamatan');
+            const filterKat = document.getElementById('filterKategori');
             const searchInput = document.getElementById('globalSearchInput');
 
             if (filterTahun) filterTahun.addEventListener('change', (e) => { state.filters.tahun = e.target.value; applyFilters(); });
             if (filterKec) filterKec.addEventListener('change', (e) => { state.filters.kecamatan = e.target.value; applyFilters(); });
+            if (filterKat) filterKat.addEventListener('change', (e) => { state.filters.kategori = e.target.value; applyFilters(); });
 
             let debounceTimer;
             if (searchInput) {
@@ -1490,25 +1516,58 @@
         }
 
         function resetAllFilters() {
-            state.filters = { tahun: 'all', kecamatan: 'all', search: '' };
+            state.filters = { tahun: 'all', kecamatan: 'all', kategori: 'all', search: '' };
             const filterTahun = document.getElementById('filterTahun');
             const filterKec = document.getElementById('filterKecamatan');
+            const filterKat = document.getElementById('filterKategori');
             const searchInput = document.getElementById('globalSearchInput');
             if (filterTahun) filterTahun.value = 'all';
             if (filterKec) filterKec.value = 'all';
+            if (filterKat) filterKat.value = 'all';
             if (searchInput) searchInput.value = '';
             applyFilters();
         }
 
         // MAIN FILTER LOGIC
         function applyFilters() {
-            const { tahun, kecamatan, search } = state.filters;
+            const { tahun, kecamatan, kategori, search } = state.filters;
+            const isPengolahan = state.currentSector === 'pengolahan';
+
+            // Filter Nilai Produksi
+            state.filtered.nilaiProduksi = (state.raw.nilaiProduksi || []).filter(item => {
+                const d = item.detail || {};
+                if (tahun !== 'all' && String(d.tahun) !== String(tahun)) return false;
+                if (kecamatan !== 'all' && (d.kecamatan || '').trim().toUpperCase() !== kecamatan.toUpperCase()) return false;
+                if (kategori !== 'all') {
+                    const uraian = (d.uraian || d.jenis || '').trim().toLowerCase();
+                    if (uraian !== kategori.toLowerCase()) return false;
+                }
+                if (search) {
+                    const matchName = (d.nama_responden || '').toLowerCase().includes(search);
+                    const matchKel = (d.kelompok || '').toLowerCase().includes(search);
+                    const matchJenis = (d.jenis || d.uraian || '').toLowerCase().includes(search);
+                    const matchNIK = String(d.nik || '').includes(search);
+                    if (!matchName && !matchKel && !matchJenis && !matchNIK) return false;
+                }
+                return true;
+            });
 
             // Filter Responden
             state.filtered.responden = (state.raw.responden || []).filter(item => {
                 const d = item.detail || {};
                 if (tahun !== 'all' && String(d.tahun) !== String(tahun)) return false;
                 if (kecamatan !== 'all' && (d.kecamatan || '').trim().toUpperCase() !== kecamatan.toUpperCase()) return false;
+                if (kategori !== 'all') {
+                    const usaha = (d.kegiatan_usaha || d.bentuk_usaha || d.jenis_olahan || '').trim().toLowerCase();
+                    if (isPengolahan) {
+                        // Cek apakah usaha cocok atau ada di list nilaiProduksi filtered
+                        const matchUsaha = usaha === kategori.toLowerCase();
+                        const matchInNilai = state.filtered.nilaiProduksi.some(n => String(n.detail?.nik || '').trim() === String(d.nik || '').trim());
+                        if (!matchUsaha && !matchInNilai) return false;
+                    } else {
+                        if (usaha !== kategori.toLowerCase()) return false;
+                    }
+                }
 
                 if (search) {
                     const matchName = (d.nama_responden || '').toLowerCase().includes(search);
@@ -1521,22 +1580,7 @@
                 return true;
             });
 
-            // Filter Nilai Produksi
-            state.filtered.nilaiProduksi = (state.raw.nilaiProduksi || []).filter(item => {
-                const d = item.detail || {};
-                if (tahun !== 'all' && String(d.tahun) !== String(tahun)) return false;
-                if (kecamatan !== 'all' && (d.kecamatan || '').trim().toUpperCase() !== kecamatan.toUpperCase()) return false;
-                if (search) {
-                    const matchName = (d.nama_responden || '').toLowerCase().includes(search);
-                    const matchKel = (d.kelompok || '').toLowerCase().includes(search);
-                    const matchJenis = (d.jenis || d.uraian || '').toLowerCase().includes(search);
-                    const matchNIK = String(d.nik || '').includes(search);
-                    if (!matchName && !matchKel && !matchJenis && !matchNIK) return false;
-                }
-                return true;
-            });
-
-            // Filter Biaya Produksi (Budidaya & Tangkap)
+            // Filter Biaya Produksi
             state.filtered.biayaProduksi = (state.raw.biayaProduksi || []).filter(item => {
                 const d = item.detail || {};
                 if (tahun !== 'all' && String(d.tahun) !== String(tahun)) return false;
@@ -1607,12 +1651,10 @@
                 return true;
             });
 
-            // Toggle Section Pengolahan vs Standard vs Tangkap
+            // Toggle Section Pengolahan vs Standard
             const secPengolahan = document.getElementById('section-biaya-pengolahan');
             const secStandard = document.getElementById('section-biaya-standard');
             const secBahanPendukung = document.getElementById('section-bahan-pendukung');
-            const isPengolahan = state.currentSector === 'pengolahan';
-            const isTangkap = state.currentSector === 'tangkap';
 
             if (secPengolahan) {
                 if (isPengolahan) secPengolahan.classList.remove('hidden');
@@ -1623,8 +1665,7 @@
                 else secStandard.classList.remove('hidden');
             }
             if (secBahanPendukung) {
-                if (isTangkap) secBahanPendukung.classList.add('hidden');
-                else secBahanPendukung.classList.remove('hidden');
+                secBahanPendukung.classList.remove('hidden');
             }
 
             renderKPIs();
@@ -1656,8 +1697,6 @@
             if (badgeBiaya) {
                 if (isPengolahan) {
                     badgeBiaya.innerText = state.filtered.bahanBaku.length + state.filtered.peralatan.length + state.filtered.bahanLainnya.length;
-                } else if (isTangkap) {
-                    badgeBiaya.innerText = state.filtered.biayaProduksi.length;
                 } else {
                     badgeBiaya.innerText = state.filtered.biayaProduksi.length + state.filtered.bahanLainnya.length;
                 }
@@ -1678,6 +1717,7 @@
             let chips = [];
             if (state.filters.tahun !== 'all') chips.push(`Tahun: ${state.filters.tahun}`);
             if (state.filters.kecamatan !== 'all') chips.push(`Kecamatan: ${state.filters.kecamatan}`);
+            if (state.filters.kategori !== 'all') chips.push(`Kategori: ${state.filters.kategori}`);
             if (state.filters.search) chips.push(`Pencarian: "${state.filters.search}"`);
 
             if (chips.length === 0) {
@@ -1696,15 +1736,17 @@
         function renderKPIs() {
             const resp = state.filtered.responden;
             const totalResponden = resp.length;
+            const isPengolahan = state.currentSector === 'pengolahan';
 
             let totalLuas = 0;
             let totalFrekuensi = 0;
             let frekuensiCount = 0;
             const kecSet = new Set();
+            const desaSet = new Set();
 
             resp.forEach(item => {
                 const d = item.detail || {};
-                const luas = parseFloat(d.luas_tempat_m2 || d.luas_bangunan_keseluruhan_m2 || d.luas_bangunan_produksi_m2) || 0;
+                const luas = parseFloat(d.luas_bangunan_produksi_m2 || d.luas_bangunan_keseluruhan_m2 || d.luas_tempat_m2) || 0;
                 totalLuas += luas;
 
                 const freq = parseFloat(d.frekwensi_produksi_thn || d.frekwensi_produksi_minggu) || 0;
@@ -1714,6 +1756,7 @@
                 }
 
                 if (d.kecamatan) kecSet.add(d.kecamatan.trim().toUpperCase());
+                if (d.desa) desaSet.add(d.desa.trim().toUpperCase());
             });
 
             // Total Nilai Produksi
@@ -1725,7 +1768,7 @@
 
             // Total Biaya / Input
             let totalBiaya = 0;
-            if (state.currentSector === 'pengolahan') {
+            if (isPengolahan) {
                 state.filtered.bahanBaku.forEach(item => {
                     const d = item.detail || {};
                     totalBiaya += parseFloat(d.nilai_rp) || 0;
@@ -1749,7 +1792,7 @@
                 });
             }
 
-            const avgFreq = frekuensiCount > 0 ? (totalFrekuensi / frekuensiCount).toFixed(1) : '0';
+            const avgFreq = frekuensiCount > 0 ? (totalFrekuensi / frekuensiCount).toFixed(isPengolahan ? 2 : 1) : '0';
             const luasHektar = (totalLuas / 10000).toFixed(2);
 
             // Update DOM
@@ -1760,6 +1803,7 @@
             const kpiSub4 = document.getElementById('kpiSub4');
             const kpi5 = document.getElementById('kpiValue5');
             const kpi6 = document.getElementById('kpiValue6');
+            const kpiSub6 = document.getElementById('kpiSub6');
 
             if (kpi1) kpi1.innerText = totalResponden.toLocaleString('id-ID');
             if (kpi2) kpi2.innerText = formatRupiahCompact(totalNilai);
@@ -1768,6 +1812,9 @@
             if (kpiSub4) kpiSub4.innerText = `≈ ${luasHektar} Ha`;
             if (kpi5) kpi5.innerText = `${avgFreq}x`;
             if (kpi6) kpi6.innerText = kecSet.size.toString();
+            if (kpiSub6) {
+                kpiSub6.innerText = desaSet.size > 0 ? `${kecSet.size} Kecamatan (${desaSet.size} Desa)` : 'Kecamatan Aktif';
+            }
         }
 
         // UTILITY: FORMAT RUPIAH
@@ -1787,145 +1834,234 @@
             return 'Rp ' + (val || 0).toLocaleString('id-ID');
         }
 
-        // RENDER CHARTS
+        // RENDER CHARTS (BUDIDAYA & PENGOLAHAN)
         function renderCharts() {
             const isDark = document.documentElement.classList.contains('dark');
             const textColor = isDark ? '#94a3b8' : '#64748b';
+            const isPengolahan = state.currentSector === 'pengolahan';
 
-            // 1. Chart Kecamatan
+            // 1. Chart Sebaran Pelaku Usaha / Pembudidaya per Kecamatan (Top 10)
             const kecCount = {};
             state.filtered.responden.forEach(item => {
                 const kec = (item.detail?.kecamatan || 'LAINNYA').trim().toUpperCase();
                 kecCount[kec] = (kecCount[kec] || 0) + 1;
             });
 
-            const sortedKec = Object.entries(kecCount).sort((a, b) => b[1] - a[1]).slice(0, 12);
+            const sortedKec = Object.entries(kecCount).sort((a, b) => b[1] - a[1]).slice(0, 10);
             const kecLabels = sortedKec.length > 0 ? sortedKec.map(x => x[0]) : ['Kecamatan A', 'Kecamatan B'];
             const kecSeries = sortedKec.length > 0 ? sortedKec.map(x => x[1]) : [0, 0];
 
             const optKec = {
                 chart: { type: 'bar', height: 320, toolbar: { show: false }, fontFamily: 'Plus Jakarta Sans' },
-                series: [{ name: 'Pelaku Usaha', data: kecSeries }],
-                colors: [state.currentSector === 'tangkap' ? '#0284c7' : (state.currentSector === 'pengolahan' ? '#0d9488' : '#10b981')],
-                plotOptions: { bar: { borderRadius: 8, columnWidth: '55%' } },
-                dataLabels: { enabled: false },
-                xaxis: { categories: kecLabels, labels: { style: { colors: textColor, fontSize: '10px' }, rotate: -45 } },
+                series: [{ name: isPengolahan ? 'Pelaku Usaha' : 'Pembudidaya', data: kecSeries }],
+                colors: [isPengolahan ? '#0d9488' : '#10b981'],
+                plotOptions: { 
+                    bar: { 
+                        borderRadius: 8, 
+                        columnWidth: '45%',
+                        dataLabels: {
+                            position: 'top'
+                        }
+                    } 
+                },
+                dataLabels: { 
+                    enabled: true,
+                    offsetY: -18,
+                    style: {
+                        fontSize: '11px',
+                        fontWeight: '700',
+                        colors: [isDark ? '#cbd5e1' : '#475569']
+                    }
+                },
+                xaxis: { 
+                    categories: kecLabels, 
+                    labels: { style: { colors: textColor, fontSize: '11px', fontWeight: '600' }, rotate: -30 } 
+                },
                 yaxis: { labels: { style: { colors: textColor } } },
                 grid: { borderColor: isDark ? '#1e293b' : '#f1f5f9' },
                 tooltip: { theme: isDark ? 'dark' : 'light' }
             };
 
-            if (state.charts.kecamatan) state.charts.kecamatan.destroy();
-            state.charts.kecamatan = new ApexCharts(document.getElementById('chartKecamatan'), optKec);
-            state.charts.kecamatan.render();
+            const chartKecEl = document.getElementById('chartKecamatan');
+            if (chartKecEl) {
+                if (state.charts.kecamatan) state.charts.kecamatan.destroy();
+                state.charts.kecamatan = new ApexCharts(chartKecEl, optKec);
+                state.charts.kecamatan.render();
+            }
 
-            // 2. Chart Kegiatan / Bentuk Usaha
+            // 2. Chart Jangkauan Pemasaran (Top 10) - KHUSUS PENGOLAHAN
+            const row1El = document.getElementById('analyticsRow1');
+            const containerPemasaran = document.getElementById('containerChartPemasaran');
+
+            if (isPengolahan) {
+                if (containerPemasaran) containerPemasaran.classList.remove('hidden');
+                if (row1El) {
+                    row1El.className = 'grid grid-cols-1 lg:grid-cols-2 gap-6';
+                }
+
+                const pemCount = {};
+                state.filtered.nilaiProduksi.forEach(item => {
+                    const p = (item.detail?.lokasi_pemasaran || 'Lokal').trim();
+                    if (p && p !== '-') {
+                        const cleanP = p.charAt(0).toUpperCase() + p.slice(1);
+                        pemCount[cleanP] = (pemCount[cleanP] || 0) + 1;
+                    }
+                });
+
+                const sortedPem = Object.entries(pemCount).sort((a, b) => b[1] - a[1]).slice(0, 10);
+                const pemLabels = sortedPem.length > 0 ? sortedPem.map(x => x[0]) : ['Lokal'];
+                const pemSeries = sortedPem.length > 0 ? sortedPem.map(x => x[1]) : [1];
+
+                const optPem = {
+                    chart: { type: 'bar', height: 320, toolbar: { show: false }, fontFamily: 'Plus Jakarta Sans' },
+                    series: [{ name: 'Frekuensi Penjualan', data: pemSeries }],
+                    colors: ['#0284c7'],
+                    plotOptions: { 
+                        bar: { 
+                            borderRadius: 8, 
+                            columnWidth: '45%',
+                            dataLabels: { position: 'top' }
+                        } 
+                    },
+                    dataLabels: { 
+                        enabled: true,
+                        offsetY: -18,
+                        style: {
+                            fontSize: '11px',
+                            fontWeight: '700',
+                            colors: [isDark ? '#cbd5e1' : '#475569']
+                        }
+                    },
+                    xaxis: { 
+                        categories: pemLabels, 
+                        labels: { style: { colors: textColor, fontSize: '11px', fontWeight: '600' }, rotate: -30 } 
+                    },
+                    yaxis: { labels: { style: { colors: textColor } } },
+                    grid: { borderColor: isDark ? '#1e293b' : '#f1f5f9' },
+                    tooltip: { theme: isDark ? 'dark' : 'light' }
+                };
+
+                const chartPemEl = document.getElementById('chartPemasaran');
+                if (chartPemEl) {
+                    if (state.charts.pemasaran) state.charts.pemasaran.destroy();
+                    state.charts.pemasaran = new ApexCharts(chartPemEl, optPem);
+                    state.charts.pemasaran.render();
+                }
+            } else {
+                if (containerPemasaran) containerPemasaran.classList.add('hidden');
+                if (row1El) {
+                    row1El.className = 'grid grid-cols-1 gap-6';
+                }
+                if (state.charts.pemasaran) {
+                    state.charts.pemasaran.destroy();
+                    state.charts.pemasaran = null;
+                }
+            }
+
+            // 3. Chart Komposisi Kegiatan (Budidaya) atau Komposisi Jenis Produk Olahan Ikan (Pengolahan)
             const kegCount = {};
-            state.filtered.responden.forEach(item => {
-                const keg = (item.detail?.kegiatan_usaha || item.detail?.bentuk_usaha || item.detail?.jenis_olahan || 'Lainnya').trim();
-                kegCount[keg] = (kegCount[keg] || 0) + 1;
-            });
+            if (isPengolahan) {
+                // Diambil dari data nilai produksi, kolom uraian (Bandeng, Tongkol, Deles, Abon, Bakso, dll.)
+                state.filtered.nilaiProduksi.forEach(item => {
+                    const u = (item.detail?.uraian || item.detail?.jenis || 'Lainnya').trim();
+                    if (u && u !== '-') {
+                        const cleanU = u.charAt(0).toUpperCase() + u.slice(1);
+                        kegCount[cleanU] = (kegCount[cleanU] || 0) + 1;
+                    }
+                });
+            } else {
+                state.filtered.responden.forEach(item => {
+                    const keg = (item.detail?.kegiatan_usaha || item.detail?.bentuk_usaha || 'Lainnya').trim();
+                    kegCount[keg] = (kegCount[keg] || 0) + 1;
+                });
+            }
 
-            const kegLabels = Object.keys(kegCount).length > 0 ? Object.keys(kegCount) : ['Usaha 1', 'Usaha 2'];
-            const kegSeries = Object.values(kegCount).length > 0 ? Object.values(kegCount) : [1, 0];
+            const kegLabels = Object.keys(kegCount).length > 0 ? Object.keys(kegCount) : (isPengolahan ? ['Bandeng', 'Tongkol', 'Deles'] : ['Pembesaran', 'Pembenihan', 'Ikan Hias']);
+            const kegSeries = Object.values(kegCount).length > 0 ? Object.values(kegCount) : [1, 0, 0];
 
             const optKeg = {
-                chart: { type: 'donut', height: 240, fontFamily: 'Plus Jakarta Sans' },
+                chart: { type: 'donut', height: 260, fontFamily: 'Plus Jakarta Sans' },
                 series: kegSeries,
                 labels: kegLabels,
-                colors: ['#059669', '#06b6d4', '#f59e0b', '#6366f1', '#ec4899'],
+                colors: ['#059669', '#06b6d4', '#f59e0b', '#6366f1', '#ec4899', '#8b5cf6', '#14b8a6', '#f97316'],
                 legend: { position: 'bottom', labels: { colors: textColor } },
                 dataLabels: { enabled: true, formatter: (val) => val.toFixed(0) + '%' },
                 tooltip: { theme: isDark ? 'dark' : 'light' }
             };
 
-            if (state.charts.kegiatan) state.charts.kegiatan.destroy();
-            state.charts.kegiatan = new ApexCharts(document.getElementById('chartKegiatan'), optKeg);
-            state.charts.kegiatan.render();
+            const chartKegEl = document.getElementById('chartKegiatan');
+            if (chartKegEl) {
+                if (state.charts.kegiatan) state.charts.kegiatan.destroy();
+                state.charts.kegiatan = new ApexCharts(chartKegEl, optKeg);
+                state.charts.kegiatan.render();
+            }
 
-            // Summary List
+            // Summary List Kegiatan / Produk
             const listEl = document.getElementById('kegiatanSummaryList');
             if (listEl) {
                 const totalKeg = kegSeries.reduce((a, b) => a + b, 0) || 1;
+                const unitLabel = isPengolahan ? 'Produk' : 'Responden';
                 listEl.innerHTML = kegLabels.map((lbl, idx) => `
-                    <div class="flex items-center justify-between">
-                        <span class="text-slate-600 dark:text-slate-400">${lbl}</span>
-                        <span class="font-bold text-slate-800 dark:text-slate-200">${kegSeries[idx]} Orang (${((kegSeries[idx]/totalKeg)*100).toFixed(1)}%)</span>
+                    <div class="flex items-center justify-between py-1 border-b border-slate-100 dark:border-slate-800/60 last:border-0">
+                        <span class="text-slate-600 dark:text-slate-400 font-medium">${lbl}</span>
+                        <span class="font-bold text-slate-800 dark:text-slate-200">${kegSeries[idx].toLocaleString('id-ID')} ${unitLabel} (${((kegSeries[idx]/totalKeg)*100).toFixed(1)}%)</span>
                     </div>
                 `).join('');
             }
 
-            // 3. Chart Permodalan
-            const modalCount = {};
-            state.filtered.responden.forEach(item => {
-                const m = (item.detail?.permodalan || 'Modal Sendiri').trim();
-                modalCount[m] = (modalCount[m] || 0) + 1;
-            });
+            // 4. Chart Kapasitas Luas (Budidaya: <50, 50-200, 200-500, >500; Pengolahan: <50, 50-100, >100)
+            let luasRanges = {};
+            if (isPengolahan) {
+                luasRanges = { '< 50 m²': 0, '50 - 100 m²': 0, '> 100 m²': 0 };
+                state.filtered.responden.forEach(item => {
+                    const l = parseFloat(item.detail?.luas_bangunan_produksi_m2 || item.detail?.luas_bangunan_keseluruhan_m2 || item.detail?.luas_tempat_m2) || 0;
+                    if (l < 50) luasRanges['< 50 m²']++;
+                    else if (l <= 100) luasRanges['50 - 100 m²']++;
+                    else luasRanges['> 100 m²']++;
+                });
+            } else {
+                luasRanges = { '< 50 m²': 0, '50 - 200 m²': 0, '200 - 500 m²': 0, '> 500 m²': 0 };
+                state.filtered.responden.forEach(item => {
+                    const l = parseFloat(item.detail?.luas_tempat_m2 || item.detail?.luas_bangunan_keseluruhan_m2 || item.detail?.luas_bangunan_produksi_m2) || 0;
+                    if (l < 50) luasRanges['< 50 m²']++;
+                    else if (l <= 200) luasRanges['50 - 200 m²']++;
+                    else if (l <= 500) luasRanges['200 - 500 m²']++;
+                    else luasRanges['> 500 m²']++;
+                });
+            }
 
-            const optModal = {
-                chart: { type: 'donut', height: 220, fontFamily: 'Plus Jakarta Sans' },
-                series: Object.values(modalCount).length > 0 ? Object.values(modalCount) : [1],
-                labels: Object.keys(modalCount).length > 0 ? Object.keys(modalCount) : ['Modal Sendiri'],
-                colors: ['#10b981', '#6366f1', '#f59e0b'],
-                legend: { position: 'bottom', labels: { colors: textColor } },
-                tooltip: { theme: isDark ? 'dark' : 'light' }
-            };
-
-            if (state.charts.permodalan) state.charts.permodalan.destroy();
-            state.charts.permodalan = new ApexCharts(document.getElementById('chartPermodalan'), optModal);
-            state.charts.permodalan.render();
-
-            // 4. Chart Luas Lahan / Bangunan
-            const luasRanges = { '< 50 m²': 0, '50 - 200 m²': 0, '200 - 500 m²': 0, '> 500 m²': 0 };
-            state.filtered.responden.forEach(item => {
-                const l = parseFloat(item.detail?.luas_tempat_m2 || item.detail?.luas_bangunan_keseluruhan_m2 || item.detail?.luas_bangunan_produksi_m2) || 0;
-                if (l < 50) luasRanges['< 50 m²']++;
-                else if (l <= 200) luasRanges['50 - 200 m²']++;
-                else if (l <= 500) luasRanges['200 - 500 m²']++;
-                else luasRanges['> 500 m²']++;
-            });
+            const luasLabels = Object.keys(luasRanges);
+            const luasSeries = Object.values(luasRanges);
 
             const optLuas = {
-                chart: { type: 'bar', height: 220, toolbar: { show: false }, fontFamily: 'Plus Jakarta Sans' },
-                series: [{ name: 'Pelaku Usaha', data: Object.values(luasRanges) }],
-                colors: ['#0284c7'],
-                plotOptions: { bar: { borderRadius: 6, columnWidth: '50%' } },
-                xaxis: { categories: Object.keys(luasRanges), labels: { style: { colors: textColor, fontSize: '10px' } } },
-                yaxis: { labels: { style: { colors: textColor } } },
-                grid: { borderColor: isDark ? '#1e293b' : '#f1f5f9' },
+                chart: { type: 'donut', height: 260, fontFamily: 'Plus Jakarta Sans' },
+                series: luasSeries.some(v => v > 0) ? luasSeries : [1, 0, 0],
+                labels: luasLabels,
+                colors: isPengolahan ? ['#0284c7', '#10b981', '#f59e0b'] : ['#06b6d4', '#10b981', '#0284c7', '#f59e0b'],
+                legend: { position: 'bottom', labels: { colors: textColor } },
+                dataLabels: { enabled: true, formatter: (val) => val.toFixed(0) + '%' },
                 tooltip: { theme: isDark ? 'dark' : 'light' }
             };
 
-            if (state.charts.luas) state.charts.luas.destroy();
-            state.charts.luas = new ApexCharts(document.getElementById('chartLuasLahan'), optLuas);
-            state.charts.luas.render();
+            const chartLuasEl = document.getElementById('chartLuasLahan');
+            if (chartLuasEl) {
+                if (state.charts.luas) state.charts.luas.destroy();
+                state.charts.luas = new ApexCharts(chartLuasEl, optLuas);
+                state.charts.luas.render();
+            }
 
-            // 5. Chart Komoditas / Produk Utama
-            const komoditasMap = {};
-            state.filtered.nilaiProduksi.forEach(item => {
-                const d = item.detail || {};
-                const j = (d.uraian || d.jenis || 'Lainnya').trim();
-                komoditasMap[j] = (komoditasMap[j] || 0) + (parseFloat(d.nilai_rp) || 0);
-            });
-
-            const sortedKom = Object.entries(komoditasMap).sort((a, b) => b[1] - a[1]).slice(0, 6);
-            const komLabels = sortedKom.length > 0 ? sortedKom.map(x => x[0]) : ['Komoditas A', 'Komoditas B'];
-            const komSeries = sortedKom.length > 0 ? sortedKom.map(x => (x[1] / 1000000).toFixed(1)) : [0, 0];
-
-            const optKom = {
-                chart: { type: 'bar', height: 220, toolbar: { show: false }, fontFamily: 'Plus Jakarta Sans' },
-                series: [{ name: 'Nilai (Juta Rp)', data: komSeries }],
-                colors: ['#059669'],
-                plotOptions: { bar: { borderRadius: 6, horizontal: true, barHeight: '55%' } },
-                xaxis: { labels: { style: { colors: textColor } } },
-                yaxis: { labels: { style: { colors: textColor, fontSize: '11px' } } },
-                grid: { borderColor: isDark ? '#1e293b' : '#f1f5f9' },
-                tooltip: { theme: isDark ? 'dark' : 'light' }
-            };
-
-            if (state.charts.komoditas) state.charts.komoditas.destroy();
-            state.charts.komoditas = new ApexCharts(document.getElementById('chartKomoditas'), optKom);
-            state.charts.komoditas.render();
+            // Summary List Luas Lahan / Bangunan
+            const luasListEl = document.getElementById('luasSummaryList');
+            if (luasListEl) {
+                const totalLuasCount = luasSeries.reduce((a, b) => a + b, 0) || 1;
+                const actorLabel = isPengolahan ? 'Pelaku Usaha' : 'Pembudidaya';
+                luasListEl.innerHTML = luasLabels.map((lbl, idx) => `
+                    <div class="flex items-center justify-between py-1 border-b border-slate-100 dark:border-slate-800/60 last:border-0">
+                        <span class="text-slate-600 dark:text-slate-400 font-medium">${lbl}</span>
+                        <span class="font-bold text-slate-800 dark:text-slate-200">${luasSeries[idx].toLocaleString('id-ID')} ${actorLabel} (${((luasSeries[idx]/totalLuasCount)*100).toFixed(1)}%)</span>
+                    </div>
+                `).join('');
+            }
         }
 
         function updateChartsTheme(isDark) {
@@ -2324,7 +2460,7 @@
             Object.entries(kecData).forEach(([kecName, data]) => {
                 const coords = KECAMATAN_COORDS[kecName] || [-7.025, 107.60];
                 const count = data.count;
-                let color = state.currentSector === 'tangkap' ? '#0284c7' : (state.currentSector === 'pengolahan' ? '#0d9488' : '#10b981');
+                let color = state.currentSector === 'pengolahan' ? '#0d9488' : '#10b981';
                 let radius = count > 50 ? 22 : (count > 20 ? 16 : 11);
 
                 const marker = L.circleMarker(coords, {
@@ -2436,15 +2572,14 @@
             if (modalNIK) modalNIK.innerText = `NIK: ${d.nik || '-'} • Kuisioner No: ${d.no || '-'} • Ds. ${d.desa || '-'}, Kec. ${d.kecamatan || '-'}`;
 
             if (modalContent) {
-                const isTangkap = state.currentSector === 'tangkap';
                 const isPengolahan = state.currentSector === 'pengolahan';
 
-                const lblKelompok = isTangkap ? 'Kelompok / KUB' : (isPengolahan ? 'Kelompok / UPI' : 'Kelompok Pembudidaya');
-                const lblKegiatan = isTangkap ? 'Alat Tangkap / Armada' : (isPengolahan ? 'Jenis Olahan' : 'Kegiatan Usaha');
-                const lblLuas = isTangkap ? 'Kapasitas / Ukuran' : (isPengolahan ? 'Luas Bangunan UPI' : 'Luas Lahan Kolam');
-                const lblFreq = isTangkap ? 'Frekuensi Melaut' : (isPengolahan ? 'Siklus Olahan' : 'Frekuensi Panen');
-                const lblNilaiTitle = isTangkap ? 'Total Nilai Hasil Tangkapan' : (isPengolahan ? 'Total Nilai Produksi Olahan' : 'Total Nilai Panen');
-                const lblBiayaTitle = isTangkap ? 'Total Biaya Melaut' : (isPengolahan ? 'Total Biaya & Aset Alat' : 'Total Biaya Operasional');
+                const lblKelompok = isPengolahan ? 'Kelompok / UPI' : 'Kelompok Pembudidaya';
+                const lblKegiatan = isPengolahan ? 'Jenis Olahan' : 'Kegiatan Usaha';
+                const lblLuas = isPengolahan ? 'Luas Bangunan UPI' : 'Luas Lahan Kolam';
+                const lblFreq = isPengolahan ? 'Siklus Olahan' : 'Frekuensi Panen';
+                const lblNilaiTitle = isPengolahan ? 'Total Nilai Produksi Olahan' : 'Total Nilai Panen';
+                const lblBiayaTitle = isPengolahan ? 'Total Biaya & Aset Alat' : 'Total Biaya Operasional';
 
                 let html = `
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
