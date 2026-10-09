@@ -206,6 +206,21 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s, border-color 0.3s;
         }
 
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            min-width: 0;
+            overflow: hidden;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .apexcharts-canvas,
+        .apexcharts-canvas svg {
+            max-width: 100% !important;
+        }
+
         .glass-panel:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 24px -1px rgba(0, 0, 0, 0.09);
@@ -600,7 +615,7 @@
             <div id="analyticsRow1" class="grid grid-cols-1 gap-6">
                 
                 <!-- Chart 1: Sebaran Kecamatan (Top 10) -->
-                <div class="glass-card rounded-2xl p-5 sm:p-6 shadow-sm">
+                <div class="glass-card rounded-2xl p-5 sm:p-6 shadow-sm min-w-0 overflow-hidden">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
                         <div>
                             <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
@@ -610,11 +625,11 @@
                             <p class="text-[11px] text-slate-500 dark:text-slate-400" id="chartKecamatanSubtitle">Wilayah dengan jumlah pembudidaya perikanan tertinggi</p>
                         </div>
                     </div>
-                    <div id="chartKecamatan" class="min-h-[320px]"></div>
+                    <div id="chartKecamatan" class="min-h-[320px] w-full min-w-0"></div>
                 </div>
 
                 <!-- Chart b (Khusus Pengolahan): Jangkauan Pemasaran (Top 10) -->
-                <div id="containerChartPemasaran" class="glass-card rounded-2xl p-5 sm:p-6 shadow-sm hidden">
+                <div id="containerChartPemasaran" class="glass-card rounded-2xl p-5 sm:p-6 shadow-sm min-w-0 overflow-hidden hidden">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
                         <div>
                             <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
@@ -624,13 +639,13 @@
                             <p class="text-[11px] text-slate-500 dark:text-slate-400" id="chartPemasaranSubtitle">Wilayah dengan tujuan penjualan produk olahan tertinggi</p>
                         </div>
                     </div>
-                    <div id="chartPemasaran" class="min-h-[320px]"></div>
+                    <div id="chartPemasaran" class="min-h-[320px] w-full min-w-0"></div>
                 </div>
 
             </div>
 
             <!-- Row Dana Hibah: Pemetaan Prioritas Anggaran dan Populasi Pelaku Usaha -->
-            <div id="containerDanaHibahCard" class="glass-card rounded-2xl p-5 sm:p-6 shadow-sm border border-emerald-500/20">
+            <div id="containerDanaHibahCard" class="glass-card rounded-2xl p-5 sm:p-6 shadow-sm border border-emerald-500/20 min-w-0 overflow-hidden">
                 <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-100 dark:border-slate-800">
                     <div>
                         <div class="flex items-center gap-2 flex-wrap mb-1">
@@ -652,7 +667,7 @@
                         <!-- Stat Badges -->
                         <div class="flex items-center gap-1.5 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/60 rounded-xl px-3 py-1.5 shadow-sm">
                             <span class="text-[10px] font-medium text-amber-700 dark:text-amber-300">Total Hibah:</span>
-                            <span id="statTotalHibah" class="text-xs font-extrabold text-amber-900 dark:text-amber-200 font-mono">Rp 0 Jt</span>
+                            <span id="statTotalHibah" class="text-xs font-extrabold text-amber-900 dark:text-amber-200 font-mono">Rp 0 Miliar</span>
                         </div>
                         <div class="flex items-center gap-1.5 bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-900/60 rounded-xl px-3 py-1.5 shadow-sm">
                             <span class="text-[10px] font-medium text-sky-700 dark:text-sky-300">Total Pelaku:</span>
@@ -1405,12 +1420,14 @@
                 state.raw = state.cache[sectorKey];
                 populateDropdownOptions();
                 applyFilters();
+                setTimeout(() => window.dispatchEvent(new Event('resize')), 100);
             } else {
                 await fetchSectorData(sectorKey);
                 if (state.currentSector === sectorKey) {
                     state.raw = state.cache[sectorKey];
                     populateDropdownOptions();
                     applyFilters();
+                    setTimeout(() => window.dispatchEvent(new Event('resize')), 100);
                 }
             }
         }
@@ -1940,7 +1957,14 @@
             const kecSeries = sortedKec.length > 0 ? sortedKec.map(x => x[1]) : [0, 0];
 
             const optKec = {
-                chart: { type: 'bar', height: 320, toolbar: { show: false }, fontFamily: 'Plus Jakarta Sans' },
+                chart: { 
+                    type: 'bar', 
+                    height: 320, 
+                    toolbar: { show: false }, 
+                    fontFamily: 'Plus Jakarta Sans',
+                    redrawOnParentResize: true,
+                    redrawOnWindowResize: true
+                },
                 series: [{ name: isPengolahan ? 'Pelaku Usaha' : 'Pembudidaya', data: kecSeries }],
                 colors: [isPengolahan ? '#0d9488' : '#10b981'],
                 plotOptions: { 
@@ -1972,7 +1996,11 @@
 
             const chartKecEl = document.getElementById('chartKecamatan');
             if (chartKecEl) {
-                if (state.charts.kecamatan) state.charts.kecamatan.destroy();
+                if (state.charts.kecamatan) {
+                    state.charts.kecamatan.destroy();
+                    state.charts.kecamatan = null;
+                }
+                chartKecEl.innerHTML = '';
                 state.charts.kecamatan = new ApexCharts(chartKecEl, optKec);
                 state.charts.kecamatan.render();
             }
@@ -2001,7 +2029,14 @@
                 const pemSeries = sortedPem.length > 0 ? sortedPem.map(x => x[1]) : [1];
 
                 const optPem = {
-                    chart: { type: 'bar', height: 320, toolbar: { show: false }, fontFamily: 'Plus Jakarta Sans' },
+                    chart: { 
+                        type: 'bar', 
+                        height: 320, 
+                        toolbar: { show: false }, 
+                        fontFamily: 'Plus Jakarta Sans',
+                        redrawOnParentResize: true,
+                        redrawOnWindowResize: true
+                    },
                     series: [{ name: 'Frekuensi Penjualan', data: pemSeries }],
                     colors: ['#0284c7'],
                     plotOptions: { 
@@ -2031,7 +2066,11 @@
 
                 const chartPemEl = document.getElementById('chartPemasaran');
                 if (chartPemEl) {
-                    if (state.charts.pemasaran) state.charts.pemasaran.destroy();
+                    if (state.charts.pemasaran) {
+                        state.charts.pemasaran.destroy();
+                        state.charts.pemasaran = null;
+                    }
+                    chartPemEl.innerHTML = '';
                     state.charts.pemasaran = new ApexCharts(chartPemEl, optPem);
                     state.charts.pemasaran.render();
                 }
@@ -2044,6 +2083,8 @@
                     state.charts.pemasaran.destroy();
                     state.charts.pemasaran = null;
                 }
+                const chartPemEl = document.getElementById('chartPemasaran');
+                if (chartPemEl) chartPemEl.innerHTML = '';
             }
 
             // 3. Chart Komposisi Kegiatan (Budidaya) atau Komposisi Jenis Produk Olahan Ikan (Pengolahan)
@@ -2073,7 +2114,13 @@
             const kegSeries = sortedKeg.length > 0 ? sortedKeg.map(x => x[1]) : [1, 0, 0];
 
             const optKeg = {
-                chart: { type: 'donut', height: 260, fontFamily: 'Plus Jakarta Sans' },
+                chart: { 
+                    type: 'donut', 
+                    height: 260, 
+                    fontFamily: 'Plus Jakarta Sans',
+                    redrawOnParentResize: true,
+                    redrawOnWindowResize: true
+                },
                 series: kegSeries,
                 labels: kegLabels,
                 colors: ['#059669', '#06b6d4', '#f59e0b', '#6366f1', '#ec4899', '#8b5cf6', '#14b8a6', '#f97316'],
@@ -2084,7 +2131,11 @@
 
             const chartKegEl = document.getElementById('chartKegiatan');
             if (chartKegEl) {
-                if (state.charts.kegiatan) state.charts.kegiatan.destroy();
+                if (state.charts.kegiatan) {
+                    state.charts.kegiatan.destroy();
+                    state.charts.kegiatan = null;
+                }
+                chartKegEl.innerHTML = '';
                 state.charts.kegiatan = new ApexCharts(chartKegEl, optKeg);
                 state.charts.kegiatan.render();
             }
@@ -2127,7 +2178,13 @@
             const luasSeries = Object.values(luasRanges);
 
             const optLuas = {
-                chart: { type: 'donut', height: 260, fontFamily: 'Plus Jakarta Sans' },
+                chart: { 
+                    type: 'donut', 
+                    height: 260, 
+                    fontFamily: 'Plus Jakarta Sans',
+                    redrawOnParentResize: true,
+                    redrawOnWindowResize: true
+                },
                 series: luasSeries.some(v => v > 0) ? luasSeries : [1, 0, 0],
                 labels: luasLabels,
                 colors: isPengolahan ? ['#0284c7', '#10b981', '#f59e0b'] : ['#06b6d4', '#10b981', '#0284c7', '#f59e0b'],
@@ -2138,7 +2195,11 @@
 
             const chartLuasEl = document.getElementById('chartLuasLahan');
             if (chartLuasEl) {
-                if (state.charts.luas) state.charts.luas.destroy();
+                if (state.charts.luas) {
+                    state.charts.luas.destroy();
+                    state.charts.luas = null;
+                }
+                chartLuasEl.innerHTML = '';
                 state.charts.luas = new ApexCharts(chartLuasEl, optLuas);
                 state.charts.luas.render();
             }
@@ -2202,8 +2263,16 @@
                 const statKecPenerimaEl = document.getElementById('statKecPenerimaHibah');
                 const badgeTahunEl = document.getElementById('danaHibahTahunBadge');
 
-                if (statTotalHibahEl) statTotalHibahEl.innerText = `Rp ${totalHibahJuta.toLocaleString('id-ID')} Jt`;
-                if (statTotalPelakuEl) statTotalPelakuEl.innerText = `${totalPelakuHibah.toLocaleString('id-ID')} ${isPengolahan ? 'Pelaku' : 'Pembudidaya'}`;
+                if (statTotalHibahEl) {
+                    if (totalHibahJuta >= 1000) {
+                        const m = totalHibahJuta / 1000;
+                        const formattedM = (m % 1 === 0) ? m.toString() : m.toLocaleString('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 3 });
+                        statTotalHibahEl.innerText = `Rp ${formattedM} Miliar`;
+                    } else {
+                        statTotalHibahEl.innerText = `Rp ${totalHibahJuta.toLocaleString('id-ID')} Jt`;
+                    }
+                }
+                if (statTotalPelakuEl) statTotalPelakuEl.innerText = `${totalPelakuHibah.toLocaleString('id-ID')} Orang`;
                 if (statKecPenerimaEl) statKecPenerimaEl.innerText = `${kecPenerimaCount} Kec`;
                 if (badgeTahunEl && hibahList.length > 0 && hibahList[0].detail?.tahun) {
                     badgeTahunEl.innerText = `Tahun ${hibahList[0].detail.tahun}`;
@@ -2225,19 +2294,21 @@
                                 reset: false
                             }
                         },
-                        fontFamily: 'Plus Jakarta Sans'
+                        fontFamily: 'Plus Jakarta Sans',
+                        redrawOnParentResize: true,
+                        redrawOnWindowResize: true
                     },
                     series: [
                         {
-                            name: 'Sum of Total Pelaku Perikanan',
+                            name: 'Pelaku Perikanan',
                             data: seriesPelaku
                         },
                         {
-                            name: 'Sum of Dana Hibah (Juta)',
+                            name: 'Dana Hibah',
                             data: seriesHibah
                         }
                     ],
-                    colors: ['#0284c7', '#ea580c'], // Biru & Oranye sesuai panduan grafik
+                    colors: ['#0284c7', '#10b981'], // Biru (Pelaku Perikanan) & Hijau Emerald (Dana Hibah)
                     plotOptions: {
                         bar: {
                             horizontal: false,
@@ -2314,7 +2385,11 @@
                     }
                 };
 
-                if (state.charts.danaHibah) state.charts.danaHibah.destroy();
+                if (state.charts.danaHibah) {
+                    state.charts.danaHibah.destroy();
+                    state.charts.danaHibah = null;
+                }
+                chartHibahEl.innerHTML = '';
                 state.charts.danaHibah = new ApexCharts(chartHibahEl, optHibah);
                 state.charts.danaHibah.render();
             }
@@ -2799,6 +2874,10 @@
                     initMap();
                     if (state.map) state.map.invalidateSize();
                 }, 150);
+            } else if (tabId === 'analytics') {
+                setTimeout(() => {
+                    window.dispatchEvent(new Event('resize'));
+                }, 50);
             }
 
             lucide.createIcons();
