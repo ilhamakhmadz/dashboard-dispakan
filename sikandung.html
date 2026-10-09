@@ -2266,7 +2266,7 @@
                 if (statTotalHibahEl) {
                     if (totalHibahJuta >= 1000) {
                         const m = totalHibahJuta / 1000;
-                        const formattedM = (m % 1 === 0) ? m.toString() : m.toLocaleString('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 3 });
+                        const formattedM = m.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                         statTotalHibahEl.innerText = `Rp ${formattedM} Miliar`;
                     } else {
                         statTotalHibahEl.innerText = `Rp ${totalHibahJuta.toLocaleString('id-ID')} Jt`;
@@ -2362,7 +2362,9 @@
                     },
                     legend: {
                         position: 'top',
-                        horizontalAlign: 'right',
+                        horizontalAlign: 'left',
+                        offsetX: 0,
+                        offsetY: 0,
                         labels: {
                             colors: textColor
                         }
