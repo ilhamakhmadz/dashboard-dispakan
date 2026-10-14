@@ -25,12 +25,23 @@
                     },
                     colors: {
                         brand: {
-                            emerald: '#10b981',
-                            dark: '#064e3b',
+                            emerald: '#117a8b',
+                            dark: '#0a4b57',
                             light: '#ecfdf5',
-                            accent: '#34d399',
-                            cyan: '#06b6d4',
-                            blue: '#0284c7'
+                            accent: '#4dbdaf',
+                            cyan: '#4dbdaf',
+                            blue: '#117a8b',
+                            1: '#1d2d35',
+                            2: '#0a4b57',
+                            3: '#117a8b',
+                            4: '#4dbdaf',
+                            5: '#2e8a57',
+                            6: '#dc3545',
+                            7: '#e07a5f',
+                            8: '#f4a261',
+                            9: '#e9c46a',
+                            10: '#f5f0da',
+                            11: '#94a3a8'
                         }
                     }
                 }
@@ -49,28 +60,28 @@
 
     <style>
         :root {
-            --bg-color: #f1f5f9;
-            --card-bg: rgba(255, 255, 255, 0.85);
-            --card-border: rgba(16, 185, 129, 0.25);
+            --bg-color: #f8fafc;
+            --card-bg: rgba(255, 255, 255, 0.88);
+            --card-border: rgba(17, 122, 139, 0.2);
             --text-main: #0f172a;
             --text-muted: #64748b;
-            --primary: #059669;
-            --accent: #0284c7;
-            --accent-glow: rgba(2, 132, 199, 0.1);
-            --primary-glow: rgba(5, 150, 105, 0.12);
+            --primary: #117a8b;
+            --accent: #4dbdaf;
+            --accent-glow: rgba(77, 189, 175, 0.15);
+            --primary-glow: rgba(17, 122, 139, 0.15);
             --font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
         }
 
         [data-theme="dark"] {
             --bg-color: #0b0f19;
-            --card-bg: rgba(20, 27, 45, 0.7);
-            --card-border: rgba(16, 185, 129, 0.18);
+            --card-bg: rgba(20, 27, 45, 0.75);
+            --card-border: rgba(77, 189, 175, 0.2);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --primary: #10b981;
-            --accent: #38bdf8;
-            --accent-glow: rgba(56, 189, 248, 0.15);
-            --primary-glow: rgba(16, 185, 129, 0.15);
+            --primary: #4dbdaf;
+            --accent: #117a8b;
+            --accent-glow: rgba(77, 189, 175, 0.15);
+            --primary-glow: rgba(17, 122, 139, 0.2);
         }
 
         * {
@@ -126,7 +137,7 @@
             font-size: 0.82rem;
             text-transform: uppercase;
             letter-spacing: 1.5px;
-            color: var(--primary);
+            color: #117a8b !important;
             font-weight: 700;
             margin-bottom: 0.25rem;
         }
@@ -168,29 +179,29 @@
         }
 
         .info-banner {
-            background: rgba(5, 150, 105, 0.08);
-            border-left: 4px solid var(--primary);
+            background: rgba(77, 189, 175, 0.12);
+            border: 1px solid rgba(77, 189, 175, 0.45);
+            border-left: 4px solid #4dbdaf;
             border-radius: 12px;
-            padding: 0.85rem 1.1rem;
+            padding: 0.9rem 1.15rem;
             margin-bottom: 1.25rem;
             display: flex;
             gap: 0.75rem;
             align-items: flex-start;
-            color: var(--text-main);
-            line-height: 1.5;
+            color: #1d2d35;
+            line-height: 1.6;
             font-size: 0.85rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
-            border: 1px solid var(--card-border);
-            border-left-width: 4px;
+            box-shadow: 0 2px 10px rgba(77, 189, 175, 0.06);
         }
 
         [data-theme="dark"] .info-banner {
-            background: rgba(16, 185, 129, 0.05);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            background: rgba(77, 189, 175, 0.1);
+            color: #e2e8f0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
         }
 
         .info-banner-icon {
-            color: var(--primary);
+            color: #117a8b;
             flex-shrink: 0;
             margin-top: 0.15rem;
         }
@@ -361,16 +372,16 @@
                 
                 <!-- Left: Logo, Dept Name, Main Title & Badge -->
                 <div class="flex items-start gap-3.5">
-                    <div class="logo-area flex items-center justify-center w-12 h-12 rounded-2xl bg-white dark:bg-slate-800 border border-emerald-500/25 shadow-md shadow-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5">
-                        <i data-lucide="fish" class="w-6 h-6"></i>
+                    <div class="logo-area flex items-center justify-center w-12 h-12 rounded-2xl bg-white dark:bg-slate-800 border border-[#117a8b]/25 shadow-md shadow-[#117a8b]/10 text-[#117a8b] flex-shrink-0 mt-0.5">
+                        <i data-lucide="fish" class="w-6 h-6 text-[#117a8b]"></i>
                     </div>
                     <div>
-                        <div class="dept-title text-xs font-bold text-emerald-600 dark:text-emerald-400 tracking-wider uppercase mb-1">
+                        <div class="dept-title text-xs font-bold text-[#117a8b] tracking-wider uppercase mb-1">
                             Dinas Ketahanan Pangan dan Perikanan Kabupaten Bandung (DISPAKAN)
                         </div>
                         <div class="flex items-center gap-2.5 flex-wrap">
                             <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-none">SIKANDUNG</h1>
-                            <span id="currentSectorBadge" class="text-[11px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-100/90 dark:bg-emerald-950/90 px-2.5 py-0.5 rounded-full border border-emerald-300 dark:border-emerald-800 uppercase tracking-wider shadow-sm">
+                            <span id="currentSectorBadge" class="text-[11px] font-bold text-[#117a8b] bg-[#117a8b]/10 px-2.5 py-0.5 rounded-full border border-[#117a8b]/30 uppercase tracking-wider shadow-sm">
                                 BUDIDAYA
                             </span>
                         </div>
@@ -382,8 +393,8 @@
                 <div class="flex flex-wrap items-center lg:justify-end gap-2">
                     <div id="sync-time" class="text-xs text-slate-600 dark:text-slate-300 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 font-mono">
                         <span class="relative flex h-2 w-2">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#117a8b] opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-[#117a8b]"></span>
                         </span>
                         <span id="current-date-nav">-</span>
                     </div>
@@ -394,7 +405,7 @@
                     </a>
 
                     <button id="refresh-btn" onclick="fetchAllData(true)" title="Sinkronisasi Data API">
-                        <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-emerald-600"></i>
+                        <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-[#117a8b]"></i>
                         <span>Sinkronisasi</span>
                     </button>
 
@@ -402,12 +413,12 @@
                         <span id="theme-icon">☀️</span> <span id="theme-text">Light Mode</span>
                     </button>
 
-                    <button id="export-btn" onclick="exportToExcel()" class="!bg-emerald-600 !text-white !border-emerald-600 hover:!bg-emerald-700 shadow-sm">
+                    <button id="export-btn" onclick="exportToExcel()" class="!bg-[#117a8b] !text-white !border-[#117a8b] hover:!bg-[#0a4b57] shadow-sm">
                         <i data-lucide="download" class="w-3.5 h-3.5"></i>
                         <span>Export Excel</span>
                     </button>
 
-                    <button onclick="window.print()" id="print-btn" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-emerald-500 transition">
+                    <button onclick="window.print()" id="print-btn" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-[#117a8b] transition">
                         <i data-lucide="printer" class="w-3.5 h-3.5"></i>
                         <span>Cetak</span>
                     </button>
@@ -415,9 +426,9 @@
             </div>
 
             <!-- Sektors Switcher Pills (CPPD Design) -->
-            <div class="flex items-center gap-2 mt-4 p-1 bg-slate-200/60 dark:bg-slate-800/60 rounded-2xl border border-emerald-500/20 w-max max-w-full overflow-x-auto">
+            <div class="flex items-center gap-2 mt-4 p-1 bg-slate-200/60 dark:bg-slate-800/60 rounded-2xl border border-[#117a8b]/20 w-max max-w-full overflow-x-auto">
                 <button onclick="switchSector('budidaya')" id="sector-btn-budidaya" class="sector-pill active">
-                    <i data-lucide="waves" class="w-4 h-4 text-emerald-600"></i>
+                    <i data-lucide="waves" class="w-4 h-4 text-[#117a8b]"></i>
                     <span>Perikanan Budidaya</span>
                 </button>
                 <button onclick="switchSector('pengolahan')" id="sector-btn-pengolahan" class="sector-pill">
@@ -429,7 +440,7 @@
 
         <!-- INFO BANNER (CPPD STYLE) -->
         <div class="info-banner">
-            <i data-lucide="info" class="info-banner-icon w-5 h-5 text-emerald-600 flex-shrink-0"></i>
+            <i data-lucide="info" class="info-banner-icon w-5 h-5 text-[#117a8b] flex-shrink-0"></i>
             <div id="sectorInfoBannerText" class="text-xs leading-relaxed text-slate-700 dark:text-slate-300">
                 Dashboard SIKANDUNG (Sistem Informasi Pendataan Perikanan) menyajikan data sensus By Name By Address (BNBA) terintegrasi perikanan budidaya dan unit pengolahan hasil perikanan (UPI) Kabupaten Bandung.
             </div>
@@ -619,7 +630,7 @@
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
                         <div>
                             <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                                <i data-lucide="bar-chart-2" class="w-4 h-4 text-emerald-600"></i>
+                                <i data-lucide="bar-chart-2" class="w-4 h-4 text-[#117a8b]"></i>
                                 <span id="chartKecamatanTitle">Sebaran Pembudidaya per Kecamatan (Top 10)</span>
                             </h3>
                             <p class="text-[11px] text-slate-500 dark:text-slate-400" id="chartKecamatanSubtitle">Wilayah dengan jumlah pembudidaya perikanan tertinggi</p>
@@ -645,18 +656,18 @@
             </div>
 
             <!-- Row Dana Hibah: Pemetaan Prioritas Anggaran dan Populasi Pelaku Usaha -->
-            <div id="containerDanaHibahCard" class="glass-card rounded-2xl p-5 sm:p-6 shadow-sm border border-emerald-500/20 min-w-0 overflow-hidden">
+            <div id="containerDanaHibahCard" class="glass-card rounded-2xl p-5 sm:p-6 shadow-sm border border-[#117a8b]/20 min-w-0 overflow-hidden">
                 <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-100 dark:border-slate-800">
                     <div>
                         <div class="flex items-center gap-2 flex-wrap mb-1">
-                            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#117a8b]/10 dark:bg-[#117a8b]/20 text-[#117a8b] border border-[#117a8b]/30">
                                 <i data-lucide="wallet" class="w-3 h-3"></i>
                                 SIKANDUNG Dana Hibah
                             </span>
                             <span id="danaHibahTahunBadge" class="text-[10px] font-semibold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full">Tahun 2025</span>
                         </div>
                         <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                            <i data-lucide="scale" class="w-4 h-4 text-amber-500"></i>
+                            <i data-lucide="scale" class="w-4 h-4 text-[#117a8b]"></i>
                             <span id="danaHibahTitle">Pemetaan Prioritas Anggaran dan Populasi Pelaku Usaha</span>
                         </h3>
                         <p class="text-[11px] text-slate-500 dark:text-slate-400" id="danaHibahSubtitle">Perbandingan alokasi dana tahun berjalan untuk penentuan target wilayah tahun depan</p>
@@ -665,17 +676,17 @@
                     <!-- Summary Badges & Quick Sorter -->
                     <div class="flex flex-wrap items-center gap-2">
                         <!-- Stat Badges -->
-                        <div class="flex items-center gap-1.5 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/60 rounded-xl px-3 py-1.5 shadow-sm">
-                            <span class="text-[10px] font-medium text-amber-700 dark:text-amber-300">Total Hibah:</span>
-                            <span id="statTotalHibah" class="text-xs font-extrabold text-amber-900 dark:text-amber-200 font-mono">Rp 0 Miliar</span>
+                        <div class="flex items-center gap-1.5 bg-[#2e8a57]/10 dark:bg-[#2e8a57]/20 border border-[#2e8a57]/30 rounded-xl px-3 py-1.5 shadow-sm">
+                            <span class="text-[10px] font-medium text-[#2e8a57] dark:text-[#8ecdab]">Total Hibah:</span>
+                            <span id="statTotalHibah" class="text-xs font-extrabold text-[#2e8a57] dark:text-[#8ecdab] font-mono">Rp 0 Miliar</span>
                         </div>
-                        <div class="flex items-center gap-1.5 bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-900/60 rounded-xl px-3 py-1.5 shadow-sm">
-                            <span class="text-[10px] font-medium text-sky-700 dark:text-sky-300">Total Pelaku:</span>
-                            <span id="statTotalPelakuHibah" class="text-xs font-extrabold text-sky-900 dark:text-sky-200 font-mono">0 Orang</span>
+                        <div class="flex items-center gap-1.5 bg-[#117a8b]/10 dark:bg-[#117a8b]/20 border border-[#117a8b]/30 rounded-xl px-3 py-1.5 shadow-sm">
+                            <span class="text-[10px] font-medium text-[#117a8b] dark:text-[#7ec4cf]">Total Pelaku:</span>
+                            <span id="statTotalPelakuHibah" class="text-xs font-extrabold text-[#117a8b] dark:text-[#7ec4cf] font-mono">0 Orang</span>
                         </div>
-                        <div class="flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60 rounded-xl px-3 py-1.5 shadow-sm">
-                            <span class="text-[10px] font-medium text-emerald-700 dark:text-emerald-300">Penerima:</span>
-                            <span id="statKecPenerimaHibah" class="text-xs font-extrabold text-emerald-900 dark:text-emerald-200 font-mono">0 Kec</span>
+                        <div class="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5 shadow-sm">
+                            <span class="text-[10px] font-medium text-slate-600 dark:text-slate-400">Penerima:</span>
+                            <span id="statKecPenerimaHibah" class="text-xs font-extrabold text-slate-800 dark:text-slate-200 font-mono">0 Kec</span>
                         </div>
                         
                         <!-- Sort Control -->
@@ -705,7 +716,7 @@
                     <div>
                         <div class="flex items-center justify-between mb-1">
                             <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                                <i data-lucide="pie-chart" class="w-4 h-4 text-emerald-600"></i>
+                                <i data-lucide="pie-chart" class="w-4 h-4 text-[#117a8b]"></i>
                                 <span id="chartKegiatanTitle">Komposisi Jenis Kegiatan Usaha Budidaya</span>
                             </h3>
                         </div>
@@ -720,7 +731,7 @@
                     <div>
                         <div class="flex items-center justify-between mb-1">
                             <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                                <i data-lucide="layers" class="w-4 h-4 text-cyan-600"></i>
+                                <i data-lucide="layers" class="w-4 h-4 text-[#117a8b]"></i>
                                 <span id="chartLuasTitle">Kapasitas Luas Lahan Pembudidaya</span>
                             </h3>
                         </div>
@@ -741,7 +752,7 @@
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                     <div>
                         <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                            <i data-lucide="map-pinned" class="w-5 h-5 text-emerald-600"></i>
+                            <i data-lucide="map-pinned" class="w-5 h-5 text-[#117a8b]"></i>
                             <span id="mapHeaderTitle">Peta Sebaran Pelaku Perikanan Kab. Bandung</span>
                         </h3>
                         <p class="text-xs text-slate-500 dark:text-slate-400">Klik titik kecamatan untuk melihat ringkasan responden dan luas sebaran</p>
@@ -749,9 +760,9 @@
                     <div class="flex items-center gap-2">
                         <span class="text-xs text-slate-500 font-medium">Legenda Kepadatan:</span>
                         <div class="flex items-center gap-1 text-[10px] font-bold">
-                            <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">&lt; 20</span>
-                            <span class="px-2 py-0.5 rounded bg-emerald-300 text-emerald-900">20 - 50</span>
-                            <span class="px-2 py-0.5 rounded bg-emerald-600 text-white">&gt; 50</span>
+                            <span class="px-2 py-0.5 rounded bg-[#117a8b]/20 text-[#0a4b57] dark:text-[#7ec4cf]">&lt; 20</span>
+                            <span class="px-2 py-0.5 rounded bg-[#117a8b]/60 text-white">20 - 50</span>
+                            <span class="px-2 py-0.5 rounded bg-[#117a8b] text-white">&gt; 50</span>
                         </div>
                     </div>
                 </div>
@@ -1966,7 +1977,7 @@
                     redrawOnWindowResize: true
                 },
                 series: [{ name: isPengolahan ? 'Pelaku Usaha' : 'Pembudidaya', data: kecSeries }],
-                colors: [isPengolahan ? '#0d9488' : '#10b981'],
+                colors: ['#117a8b'],
                 plotOptions: { 
                     bar: { 
                         borderRadius: 8, 
@@ -2113,6 +2124,18 @@
             const kegLabels = sortedKeg.length > 0 ? sortedKeg.map(x => x[0]) : (isPengolahan ? ['Bandeng', 'Tongkol', 'Deles'] : ['Pembesaran', 'Pembenihan', 'Ikan Hias']);
             const kegSeries = sortedKeg.length > 0 ? sortedKeg.map(x => x[1]) : [1, 0, 0];
 
+            // Mapping warna kegiatan: Pembesaran (Warna 4), Pembenihan (Warna 7), Ikan Hias (Warna 9)
+            const kegColorMap = {
+                'pembesaran': '#4dbdaf', // warna 4
+                'pembenihan': '#e07a5f', // warna 7
+                'ikan hias': '#e9c46a'   // warna 9
+            };
+            const defaultKegColors = ['#4dbdaf', '#e07a5f', '#e9c46a', '#117a8b', '#2e8a57', '#0a4b57', '#dc3545', '#f4a261'];
+            const kegColors = kegLabels.map((lbl, idx) => {
+                const key = (lbl || '').toLowerCase().trim();
+                return kegColorMap[key] || defaultKegColors[idx % defaultKegColors.length];
+            });
+
             const optKeg = {
                 chart: { 
                     type: 'donut', 
@@ -2123,7 +2146,7 @@
                 },
                 series: kegSeries,
                 labels: kegLabels,
-                colors: ['#059669', '#06b6d4', '#f59e0b', '#6366f1', '#ec4899', '#8b5cf6', '#14b8a6', '#f97316'],
+                colors: kegColors,
                 legend: { position: 'bottom', labels: { colors: textColor } },
                 dataLabels: { enabled: true, formatter: (val) => val.toFixed(0) + '%' },
                 tooltip: { theme: isDark ? 'dark' : 'light' }
@@ -2153,7 +2176,7 @@
                 `).join('');
             }
 
-            // 4. Chart Kapasitas Luas (Budidaya: <50, 50-200, 200-500, >500; Pengolahan: <50, 50-100, >100)
+            // 4. Chart Kapasitas Luas (Budidaya: 3 kategori [<200 warna 2, 200-500 warna 6, >500 warna 8]; Pengolahan: <50, 50-100, >100)
             let luasRanges = {};
             if (isPengolahan) {
                 luasRanges = { '< 50 m²': 0, '50 - 100 m²': 0, '> 100 m²': 0 };
@@ -2164,11 +2187,10 @@
                     else luasRanges['> 100 m²']++;
                 });
             } else {
-                luasRanges = { '< 50 m²': 0, '50 - 200 m²': 0, '200 - 500 m²': 0, '> 500 m²': 0 };
+                luasRanges = { '< 200 m²': 0, '200 - 500 m²': 0, '> 500 m²': 0 };
                 state.filtered.responden.forEach(item => {
                     const l = parseFloat(item.detail?.luas_tempat_m2 || item.detail?.luas_bangunan_keseluruhan_m2 || item.detail?.luas_bangunan_produksi_m2) || 0;
-                    if (l < 50) luasRanges['< 50 m²']++;
-                    else if (l <= 200) luasRanges['50 - 200 m²']++;
+                    if (l < 200) luasRanges['< 200 m²']++;
                     else if (l <= 500) luasRanges['200 - 500 m²']++;
                     else luasRanges['> 500 m²']++;
                 });
@@ -2187,7 +2209,7 @@
                 },
                 series: luasSeries.some(v => v > 0) ? luasSeries : [1, 0, 0],
                 labels: luasLabels,
-                colors: isPengolahan ? ['#0284c7', '#10b981', '#f59e0b'] : ['#06b6d4', '#10b981', '#0284c7', '#f59e0b'],
+                colors: isPengolahan ? ['#0a4b57', '#117a8b', '#f4a261'] : ['#0a4b57', '#dc3545', '#f4a261'],
                 legend: { position: 'bottom', labels: { colors: textColor } },
                 dataLabels: { enabled: true, formatter: (val) => val.toFixed(0) + '%' },
                 tooltip: { theme: isDark ? 'dark' : 'light' }
@@ -2308,7 +2330,7 @@
                             data: seriesHibah
                         }
                     ],
-                    colors: ['#0284c7', '#10b981'], // Biru (Pelaku Perikanan) & Hijau Emerald (Dana Hibah)
+                    colors: ['#117a8b', '#2e8a57'], // Warna 3 (Pelaku Perikanan) & Warna 5 (Dana Hibah)
                     plotOptions: {
                         bar: {
                             horizontal: false,
@@ -2808,7 +2830,7 @@
             Object.entries(kecData).forEach(([kecName, data]) => {
                 const coords = KECAMATAN_COORDS[kecName] || [-7.025, 107.60];
                 const count = data.count;
-                let color = state.currentSector === 'pengolahan' ? '#0d9488' : '#10b981';
+                let color = '#117a8b'; // Warna 3 (panduan.md)
                 let radius = count > 50 ? 22 : (count > 20 ? 16 : 11);
 
                 const marker = L.circleMarker(coords, {
@@ -2822,14 +2844,14 @@
 
                 const popupHtml = `
                     <div class="p-3 font-sans min-w-[200px]">
-                        <div class="bg-emerald-600 text-white p-2 -m-3 mb-2.5 rounded-t-lg">
+                        <div class="bg-[#117a8b] text-white p-2 -m-3 mb-2.5 rounded-t-lg">
                             <h4 class="font-bold text-xs uppercase">${kecName}</h4>
-                            <p class="text-[10px] text-emerald-100">${SECTOR_APIS[state.currentSector].title}</p>
+                            <p class="text-[10px] text-teal-100">${SECTOR_APIS[state.currentSector].title}</p>
                         </div>
                         <table class="w-full text-xs text-slate-700">
                             <tr class="border-b border-slate-100">
                                 <td class="py-1 text-slate-500">Jumlah Responden</td>
-                                <td class="py-1 text-right font-bold text-emerald-700">${data.count} Pelaku</td>
+                                <td class="py-1 text-right font-bold text-[#117a8b]">${data.count} Pelaku</td>
                             </tr>
                             <tr class="border-b border-slate-100">
                                 <td class="py-1 text-slate-500">Total Luas</td>

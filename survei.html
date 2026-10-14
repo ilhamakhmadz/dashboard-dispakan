@@ -46,16 +46,16 @@
 
     <style>
         :root {
-            --bg-color: #f1f5f9;
-            --card-bg: rgba(255, 255, 255, 0.85);
-            --card-border: rgba(16, 185, 129, 0.25);
+            --bg-color: #f8fafc;
+            --card-bg: rgba(255, 255, 255, 0.88);
+            --card-border: rgba(17, 122, 139, 0.2);
             --text-main: #0f172a;
             --text-muted: #64748b;
-            --primary: #059669;
-            --accent: #dc2626;
-            --accent-glow: rgba(220, 38, 38, 0.1);
-            --primary-glow: rgba(5, 150, 105, 0.1);
-            --success: #059669;
+            --primary: #117a8b;
+            --accent: #dc3545;
+            --accent-glow: rgba(220, 53, 69, 0.1);
+            --primary-glow: rgba(17, 122, 139, 0.12);
+            --success: #2e8a57;
             --font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
         }
 
@@ -119,8 +119,8 @@
             font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 1.5px;
-            color: var(--primary);
-            font-weight: 600;
+            color: #117a8b;
+            font-weight: 700;
             margin-bottom: 0.5rem;
         }
 
@@ -269,29 +269,29 @@
         }
 
         .info-banner {
-            background: rgba(5, 150, 105, 0.08);
-            border-left: 4px solid var(--primary);
-            border-radius: 8px;
-            padding: 0.85rem 1.1rem;
+            background: rgba(77, 189, 175, 0.12);
+            border: 1px solid rgba(77, 189, 175, 0.45);
+            border-left: 4px solid #4dbdaf;
+            border-radius: 12px;
+            padding: 0.9rem 1.15rem;
             margin-bottom: 1.25rem;
             display: flex;
             gap: 0.75rem;
             align-items: flex-start;
-            color: var(--text-main);
-            line-height: 1.5;
+            color: #1d2d35;
+            line-height: 1.6;
             font-size: 0.85rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
-            border: 1px solid var(--card-border);
-            border-left-width: 4px;
+            box-shadow: 0 2px 10px rgba(77, 189, 175, 0.06);
         }
 
         .info-banner-icon {
-            color: var(--primary);
+            color: #117a8b;
             flex-shrink: 0;
-            margin-top: 0.1rem;
+            margin-top: 0.15rem;
         }
 
-        #refresh-btn {
+        #refresh-btn,
+        .btn-nav {
             cursor: pointer;
             padding: 0.4rem 0.8rem;
             border-radius: 50px;
@@ -305,11 +305,14 @@
             border: 1px solid var(--card-border);
             transition: all 0.3s;
             outline: none;
+            text-decoration: none;
         }
 
-        #refresh-btn:hover {
+        #refresh-btn:hover,
+        .btn-nav:hover {
             border-color: var(--primary);
             box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+            color: var(--primary);
         }
 
         .animate-fade-in {
@@ -360,16 +363,16 @@
     </style>
 </head>
 
-<body class="text-slate-800 antialiased selection:bg-emerald-100 selection:text-emerald-900">
+<body class="text-slate-800 antialiased selection:bg-[#117a8b]/20 selection:text-[#0a4b57]">
 
     <!-- LOADING SCREEN -->
     <div id="loading-screen"
         class="fixed inset-0 z-[1000] bg-white flex flex-col items-center justify-center transition-all duration-700 ease-in-out">
         <div class="relative w-24 h-24 mb-8">
             <div class="absolute inset-0 border-4 border-slate-100 rounded-full"></div>
-            <div class="absolute inset-0 border-4 border-emerald-600 rounded-full border-t-transparent animate-spin">
+            <div class="absolute inset-0 border-4 border-[#117a8b] rounded-full border-t-transparent animate-spin">
             </div>
-            <div class="absolute inset-0 flex items-center justify-center text-emerald-600">
+            <div class="absolute inset-0 flex items-center justify-center text-[#117a8b]">
                 <i data-lucide="utensils" class="w-8 h-8 animate-pulse"></i>
             </div>
         </div>
@@ -383,18 +386,22 @@
 
         <div class="w-72 h-2.5 bg-slate-100 rounded-full overflow-hidden relative shadow-inner">
             <div id="loading-bar-inner"
-                class="h-full bg-gradient-to-r from-emerald-500 to-green-600 rounded-full transition-all duration-500 ease-out"
+                class="h-full bg-gradient-to-r from-[#117a8b] to-[#4dbdaf] rounded-full transition-all duration-500 ease-out"
                 style="width: 5%"></div>
         </div>
-        <p id="loading-pct" class="text-xs font-bold text-emerald-600 mt-3 font-mono">5%</p>
+        <p id="loading-pct" class="text-xs font-bold text-[#117a8b] mt-3 font-mono">5%</p>
     </div>
 
     <div class="container" id="app">
         <!-- HEADER (CPPD STYLE) -->
         <header>
-            <div style="position: absolute; top: 0rem; right: 0rem; display: flex; align-items: center; gap: 0.5rem;">
+            <div style="position: absolute; top: 0rem; right: 0rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
                 <span id="current-date"
                     style="font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.25rem; margin-right: 0.5rem;">Loading...</span>
+                <a href="https://aplikasi.bandungkab.go.id/publik/dispakan-portal-dashboard" class="btn-nav" id="back-dashboard-btn" title="Kembali ke Dashboard">
+                    <i data-lucide="layout-dashboard" style="width: 14px; height: 14px;"></i>
+                    <span>Kembali ke Dashboard</span>
+                </a>
                 <button id="refresh-btn" onclick="window.location.reload()" title="Muat Ulang Data">
                     <i data-lucide="refresh-cw" style="width: 14px; height: 14px;"></i>
                     <span>Sinkronisasi</span>
@@ -403,11 +410,11 @@
 
             <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
                 <div class="logo-area"
-                    style="display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; background: var(--card-bg); border: 1px solid var(--card-border); box-shadow: 0 4px 15px var(--primary-glow); color: var(--primary); flex-shrink: 0;">
-                    <i data-lucide="activity" style="width: 22px; height: 22px;"></i>
+                    style="display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; background: rgba(17, 122, 139, 0.08); border: 1px solid rgba(17, 122, 139, 0.25); box-shadow: 0 4px 15px rgba(17, 122, 139, 0.12); color: #117a8b; flex-shrink: 0;">
+                    <i data-lucide="activity" style="width: 22px; height: 22px; color: #117a8b;"></i>
                 </div>
                 <div class="dept-title"
-                    style="margin-bottom: 0; line-height: 1.3; max-width: 700px; font-size: 0.8rem;">
+                    style="margin-bottom: 0; line-height: 1.3; max-width: 700px; font-size: 0.8rem; color: #117a8b;">
                     Dinas Ketahanan Pangan dan Perikanan Kabupaten Bandung (DISPAKAN)
                 </div>
             </div>
@@ -446,8 +453,8 @@
                 <div
                     style="font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.5rem;">
                     <span
-                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span> 31 Kecamatan Terdata
+                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#117a8b]/10 text-[#117a8b] border border-[#117a8b]/30">
+                        <span class="w-2 h-2 rounded-full bg-[#117a8b]"></span> 31 Kecamatan Terdata
                     </span>
                 </div>
             </div>
@@ -456,24 +463,24 @@
             <div class="grid-summary" id="stats-container">
                 <div class="glass-panel summary-card">
                     <div class="title">Skor Susenas Terkini</div>
-                    <div class="value" id="val-susenas">95,78</div>
-                    <div class="subtitle"><span class="pct-badge" id="badge-susenas">BPS 2025</span></div>
+                    <div class="value" id="val-susenas" style="color: #0a4b57;">95,78</div>
+                    <div class="subtitle"><span class="pct-badge" style="background: #0a4b57;" id="badge-susenas">BPS 2025</span></div>
                 </div>
                 <div class="glass-panel summary-card">
                     <div class="title">Skor Survei Terkini</div>
-                    <div class="value" id="val-survei">87,90</div>
-                    <div class="subtitle"><span class="pct-badge" id="badge-survei">DISPAKAN 2025</span></div>
+                    <div class="value" id="val-survei" style="color: #9a7312;">87,90</div>
+                    <div class="subtitle"><span class="pct-badge" style="background: #e9c46a; color: #1d2d35;" id="badge-survei">DISPAKAN 2025</span></div>
                 </div>
                 <div class="glass-panel summary-card">
                     <div class="title">Proyeksi (Susenas)</div>
-                    <div class="value" id="val-proyeksi" style="color: #6366f1;">91,50</div>
-                    <div class="subtitle"><span class="pct-badge" style="background:#6366f1;"
+                    <div class="value" id="val-proyeksi" style="color: #117a8b;">91,50</div>
+                    <div class="subtitle"><span class="pct-badge" style="background: #4dbdaf; color: #1d2d35;"
                             id="badge-proyeksi">PROYEKSI 2026</span></div>
                 </div>
                 <div class="glass-panel summary-card">
                     <div class="title">Gap Terakhir</div>
-                    <div class="value" id="val-gap" style="color: #dc2626;">-7,88</div>
-                    <div class="subtitle"><span class="pct-badge accent" id="badge-gap">TAHUN 2025</span></div>
+                    <div class="value" id="val-gap" style="color: #dc3545;">-7,88</div>
+                    <div class="subtitle"><span class="pct-badge accent" style="background: #dc3545;" id="badge-gap">TAHUN 2025</span></div>
                 </div>
             </div>
         </section>
@@ -484,7 +491,7 @@
                 class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100">
                 <div>
                     <h3 class="font-bold text-slate-800 text-lg flex items-center gap-2">
-                        <span class="bg-emerald-100 p-1.5 rounded-lg text-emerald-600">
+                        <span class="bg-[#117a8b]/10 p-1.5 rounded-lg text-[#117a8b]">
                             <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
                         </span>
                         Skor Pola Pangan Harapan (PPH) Konsumsi Kecamatan berdasarkan Survei
@@ -493,24 +500,24 @@
                         Arahkan kursor atau klik pada batang kecamatan untuk melihat pop-up informasi skor PPH.
                     </p>
                 </div>
-                <div class="flex items-center gap-3">
+                <div class="flex flex-wrap items-center gap-2.5">
                     <span
-                        class="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-lg">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Baik (&gt;90)
+                        class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2e8a57] bg-[#2e8a57]/10 border border-[#2e8a57]/30 px-3 py-1.5 rounded-lg">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#2e8a57]"></span> Baik (&gt;90)
                     </span>
                     <span
-                        class="inline-flex items-center gap-1.5 text-xs font-medium text-amber-700 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-lg">
-                        <span class="w-2 h-2 rounded-full bg-amber-500"></span> Sedang (80-90)
+                        class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#9a7312] bg-[#e9c46a]/20 border border-[#e9c46a]/50 px-3 py-1.5 rounded-lg">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#e9c46a]"></span> Sedang (80-90)
                     </span>
                     <span
-                        class="inline-flex items-center gap-1.5 text-xs font-medium text-rose-700 bg-rose-50 border border-rose-200 px-3 py-1.5 rounded-lg">
-                        <span class="w-2 h-2 rounded-full bg-rose-500"></span> Kurang (&lt;80)
+                        class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#c25638] bg-[#e07a5f]/20 border border-[#e07a5f]/50 px-3 py-1.5 rounded-lg">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#e07a5f]"></span> Kurang (&lt;80)
                     </span>
                 </div>
             </div>
 
             <!-- Bar Chart Container -->
-            <div id="chart-kecamatan" class="w-full min-h-[420px] flex items-center justify-center">
+            <div id="chart-kecamatan" class="w-full min-h-[820px] flex items-center justify-center">
                 <div class="loader opacity-50"></div>
             </div>
         </div>
@@ -521,7 +528,7 @@
                 class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100">
                 <div>
                     <h3 class="font-bold text-slate-800 text-lg flex items-center gap-2">
-                        <span class="bg-emerald-100 p-1.5 rounded-lg text-emerald-600">
+                        <span class="bg-[#117a8b]/10 p-1.5 rounded-lg text-[#117a8b]">
                             <i data-lucide="line-chart" class="w-5 h-5"></i>
                         </span>
                         Tren Perkembangan Skor PPH Konsumsi
@@ -532,13 +539,13 @@
                 </div>
                 <div class="flex flex-wrap items-center gap-4 text-xs font-semibold text-slate-600">
                     <span class="flex items-center gap-1.5">
-                        <span class="w-3 h-3 rounded-full bg-emerald-600"></span> Susenas
+                        <span class="w-3 h-3 rounded-full bg-[#0a4b57]"></span> Susenas
                     </span>
                     <span class="flex items-center gap-1.5">
-                        <span class="w-3 h-3 rounded-full bg-amber-500"></span> Survei
+                        <span class="w-3 h-3 rounded-full bg-[#e9c46a]"></span> Survei
                     </span>
                     <span class="flex items-center gap-1.5">
-                        <span class="w-3 h-3 rounded-full bg-indigo-500 border border-indigo-200"></span> Prediksi
+                        <span class="w-3 h-3 rounded-full bg-[#4dbdaf]"></span> Prediksi
                         (Susenas)
                     </span>
                 </div>
@@ -547,7 +554,7 @@
             <!-- Subheading inside card -->
             <div class="mb-4">
                 <h4 class="text-sm font-bold text-slate-800">Grafik Komparasi: Susenas vs Survei</h4>
-                <p class="text-xs text-slate-500 mt-0.5">Garis hijau menunjukkan data Susenas, oranye menunjukkan
+                <p class="text-xs text-slate-500 mt-0.5">Garis biru tua menunjukkan data Susenas, kuning emas menunjukkan
                     Survei, garis putus-putus menunjukkan Prediksi (Susenas).</p>
             </div>
 
@@ -563,7 +570,7 @@
                 class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-100">
                 <div>
                     <h3 class="font-bold text-slate-800 text-lg flex items-center gap-2">
-                        <span class="bg-emerald-100 p-1.5 rounded-lg text-emerald-600">
+                        <span class="bg-[#117a8b]/10 p-1.5 rounded-lg text-[#117a8b]">
                             <i data-lucide="bar-chart-2" class="w-5 h-5"></i>
                         </span>
                         Perkembangan Skor PPH Konsumsi Berdasarkan Kelompok Pangan
@@ -574,13 +581,13 @@
                 </div>
                 <div class="flex flex-wrap items-center gap-4 text-xs font-semibold text-slate-600">
                     <span class="flex items-center gap-1.5">
-                        <span class="w-3 h-3 rounded-full bg-[#16a34a]"></span> Susenas
+                        <span class="w-3 h-3 rounded-full bg-[#0a4b57]"></span> Susenas
                     </span>
                     <span class="flex items-center gap-1.5">
-                        <span class="w-3 h-3 rounded-full bg-[#f59e0b]"></span> Survei
+                        <span class="w-3 h-3 rounded-full bg-[#e9c46a]"></span> Survei
                     </span>
                     <span class="flex items-center gap-1.5">
-                        <span class="w-3 h-3 rounded-full bg-[#ef4444]"></span> Ideal
+                        <span class="w-3 h-3 rounded-full bg-[#dc3545]"></span> Ideal
                     </span>
                 </div>
             </div>
@@ -611,13 +618,13 @@
                                 <i data-lucide="search" class="w-4 h-4 text-slate-400"></i>
                             </div>
                             <input type="text" id="search-input"
-                                class="bg-white border border-slate-200 text-slate-700 text-xs sm:text-sm rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 block w-full pl-10 p-2.5 shadow-sm"
+                                class="bg-white border border-slate-200 text-slate-700 text-xs sm:text-sm rounded-xl focus:ring-2 focus:ring-[#117a8b] focus:border-[#117a8b] block w-full pl-10 p-2.5 shadow-sm"
                                 placeholder="Cari nama kecamatan...">
                         </div>
 
                         <!-- Export Button -->
                         <button id="btn-export"
-                            class="flex items-center justify-center gap-2 px-4 py-2 bg-emerald-600 text-white text-xs sm:text-sm font-semibold rounded-xl hover:bg-emerald-700 transition shadow-sm active:scale-95">
+                            class="flex items-center justify-center gap-2 px-4 py-2 bg-[#117a8b] text-white text-xs sm:text-sm font-semibold rounded-xl hover:bg-[#0a4b57] transition shadow-sm active:scale-95">
                             <i data-lucide="file-spreadsheet" class="w-4 h-4"></i> Ekspor Excel
                         </button>
                     </div>
@@ -923,10 +930,10 @@
 
         const getKategoriData = (skor) => {
             const val = parseFloat(skor);
-            if (isNaN(val)) return { label: 'Tidak Valid', color: 'slate', bgClass: 'bg-slate-100 text-slate-700 border-slate-200' };
-            if (val > 90) return { label: 'Baik', color: 'emerald', bgClass: 'bg-emerald-50 text-emerald-700 border-emerald-200' };
-            if (val >= 80) return { label: 'Sedang', color: 'amber', bgClass: 'bg-amber-50 text-amber-700 border-amber-200' };
-            return { label: 'Kurang', color: 'rose', bgClass: 'bg-rose-50 text-rose-700 border-rose-200' };
+            if (isNaN(val)) return { label: 'Tidak Valid', color: 'slate', hex: '#64748b', bgClass: 'bg-slate-100 text-slate-700 border-slate-200' };
+            if (val > 90) return { label: 'Baik', color: 'warna5', hex: '#2e8a57', bgClass: 'bg-[#2e8a57]/10 text-[#2e8a57] border-[#2e8a57]/30' };
+            if (val >= 80) return { label: 'Sedang', color: 'warna9', hex: '#e9c46a', bgClass: 'bg-[#e9c46a]/15 text-[#9a7312] border-[#e9c46a]/40' };
+            return { label: 'Kurang', color: 'warna7', hex: '#e07a5f', bgClass: 'bg-[#e07a5f]/15 text-[#c25638] border-[#e07a5f]/40' };
         };
 
         const getStatusBadge = (skor) => {
@@ -1264,12 +1271,24 @@
             els.valProyeksi.innerText = fmt2(valProyeksi);
             els.valGap.innerText = valGap > 0 ? `+${fmt2(valGap)}` : `${fmt2(valGap)}`;
 
+            els.badgeSusenas.style.background = '#0a4b57';
+            els.badgeSusenas.style.color = '#ffffff';
+
+            els.badgeSurvei.style.background = '#e9c46a';
+            els.badgeSurvei.style.color = '#1d2d35';
+
+            els.badgeProyeksi.style.background = '#4dbdaf';
+            els.badgeProyeksi.style.color = '#1d2d35';
+
             if (valGap < 0) {
-                els.valGap.style.color = '#dc2626';
+                els.valGap.style.color = '#dc3545';
+                els.badgeGap.style.background = '#dc3545';
             } else if (valGap > 0) {
-                els.valGap.style.color = '#059669';
+                els.valGap.style.color = '#2e8a57';
+                els.badgeGap.style.background = '#2e8a57';
             } else {
                 els.valGap.style.color = 'var(--text-main)';
+                els.badgeGap.style.background = 'var(--primary)';
             }
 
             els.badgeSusenas.innerText = benchmark.bpsBadge;
@@ -1321,7 +1340,7 @@
                         data: prediksiSeries
                     }
                 ],
-                colors: ['#16a34a', '#f59e0b', '#6366f1'],
+                colors: ['#0a4b57', '#e9c46a', '#4dbdaf'],
                 stroke: {
                     curve: 'smooth',
                     width: [3, 3, 2.5],
@@ -1483,7 +1502,7 @@
                         data: dataForYear.ideal
                     }
                 ],
-                colors: ['#16a34a', '#f59e0b', '#ef4444'], // Hijau (Susenas), Kuning (Survei), Merah (Ideal)
+                colors: ['#0a4b57', '#e9c46a', '#dc3545'], // Warna 2 (Susenas), Warna 9 (Survei), Warna 6 (Ideal)
                 xaxis: {
                     categories: dataForYear.categories,
                     title: {
@@ -1595,7 +1614,7 @@
 
             let kecList = [];
             kecMap.forEach((val, name) => {
-                const avg = parseFloat((val.sum / val.count).toFixed(1));
+                const avg = parseFloat((val.sum / val.count).toFixed(2));
                 const cat = getKategoriData(avg);
                 if (catCount[cat.label] !== undefined) catCount[cat.label]++;
                 kecList.push({
@@ -1606,7 +1625,7 @@
                 });
             });
 
-            // Sort descending by score
+            // Sort descending by score (highest at top, matching reference mockup)
             kecList.sort((a, b) => b.skor - a.skor);
 
             // Update Mutu Counts in UI
@@ -1614,9 +1633,9 @@
             if (els.countSedang) els.countSedang.innerText = `${catCount['Sedang']} Kec.`;
             if (els.countKurang) els.countKurang.innerText = `${catCount['Kurang']} Kec.`;
 
-            const avgSkorOverall = countSkor > 0 ? (sumSkor / countSkor).toFixed(1) : 0;
+            const avgSkorOverall = countSkor > 0 ? (sumSkor / countSkor).toFixed(2) : '0,00';
 
-            // 1. MAIN BAR CHART: Skor Pola Pangan Harapan (PPH) Konsumsi Kecamatan
+            // 1. MAIN BAR CHART: Skor Pola Pangan Harapan (PPH) Konsumsi Kecamatan (Horizontal)
             const kecEl = document.querySelector("#chart-kecamatan");
             if (kecEl) {
                 kecEl.innerHTML = '';
@@ -1624,12 +1643,14 @@
                     const categories = kecList.map(k => k.name);
                     const seriesData = kecList.map(k => k.skor);
                     const colors = kecList.map(k => {
-                        if (k.skor > 90) return '#10b981'; // Emerald (>90)
-                        if (k.skor >= 80) return '#f59e0b'; // Amber (80-90)
-                        return '#f43f5e'; // Rose (<80)
+                        if (k.skor > 90) return '#2e8a57'; // Warna 5: Baik (>90)
+                        if (k.skor >= 80) return '#e9c46a'; // Warna 9: Sedang (80-90)
+                        return '#e07a5f'; // Warna 7: Kurang (<80)
                     });
 
                     if (chartInstances.mainBar) chartInstances.mainBar.destroy();
+
+                    const chartHeight = Math.max(820, categories.length * 26 + 60);
 
                     chartInstances.mainBar = new ApexCharts(kecEl, {
                         ...commonOpts,
@@ -1639,7 +1660,7 @@
                         }],
                         chart: {
                             type: 'bar',
-                            height: 440,
+                            height: chartHeight,
                             events: {
                                 dataPointSelection: function (event, chartContext, config) {
                                     const selectedIndex = config.dataPointIndex;
@@ -1651,9 +1672,9 @@
                         },
                         plotOptions: {
                             bar: {
-                                horizontal: false,
-                                borderRadius: 6,
-                                columnWidth: '55%',
+                                horizontal: true,
+                                borderRadius: 3,
+                                barHeight: '62%',
                                 distributed: true,
                                 dataLabels: { position: 'top' }
                             }
@@ -1661,41 +1682,57 @@
                         colors: colors,
                         dataLabels: {
                             enabled: true,
-                            formatter: function (val) { return val.toFixed(1); },
-                            offsetY: -22,
-                            style: { fontSize: '10px', fontWeight: '700', colors: ['#475569'] }
+                            textAnchor: 'start',
+                            offsetX: 8,
+                            formatter: function (val) {
+                                return Number(val).toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                            },
+                            style: {
+                                fontSize: '11px',
+                                fontWeight: '700',
+                                colors: ['#334155']
+                            }
                         },
                         xaxis: {
                             categories: categories,
-                            labels: {
-                                rotate: -45,
-                                rotateAlways: true,
-                                style: { fontSize: '11px', fontWeight: '600', colors: '#64748b' }
-                            },
-                            axisBorder: { show: false },
-                            axisTicks: { show: false }
-                        },
-                        yaxis: {
                             min: 0,
                             max: 100,
-                            title: { text: 'Skor PPH (0 - 100)', style: { color: '#64748b', fontWeight: '600' } }
+                            tickAmount: 5,
+                            labels: {
+                                style: { fontSize: '11px', fontWeight: '600', colors: '#64748b' },
+                                formatter: function (val) {
+                                    return Number(val).toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                                }
+                            },
+                            axisBorder: { show: true, color: '#cbd5e1' },
+                            axisTicks: { show: true, color: '#cbd5e1' }
+                        },
+                        yaxis: {
+                            labels: {
+                                style: { fontSize: '11px', fontWeight: '600', colors: '#334155' }
+                            }
                         },
                         legend: { show: false },
-                        grid: { borderColor: '#f1f5f9', strokeDashArray: 4 },
+                        grid: {
+                            borderColor: '#f1f5f9',
+                            strokeDashArray: 0,
+                            xaxis: { lines: { show: true } },
+                            yaxis: { lines: { show: false } }
+                        },
                         tooltip: {
                             custom: function ({ series, seriesIndex, dataPointIndex, w }) {
                                 const k = kecList[dataPointIndex];
                                 if (!k) return '';
-                                const badgeColor = k.cat.color === 'emerald' ? 'bg-emerald-100 text-emerald-800' : (k.cat.color === 'amber' ? 'bg-amber-100 text-amber-800' : 'bg-rose-100 text-rose-800');
+                                const badgeColor = k.cat.bgClass;
                                 return `
                                     <div class="p-3.5 bg-white rounded-2xl shadow-xl border border-slate-100 min-w-[200px]">
                                         <div class="flex items-center justify-between gap-3 mb-2 border-b border-slate-100 pb-2">
                                             <span class="text-xs font-extrabold text-slate-800 uppercase tracking-tight">Kec. ${k.name}</span>
-                                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${badgeColor}">${k.cat.label}</span>
+                                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full border ${badgeColor}">${k.cat.label}</span>
                                         </div>
                                         <div class="flex items-baseline justify-between mt-1">
                                             <span class="text-xs text-slate-500 font-medium">Skor PPH:</span>
-                                            <span class="text-xl font-extrabold text-emerald-600">${k.skor.toFixed(1)}</span>
+                                            <span class="text-xl font-extrabold" style="color: ${k.cat.hex || '#0a4b57'}">${formatNumber(k.skor)}</span>
                                         </div>
                                         <p class="text-[10px] text-slate-400 mt-2 italic flex items-center gap-1">
                                             <span>👉 Klik batang untuk detail popup</span>
@@ -1775,7 +1812,7 @@
                         ${getStatusBadge(skor)}
                     </td>
                     <td class="px-6 py-4 text-center">
-                        <button onclick="openDetail(${item.id})" class="inline-flex items-center gap-1 text-emerald-600 hover:text-emerald-800 hover:bg-emerald-50 px-2.5 py-1.5 rounded-lg transition-all border border-emerald-100 text-xs font-semibold" title="Buka Pop-up Detail">
+                        <button onclick="openDetail(${item.id})" class="inline-flex items-center gap-1 text-[#117a8b] hover:text-[#0a4b57] hover:bg-[#117a8b]/10 px-2.5 py-1.5 rounded-lg transition-all border border-[#117a8b]/20 text-xs font-semibold" title="Buka Pop-up Detail">
                             <i data-lucide="info" class="w-3.5 h-3.5"></i> Detail
                         </button>
                     </td>

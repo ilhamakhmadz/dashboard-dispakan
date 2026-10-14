@@ -17,10 +17,21 @@
                     },
                     colors: {
                         brand: {
-                            emerald: '#10b981',
-                            dark: '#064e3b',
+                            emerald: '#117a8b',
+                            dark: '#0a4b57',
                             light: '#ecfdf5',
-                            accent: '#34d399'
+                            accent: '#4dbdaf',
+                            1: '#1d2d35',
+                            2: '#0a4b57',
+                            3: '#117a8b',
+                            4: '#4dbdaf',
+                            5: '#2e8a57',
+                            6: '#dc3545',
+                            7: '#e07a5f',
+                            8: '#f4a261',
+                            9: '#e9c46a',
+                            10: '#f5f0da',
+                            11: '#94a3a8'
                         }
                     },
                     boxShadow: {
@@ -73,7 +84,7 @@
         }
 
         .gradient-header {
-            background: linear-gradient(135deg, #047857 0%, #064e3b 100%);
+            background: linear-gradient(135deg, #117a8b 0%, #0a4b57 100%);
         }
 
         .animate-fade-in {
@@ -96,7 +107,7 @@
         .loader {
             border: 3px solid #f3f3f3;
             border-radius: 50%;
-            border-top: 3px solid #10b981;
+            border-top: 3px solid #117a8b;
             width: 24px;
             height: 24px;
             animation: spin 1s linear infinite;
@@ -129,9 +140,9 @@
         class="fixed inset-0 z-[1000] bg-white flex flex-col items-center justify-center transition-all duration-700 ease-in-out">
         <div class="relative w-24 h-24 mb-8">
             <div class="absolute inset-0 border-4 border-slate-100 rounded-full"></div>
-            <div class="absolute inset-0 border-4 border-emerald-600 rounded-full border-t-transparent animate-spin">
+            <div class="absolute inset-0 border-4 border-[#117a8b] rounded-full border-t-transparent animate-spin">
             </div>
-            <div class="absolute inset-0 flex items-center justify-center text-emerald-600">
+            <div class="absolute inset-0 flex items-center justify-center text-[#117a8b]">
                 <i data-lucide="leaf" class="w-8 h-8 animate-pulse"></i>
             </div>
         </div>
@@ -145,10 +156,10 @@
 
         <div class="w-72 h-2.5 bg-slate-100 rounded-full overflow-hidden relative shadow-inner">
             <div id="loading-bar-inner"
-                class="h-full bg-gradient-to-r from-emerald-500 to-green-600 rounded-full transition-all duration-500 ease-out"
+                class="h-full bg-gradient-to-r from-[#117a8b] to-[#4dbdaf] rounded-full transition-all duration-500 ease-out"
                 style="width: 15%"></div>
         </div>
-        <p id="loading-pct" class="text-xs font-bold text-emerald-600 mt-3 font-mono">15%</p>
+        <p id="loading-pct" class="text-xs font-bold text-[#117a8b] mt-3 font-mono">15%</p>
     </div>
 
     <!-- Navbar -->
@@ -157,32 +168,38 @@
             <div class="flex items-center justify-between h-16 sm:h-20 py-3 lg:py-0">
                 <!-- Logo & Title -->
                 <div class="flex items-center gap-3">
-                    <div class="bg-emerald-600 p-2 rounded-lg text-white shadow-md">
+                    <div class="bg-[#117a8b] p-2 rounded-lg text-white shadow-md">
                         <i data-lucide="pie-chart" class="w-6 h-6"></i>
                     </div>
                     <div class="block">
                         <h1 class="text-lg font-bold text-slate-900 leading-tight tracking-tight">DATA PANGAN</h1>
-                        <p class="text-[10px] font-semibold text-emerald-600 uppercase tracking-widest">Kabupaten
+                        <p class="text-[10px] font-semibold text-[#117a8b] uppercase tracking-widest">Kabupaten
                             Bandung</p>
                     </div>
                 </div>
 
-                <!-- Right Actions (Date, Live, Refresh) -->
-                <div class="flex items-center gap-3 sm:gap-4">
+                <!-- Right Actions (Date, Live, Refresh, Dashboard) -->
+                <div class="flex items-center gap-2.5 sm:gap-4">
+                    <a href="https://aplikasi.bandungkab.go.id/publik/dispakan-portal-dashboard"
+                        class="flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-200 rounded-xl hover:bg-[#117a8b]/10 hover:text-[#117a8b] hover:border-[#117a8b]/30 transition-all shadow-sm"
+                        title="Kembali ke Dashboard">
+                        <i data-lucide="layout-dashboard" class="w-4 h-4 text-[#117a8b]"></i>
+                        <span>Kembali ke Dashboard</span>
+                    </a>
                     <div class="flex flex-col items-end">
                         <span class="text-xs font-medium text-slate-500 hidden sm:inline"
                             id="current-date">Loading...</span>
                         <div class="flex items-center gap-1.5">
                             <span class="relative flex h-2 w-2">
                                 <span
-                                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4dbdaf] opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2 w-2 bg-[#117a8b]"></span>
                             </span>
-                            <span class="text-xs font-bold text-emerald-600">LIVE API DATA</span>
+                            <span class="text-xs font-bold text-[#117a8b]">LIVE API DATA</span>
                         </div>
                     </div>
                     <button onclick="window.location.reload()"
-                        class="p-2 sm:p-2.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200 transition-all shadow-sm group"
+                        class="p-2 sm:p-2.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:bg-[#117a8b]/10 hover:text-[#117a8b] hover:border-[#117a8b]/30 transition-all shadow-sm group"
                         title="Sinkronisasi Data">
                         <i data-lucide="refresh-cw"
                             class="w-4 h-4 sm:w-5 sm:h-5 group-hover:rotate-180 transition-transform duration-500"></i>
@@ -200,10 +217,10 @@
             <!-- Brand & Dept Header -->
             <div class="flex items-center gap-3 mb-3">
                 <div
-                    class="w-11 h-11 rounded-xl bg-white border border-emerald-100 shadow-sm flex items-center justify-center text-emerald-600 shrink-0 ring-1 ring-emerald-500/10">
+                    class="w-11 h-11 rounded-xl bg-white border border-[#117a8b]/20 shadow-sm flex items-center justify-center text-[#117a8b] shrink-0 ring-1 ring-[#117a8b]/10">
                     <i data-lucide="wheat" class="w-5 h-5"></i>
                 </div>
-                <div class="text-xs font-bold text-emerald-700 uppercase tracking-widest leading-tight">
+                <div class="text-xs font-bold text-[#117a8b] uppercase tracking-widest leading-tight">
                     Dinas Ketahanan Pangan dan Perikanan Kabupaten Bandung (DISPAKAN)
                 </div>
             </div>
@@ -214,23 +231,26 @@
                 Neraca Bahan Makanan (NBM)
             </h1>
 
-            <!-- Description / Info Banner -->
+            <!-- Description / Info Banner (Warna 4: #4dbdaf) -->
             <div
-                class="bg-emerald-50/70 border border-emerald-200/80 border-l-4 border-l-emerald-600 rounded-xl p-4 md:p-5 mt-4 flex items-start gap-3.5 shadow-sm text-slate-700 text-sm leading-relaxed">
-                <i data-lucide="info" class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5"></i>
+                style="background: rgba(77, 189, 175, 0.12); border: 1px solid rgba(77, 189, 175, 0.45); border-left: 4px solid #4dbdaf;"
+                class="rounded-xl p-4 md:p-5 mt-4 flex items-start gap-3.5 shadow-sm text-slate-700 text-sm leading-relaxed">
+                <i data-lucide="info" class="w-5 h-5 text-[#117a8b] shrink-0 mt-0.5"></i>
                 <div class="flex-1">
                     <p class="mb-3 text-slate-700 leading-relaxed">
                         Neraca Bahan Makanan (NBM) merupakan instrumen yang menyajikan data ketersediaan dan pemanfaatan pangan di suatu wilayah dalam periode tertentu. NBM digunakan untuk menganalisis kondisi ketersediaan pangan serta menghasilkan Skor Pola Pangan Harapan (PPH) Ketersediaan sebagai indikator keragaman dan keseimbangan pangan.
                     </p>
-                    <div class="flex flex-wrap gap-2 pt-2 border-t border-emerald-200/60">
+                    <div class="flex flex-wrap gap-2 pt-2" style="border-top: 1px solid rgba(77, 189, 175, 0.3);">
                         <div
-                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/90 border border-emerald-200 text-xs font-semibold text-emerald-700 shadow-2xs">
-                            <i data-lucide="server" class="w-3.5 h-3.5 text-emerald-600"></i>
+                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/95 border text-xs font-semibold text-[#0a4b57] shadow-2xs"
+                            style="border-color: rgba(77, 189, 175, 0.5);">
+                            <i data-lucide="server" class="w-3.5 h-3.5 text-[#117a8b]"></i>
                             <span>API Terhubung</span>
                         </div>
                         <div
-                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/90 border border-emerald-200 text-xs font-semibold text-emerald-700 shadow-2xs">
-                            <i data-lucide="filter" class="w-3.5 h-3.5 text-emerald-600"></i>
+                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/95 border text-xs font-semibold text-[#0a4b57] shadow-2xs"
+                            style="border-color: rgba(77, 189, 175, 0.5);">
+                            <i data-lucide="filter" class="w-3.5 h-3.5 text-[#117a8b]"></i>
                             <span>Filter Aktif: <span id="active-filter-label" class="font-bold text-slate-900">Semua
                                     Data</span></span>
                         </div>
@@ -244,7 +264,7 @@
             class="bg-white rounded-2xl p-4 sm:p-5 shadow-soft border border-slate-100 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div class="flex items-center gap-3">
                 <div
-                    class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100 shrink-0">
+                    class="w-9 h-9 rounded-xl bg-[#117a8b]/10 text-[#117a8b] flex items-center justify-center border border-[#117a8b]/20 shrink-0">
                     <i data-lucide="filter" class="w-4 h-4"></i>
                 </div>
                 <div>
@@ -254,10 +274,10 @@
             </div>
             <div class="relative min-w-[200px] sm:w-64">
                 <div class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
-                    <i data-lucide="calendar" class="w-4 h-4 text-emerald-600"></i>
+                    <i data-lucide="calendar" class="w-4 h-4 text-[#117a8b]"></i>
                 </div>
                 <select id="nav-filter-tahun"
-                    class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm font-semibold rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 block pl-10 pr-9 py-2.5 cursor-pointer appearance-none hover:bg-white transition-all shadow-2xs">
+                    class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm font-semibold rounded-xl focus:ring-2 focus:ring-[#117a8b] focus:border-[#117a8b] block pl-10 pr-9 py-2.5 cursor-pointer appearance-none hover:bg-white transition-all shadow-2xs">
                     <option value="all">Semua Tahun</option>
                     <option value="2025">2025</option>
                     <option value="2024">2024</option>
@@ -326,15 +346,15 @@
                         SKOR POLA PANGAN HARAPAN (PPH) KETERSEDIAAN
                     </h3>
 
-                    <!-- Legend -->
+                    <!-- Legend (Warna 2: #0a4b57 & Warna 6: #dc3545) -->
                     <div
                         class="flex items-center justify-center gap-6 mt-3 text-xs md:text-sm font-semibold text-slate-600">
                         <div class="flex items-center gap-2">
-                            <span class="w-3.5 h-3.5 rounded-full bg-[#eab308] inline-block shadow-sm"></span>
+                            <span class="w-3.5 h-3.5 rounded-full bg-[#0a4b57] inline-block shadow-sm"></span>
                             <span>Skor PPH</span>
                         </div>
                         <div class="flex items-center gap-2">
-                            <span class="w-3.5 h-3.5 rounded-full bg-[#22c55e] inline-block shadow-sm"></span>
+                            <span class="w-3.5 h-3.5 rounded-full bg-[#dc3545] inline-block shadow-sm"></span>
                             <span>Skor PPH Ideal</span>
                         </div>
                     </div>
@@ -343,7 +363,7 @@
                     <p class="mt-2 text-xs md:text-sm text-slate-600 font-medium">
                         Skor PPH: <span id="pph-chart-score" class="font-bold text-slate-900">89,27</span> / <span
                             class="font-bold text-slate-900">100,00</span> (<span id="pph-chart-pct"
-                            class="text-emerald-600 font-bold">89,27%</span>)
+                            class="text-[#0a4b57] font-bold">89,27%</span>)
                     </p>
                 </div>
 
@@ -367,8 +387,8 @@
                 <!-- Header Kartu -->
                 <div class="flex items-center gap-3 mb-6">
                     <div
-                        class="w-10 h-10 rounded-full bg-emerald-800 flex items-center justify-center text-white ring-4 ring-emerald-100">
-                        <span class="w-3.5 h-3.5 rounded-full bg-emerald-300"></span>
+                        class="w-10 h-10 rounded-full bg-[#0a4b57] flex items-center justify-center text-white ring-4 ring-[#4dbdaf]/20">
+                        <span class="w-3.5 h-3.5 rounded-full bg-[#4dbdaf]"></span>
                     </div>
                     <div>
                         <h3 class="text-base font-bold text-slate-900 leading-tight">Skor PPH</h3>
@@ -390,18 +410,18 @@
                                             </feDropShadow>
                                         </filter>
                                     </defs>
-                                    <!-- Rose / Polar Slices -->
+                                    <!-- Rose / Polar Slices (Warna 1-11) -->
                                     <g id="pph-slice-group-0"
                                         class="transition-all duration-300 cursor-pointer origin-center"
                                         onmouseenter="highlightPphSlice(0)" onmouseleave="resetPphSlices()"
                                         style="opacity: 1; transform: scale(1);">
                                         <path
                                             d="M 78.00 170.00 A 92 92 0 0 1 170.00 78.00 L 170.00 115.00 A 55 55 0 0 0 115.00 170.00 Z"
-                                            fill="#93c5fd" stroke="#ffffff" stroke-width="2" class="opacity-90">
+                                            fill="#8c9ea7" stroke="#ffffff" stroke-width="2" class="opacity-90">
                                         </path>
                                         <path
                                             d="M 18.00 170.00 A 152 152 0 0 1 170.00 18.00 L 170.00 78.00 A 92 92 0 0 0 78.00 170.00 Z"
-                                            fill="#2563eb" stroke="#ffffff" stroke-width="2">
+                                            fill="#1d2d35" stroke="#ffffff" stroke-width="2">
                                         </path>
                                     </g>
 
@@ -411,11 +431,11 @@
                                         style="opacity: 1; transform: scale(1);">
                                         <path
                                             d="M 170.00 78.00 A 92 92 0 0 1 184.39 79.13 L 178.60 115.68 A 55 55 0 0 0 170.00 115.00 Z"
-                                            fill="#fed7aa" stroke="#ffffff" stroke-width="2" class="opacity-90">
+                                            fill="#74aab3" stroke="#ffffff" stroke-width="2" class="opacity-90">
                                         </path>
                                         <path
                                             d="M 170.00 21.10 A 148.9 148.9 0 0 1 193.29 22.93 L 184.39 79.13 A 92 92 0 0 0 170.00 78.00 Z"
-                                            fill="#f97316" stroke="#ffffff" stroke-width="2">
+                                            fill="#0a4b57" stroke="#ffffff" stroke-width="2">
                                         </path>
                                     </g>
 
@@ -425,11 +445,11 @@
                                         style="opacity: 1; transform: scale(1);">
                                         <path
                                             d="M 184.39 79.13 A 92 92 0 0 1 254.69 134.05 L 220.63 148.51 A 55 55 0 0 0 178.60 115.68 Z"
-                                            fill="#fca5a5" stroke="#ffffff" stroke-width="2" class="opacity-90">
+                                            fill="#7ec4cf" stroke="#ffffff" stroke-width="2" class="opacity-90">
                                         </path>
                                         <path
                                             d="M 190.43 41.01 A 130.6 130.6 0 0 1 290.22 118.97 L 254.69 134.05 A 92 92 0 0 0 184.39 79.13 Z"
-                                            fill="#991b1b" stroke="#ffffff" stroke-width="2">
+                                            fill="#117a8b" stroke="#ffffff" stroke-width="2">
                                         </path>
                                     </g>
 
@@ -439,11 +459,11 @@
                                         style="opacity: 1; transform: scale(1);">
                                         <path
                                             d="M 258.87 146.19 A 92 92 0 0 1 261.31 181.21 L 224.59 176.70 A 55 55 0 0 0 223.13 155.76 Z"
-                                            fill="#d8b4fe" stroke="#ffffff" stroke-width="2" class="opacity-90">
+                                            fill="#a5e2dc" stroke="#ffffff" stroke-width="2" class="opacity-90">
                                         </path>
                                         <path
                                             d="M 316.82 130.66 A 152 152 0 0 1 320.87 188.52 L 261.31 181.21 A 92 92 0 0 0 258.87 146.19 Z"
-                                            fill="#9333ea" stroke="#ffffff" stroke-width="2">
+                                            fill="#4dbdaf" stroke="#ffffff" stroke-width="2">
                                         </path>
                                     </g>
 
@@ -453,7 +473,7 @@
                                         style="opacity: 1; transform: scale(1);">
                                         <path
                                             d="M 261.31 181.21 A 92 92 0 0 1 259.99 189.13 L 223.80 181.44 A 55 55 0 0 0 224.59 176.70 Z"
-                                            fill="#99f6e4" stroke="#ffffff" stroke-width="2" class="opacity-90">
+                                            fill="#8ecdab" stroke="#ffffff" stroke-width="2" class="opacity-90">
                                         </path>
                                     </g>
 
@@ -463,11 +483,11 @@
                                         style="opacity: 1; transform: scale(1);">
                                         <path
                                             d="M 259.99 189.13 A 92 92 0 0 1 231.56 238.37 L 206.80 210.87 A 55 55 0 0 0 223.80 181.44 Z"
-                                            fill="#d7b998" stroke="#ffffff" stroke-width="2" class="opacity-90">
+                                            fill="#f19da6" stroke="#ffffff" stroke-width="2" class="opacity-90">
                                         </path>
                                         <path
                                             d="M 318.68 201.60 A 152 152 0 0 1 271.71 282.96 L 231.56 238.37 A 92 92 0 0 0 259.99 189.13 Z"
-                                            fill="#92400e" stroke="#ffffff" stroke-width="2">
+                                            fill="#dc3545" stroke="#ffffff" stroke-width="2">
                                         </path>
                                     </g>
 
@@ -477,11 +497,11 @@
                                         style="opacity: 1; transform: scale(1);">
                                         <path
                                             d="M 231.56 238.37 A 92 92 0 0 1 220.11 247.16 L 199.96 216.13 A 55 55 0 0 0 206.80 210.87 Z"
-                                            fill="#fda4af" stroke="#ffffff" stroke-width="2" class="opacity-90">
+                                            fill="#f2bcaf" stroke="#ffffff" stroke-width="2" class="opacity-90">
                                         </path>
                                         <path
                                             d="M 239.26 246.92 A 103.5 103.5 0 0 1 226.37 256.80 L 220.11 247.16 A 92 92 0 0 0 231.56 238.37 Z"
-                                            fill="#e11d48" stroke="#ffffff" stroke-width="2">
+                                            fill="#e07a5f" stroke="#ffffff" stroke-width="2">
                                         </path>
                                     </g>
 
@@ -491,11 +511,11 @@
                                         style="opacity: 1; transform: scale(1);">
                                         <path
                                             d="M 170.00 262.00 A 92 92 0 0 1 78.00 170.00 L 115.00 170.00 A 55 55 0 0 0 170.00 225.00 Z"
-                                            fill="#86efac" stroke="#ffffff" stroke-width="2" class="opacity-90">
+                                            fill="#fad0b0" stroke="#ffffff" stroke-width="2" class="opacity-90">
                                         </path>
                                         <path
                                             d="M 170.00 317.20 A 147.2 147.2 0 0 1 22.80 170.00 L 78.00 170.00 A 92 92 0 0 0 170.00 262.00 Z"
-                                            fill="#16a34a" stroke="#ffffff" stroke-width="2">
+                                            fill="#f4a261" stroke="#ffffff" stroke-width="2">
                                         </path>
                                     </g>
 
@@ -547,7 +567,7 @@
                         Perkembangan Skor PPH Ketersediaan
                     </h3>
                     <div class="flex items-center gap-2 text-xs font-semibold text-slate-600">
-                        <span class="w-4 h-0.5 bg-[#3b82f6]"></span>
+                        <span class="w-4 h-0.5 bg-[#117a8b]"></span>
                         <span>Total</span>
                     </div>
                 </div>
@@ -589,11 +609,11 @@
                             <div
                                 class="flex items-center justify-center gap-4 mt-1.5 text-xs font-semibold text-slate-600">
                                 <div class="flex items-center gap-1.5">
-                                    <span class="w-2.5 h-2.5 rounded-full bg-[#f97316]"></span>
+                                    <span class="w-2.5 h-2.5 rounded-full bg-[#e9c46a]"></span>
                                     <span>Hewani</span>
                                 </div>
                                 <div class="flex items-center gap-1.5">
-                                    <span class="w-2.5 h-2.5 rounded-full bg-[#22c55e]"></span>
+                                    <span class="w-2.5 h-2.5 rounded-full bg-[#2e8a57]"></span>
                                     <span>Nabati</span>
                                 </div>
                             </div>
@@ -622,11 +642,11 @@
                             <div
                                 class="flex items-center justify-center gap-4 mt-1.5 text-xs font-semibold text-slate-600">
                                 <div class="flex items-center gap-1.5">
-                                    <span class="w-2.5 h-2.5 rounded-full bg-[#f97316]"></span>
+                                    <span class="w-2.5 h-2.5 rounded-full bg-[#e9c46a]"></span>
                                     <span>Hewani</span>
                                 </div>
                                 <div class="flex items-center gap-1.5">
-                                    <span class="w-2.5 h-2.5 rounded-full bg-[#22c55e]"></span>
+                                    <span class="w-2.5 h-2.5 rounded-full bg-[#2e8a57]"></span>
                                     <span>Nabati</span>
                                 </div>
                             </div>
@@ -655,11 +675,11 @@
                             <div
                                 class="flex items-center justify-center gap-4 mt-1.5 text-xs font-semibold text-slate-600">
                                 <div class="flex items-center gap-1.5">
-                                    <span class="w-2.5 h-2.5 rounded-full bg-[#f97316]"></span>
+                                    <span class="w-2.5 h-2.5 rounded-full bg-[#e9c46a]"></span>
                                     <span>Hewani</span>
                                 </div>
                                 <div class="flex items-center gap-1.5">
-                                    <span class="w-2.5 h-2.5 rounded-full bg-[#22c55e]"></span>
+                                    <span class="w-2.5 h-2.5 rounded-full bg-[#2e8a57]"></span>
                                     <span>Nabati</span>
                                 </div>
                             </div>
@@ -699,7 +719,7 @@
                     <div>
                         <!-- Header Kartu -->
                         <div class="flex items-center justify-between mb-4">
-                            <h4 class="font-extrabold text-emerald-800 text-base tracking-wider uppercase">AKE</h4>
+                            <h4 class="font-extrabold text-[#117a8b] text-base tracking-wider uppercase">AKE</h4>
                         </div>
 
                         <!-- Donut Chart -->
@@ -719,7 +739,7 @@
                     <div>
                         <!-- Header Kartu -->
                         <div class="flex items-center justify-between mb-4">
-                            <h4 class="font-extrabold text-emerald-800 text-base tracking-wider uppercase">AKP</h4>
+                            <h4 class="font-extrabold text-[#117a8b] text-base tracking-wider uppercase">AKP</h4>
                         </div>
 
                         <!-- Donut Chart -->
@@ -739,7 +759,7 @@
                     <div>
                         <!-- Header Kartu -->
                         <div class="flex items-center justify-between mb-4">
-                            <h4 class="font-extrabold text-emerald-800 text-base tracking-wider uppercase">AKL</h4>
+                            <h4 class="font-extrabold text-[#117a8b] text-base tracking-wider uppercase">AKL</h4>
                         </div>
 
                         <!-- Donut Chart -->
@@ -767,61 +787,62 @@
         const API_PERKEMBANGAN_URL = 'https://api.bandungkab.go.id/api/data/perkembangan-angka-kecukupan-energi-protein-lemak-dan-skor-pph-ketersediaan-QRmyy';
 
         // Verified standard datasets from Bandung Kab Open Data (100% accurate fallback & live synchronization)
+        // Palet warna diselaraskan dengan Warna 1-11 dari panduan.md
         const PPH_DATASETS = {
             '2022': {
                 score: 84.68,
                 items: [
-                    { name: 'Padi-padian', icon: '🌾', aktual: 25.00, ideal: 25.00, color1: '#2563eb', color2: '#93c5fd' },
-                    { name: 'Umbi-umbian', icon: '🍠', aktual: 1.31, ideal: 2.50, color1: '#f97316', color2: '#fed7aa' },
-                    { name: 'Pangan Hewani', icon: '🥩', aktual: 20.11, ideal: 24.00, color1: '#991b1b', color2: '#fca5a5' },
-                    { name: 'Minyak dan Lemak', icon: '🧈', aktual: 5.00, ideal: 5.00, color1: '#9333ea', color2: '#d8b4fe' },
-                    { name: 'Buah/biji berminyak', icon: '🥥', aktual: 0.08, ideal: 1.00, color1: '#0d9488', color2: '#99f6e4' },
-                    { name: 'Kacang-kacangan', icon: '🥜', aktual: 6.85, ideal: 10.00, color1: '#92400e', color2: '#d7b998' },
-                    { name: 'Gula', icon: '🎋', aktual: 1.39, ideal: 2.50, color1: '#e11d48', color2: '#fda4af' },
-                    { name: 'Sayuran dan Buah', icon: '🥗', aktual: 24.94, ideal: 30.00, color1: '#16a34a', color2: '#86efac' },
-                    { name: 'Lain-lain', icon: '🍱', aktual: 0.00, ideal: 0.00, color1: '#475569', color2: '#cbd5e1' }
+                    { name: 'Padi-padian', icon: '🌾', aktual: 25.00, ideal: 25.00, color1: '#1d2d35', color2: '#8c9ea7' },
+                    { name: 'Umbi-umbian', icon: '🍠', aktual: 1.31, ideal: 2.50, color1: '#0a4b57', color2: '#74aab3' },
+                    { name: 'Pangan Hewani', icon: '🥩', aktual: 20.11, ideal: 24.00, color1: '#117a8b', color2: '#7ec4cf' },
+                    { name: 'Minyak dan Lemak', icon: '🧈', aktual: 5.00, ideal: 5.00, color1: '#4dbdaf', color2: '#a5e2dc' },
+                    { name: 'Buah/biji berminyak', icon: '🥥', aktual: 0.08, ideal: 1.00, color1: '#2e8a57', color2: '#8ecdab' },
+                    { name: 'Kacang-kacangan', icon: '🥜', aktual: 6.85, ideal: 10.00, color1: '#dc3545', color2: '#f19da6' },
+                    { name: 'Gula', icon: '🎋', aktual: 1.39, ideal: 2.50, color1: '#e07a5f', color2: '#f2bcaf' },
+                    { name: 'Sayuran dan Buah', icon: '🥗', aktual: 24.94, ideal: 30.00, color1: '#f4a261', color2: '#fad0b0' },
+                    { name: 'Lain-lain', icon: '🍱', aktual: 0.00, ideal: 0.00, color1: '#94a3a8', color2: '#cad2d5' }
                 ]
             },
             '2023': {
                 score: 87.59,
                 items: [
-                    { name: 'Padi-padian', icon: '🌾', aktual: 25.00, ideal: 25.00, color1: '#2563eb', color2: '#93c5fd' },
-                    { name: 'Umbi-umbian', icon: '🍠', aktual: 0.91, ideal: 2.50, color1: '#f97316', color2: '#fed7aa' },
-                    { name: 'Pangan Hewani', icon: '🥩', aktual: 21.76, ideal: 24.00, color1: '#991b1b', color2: '#fca5a5' },
-                    { name: 'Minyak dan Lemak', icon: '🧈', aktual: 5.00, ideal: 5.00, color1: '#9333ea', color2: '#d8b4fe' },
-                    { name: 'Buah/biji berminyak', icon: '🥥', aktual: 0.08, ideal: 1.00, color1: '#0d9488', color2: '#99f6e4' },
-                    { name: 'Kacang-kacangan', icon: '🥜', aktual: 5.67, ideal: 10.00, color1: '#92400e', color2: '#d7b998' },
-                    { name: 'Gula', icon: '🎋', aktual: 1.02, ideal: 2.50, color1: '#e11d48', color2: '#fda4af' },
-                    { name: 'Sayuran dan Buah', icon: '🥗', aktual: 28.15, ideal: 30.00, color1: '#16a34a', color2: '#86efac' },
-                    { name: 'Lain-lain', icon: '🍱', aktual: 0.00, ideal: 0.00, color1: '#475569', color2: '#cbd5e1' }
+                    { name: 'Padi-padian', icon: '🌾', aktual: 25.00, ideal: 25.00, color1: '#1d2d35', color2: '#8c9ea7' },
+                    { name: 'Umbi-umbian', icon: '🍠', aktual: 0.91, ideal: 2.50, color1: '#0a4b57', color2: '#74aab3' },
+                    { name: 'Pangan Hewani', icon: '🥩', aktual: 21.76, ideal: 24.00, color1: '#117a8b', color2: '#7ec4cf' },
+                    { name: 'Minyak dan Lemak', icon: '🧈', aktual: 5.00, ideal: 5.00, color1: '#4dbdaf', color2: '#a5e2dc' },
+                    { name: 'Buah/biji berminyak', icon: '🥥', aktual: 0.08, ideal: 1.00, color1: '#2e8a57', color2: '#8ecdab' },
+                    { name: 'Kacang-kacangan', icon: '🥜', aktual: 5.67, ideal: 10.00, color1: '#dc3545', color2: '#f19da6' },
+                    { name: 'Gula', icon: '🎋', aktual: 1.02, ideal: 2.50, color1: '#e07a5f', color2: '#f2bcaf' },
+                    { name: 'Sayuran dan Buah', icon: '🥗', aktual: 28.15, ideal: 30.00, color1: '#f4a261', color2: '#fad0b0' },
+                    { name: 'Lain-lain', icon: '🍱', aktual: 0.00, ideal: 0.00, color1: '#94a3a8', color2: '#cad2d5' }
                 ]
             },
             '2024': {
                 score: 89.02,
                 items: [
-                    { name: 'Padi-padian', icon: '🌾', aktual: 25.00, ideal: 25.00, color1: '#2563eb', color2: '#93c5fd' },
-                    { name: 'Umbi-umbian', icon: '🍠', aktual: 0.88, ideal: 2.50, color1: '#f97316', color2: '#fed7aa' },
-                    { name: 'Pangan Hewani', icon: '🥩', aktual: 21.64, ideal: 24.00, color1: '#991b1b', color2: '#fca5a5' },
-                    { name: 'Minyak dan Lemak', icon: '🧈', aktual: 5.00, ideal: 5.00, color1: '#9333ea', color2: '#d8b4fe' },
-                    { name: 'Buah/biji berminyak', icon: '🥥', aktual: 0.06, ideal: 1.00, color1: '#0d9488', color2: '#99f6e4' },
-                    { name: 'Kacang-kacangan', icon: '🥜', aktual: 5.42, ideal: 10.00, color1: '#92400e', color2: '#d7b998' },
-                    { name: 'Gula', icon: '🎋', aktual: 1.02, ideal: 2.50, color1: '#e11d48', color2: '#fda4af' },
-                    { name: 'Sayuran dan Buah', icon: '🥗', aktual: 30.00, ideal: 30.00, color1: '#16a34a', color2: '#86efac' },
-                    { name: 'Lain-lain', icon: '🍱', aktual: 0.00, ideal: 0.00, color1: '#475569', color2: '#cbd5e1' }
+                    { name: 'Padi-padian', icon: '🌾', aktual: 25.00, ideal: 25.00, color1: '#1d2d35', color2: '#8c9ea7' },
+                    { name: 'Umbi-umbian', icon: '🍠', aktual: 0.88, ideal: 2.50, color1: '#0a4b57', color2: '#74aab3' },
+                    { name: 'Pangan Hewani', icon: '🥩', aktual: 21.64, ideal: 24.00, color1: '#117a8b', color2: '#7ec4cf' },
+                    { name: 'Minyak dan Lemak', icon: '🧈', aktual: 5.00, ideal: 5.00, color1: '#4dbdaf', color2: '#a5e2dc' },
+                    { name: 'Buah/biji berminyak', icon: '🥥', aktual: 0.06, ideal: 1.00, color1: '#2e8a57', color2: '#8ecdab' },
+                    { name: 'Kacang-kacangan', icon: '🥜', aktual: 5.42, ideal: 10.00, color1: '#dc3545', color2: '#f19da6' },
+                    { name: 'Gula', icon: '🎋', aktual: 1.02, ideal: 2.50, color1: '#e07a5f', color2: '#f2bcaf' },
+                    { name: 'Sayuran dan Buah', icon: '🥗', aktual: 30.00, ideal: 30.00, color1: '#f4a261', color2: '#fad0b0' },
+                    { name: 'Lain-lain', icon: '🍱', aktual: 0.00, ideal: 0.00, color1: '#94a3a8', color2: '#cad2d5' }
                 ]
             },
             '2025': {
                 score: 89.27,
                 items: [
-                    { name: 'Padi-padian', icon: '🌾', aktual: 25.00, ideal: 25.00, color1: '#2563eb', color2: '#93c5fd' },
-                    { name: 'Umbi-umbian', icon: '🍠', aktual: 2.50, ideal: 2.50, color1: '#f97316', color2: '#fed7aa' },
-                    { name: 'Pangan Hewani', icon: '🥩', aktual: 18.36, ideal: 24.00, color1: '#991b1b', color2: '#fca5a5' },
-                    { name: 'Minyak dan Lemak', icon: '🧈', aktual: 5.00, ideal: 5.00, color1: '#9333ea', color2: '#d8b4fe' },
-                    { name: 'Buah/biji berminyak', icon: '🥥', aktual: 0.00, ideal: 1.00, color1: '#0d9488', color2: '#99f6e4' },
-                    { name: 'Kacang-kacangan', icon: '🥜', aktual: 10.00, ideal: 10.00, color1: '#92400e', color2: '#d7b998' },
-                    { name: 'Gula', icon: '🎋', aktual: 0.48, ideal: 2.50, color1: '#e11d48', color2: '#fda4af' },
-                    { name: 'Sayuran dan Buah', icon: '🥗', aktual: 27.93, ideal: 30.00, color1: '#16a34a', color2: '#86efac' },
-                    { name: 'Lain-lain', icon: '🍱', aktual: 0.00, ideal: 0.00, color1: '#475569', color2: '#cbd5e1' }
+                    { name: 'Padi-padian', icon: '🌾', aktual: 25.00, ideal: 25.00, color1: '#1d2d35', color2: '#8c9ea7' },
+                    { name: 'Umbi-umbian', icon: '🍠', aktual: 2.50, ideal: 2.50, color1: '#0a4b57', color2: '#74aab3' },
+                    { name: 'Pangan Hewani', icon: '🥩', aktual: 18.36, ideal: 24.00, color1: '#117a8b', color2: '#7ec4cf' },
+                    { name: 'Minyak dan Lemak', icon: '🧈', aktual: 5.00, ideal: 5.00, color1: '#4dbdaf', color2: '#a5e2dc' },
+                    { name: 'Buah/biji berminyak', icon: '🥥', aktual: 0.00, ideal: 1.00, color1: '#2e8a57', color2: '#8ecdab' },
+                    { name: 'Kacang-kacangan', icon: '🥜', aktual: 10.00, ideal: 10.00, color1: '#dc3545', color2: '#f19da6' },
+                    { name: 'Gula', icon: '🎋', aktual: 0.48, ideal: 2.50, color1: '#e07a5f', color2: '#f2bcaf' },
+                    { name: 'Sayuran dan Buah', icon: '🥗', aktual: 27.93, ideal: 30.00, color1: '#f4a261', color2: '#fad0b0' },
+                    { name: 'Lain-lain', icon: '🍱', aktual: 0.00, ideal: 0.00, color1: '#94a3a8', color2: '#cad2d5' }
                 ]
             }
         };
@@ -862,9 +883,19 @@
             'Susu', 'Ikan', 'Minyak & Lemak'
         ];
 
+        // Palet Warna 1-11 dari panduan.md
         const colors11 = [
-            '#047857', '#10b981', '#06b6d4', '#f97316', '#eab308',
-            '#84cc16', '#ef4444', '#f43f5e', '#a855f7', '#3b82f6', '#b45309'
+            '#1d2d35', // 1
+            '#0a4b57', // 2
+            '#117a8b', // 3
+            '#4dbdaf', // 4
+            '#2e8a57', // 5
+            '#dc3545', // 6
+            '#e07a5f', // 7
+            '#f4a261', // 8
+            '#e9c46a', // 9
+            '#f5f0da', // 10
+            '#94a3a8'  // 11
         ];
 
         // State
@@ -1088,10 +1119,10 @@
                 : `${pphFormatted}% dari Target Ideal Nasional (Tahun ${valTahun})`;
 
             const cards = [
-                { title: 'Skor PPH Ketersediaan', val: pphFormatted + ' / 100,00', sub: pphSub, icon: 'award', color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-200' },
+                { title: 'Skor PPH Ketersediaan', val: pphFormatted + ' / 100,00', sub: pphSub, icon: 'award', color: 'text-[#0a4b57]', bg: 'bg-[#0a4b57]/5', border: 'border-[#0a4b57]/20' },
                 { title: 'Angka Kecukupan Energi (AKE)', val: akeFormatted, sub: 'Kkal/hari', icon: 'zap', color: 'text-orange-600', bg: 'bg-orange-50', border: 'border-orange-200' },
                 { title: 'Angka Kecukupan Protein (AKP)', val: akpFormatted, sub: 'Gram/hari', icon: 'activity', color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-200' },
-                { title: 'Angka Kecukupan Lemak (AKL)', val: aklFormatted, sub: 'Gram/hari', icon: 'droplet', color: 'text-indigo-600', bg: 'bg-indigo-50', border: 'border-indigo-200' }
+                { title: 'Angka Kecukupan Lemak (AKL)', val: aklFormatted, sub: 'Gram/hari', icon: 'droplet', color: 'text-[#117a8b]', bg: 'bg-[#117a8b]/5', border: 'border-[#117a8b]/20' }
             ];
 
             if (els.stats) {
@@ -1150,10 +1181,10 @@
                     const isLast = idx === pph.items.length - 1;
                     const colSpanClass = isLast ? 'sm:col-span-2 lg:col-span-2' : '';
                     return `
-                        <div class="bg-amber-50/60 p-3 rounded-xl border border-amber-100/80 text-center ${colSpanClass}">
+                        <div class="p-3 rounded-xl text-center ${colSpanClass}" style="background: rgba(10, 75, 87, 0.05); border: 1px solid rgba(10, 75, 87, 0.15);">
                             <span class="text-lg">${item.icon}</span>
                             <p class="text-[11px] font-bold text-slate-700 mt-1">${item.name}</p>
-                            <p class="text-xs font-extrabold text-amber-700 mt-0.5">${formatNumber(item.aktual, 2)} <span
+                            <p class="text-xs font-extrabold text-[#0a4b57] mt-0.5">${formatNumber(item.aktual, 2)} <span
                                     class="text-[10px] font-normal text-slate-500">/ ${formatNumber(item.ideal, 2)}</span></p>
                         </div>
                     `;
@@ -1175,7 +1206,7 @@
                     },
                     animations: { enabled: true, easing: 'easeinout', speed: 600 }
                 },
-                colors: ['#eab308', '#22c55e'],
+                colors: ['#0a4b57', '#dc3545'],
                 plotOptions: {
                     bar: {
                         horizontal: false,
@@ -1243,6 +1274,20 @@
             if (centerScoreEl) {
                 centerScoreEl.textContent = formatNumber(pph.score, 2);
             }
+
+            // Dynamically update SVG slice path fills to synchronize with item colors
+            pph.items.forEach((item, idx) => {
+                const grp = document.getElementById(`pph-slice-group-${idx}`);
+                if (grp) {
+                    const paths = grp.querySelectorAll('path');
+                    if (paths.length === 2) {
+                        paths[0].setAttribute('fill', item.color2);
+                        paths[1].setAttribute('fill', item.color1);
+                    } else if (paths.length === 1) {
+                        paths[0].setAttribute('fill', item.color2 || item.color1);
+                    }
+                }
+            });
 
             const legendContainer = document.getElementById("pph-donut-legend");
             if (legendContainer) {
@@ -1332,11 +1377,11 @@
                     fontFamily: 'Plus Jakarta Sans, sans-serif',
                     toolbar: { show: true }
                 },
-                colors: ['#3b82f6'],
+                colors: ['#117a8b'],
                 stroke: { curve: 'straight', width: 3.5 },
                 markers: {
                     size: 5,
-                    colors: ['#3b82f6'],
+                    colors: ['#117a8b'],
                     strokeColors: '#ffffff',
                     strokeWidth: 2,
                     hover: { size: 7 }
@@ -1344,7 +1389,16 @@
                 dataLabels: {
                     enabled: true,
                     offsetY: -10,
-                    style: { fontSize: '12px', fontWeight: '700', colors: ['#1e293b'] },
+                    style: { fontSize: '11px', fontWeight: '700', colors: ['#ffffff'] },
+                    background: {
+                        enabled: true,
+                        foreColor: '#ffffff',
+                        borderRadius: 3,
+                        padding: 4,
+                        opacity: 0.88,
+                        borderWidth: 0,
+                        dropShadow: { enabled: false }
+                    },
                     formatter: function (val) {
                         return formatNumber(val, 2);
                     }
@@ -1411,7 +1465,7 @@
                         fontFamily: 'Plus Jakarta Sans, sans-serif',
                         toolbar: { show: false }
                     },
-                    colors: ['#f97316', '#22c55e'],
+                    colors: ['#e9c46a', '#2e8a57'],
                     plotOptions: {
                         bar: {
                             horizontal: false,
@@ -1505,15 +1559,15 @@
                                 size: '68%',
                                 labels: {
                                     show: true,
-                                    name: { show: true, fontSize: '22px', fontWeight: '800', color: '#064e3b', offsetY: -4 },
-                                    value: { show: true, fontSize: '11px', fontWeight: '600', color: '#64748b', offsetY: 4, formatter: () => unitText },
+                                    name: { show: true, fontSize: '12px', fontWeight: '700', color: '#64748b', offsetY: -6 },
+                                    value: { show: true, fontSize: '15px', fontWeight: '800', color: '#0a4b57', offsetY: 4, formatter: (val) => `${formatNumber(val, 2)} ${unitText}` },
                                     total: {
                                         show: true,
                                         showAlways: true,
                                         label: centerVal,
                                         fontSize: '20px',
                                         fontWeight: '800',
-                                        color: '#064e3b',
+                                        color: '#0a4b57',
                                         formatter: () => unitText
                                     }
                                 }
@@ -1540,36 +1594,35 @@
             create11KlpDonutChart('#chart-akp-11klp', klp11.akp.data, klp11.akp.total, 'Gram/hari', 'donutAkp');
             create11KlpDonutChart('#chart-akl-11klp', klp11.akl.data, klp11.akl.total, 'Gram/hari', 'donutAkl');
 
-            // Populate Lists
+            // Populate Lists with representative color indicator dots
             const akeList = document.getElementById('ake-11klp-list');
             const akpList = document.getElementById('akp-11klp-list');
             const aklList = document.getElementById('akl-11klp-list');
 
-            if (akeList) {
-                akeList.innerHTML = labels11.map((lbl, idx) => `
+            function render11KlpListItem(lbl, val, idx) {
+                const color = colors11[idx] || '#64748b';
+                return `
                     <div class="flex items-center justify-between py-1.5">
-                        <span class="font-medium">${lbl}</span>
-                        <span class="font-semibold text-slate-900">${formatNumber(klp11.ake.data[idx], 2)}</span>
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full inline-block shrink-0 shadow-2xs"
+                                style="background-color: ${color}; border: 1px solid rgba(0,0,0,0.12);"></span>
+                            <span class="font-medium text-slate-700">${lbl}</span>
+                        </div>
+                        <span class="font-semibold text-slate-900 font-mono">${formatNumber(val, 2)}</span>
                     </div>
-                `).join('');
+                `;
+            }
+
+            if (akeList) {
+                akeList.innerHTML = labels11.map((lbl, idx) => render11KlpListItem(lbl, klp11.ake.data[idx], idx)).join('');
             }
 
             if (akpList) {
-                akpList.innerHTML = labels11.map((lbl, idx) => `
-                    <div class="flex items-center justify-between py-1.5">
-                        <span class="font-medium">${lbl}</span>
-                        <span class="font-semibold text-slate-900">${formatNumber(klp11.akp.data[idx], 2)}</span>
-                    </div>
-                `).join('');
+                akpList.innerHTML = labels11.map((lbl, idx) => render11KlpListItem(lbl, klp11.akp.data[idx], idx)).join('');
             }
 
             if (aklList) {
-                aklList.innerHTML = labels11.map((lbl, idx) => `
-                    <div class="flex items-center justify-between py-1.5">
-                        <span class="font-medium">${lbl}</span>
-                        <span class="font-semibold text-slate-900">${formatNumber(klp11.akl.data[idx], 2)}</span>
-                    </div>
-                `).join('');
+                aklList.innerHTML = labels11.map((lbl, idx) => render11KlpListItem(lbl, klp11.akl.data[idx], idx)).join('');
             }
         }
 

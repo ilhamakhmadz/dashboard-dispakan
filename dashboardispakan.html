@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard SIP - Dispakan Kab. Bandung</title>
+    <title>Dashboard Sistem Informasi Pangan dan Perikanan - Dispakan Kab. Bandung</title>
 
     <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,7 +14,7 @@
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Konfigurasi Tailwind -->
+    <!-- Konfigurasi Tailwind dengan Palet Warna Panduan -->
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -24,9 +24,22 @@
                         sans: ['"Plus Jakarta Sans"', 'sans-serif'],
                     },
                     colors: {
-                        emerald: {
-                            50: '#ecfdf5', 100: '#d1fae5', 400: '#34d399', 500: '#10b981',
-                            600: '#059669', 700: '#047857', 800: '#065f46', 900: '#064e3b', 950: '#022c22',
+                        brand: {
+                            1: '#1d2d35',
+                            2: '#0a4b57',
+                            3: '#117a8b', // Warna Utama 3
+                            4: '#4dbdaf', // Warna Utama 4
+                            5: '#2e8a57',
+                            6: '#dc3545',
+                            7: '#e07a5f',
+                            8: '#f4a261',
+                            9: '#e9c46a',
+                            10: '#f5f0da',
+                            11: '#94a3a8',
+                            dark: '#1d2d35',
+                            deep: '#0a4b57',
+                            primary: '#117a8b',
+                            secondary: '#4dbdaf',
                         }
                     },
                     animation: {
@@ -68,33 +81,33 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Efek Kaca (Glassmorphism) Premium */
+        /* Efek Kaca (Glassmorphism) Menggunakan Palet Panduan */
         .glass {
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.55);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 8px 32px 0 rgba(17, 122, 139, 0.08);
         }
 
         .glass-card {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.3) 100%);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.45) 100%);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.85);
+            box-shadow: 0 8px 32px 0 rgba(10, 75, 87, 0.08);
         }
 
         .dark .glass {
-            background: rgba(2, 44, 34, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            background: rgba(10, 75, 87, 0.35);
+            border: 1px solid rgba(77, 189, 175, 0.15);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.35);
         }
 
         .dark .glass-card {
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.8) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+            background: linear-gradient(135deg, rgba(29, 45, 53, 0.85) 0%, rgba(10, 75, 87, 0.8) 100%);
+            border: 1px solid rgba(77, 189, 175, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
         }
 
         /* Utilitas Delay Animasi untuk Staggering */
@@ -122,7 +135,7 @@
             animation-delay: 4s;
         }
 
-        /* Custom Scrollbar */
+        /* Custom Scrollbar dengan Aksen Warna 3 & 4 */
         ::-webkit-scrollbar {
             width: 6px;
         }
@@ -132,12 +145,12 @@
         }
 
         ::-webkit-scrollbar-thumb {
-            background: rgba(16, 185, 129, 0.3);
+            background: rgba(17, 122, 139, 0.4);
             border-radius: 10px;
         }
 
         .dark ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(77, 189, 175, 0.35);
         }
     </style>
 
@@ -152,20 +165,20 @@
 </head>
 
 <body
-    class="min-h-screen bg-slate-50 dark:bg-neutral-950 font-sans selection:bg-emerald-500/30 transition-colors duration-700 m-0 p-0 overflow-x-hidden overflow-y-auto">
+    class="min-h-screen bg-slate-50 dark:bg-[#101b20] font-sans selection:bg-[#4dbdaf]/30 transition-colors duration-700 m-0 p-0 overflow-x-hidden overflow-y-auto">
 
     <!-- ========================================== -->
     <!-- BACKGROUND ANIMASI (BLOBS)                 -->
     <!-- ========================================== -->
     <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
         <div
-            class="absolute top-[-10%] left-[-10%] w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full bg-emerald-200/50 dark:bg-emerald-900/30 mix-blend-multiply dark:mix-blend-screen filter blur-[80px] md:blur-[120px] animate-blob">
+            class="absolute top-[-10%] left-[-10%] w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full bg-[#117a8b]/25 dark:bg-[#117a8b]/20 mix-blend-multiply dark:mix-blend-screen filter blur-[80px] md:blur-[120px] animate-blob">
         </div>
         <div
-            class="absolute top-[20%] right-[-10%] w-[350px] h-[350px] md:w-[500px] md:h-[500px] rounded-full bg-teal-200/50 dark:bg-teal-900/20 mix-blend-multiply dark:mix-blend-screen filter blur-[80px] md:blur-[120px] animate-blob delay-2000">
+            class="absolute top-[20%] right-[-10%] w-[350px] h-[350px] md:w-[500px] md:h-[500px] rounded-full bg-[#4dbdaf]/30 dark:bg-[#4dbdaf]/20 mix-blend-multiply dark:mix-blend-screen filter blur-[80px] md:blur-[120px] animate-blob delay-2000">
         </div>
         <div
-            class="absolute bottom-[-20%] left-[20%] w-[400px] h-[400px] md:w-[700px] md:h-[700px] rounded-full bg-green-200/40 dark:bg-green-900/20 mix-blend-multiply dark:mix-blend-screen filter blur-[80px] md:blur-[120px] animate-blob delay-4000">
+            class="absolute bottom-[-20%] left-[20%] w-[400px] h-[400px] md:w-[700px] md:h-[700px] rounded-full bg-[#0a4b57]/20 dark:bg-[#0a4b57]/30 mix-blend-multiply dark:mix-blend-screen filter blur-[80px] md:blur-[120px] animate-blob delay-4000">
         </div>
     </div>
 
@@ -180,30 +193,32 @@
 
             <!-- Toggle Dark Mode -->
             <button id="darkModeToggle"
-                class="w-12 h-12 md:w-14 md:h-14 rounded-[1.2rem] glass flex items-center justify-center text-emerald-900 dark:text-emerald-100 transition-all duration-300 hover:scale-110 active:scale-95 hover:shadow-emerald-500/20">
-                <i data-lucide="moon" id="moonIcon" class="hidden w-5 h-5 md:w-6 md:h-6"></i>
-                <i data-lucide="sun" id="sunIcon" class="hidden w-5 h-5 md:w-6 md:h-6"></i>
+                class="w-12 h-12 md:w-14 md:h-14 rounded-[1.2rem] glass flex items-center justify-center text-[#117a8b] dark:text-[#4dbdaf] transition-all duration-300 hover:scale-110 active:scale-95 hover:shadow-[#117a8b]/20">
+                <i data-lucide="moon" class="w-5 h-5 md:w-6 md:h-6 block dark:hidden"></i>
+                <i data-lucide="sun" class="w-5 h-5 md:w-6 md:h-6 hidden dark:block"></i>
             </button>
 
-            <!-- Lencana Tengah -->
+            <!-- Lencana Tengah (Logo Dispakan) -->
             <div
-                class="flex items-center gap-3 glass px-5 md:px-6 py-2.5 md:py-3 rounded-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+                class="flex items-center gap-3 glass px-4 md:px-5 py-2 md:py-2.5 rounded-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1 group">
                 <div
-                    class="w-8 h-8 rounded-full bg-gradient-to-tr from-emerald-600 to-emerald-400 flex items-center justify-center shadow-inner">
-                    <i data-lucide="sprout" class="text-white w-4 h-4"></i>
+                    class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-white/80 dark:bg-black/25 p-1 flex items-center justify-center shadow-sm border border-white/60 dark:border-white/10 backdrop-blur-sm flex-shrink-0">
+                    <img src="https://nos.wjv-1.neo.id/skpd/logo/20/1747972457Logo%20Dispakan%20trans.png"
+                        alt="Logo Dispakan Kab. Bandung"
+                        class="w-full h-full object-contain filter drop-shadow-sm transition-transform duration-300 group-hover:scale-110">
                 </div>
                 <div class="flex flex-col">
                     <span
-                        class="text-[0.6rem] md:text-[0.7rem] font-extrabold tracking-[0.2em] uppercase text-emerald-950 dark:text-white leading-none mb-0.5">Dispakan</span>
+                        class="text-[0.6rem] md:text-[0.7rem] font-extrabold tracking-[0.2em] uppercase text-[#1d2d35] dark:text-white leading-none mb-0.5">Dispakan</span>
                     <span
-                        class="text-[0.55rem] md:text-[0.6rem] font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider leading-none">Kab.
+                        class="text-[0.55rem] md:text-[0.6rem] font-semibold text-[#117a8b] dark:text-[#4dbdaf] uppercase tracking-wider leading-none">Kab.
                         Bandung</span>
                 </div>
             </div>
 
             <!-- Tombol Toggle Auto Swipe -->
             <button id="autoPlayToggle"
-                class="w-12 h-12 md:w-14 md:h-14 rounded-[1.2rem] glass flex items-center justify-center text-emerald-900 dark:text-emerald-100 transition-all duration-300 hover:scale-110 active:scale-95 hover:shadow-emerald-500/20 group">
+                class="w-12 h-12 md:w-14 md:h-14 rounded-[1.2rem] glass flex items-center justify-center text-[#117a8b] dark:text-[#4dbdaf] transition-all duration-300 hover:scale-110 active:scale-95 hover:shadow-[#117a8b]/20 group">
                 <!-- Ikon Pause (Menandakan sedang auto-play) -->
                 <i data-lucide="pause" id="pauseIcon"
                     class="block w-5 h-5 md:w-6 md:h-6 transition-transform group-hover:scale-110"></i>
@@ -223,11 +238,11 @@
                 class="inline-flex items-center gap-2 px-4 py-1.5 mb-6 rounded-full glass opacity-0 animate-fade-in-up delay-200">
                 <span class="relative flex h-2 w-2">
                     <span
-                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-600 dark:bg-emerald-400"></span>
+                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4dbdaf] opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-[#117a8b] dark:bg-[#4dbdaf]"></span>
                 </span>
                 <p
-                    class="text-emerald-800 dark:text-emerald-200 font-bold tracking-[0.15em] text-[0.65rem] md:text-xs uppercase">
+                    class="text-[#0a4b57] dark:text-[#4dbdaf] font-bold tracking-[0.15em] text-[0.65rem] md:text-xs uppercase">
                     Dashboard Pimpinan
                 </p>
             </div>
@@ -235,16 +250,16 @@
             <!-- Judul Utama -->
             <div class="text-center opacity-0 animate-fade-in-up delay-300">
                 <h1
-                    class="text-[3.2rem] md:text-7xl font-extrabold text-neutral-900 dark:text-white tracking-tight leading-[1] drop-shadow-sm">
+                    class="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-[#1d2d35] dark:text-white tracking-tight leading-[1.15] drop-shadow-sm px-2">
                     Sistem <br />
                     <span
-                        class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500 dark:from-emerald-400 dark:to-teal-300">
-                        Informasi Pangan v2.0
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-[#117a8b] via-[#2197a8] to-[#4dbdaf] dark:from-[#4dbdaf] dark:via-[#72e1d4] dark:to-[#4dbdaf]">
+                        Informasi Pangan dan Perikanan
                     </span>
                 </h1>
                 <p
                     class="mt-6 text-sm md:text-lg text-neutral-600 dark:text-neutral-400 font-medium max-w-xs md:max-w-md mx-auto leading-relaxed">
-                    Pusat layanan data ketahanan pangan terpadu Kabupaten Bandung.
+                    Pusat layanan data ketahanan pangan dan perikanan terpadu Kabupaten Bandung.
                 </p>
             </div>
 
@@ -266,10 +281,10 @@
         <footer class="w-full pb-8 md:pb-10 flex flex-col items-center gap-6 opacity-0 animate-fade-in-up delay-400">
 
             <!-- Tombol Pencarian -->
-            <div class="p-2 md:p-2.5 rounded-[2rem] glass transition-all hover:scale-105 active:scale-95 cursor-pointer hover:shadow-emerald-500/30 group animate-float"
+            <div class="p-2 md:p-2.5 rounded-[2rem] glass transition-all hover:scale-105 active:scale-95 cursor-pointer hover:shadow-[#117a8b]/30 group animate-float"
                 id="searchBtn">
                 <div
-                    class="w-[72px] h-[72px] md:w-[84px] md:h-[84px] bg-gradient-to-tr from-emerald-600 to-teal-500 rounded-[1.5rem] flex items-center justify-center text-white shadow-lg shadow-emerald-600/30 transition-transform duration-300 group-hover:rotate-12">
+                    class="w-[72px] h-[72px] md:w-[84px] md:h-[84px] bg-gradient-to-tr from-[#117a8b] to-[#4dbdaf] rounded-[1.5rem] flex items-center justify-center text-white shadow-lg shadow-[#117a8b]/30 transition-transform duration-300 group-hover:rotate-12">
                     <i data-lucide="search" class="w-7 h-7 md:w-8 md:h-8"></i>
                 </div>
             </div>
@@ -278,15 +293,15 @@
             <div
                 class="glass px-6 py-2.5 rounded-2xl flex items-center gap-6 text-xs text-slate-700 dark:text-slate-300 font-semibold shadow-sm border border-white/40 dark:border-white/10">
                 <div class="flex items-center gap-2">
-                    <i data-lucide="eye" class="w-4 h-4 text-emerald-500"></i>
+                    <i data-lucide="eye" class="w-4 h-4 text-[#117a8b] dark:text-[#4dbdaf]"></i>
                     <span>Total: <strong id="totalVisitors"
-                            class="text-emerald-600 dark:text-emerald-400 font-extrabold">0</strong></span>
+                            class="text-[#117a8b] dark:text-[#4dbdaf] font-extrabold">0</strong></span>
                 </div>
                 <div class="h-4 w-[1px] bg-slate-300 dark:bg-slate-700"></div>
                 <div class="flex items-center gap-2">
-                    <i data-lucide="users" class="w-4 h-4 text-blue-500"></i>
+                    <i data-lucide="users" class="w-4 h-4 text-[#4dbdaf]"></i>
                     <span>Hari ini: <strong id="todayVisitors"
-                            class="text-blue-600 dark:text-blue-400 font-extrabold">0</strong></span>
+                            class="text-[#117a8b] dark:text-[#4dbdaf] font-extrabold">0</strong></span>
                 </div>
             </div>
 
@@ -296,21 +311,21 @@
         <!-- MODAL PENCARIAN (SEARCH OVERLAY)           -->
         <!-- ========================================== -->
         <div id="searchOverlay"
-            class="fixed inset-0 z-50 bg-neutral-900/20 dark:bg-black/60 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-500 flex flex-col justify-end md:justify-center md:items-center p-0 md:p-6">
+            class="fixed inset-0 z-50 bg-[#1d2d35]/30 dark:bg-black/70 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-500 flex flex-col justify-end md:justify-center md:items-center p-0 md:p-6">
             <div id="searchModal"
-                class="bg-white/90 dark:bg-[#0f172a]/90 backdrop-blur-3xl h-[85%] md:h-[80vh] w-full md:max-w-3xl rounded-t-[2.5rem] md:rounded-[3rem] shadow-2xl p-6 md:p-10 transform translate-y-full md:translate-y-10 md:scale-95 transition-all duration-500 ease-[cubic-bezier(0.2,1,0.3,1)] border-t md:border border-white/50 dark:border-white/10 flex flex-col">
+                class="bg-white/95 dark:bg-[#1d2d35]/95 backdrop-blur-3xl h-[85%] md:h-[80vh] w-full md:max-w-3xl rounded-t-[2.5rem] md:rounded-[3rem] shadow-2xl p-6 md:p-10 transform translate-y-full md:translate-y-10 md:scale-95 transition-all duration-500 ease-[cubic-bezier(0.2,1,0.3,1)] border-t md:border border-white/50 dark:border-white/10 flex flex-col">
 
                 <!-- Handle & Header -->
                 <div class="w-16 h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full mx-auto mb-8 md:hidden"></div>
                 <div class="flex justify-between items-center mb-8">
                     <div>
-                        <h3 class="text-2xl md:text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+                        <h3 class="text-2xl md:text-4xl font-extrabold text-[#1d2d35] dark:text-white tracking-tight">
                             Cari Layanan</h3>
                         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 font-medium">Temukan modul dan laporan
-                            pangan</p>
+                            pangan & perikanan</p>
                     </div>
                     <button id="closeSearchBtn"
-                        class="w-12 h-12 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/10 hover:rotate-90 transition-all duration-300 active:scale-90">
+                        class="w-12 h-12 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-[#117a8b]/10 dark:hover:bg-[#4dbdaf]/20 hover:text-[#117a8b] dark:hover:text-[#4dbdaf] hover:rotate-90 transition-all duration-300 active:scale-90">
                         <i data-lucide="x" class="w-6 h-6"></i>
                     </button>
                 </div>
@@ -318,9 +333,9 @@
                 <!-- Input Pencarian -->
                 <div class="relative mb-8 group">
                     <i data-lucide="search"
-                        class="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-400 dark:text-gray-500 transition-colors group-focus-within:text-emerald-500"></i>
+                        class="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-400 dark:text-gray-500 transition-colors group-focus-within:text-[#117a8b] dark:group-focus-within:text-[#4dbdaf]"></i>
                     <input type="text" id="searchInput" placeholder="Ketik kata kunci pencarian..."
-                        class="w-full bg-gray-100/80 dark:bg-black/40 border border-transparent focus:border-emerald-500/50 text-gray-900 dark:text-white rounded-[1.5rem] py-5 pl-16 pr-6 outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all font-semibold md:text-lg placeholder-gray-400 dark:placeholder-gray-600 shadow-inner">
+                        class="w-full bg-gray-100/80 dark:bg-black/40 border border-transparent focus:border-[#4dbdaf]/60 text-gray-900 dark:text-white rounded-[1.5rem] py-5 pl-16 pr-6 outline-none focus:ring-4 focus:ring-[#117a8b]/15 transition-all font-semibold md:text-lg placeholder-gray-400 dark:placeholder-gray-600 shadow-inner">
                 </div>
 
                 <!-- Hasil Pencarian -->
@@ -338,43 +353,28 @@
 
         const htmlEl = document.documentElement;
         const darkModeToggle = document.getElementById('darkModeToggle');
-        const moonIcon = document.getElementById('moonIcon');
-        const sunIcon = document.getElementById('sunIcon');
-
-        function updateDarkModeIcons() {
-            if (htmlEl.classList.contains('dark')) {
-                moonIcon.classList.add('hidden');
-                sunIcon.classList.remove('hidden');
-                sunIcon.classList.add('block');
-            } else {
-                sunIcon.classList.add('hidden');
-                moonIcon.classList.remove('hidden');
-                moonIcon.classList.add('block');
-            }
-        }
-        updateDarkModeIcons();
 
         darkModeToggle.addEventListener('click', () => {
             htmlEl.classList.toggle('dark');
-            updateDarkModeIcons();
             localStorage.setItem('theme', htmlEl.classList.contains('dark') ? 'dark' : 'light');
         });
 
         // ==========================================
-        // DATA MENU (Termasuk Pedoman Teknis SIP & PSAT)
+        // DATA MENU (Termasuk Pedoman Teknis SIPP & PSAT)
+        // Palet diselaraskan dengan Warna 3 (#117a8b) dan Warna 4 (#4dbdaf)
         // ==========================================
         const menuItems = [
-            { id: 'sikandung', label: 'SIKANDUNG (Perikanan)', icon: 'fish', color: 'text-cyan-500', url: 'https://aplikasi.bandungkab.go.id/publik/dispakan-sikandung' },
-            { id: 'sileleikan', label: 'SI LELE IKAN', icon: 'anchor', color: 'text-cyan-500', url: 'https://aplikasi.bandungkab.go.id/publik/dispakan-si-lele-ikan-aplikasi-layanan-dan-edukasi-pelaku-perikanan' },
-            { id: 'pedoman_tek', label: 'Buku Pedoman Teknis SIP', icon: 'book-open', color: 'text-emerald-500', url: 'https://drive.google.com/file/d/1F1UIh8LIF7YUBVRcAwxyUPR4dg_CEy7i/view?usp=sharing' },
-            { id: 'survei_konsumsi', label: 'Survei Konsumsi Pangan', icon: 'clipboard-list', color: 'text-teal-600', url: 'https://aplikasi.bandungkab.go.id/publik/dispakan-survei-konsumsi-pangan' },
-            { id: 'keamanan_psat', label: 'Keamanan Pangan (PSAT)', icon: 'shield-check', color: 'text-emerald-500', url: 'https://aplikasi.bandungkab.go.id/publik/dispakan-keamanan-pangan-segar-asal-tumbuhan-psat' },
-            { id: 'fsva', label: 'FSVA (Atlas Pangan)', icon: 'map', color: 'text-emerald-500', url: 'https://aplikasi.bandungkab.go.id/publik/dispakan-food-security-and-vulnerability-atlas-fsva' },
-            { id: 'dashboard_cppd', label: 'CPPD', icon: 'package-check', color: 'text-blue-500', url: 'https://aplikasi.bandungkab.go.id/publik/dasboard-cppd-dispakan' },
-            { id: 'trx_lumbung', label: 'Trx Lumbung Pangan', icon: 'arrow-left-right', color: 'text-teal-500', url: 'https://aplikasi.bandungkab.go.id/publik/dispakan-data-transaksi-lumbung-pangan-masyarakat' },
-            { id: 'data_lumbung', label: 'Data Lumbung', icon: 'warehouse', color: 'text-orange-500', url: 'https://aplikasi.bandungkab.go.id/publik/dispakan-data-lumbung-pangan-masyarakat' },
-            { id: 'nbm', label: 'NBM', icon: 'pie-chart', color: 'text-emerald-600', url: 'https://aplikasi.bandungkab.go.id/publik/dispakan-neraca-bahan-makanan-nbm-dan-pola-pangan-harapan-pph' },
-            { id: 'skpg', label: 'SKPG (Warning)', icon: 'alert-triangle', color: 'text-red-600', url: 'https://aplikasi.bandungkab.go.id/publik/dispakan-sistem-peringatan-dini-kerawanan-pangan-dan-gizi-skpg' }
+            { id: 'sikandung', label: 'SIKANDUNG (Perikanan)', icon: 'fish', color: 'text-[#4dbdaf]', url: 'https://aplikasi.bandungkab.go.id/publik/dispakan-sikandung' },
+            { id: 'sileleikan', label: 'SI LELE IKAN', icon: 'anchor', color: 'text-[#117a8b]', url: 'https://aplikasi.bandungkab.go.id/publik/dispakan-si-lele-ikan-aplikasi-layanan-dan-edukasi-pelaku-perikanan' },
+            { id: 'pedoman_tek', label: 'Buku Pedoman Teknis SIPP', icon: 'book-open', color: 'text-[#4dbdaf]', url: 'https://drive.google.com/file/d/1F1UIh8LIF7YUBVRcAwxyUPR4dg_CEy7i/view?usp=sharing' },
+            { id: 'survei_konsumsi', label: 'Survei Konsumsi Pangan', icon: 'clipboard-list', color: 'text-[#117a8b]', url: 'https://aplikasi.bandungkab.go.id/publik/dispakan-survei-konsumsi-pangan' },
+            { id: 'keamanan_psat', label: 'Keamanan Pangan (PSAT)', icon: 'shield-check', color: 'text-[#2e8a57]', url: 'https://aplikasi.bandungkab.go.id/publik/dispakan-keamanan-pangan-segar-asal-tumbuhan-psat' },
+            { id: 'fsva', label: 'FSVA (Atlas Pangan)', icon: 'map', color: 'text-[#4dbdaf]', url: 'https://aplikasi.bandungkab.go.id/publik/dispakan-food-security-and-vulnerability-atlas-fsva' },
+            { id: 'dashboard_cppd', label: 'CPPD', icon: 'package-check', color: 'text-[#0a4b57] dark:text-[#4dbdaf]', url: 'https://aplikasi.bandungkab.go.id/publik/dasboard-cppd-dispakan' },
+            { id: 'trx_lumbung', label: 'Trx Lumbung Pangan', icon: 'arrow-left-right', color: 'text-[#117a8b]', url: 'https://aplikasi.bandungkab.go.id/publik/dispakan-data-transaksi-lumbung-pangan-masyarakat' },
+            { id: 'data_lumbung', label: 'Data Lumbung', icon: 'warehouse', color: 'text-[#f4a261]', url: 'https://aplikasi.bandungkab.go.id/publik/dispakan-data-lumbung-pangan-masyarakat' },
+            { id: 'nbm', label: 'NBM', icon: 'pie-chart', color: 'text-[#2e8a57]', url: 'https://aplikasi.bandungkab.go.id/publik/dispakan-neraca-bahan-makanan-nbm-dan-pola-pangan-harapan-pph' },
+            { id: 'skpg', label: 'SKPG (Warning)', icon: 'alert-triangle', color: 'text-[#dc3545]', url: 'https://aplikasi.bandungkab.go.id/publik/dispakan-sistem-peringatan-dini-kerawanan-pangan-dan-gizi-skpg' }
         ];
 
         // ==========================================
@@ -430,16 +430,9 @@
         const pauseIcon = document.getElementById('pauseIcon');
 
         function updateAutoPlayUI() {
-            if (isAutoPlay) {
-                pauseIcon.classList.remove('hidden');
-                pauseIcon.classList.add('block');
-                playIcon.classList.remove('block');
-                playIcon.classList.add('hidden');
-            } else {
-                playIcon.classList.remove('hidden');
-                playIcon.classList.add('block');
-                pauseIcon.classList.remove('block');
-                pauseIcon.classList.add('hidden');
+            if (pauseIcon && playIcon) {
+                pauseIcon.style.display = isAutoPlay ? 'block' : 'none';
+                playIcon.style.display = isAutoPlay ? 'none' : 'block';
             }
         }
 
@@ -499,7 +492,7 @@
                 card.className = "menu-card absolute w-[130px] h-[160px] md:w-[160px] md:h-[200px] glass-card rounded-[2.5rem] flex flex-col items-center justify-center gap-3 md:gap-4 transition-all duration-700 origin-bottom select-none no-tap-highlight group";
 
                 if (diff === 0) {
-                    card.classList.add('z-30', 'cursor-pointer', 'shadow-[0_20px_40px_-10px_rgba(16,185,129,0.3)]', 'dark:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.6)]', 'hover:-translate-y-8');
+                    card.classList.add('z-30', 'cursor-pointer', 'shadow-[0_20px_45px_-10px_rgba(17,122,139,0.4)]', 'dark:shadow-[0_20px_45px_-10px_rgba(77,189,175,0.3)]', 'border-2', 'border-[#4dbdaf]/70', 'hover:-translate-y-8');
                     card.style.transform = 'translateY(-20px) scale(1.15)';
                     card.style.opacity = '1';
                     card.style.pointerEvents = 'auto';
@@ -625,14 +618,14 @@
             filteredItems.forEach(item => {
                 const originalIndex = menuItems.findIndex(m => m.id === item.id);
                 const itemEl = document.createElement('div');
-                itemEl.className = 'group flex items-center gap-5 p-4 md:p-5 rounded-[1.5rem] bg-gray-50/50 dark:bg-white/5 hover:bg-emerald-500 hover:text-white transition-all cursor-pointer border border-transparent hover:border-emerald-400 hover:shadow-lg hover:shadow-emerald-500/20 active:scale-[0.98]';
+                itemEl.className = 'group flex items-center gap-5 p-4 md:p-5 rounded-[1.5rem] bg-gray-50/50 dark:bg-white/5 hover:bg-gradient-to-r hover:from-[#117a8b] hover:to-[#4dbdaf] hover:text-white transition-all cursor-pointer border border-transparent hover:border-[#4dbdaf]/50 hover:shadow-lg hover:shadow-[#117a8b]/20 active:scale-[0.98]';
                 itemEl.innerHTML = `
           <div class="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-white dark:bg-black/30 flex items-center justify-center shadow-sm group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
-            <i data-lucide="${item.icon}" class="w-5 h-5 md:w-6 md:h-6 ${item.color} group-hover:text-emerald-600 transition-colors"></i>
+            <i data-lucide="${item.icon}" class="w-5 h-5 md:w-6 md:h-6 ${item.color} group-hover:text-[#117a8b] transition-colors"></i>
           </div>
           <div class="flex flex-col">
             <span class="font-bold text-[15px] md:text-[17px] text-gray-900 dark:text-gray-100 group-hover:text-white transition-colors">${item.label}</span>
-            <span class="text-[11px] md:text-[12px] opacity-60 font-semibold uppercase tracking-wider mt-0.5 group-hover:text-emerald-100">Layanan Publik</span>
+            <span class="text-[11px] md:text-[12px] opacity-60 font-semibold uppercase tracking-wider mt-0.5 group-hover:text-white/80">Layanan Publik</span>
           </div>
           <div class="ml-auto w-8 h-8 rounded-full bg-white/20 flex items-center justify-center opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
             <i data-lucide="chevron-right" class="w-4 h-4 text-white"></i>
