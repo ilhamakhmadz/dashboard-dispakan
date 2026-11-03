@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title id="page-title">Dashboard FSVA - Kab. Bandung</title>
-    
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -33,70 +34,129 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
     <!-- Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    
+
     <!-- Leaflet CSS & JS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+
         .glass-nav {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(15, 23, 42, 0.05);
         }
+
         .gradient-header {
             background: linear-gradient(135deg, #047857 0%, #064e3b 100%);
         }
-        .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; opacity: 0; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         .loader {
             border: 3px solid #f3f3f3;
             border-radius: 50%;
-            border-top: 3px solid #10b981;
+            border-top: 3px solid #117a8b;
             width: 24px;
             height: 24px;
             animation: spin 1s linear infinite;
         }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        .leaflet-popup-content-wrapper { border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); }
-        .leaflet-popup-content { margin: 0; }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        .leaflet-popup-content-wrapper {
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            padding: 0;
+            overflow: hidden;
+        }
+        .leaflet-popup-content {
+            margin: 0;
+        }
+        .custom-popup table td {
+            padding: 4px 8px;
+        }
     </style>
 </head>
-<body class="text-slate-800 antialiased selection:bg-emerald-100 selection:text-emerald-900">
+
+<body class="text-slate-800 antialiased selection:bg-[#117a8b]/20 selection:text-[#0a4b57]">
 
     <!-- LOADING SCREEN -->
-    <div id="loading-screen" class="fixed inset-0 z-[1000] bg-white flex flex-col items-center justify-center transition-all duration-700 ease-in-out">
+    <div id="loading-screen"
+        class="fixed inset-0 z-[1000] bg-white flex flex-col items-center justify-center transition-all duration-700 ease-in-out">
         <div class="relative w-24 h-24 mb-8">
             <div class="absolute inset-0 border-4 border-slate-100 rounded-full"></div>
-            <div class="absolute inset-0 border-4 border-emerald-600 rounded-full border-t-transparent animate-spin"></div>
-            <div class="absolute inset-0 flex items-center justify-center text-emerald-600">
+            <div class="absolute inset-0 border-4 border-[#117a8b] rounded-full border-t-transparent animate-spin">
+            </div>
+            <div class="absolute inset-0 flex items-center justify-center text-[#117a8b]">
                 <i data-lucide="map" class="w-8 h-8 animate-pulse"></i>
             </div>
         </div>
-        
+
         <h2 class="text-2xl font-bold text-slate-800 mb-2 tracking-tight">Data FSVA (Ketahanan Pangan)</h2>
-        
+
         <div class="h-6 mb-3 flex items-center justify-center">
-            <p id="loading-text" class="text-sm font-medium text-slate-500 font-mono transition-all duration-300">Menarik data dari API...</p>
+            <p id="loading-text" class="text-sm font-medium text-slate-500 font-mono transition-all duration-300">
+                Menarik data dari API...</p>
         </div>
 
         <div class="w-72 h-2.5 bg-slate-100 rounded-full overflow-hidden relative shadow-inner">
-            <div id="loading-bar-inner" class="h-full bg-gradient-to-r from-emerald-500 to-green-600 rounded-full transition-all duration-500 ease-out" style="width: 5%"></div>
+            <div id="loading-bar-inner"
+                class="h-full bg-gradient-to-r from-[#117a8b] to-[#4dbdaf] rounded-full transition-all duration-500 ease-out"
+                style="width: 5%"></div>
         </div>
-        <p id="loading-pct" class="text-xs font-bold text-emerald-600 mt-3 font-mono">5%</p>
+        <p id="loading-pct" class="text-xs font-bold text-[#117a8b] mt-3 font-mono">5%</p>
     </div>
 
     <!-- Navbar -->
@@ -106,19 +166,21 @@
                 <!-- Logo & Title -->
                 <div class="flex items-center justify-between w-full lg:w-auto">
                     <div class="flex items-center gap-3">
-                        <div class="bg-emerald-600 p-2 rounded-lg text-white shadow-md">
+                        <div class="bg-[#117a8b] p-2 rounded-lg text-white shadow-md">
                             <i data-lucide="map" class="w-6 h-6"></i>
                         </div>
                         <div class="block">
                             <h1 class="text-lg font-bold text-slate-900 leading-tight tracking-tight">ATLAS FSVA</h1>
-                            <p class="text-[10px] font-semibold text-emerald-600 uppercase tracking-widest">Kabupaten Bandung</p>
+                            <p class="text-[10px] font-semibold text-emerald-600 uppercase tracking-widest">Kabupaten
+                                Bandung</p>
                         </div>
                     </div>
                     <!-- Mobile Refresh -->
                     <div class="lg:hidden flex items-center gap-2">
                         <span class="relative flex h-2 w-2">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                            <span
+                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4dbdaf] opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-[#117a8b]"></span>
                         </span>
                         <button onclick="window.location.reload()" class="p-2 rounded-lg bg-slate-50 text-slate-600">
                             <i data-lucide="refresh-cw" class="w-4 h-4"></i>
@@ -133,7 +195,8 @@
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <i data-lucide="calendar" class="w-4 h-4 text-slate-500"></i>
                         </div>
-                        <select id="nav-filter-tahun" class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-xl focus:ring-emerald-500 focus:border-emerald-500 block pl-10 p-2.5 cursor-pointer font-medium appearance-none hover:bg-white transition-colors">
+                        <select id="nav-filter-tahun"
+                            class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-xl focus:ring-[#117a8b] focus:border-[#117a8b] block pl-10 p-2.5 cursor-pointer font-medium appearance-none hover:bg-white transition-colors">
                             <option value="all">Semua Tahun</option>
                         </select>
                         <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
@@ -146,7 +209,8 @@
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <i data-lucide="map-pin" class="w-4 h-4 text-slate-500"></i>
                         </div>
-                        <select id="nav-filter-kecamatan" class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-xl focus:ring-emerald-500 focus:border-emerald-500 block pl-10 p-2.5 cursor-pointer font-medium appearance-none hover:bg-white transition-colors">
+                        <select id="nav-filter-kecamatan"
+                            class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-xl focus:ring-[#117a8b] focus:border-[#117a8b] block pl-10 p-2.5 cursor-pointer font-medium appearance-none hover:bg-white transition-colors">
                             <option value="all">Semua Kecamatan</option>
                         </select>
                         <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
@@ -159,7 +223,8 @@
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <i data-lucide="alert-triangle" class="w-4 h-4 text-slate-500"></i>
                         </div>
-                        <select id="nav-filter-prioritas" class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-xl focus:ring-emerald-500 focus:border-emerald-500 block pl-10 p-2.5 cursor-pointer font-medium appearance-none hover:bg-white transition-colors">
+                        <select id="nav-filter-prioritas"
+                            class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-xl focus:ring-[#117a8b] focus:border-[#117a8b] block pl-10 p-2.5 cursor-pointer font-medium appearance-none hover:bg-white transition-colors">
                             <option value="all">Semua Prioritas</option>
                         </select>
                         <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
@@ -167,33 +232,37 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Right Actions (Date & Live) -->
                 <div class="hidden lg:flex items-center gap-4">
                     <div class="flex flex-col items-end">
                         <span class="text-xs font-medium text-slate-500" id="current-date">Loading...</span>
                         <div class="flex items-center gap-1.5">
                             <span class="relative flex h-2 w-2">
-                              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                              <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                                <span
+                                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4dbdaf] opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2 w-2 bg-[#117a8b]"></span>
                             </span>
-                            <span class="text-xs font-bold text-emerald-600">LIVE API DATA</span>
+                            <span class="text-xs font-bold text-[#117a8b]">LIVE API DATA</span>
                         </div>
                     </div>
-                    <button onclick="window.location.reload()" class="p-2.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200 transition-all shadow-sm group">
-                        <i data-lucide="refresh-cw" class="w-5 h-5 group-hover:rotate-180 transition-transform duration-500"></i>
+                    <button onclick="window.location.reload()"
+                        class="p-2.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:bg-[#117a8b]/10 hover:text-[#117a8b] hover:border-[#117a8b]/30 transition-all shadow-sm group">
+                        <i data-lucide="refresh-cw"
+                            class="w-5 h-5 group-hover:rotate-180 transition-transform duration-500"></i>
                     </button>
                 </div>
             </div>
 
             <!-- Mobile Filter Section -->
             <div class="lg:hidden flex flex-col gap-2 pb-3">
-                 <div class="grid grid-cols-2 gap-2">
-                     <div class="relative">
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="relative">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <i data-lucide="calendar" class="w-4 h-4 text-slate-500"></i>
                         </div>
-                        <select id="mobile-filter-tahun" class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg pl-10 p-2.5 font-medium appearance-none">
+                        <select id="mobile-filter-tahun"
+                            class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg pl-10 p-2.5 font-medium appearance-none">
                             <option value="all">Semua Tahun</option>
                         </select>
                     </div>
@@ -201,7 +270,8 @@
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <i data-lucide="alert-triangle" class="w-4 h-4 text-slate-500"></i>
                         </div>
-                        <select id="mobile-filter-prioritas" class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg pl-10 p-2.5 font-medium appearance-none">
+                        <select id="mobile-filter-prioritas"
+                            class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg pl-10 p-2.5 font-medium appearance-none">
                             <option value="all">Semua Prioritas</option>
                         </select>
                     </div>
@@ -209,130 +279,268 @@
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <i data-lucide="map-pin" class="w-4 h-4 text-slate-500"></i>
                         </div>
-                        <select id="mobile-filter-kecamatan" class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg pl-10 p-2.5 font-medium appearance-none">
+                        <select id="mobile-filter-kecamatan"
+                            class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg pl-10 p-2.5 font-medium appearance-none">
                             <option value="all">Semua Kecamatan</option>
                         </select>
                     </div>
-                 </div>
+                </div>
             </div>
         </div>
     </nav>
 
     <!-- Main Content -->
     <main class="container mx-auto px-4 lg:px-8 py-8 mt-44 sm:mt-40 lg:mt-20 mb-12">
-        
-        <!-- Header Section -->
-        <div class="mb-8 rounded-3xl gradient-header p-8 text-white shadow-lg relative overflow-hidden">
-            <div class="relative z-10">
-                <h2 id="dashboard-title" class="text-2xl md:text-3xl font-bold mb-2">Memuat Judul...</h2>
-                <p class="text-emerald-100 max-w-3xl text-sm md:text-base leading-relaxed opacity-90">
-                    Sistem pemantauan dan analisis Peta Ketahanan dan Kerentanan Pangan (Food Security and Vulnerability Atlas - FSVA) di wilayah Kabupaten Bandung berdasarkan 6 indikator utama. Peta Ketahanan dan Kerentanan Pangan (Food Security and Vulnerability Atlas atau FSVA) merupakan peta tematik yang menyajikan visualisasi geografis hasil analisis indikator ketahanan dan kerentanan pangan suatu wilayah.
-                </p>
-                <div class="mt-6 flex flex-wrap gap-3">
-                    <div class="bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-lg flex items-center gap-2">
-                        <i data-lucide="server" class="w-4 h-4 text-emerald-300"></i>
-                        <span class="text-sm font-medium text-emerald-50">API Terhubung</span>
-                    </div>
-                    <div class="bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-lg flex items-center gap-2">
-                        <i data-lucide="filter" class="w-4 h-4 text-emerald-300"></i>
-                        <span class="text-sm font-medium text-emerald-50">Filter Aktif: <span id="active-filter-label" class="text-white font-bold">Semua Data</span></span>
-                    </div>
-                </div>
-            </div>
-            <!-- Decor -->
-            <div class="absolute right-0 bottom-0 opacity-10 pointer-events-none">
-                <i data-lucide="map" class="w-64 h-64 -mb-12 -mr-12 text-white"></i>
-            </div>
-        </div>
 
-        <!-- KPI Cards -->
-        <section class="mb-8 grid grid-cols-1 lg:grid-cols-4 gap-6 bg-white rounded-2xl shadow-soft border border-slate-100 overflow-hidden">
-            <!-- Map Container -->
-            <div class="lg:col-span-3 p-4 border-b lg:border-b-0 lg:border-r border-slate-100 relative">
-                <div class="flex justify-between items-center mb-4 px-2">
-                    <h3 class="font-bold text-slate-800 text-lg flex items-center gap-2">
-                        <i data-lucide="map" class="w-5 h-5 text-emerald-600"></i>
-                        Peta Ketahanan dan Kerentanan Pangan Kabupaten Bandung (FSVA)
-                    </h3>
+        <!-- Header Section -->
+        <header class="mb-8 relative">
+            <!-- Brand & Dept Header -->
+            <div class="flex items-center gap-3 mb-3">
+                <div
+                    class="w-11 h-11 rounded-xl bg-white border border-[#117a8b]/20 shadow-sm flex items-center justify-center text-[#117a8b] shrink-0 ring-1 ring-[#117a8b]/10">
+                    <i data-lucide="wheat" class="w-5 h-5"></i>
                 </div>
-                <div id="fsva-map" class="w-full h-[500px] rounded-xl z-0 bg-slate-50 border border-slate-200"></div>
-                <!-- Catatan GeoJSON -->
-                <div id="geojson-warning" class="absolute bottom-6 left-6 bg-white/95 p-4 rounded-xl shadow-xl text-xs text-slate-700 max-w-md border border-orange-200 z-[400] flex gap-3 items-start hidden">
-                    <i data-lucide="alert-circle" class="w-6 h-6 text-orange-500 shrink-0"></i>
-                    <div>
-                        <strong class="text-sm block mb-1 text-slate-800">Poligon Peta Belum Tersedia</strong>
-                        <p class="leading-relaxed">Sistem memerlukan file <code class="bg-slate-100 px-1.5 py-0.5 rounded font-mono text-orange-600">bandung.geojson</code> di dalam folder yang sama dengan file ini untuk menampilkan warna kerentanan dan popup detail desa. Silakan letakkan file GeoJSON batas desa Kabupaten Bandung Anda.</p>
+                <div class="text-xs font-bold text-[#117a8b] uppercase tracking-widest leading-tight">
+                    Dinas Ketahanan Pangan dan Perikanan Kabupaten Bandung (DISPAKAN)
+                </div>
+            </div>
+
+            <!-- Headline -->
+            <h1 id="dashboard-title"
+                class="text-2xl md:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight mb-2">
+                Food Security and Vulnerability Atlas (FSVA)
+            </h1>
+
+            <!-- Penjelasan / Info Banner (Warna 4: #4dbdaf) -->
+            <div
+                style="background: rgba(77, 189, 175, 0.12); border: 1px solid rgba(77, 189, 175, 0.45); border-left: 4px solid #4dbdaf;"
+                class="rounded-xl p-4 md:p-5 mt-4 flex items-start gap-3.5 shadow-sm text-slate-700 text-sm leading-relaxed">
+                <i data-lucide="info" class="w-5 h-5 text-[#117a8b] shrink-0 mt-0.5"></i>
+                <div class="flex-1">
+                    <p class="mb-3 text-slate-700 leading-relaxed font-medium">
+                        Peta Ketahanan dan Kerentanan Pangan (<em>Food Security and Vulnerability Atlas</em> atau FSVA) merupakan peta tematik yang menyajikan visualisasi geografis hasil analisis indikator ketahanan dan kerentanan pangan suatu wilayah.
+                    </p>
+                    <div class="flex flex-wrap gap-2 pt-2" style="border-top: 1px solid rgba(77, 189, 175, 0.3);">
+                        <div
+                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/95 border text-xs font-semibold text-[#0a4b57] shadow-2xs"
+                            style="border-color: rgba(77, 189, 175, 0.5);">
+                            <i data-lucide="server" class="w-3.5 h-3.5 text-[#117a8b]"></i>
+                            <span>API Terhubung</span>
+                        </div>
+                        <div
+                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/95 border text-xs font-semibold text-[#0a4b57] shadow-2xs"
+                            style="border-color: rgba(77, 189, 175, 0.5);">
+                            <i data-lucide="filter" class="w-3.5 h-3.5 text-[#117a8b]"></i>
+                            <span>Filter Aktif: <span id="active-filter-label" class="font-bold text-slate-900">Semua Data</span></span>
+                        </div>
                     </div>
                 </div>
             </div>
-            
-            <!-- Legend / Sidebar -->
-            <div class="lg:col-span-1 p-6 flex flex-col items-center">
-                <h4 class="font-bold text-center text-xs mb-1">PETA FSVA KERAWANAN PANGAN<br>KABUPATEN BANDUNG</h4>
-                
-                <!-- Logo Kab Bandung -->
-                <img src="https://bandungkab.go.id/uploads/images/logo_bandungkab.png" alt="Logo Kab Bandung" class="h-24 my-6 object-contain drop-shadow-md">
-                
-                <h5 class="font-bold text-[10px] text-center text-slate-700 mb-6 uppercase tracking-widest">Keterangan<br>Kerawanan Pangan :</h5>
-                
-                <div class="w-full">
-                    <p class="text-xs font-semibold text-slate-600 mb-4 border-b border-slate-100 pb-2">Total Kecamatan: <span id="map-total-kec">0</span></p>
-                    
-                    <ul class="space-y-4 w-full">
-                        <li class="flex flex-col">
-                            <div class="flex items-center gap-2">
-                                <div class="w-4 h-4 rounded bg-[#dc2626] shadow-sm border border-[#991b1b]"></div>
-                                <span class="text-[11px] font-bold text-slate-700">SANGAT RENTAN</span>
-                            </div>
-                            <span class="text-xs text-slate-500 ml-6"><span id="map-prio-1" class="font-bold">0</span> Desa</span>
-                        </li>
-                        <li class="flex flex-col">
-                            <div class="flex items-center gap-2">
-                                <div class="w-4 h-4 rounded bg-[#f87171] shadow-sm border border-[#b91c1c]"></div>
-                                <span class="text-[11px] font-bold text-slate-700">RENTAN</span>
-                            </div>
-                            <span class="text-xs text-slate-500 ml-6"><span id="map-prio-2" class="font-bold">0</span> Desa</span>
-                        </li>
-                        <li class="flex flex-col">
-                            <div class="flex items-center gap-2">
-                                <div class="w-4 h-4 rounded bg-[#fbcfe8] shadow-sm border border-[#db2777]"></div>
-                                <span class="text-[11px] font-bold text-slate-700">AGAK RENTAN</span>
-                            </div>
-                            <span class="text-xs text-slate-500 ml-6"><span id="map-prio-3" class="font-bold">0</span> Desa</span>
-                        </li>
-                        <li class="flex flex-col">
-                            <div class="flex items-center gap-2">
-                                <div class="w-4 h-4 rounded bg-[#bbf7d0] shadow-sm border border-[#16a34a]"></div>
-                                <span class="text-[11px] font-bold text-slate-700">AGAK TAHAN</span>
-                            </div>
-                            <span class="text-xs text-slate-500 ml-6"><span id="map-prio-4" class="font-bold">0</span> Desa</span>
-                        </li>
-                        <li class="flex flex-col">
-                            <div class="flex items-center gap-2">
-                                <div class="w-4 h-4 rounded bg-[#22c55e] shadow-sm border border-[#15803d]"></div>
-                                <span class="text-[11px] font-bold text-slate-700">TAHAN</span>
-                            </div>
-                            <span class="text-xs text-slate-500 ml-6"><span id="map-prio-5" class="font-bold">0</span> Desa</span>
-                        </li>
-                        <li class="flex flex-col">
-                            <div class="flex items-center gap-2">
-                                <div class="w-4 h-4 rounded bg-[#14532d] shadow-sm border border-[#052e16]"></div>
-                                <span class="text-[11px] font-bold text-slate-700">SANGAT TAHAN</span>
-                            </div>
-                            <span class="text-xs text-slate-500 ml-6"><span id="map-prio-6" class="font-bold">0</span> Desa</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+        </header>
 
         <!-- KPI Cards -->
         <section id="stats-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <!-- Skeletons -->
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100"><div class="animate-pulse flex space-x-4"><div class="flex-1 space-y-4 py-1"><div class="h-4 bg-slate-200 rounded w-3/4"></div><div class="h-8 bg-slate-200 rounded"></div></div></div></div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100"><div class="animate-pulse flex space-x-4"><div class="flex-1 space-y-4 py-1"><div class="h-4 bg-slate-200 rounded w-3/4"></div><div class="h-8 bg-slate-200 rounded"></div></div></div></div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100"><div class="animate-pulse flex space-x-4"><div class="flex-1 space-y-4 py-1"><div class="h-4 bg-slate-200 rounded w-3/4"></div><div class="h-8 bg-slate-200 rounded"></div></div></div></div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100"><div class="animate-pulse flex space-x-4"><div class="flex-1 space-y-4 py-1"><div class="h-4 bg-slate-200 rounded w-3/4"></div><div class="h-8 bg-slate-200 rounded"></div></div></div></div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <div class="animate-pulse flex space-x-4">
+                    <div class="flex-1 space-y-4 py-1">
+                        <div class="h-4 bg-slate-200 rounded w-3/4"></div>
+                        <div class="h-8 bg-slate-200 rounded"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <div class="animate-pulse flex space-x-4">
+                    <div class="flex-1 space-y-4 py-1">
+                        <div class="h-4 bg-slate-200 rounded w-3/4"></div>
+                        <div class="h-8 bg-slate-200 rounded"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <div class="animate-pulse flex space-x-4">
+                    <div class="flex-1 space-y-4 py-1">
+                        <div class="h-4 bg-slate-200 rounded w-3/4"></div>
+                        <div class="h-8 bg-slate-200 rounded"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <div class="animate-pulse flex space-x-4">
+                    <div class="flex-1 space-y-4 py-1">
+                        <div class="h-4 bg-slate-200 rounded w-3/4"></div>
+                        <div class="h-8 bg-slate-200 rounded"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PETA FSVA (Sesuai Screenshot) -->
+        <section class="mb-8 bg-white rounded-3xl shadow-soft border border-slate-100 overflow-hidden">
+            <!-- Filter Bar Peta -->
+            <div class="p-4 sm:p-5 border-b border-slate-100 bg-slate-50/70 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-[#117a8b]/10 text-[#117a8b] flex items-center justify-center border border-[#117a8b]/20 shrink-0">
+                        <i data-lucide="map" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-base leading-tight">Peta Kerawanan Pangan</h3>
+                        <p class="text-xs text-slate-500">Peta tematik visualisasi geografis status ketahanan pangan per desa</p>
+                    </div>
+                </div>
+
+                <!-- Controls: Filter Kecamatan, Desa, dan Tombol Filter/Reset -->
+                <div class="flex flex-wrap items-center gap-2.5">
+                    <div class="relative min-w-[170px]">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+                            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-[#117a8b]"></i>
+                        </div>
+                        <select id="map-filter-kecamatan"
+                            class="w-full bg-white border border-slate-200 text-slate-700 text-xs font-semibold rounded-xl pl-9 pr-8 py-2.5 focus:ring-2 focus:ring-[#117a8b] focus:border-[#117a8b] appearance-none cursor-pointer shadow-2xs hover:bg-slate-50 transition">
+                            <option value="all">Semua Kecamatan</option>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
+                            <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+                        </div>
+                    </div>
+
+                    <div class="relative min-w-[170px]">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+                            <i data-lucide="home" class="w-3.5 h-3.5 text-[#117a8b]"></i>
+                        </div>
+                        <select id="map-filter-desa"
+                            class="w-full bg-white border border-slate-200 text-slate-700 text-xs font-semibold rounded-xl pl-9 pr-8 py-2.5 focus:ring-2 focus:ring-[#117a8b] focus:border-[#117a8b] appearance-none cursor-pointer shadow-2xs hover:bg-slate-50 transition">
+                            <option value="all">Semua Desa/Kelurahan</option>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
+                            <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+                        </div>
+                    </div>
+
+                    <button id="map-btn-filter"
+                        class="px-4 py-2.5 bg-[#dc3545] hover:bg-[#b02a37] text-white text-xs font-bold rounded-xl shadow-sm transition flex items-center gap-1.5 active:scale-95">
+                        <i data-lucide="filter" class="w-3.5 h-3.5"></i>
+                        <span>Filter</span>
+                    </button>
+
+                    <button id="map-btn-reset"
+                        class="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-bold rounded-xl transition flex items-center gap-1.5 active:scale-95"
+                        title="Reset tampilan peta ke seluruh wilayah">
+                        <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                        <span>Reset</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Map Layout Grid (Map 3 Cols, Sidebar 1 Col) -->
+            <div class="grid grid-cols-1 lg:grid-cols-4">
+                <!-- Map Area -->
+                <div class="lg:col-span-3 p-4 sm:p-6 border-b lg:border-b-0 lg:border-r border-slate-100 relative">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3 px-1">
+                        <h4 class="font-extrabold text-slate-800 text-sm sm:text-base tracking-tight flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-[#117a8b] inline-block"></span>
+                            Peta Ketahanan dan Kerentanan Pangan Kabupaten Bandung (FSVA)
+                        </h4>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                            PETA FSVA KERAWANAN PANGAN KABUPATEN BANDUNG
+                        </span>
+                    </div>
+
+                    <!-- Map Canvas -->
+                    <div id="fsva-map" class="w-full h-[520px] rounded-2xl z-0 bg-slate-50 border border-slate-200 relative overflow-hidden">
+                        <div id="map-loader" class="absolute inset-0 bg-white/80 backdrop-blur-xs flex flex-col items-center justify-center z-[500] transition-opacity">
+                            <div class="loader mb-2"></div>
+                            <span class="text-xs font-semibold text-[#117a8b]">Memuat batas wilayah desa & kelereng FSVA...</span>
+                        </div>
+                    </div>
+
+                    <!-- Floating Mini Legend (Kiri Bawah Peta - Sesuai Screenshot) -->
+                    <div class="absolute bottom-8 left-8 bg-white/95 backdrop-blur-md p-3.5 rounded-xl shadow-lg border border-slate-200/90 z-[400] text-[11px] font-medium hidden sm:block">
+                        <div class="font-extrabold text-slate-800 mb-2 pb-1 border-b border-slate-100 text-[10px] uppercase tracking-wider">
+                            Peringkat / Tingkat Kerentanan
+                        </div>
+                        <div class="space-y-1.5">
+                            <div class="flex items-center gap-2"><span class="w-3.5 h-3.5 rounded-xs inline-block bg-[#dc2626] border border-[#991b1b]"></span><span class="text-slate-700">Sangat Rentan</span></div>
+                            <div class="flex items-center gap-2"><span class="w-3.5 h-3.5 rounded-xs inline-block bg-[#f87171] border border-[#b91c1c]"></span><span class="text-slate-700">Rentan</span></div>
+                            <div class="flex items-center gap-2"><span class="w-3.5 h-3.5 rounded-xs inline-block bg-[#fbcfe8] border border-[#db2777]"></span><span class="text-slate-700">Agak Rentan</span></div>
+                            <div class="flex items-center gap-2"><span class="w-3.5 h-3.5 rounded-xs inline-block bg-[#bbf7d0] border border-[#16a34a]"></span><span class="text-slate-700">Agak Tahan</span></div>
+                            <div class="flex items-center gap-2"><span class="w-3.5 h-3.5 rounded-xs inline-block bg-[#22c55e] border border-[#15803d]"></span><span class="text-slate-700">Tahan</span></div>
+                            <div class="flex items-center gap-2"><span class="w-3.5 h-3.5 rounded-xs inline-block bg-[#14532d] border border-[#052e16]"></span><span class="text-slate-700">Sangat Tahan</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar Kanan (Sesuai Screenshot: Logo Kab Bandung & List Keterangan) -->
+                <div class="lg:col-span-1 p-6 flex flex-col justify-between bg-slate-50/50">
+                    <div>
+                        <!-- Logo Kabupaten Bandung -->
+                        <div class="flex justify-center mb-5">
+                            <img src="https://bandungkab.go.id/uploads/images/logo_bandungkab.png" alt="Logo Kabupaten Bandung" class="h-24 object-contain drop-shadow-sm hover:scale-105 transition-transform">
+                        </div>
+
+                        <div class="text-center mb-5">
+                            <h4 class="text-xs font-black text-slate-800 tracking-wider uppercase leading-tight">
+                                KETERANGAN<br>KERAWANAN PANGAN :
+                            </h4>
+                            <p class="text-[11px] font-bold text-[#117a8b] mt-2">
+                                Total Kecamatan: <span id="map-total-kec" class="font-mono font-black text-slate-800">31</span>
+                            </p>
+                        </div>
+
+                        <!-- Legend Items with Counts -->
+                        <ul class="space-y-3 text-xs">
+                            <li class="flex items-center justify-between p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-4 h-4 rounded-xs bg-[#dc2626] shrink-0 border border-[#991b1b]"></span>
+                                    <span class="font-bold text-slate-700 text-[11px]">SANGAT RENTAN</span>
+                                </div>
+                                <span class="font-black text-slate-800 font-mono text-xs"><span id="map-count-prio-1">0</span> <span class="text-[10px] font-normal text-slate-500">Desa</span></span>
+                            </li>
+                            <li class="flex items-center justify-between p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-4 h-4 rounded-xs bg-[#f87171] shrink-0 border border-[#b91c1c]"></span>
+                                    <span class="font-bold text-slate-700 text-[11px]">RENTAN</span>
+                                </div>
+                                <span class="font-black text-slate-800 font-mono text-xs"><span id="map-count-prio-2">0</span> <span class="text-[10px] font-normal text-slate-500">Desa</span></span>
+                            </li>
+                            <li class="flex items-center justify-between p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-4 h-4 rounded-xs bg-[#fbcfe8] shrink-0 border border-[#db2777]"></span>
+                                    <span class="font-bold text-slate-700 text-[11px]">AGAK RENTAN</span>
+                                </div>
+                                <span class="font-black text-slate-800 font-mono text-xs"><span id="map-count-prio-3">0</span> <span class="text-[10px] font-normal text-slate-500">Desa</span></span>
+                            </li>
+                            <li class="flex items-center justify-between p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-4 h-4 rounded-xs bg-[#bbf7d0] shrink-0 border border-[#16a34a]"></span>
+                                    <span class="font-bold text-slate-700 text-[11px]">AGAK TAHAN</span>
+                                </div>
+                                <span class="font-black text-slate-800 font-mono text-xs"><span id="map-count-prio-4">0</span> <span class="text-[10px] font-normal text-slate-500">Desa</span></span>
+                            </li>
+                            <li class="flex items-center justify-between p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-4 h-4 rounded-xs bg-[#22c55e] shrink-0 border border-[#15803d]"></span>
+                                    <span class="font-bold text-slate-700 text-[11px]">TAHAN</span>
+                                </div>
+                                <span class="font-black text-slate-800 font-mono text-xs"><span id="map-count-prio-5">0</span> <span class="text-[10px] font-normal text-slate-500">Desa</span></span>
+                            </li>
+                            <li class="flex items-center justify-between p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-4 h-4 rounded-xs bg-[#14532d] shrink-0 border border-[#052e16]"></span>
+                                    <span class="font-bold text-slate-700 text-[11px]">SANGAT TAHAN</span>
+                                </div>
+                                <span class="font-black text-slate-800 font-mono text-xs"><span id="map-count-prio-6">0</span> <span class="text-[10px] font-normal text-slate-500">Desa</span></span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Footer Note -->
+                    <div class="mt-8 pt-4 border-t border-slate-200/70 text-[10px] text-slate-400 text-center leading-relaxed">
+                        Pemerintah Kabupaten Bandung<br>
+                        <span class="font-semibold text-slate-600">Dinas Ketahanan Pangan dan Perikanan</span>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- Charts Grid 1 -->
@@ -341,7 +549,8 @@
             <div class="bg-white p-6 rounded-2xl shadow-soft border border-slate-100 lg:col-span-2">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="font-bold text-slate-800 flex items-center gap-2">
-                        <span class="bg-emerald-100 p-1.5 rounded-lg text-emerald-600"><i data-lucide="bar-chart-2" class="w-4 h-4"></i></span>
+                        <span class="bg-[#117a8b]/10 p-1.5 rounded-lg text-[#117a8b]"><i data-lucide="bar-chart-2"
+                                class="w-4 h-4"></i></span>
                         Distribusi Status Kerentanan Pangan
                     </h3>
                 </div>
@@ -354,7 +563,8 @@
             <div class="bg-white p-6 rounded-2xl shadow-soft border border-slate-100">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="font-bold text-slate-800 flex items-center gap-2">
-                        <span class="bg-red-100 p-1.5 rounded-lg text-red-600"><i data-lucide="alert-triangle" class="w-4 h-4"></i></span> 
+                        <span class="bg-red-100 p-1.5 rounded-lg text-red-600"><i data-lucide="alert-triangle"
+                                class="w-4 h-4"></i></span>
                         Kecamatan Paling Rentan
                     </h3>
                 </div>
@@ -370,7 +580,8 @@
             <div class="bg-white p-6 rounded-2xl shadow-soft border border-slate-100">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="font-bold text-slate-800 flex items-center gap-2">
-                        <span class="bg-purple-100 p-1.5 rounded-lg text-purple-600"><i data-lucide="radar" class="w-4 h-4"></i></span> 
+                        <span class="bg-purple-100 p-1.5 rounded-lg text-purple-600"><i data-lucide="radar"
+                                class="w-4 h-4"></i></span>
                         Profil Rata-Rata 6 Indikator FSVA
                     </h3>
                 </div>
@@ -383,7 +594,8 @@
             <div class="bg-white p-6 rounded-2xl shadow-soft border border-slate-100">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="font-bold text-slate-800 flex items-center gap-2">
-                        <span class="bg-orange-100 p-1.5 rounded-lg text-orange-600"><i data-lucide="trending-down" class="w-4 h-4"></i></span> 
+                        <span class="bg-orange-100 p-1.5 rounded-lg text-orange-600"><i data-lucide="trending-down"
+                                class="w-4 h-4"></i></span>
                         10 Desa dengan Indeks Komposit Terendah
                     </h3>
                 </div>
@@ -393,30 +605,46 @@
             </div>
         </div>
 
-        <!-- Charts Grid 3: Advanced Analysis -->
+        <!-- Charts Grid 3: Analisis Tren Tahunan -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            <!-- Chart 5: Tren per Tahun -->
+            <!-- Chart 5: Tren Indeks Ketahanan Pangan (IKP) -->
             <div class="bg-white p-6 rounded-2xl shadow-soft border border-slate-100">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="font-bold text-slate-800 flex items-center gap-2">
-                        <span class="bg-indigo-100 p-1.5 rounded-lg text-indigo-600"><i data-lucide="calendar-days" class="w-4 h-4"></i></span>
-                        Tren Rata-Rata Indeks Komposit per Tahun
-                    </h3>
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white shrink-0 shadow-sm" style="background-color: #117a8b;">
+                            <i data-lucide="trending-up" class="w-4 h-4"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-base leading-tight">Tren Indeks Ketahanan Pangan (IKP)</h3>
+                            <p class="text-xs text-slate-500 font-medium">Tren Rata-Rata Indeks Komposit per Tahun</p>
+                        </div>
+                    </div>
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#117a8b]/10 text-[#117a8b] border border-[#117a8b]/20">
+                        <i data-lucide="lock" class="w-3 h-3"></i> Terkunci
+                    </span>
                 </div>
                 <div id="chart-tren-tahun" class="h-80 flex items-center justify-center">
                     <div class="loader opacity-50"></div>
                 </div>
             </div>
 
-            <!-- Chart 6: Komposisi Prioritas -->
+            <!-- Chart 6: Tren Desa Rentan Pangan Per Tahun -->
             <div class="bg-white p-6 rounded-2xl shadow-soft border border-slate-100">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="font-bold text-slate-800 flex items-center gap-2">
-                        <span class="bg-blue-100 p-1.5 rounded-lg text-blue-600"><i data-lucide="layers" class="w-4 h-4"></i></span> 
-                        Komposisi Desa (Prioritas 1-6) per Kecamatan
-                    </h3>
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white shrink-0 shadow-sm" style="background-color: #6e1f1f;">
+                            <i data-lucide="bar-chart-2" class="w-4 h-4"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-base leading-tight">Tren Desa Rentan Pangan Per Tahun</h3>
+                            <p class="text-xs text-slate-500 font-medium">Prioritas 1 - 3 (Semua Tahun)</p>
+                        </div>
+                    </div>
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#6e1f1f]/10 text-[#6e1f1f] border border-[#6e1f1f]/20">
+                        <i data-lucide="lock" class="w-3 h-3"></i> Terkunci
+                    </span>
                 </div>
-                <div id="chart-komposisi" class="h-80 flex items-center justify-center">
+                <div id="chart-tren-rentan" class="h-80 flex items-center justify-center">
                     <div class="loader opacity-50"></div>
                 </div>
             </div>
@@ -429,20 +657,24 @@
                 <div class="flex flex-col lg:flex-row justify-between gap-4">
                     <div>
                         <h3 class="font-bold text-slate-800 text-lg">Direktori Desa FSVA</h3>
-                        <p class="text-xs text-slate-500">Daftar lengkap status ketahanan pangan tingkat desa/kelurahan.</p>
+                        <p class="text-xs text-slate-500">Daftar lengkap status ketahanan pangan tingkat desa/kelurahan.
+                        </p>
                     </div>
-                    
+
                     <div class="flex flex-col sm:flex-row gap-2">
                         <!-- Search -->
                         <div class="relative w-full sm:w-64">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                 <i data-lucide="search" class="w-4 h-4 text-slate-400"></i>
                             </div>
-                            <input type="text" id="search-input" class="bg-white border border-slate-200 text-slate-700 text-sm rounded-xl focus:ring-emerald-500 focus:border-emerald-500 block w-full pl-10 p-2.5 shadow-sm" placeholder="Cari Desa atau Kecamatan...">
+                            <input type="text" id="search-input"
+                                class="bg-white border border-slate-200 text-slate-700 text-sm rounded-xl focus:ring-[#117a8b] focus:border-[#117a8b] block w-full pl-10 p-2.5 shadow-sm"
+                                placeholder="Cari Desa atau Kecamatan...">
                         </div>
 
                         <!-- Export Button -->
-                        <button id="btn-export" class="flex items-center justify-center gap-2 px-4 py-2 bg-emerald-600 text-white text-sm font-semibold rounded-xl hover:bg-emerald-700 transition shadow-lg shadow-emerald-200 active:scale-95">
+                        <button id="btn-export"
+                            class="flex items-center justify-center gap-2 px-4 py-2 bg-[#117a8b] text-white text-sm font-semibold rounded-xl hover:bg-[#0a4b57] transition shadow-lg shadow-[#117a8b]/20 active:scale-95">
                             <i data-lucide="file-spreadsheet" class="w-4 h-4"></i> Excel
                         </button>
                     </div>
@@ -466,24 +698,43 @@
                     <tbody id="table-body" class="divide-y divide-slate-100">
                         <!-- Skeletons -->
                         <tr class="animate-pulse">
-                            <td class="px-6 py-4"><div class="h-4 w-24 bg-slate-200 rounded"></div></td>
-                            <td class="px-6 py-4"><div class="h-4 w-32 bg-slate-200 rounded"></div></td>
-                            <td class="px-6 py-4"><div class="h-4 w-12 mx-auto bg-slate-200 rounded"></div></td>
-                            <td class="px-6 py-4"><div class="h-4 w-16 ml-auto bg-slate-200 rounded"></div></td>
-                            <td class="px-6 py-4"><div class="h-4 w-10 mx-auto bg-slate-200 rounded"></div></td>
-                            <td class="px-6 py-4"><div class="h-6 w-20 mx-auto bg-slate-200 rounded-full"></div></td>
-                            <td class="px-6 py-4"><div class="h-8 w-8 mx-auto bg-slate-200 rounded"></div></td>
+                            <td class="px-6 py-4">
+                                <div class="h-4 w-24 bg-slate-200 rounded"></div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="h-4 w-32 bg-slate-200 rounded"></div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="h-4 w-12 mx-auto bg-slate-200 rounded"></div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="h-4 w-16 ml-auto bg-slate-200 rounded"></div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="h-4 w-10 mx-auto bg-slate-200 rounded"></div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="h-6 w-20 mx-auto bg-slate-200 rounded-full"></div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="h-8 w-8 mx-auto bg-slate-200 rounded"></div>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            
+
             <!-- Pagination -->
             <div id="pagination" class="p-4 border-t border-slate-100 flex items-center justify-between bg-slate-50/50">
-                <span class="text-xs text-slate-500">Menampilkan <span id="showing-info" class="font-bold text-slate-800">0</span> entri data</span>
+                <span class="text-xs text-slate-500">Menampilkan <span id="showing-info"
+                        class="font-bold text-slate-800">0</span> entri data</span>
                 <div class="flex gap-1">
-                    <button id="btn-prev" class="p-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-100 hover:text-emerald-600 transition-all disabled:opacity-50"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
-                    <button id="btn-next" class="p-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-100 hover:text-emerald-600 transition-all disabled:opacity-50"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+                    <button id="btn-prev"
+                        class="p-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-100 hover:text-[#117a8b] transition-all disabled:opacity-50"><i
+                            data-lucide="chevron-left" class="w-4 h-4"></i></button>
+                    <button id="btn-next"
+                        class="p-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-100 hover:text-[#117a8b] transition-all disabled:opacity-50"><i
+                            data-lucide="chevron-right" class="w-4 h-4"></i></button>
                 </div>
             </div>
         </section>
@@ -491,45 +742,53 @@
     </main>
 
     <!-- Modal Detail -->
-    <div id="modal-detail" class="fixed inset-0 z-[100] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div id="modal-detail" class="fixed inset-0 z-[100] hidden" aria-labelledby="modal-title" role="dialog"
+        aria-modal="true">
         <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" id="modal-backdrop"></div>
         <div class="fixed inset-0 z-10 overflow-y-auto">
             <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
-                <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-2xl animate-fade-in ring-1 ring-black/5">
-                    
+                <div
+                    class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-2xl animate-fade-in ring-1 ring-black/5">
+
                     <!-- Modal Header -->
-                    <div class="bg-emerald-600 px-6 py-4 flex justify-between items-center text-white">
+                    <div class="bg-[#117a8b] px-6 py-4 flex justify-between items-center text-white">
                         <div class="flex items-center gap-3">
-                             <div class="bg-white/20 p-2.5 rounded-xl shadow-sm border border-white/10">
+                            <div class="bg-white/20 p-2.5 rounded-xl shadow-sm border border-white/10">
                                 <i data-lucide="map-pin" class="w-6 h-6"></i>
-                             </div>
-                             <div>
-                                 <h3 class="text-lg font-bold leading-tight" id="modal-desa">Nama Desa</h3>
-                                 <p class="text-xs font-medium text-emerald-100 flex items-center gap-1">
-                                    <span id="modal-kecamatan">Kecamatan</span> &bull; <span id="modal-tahun">Tahun</span>
-                                 </p>
-                             </div>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold leading-tight" id="modal-desa">Nama Desa</h3>
+                                <p class="text-xs font-medium text-emerald-100 flex items-center gap-1">
+                                    <span id="modal-kecamatan">Kecamatan</span> &bull; <span
+                                        id="modal-tahun">Tahun</span>
+                                </p>
+                            </div>
                         </div>
-                        <button id="modal-close" class="p-1 rounded-full text-emerald-200 hover:text-white hover:bg-emerald-500 transition">
+                        <button id="modal-close"
+                            class="p-1 rounded-full text-emerald-200 hover:text-white hover:bg-[#117a8b] transition">
                             <i data-lucide="x" class="w-6 h-6"></i>
                         </button>
                     </div>
 
                     <!-- Modal Body -->
                     <div class="px-6 py-6 space-y-6">
-                        
+
                         <!-- Top Highlights -->
                         <div class="grid grid-cols-3 gap-4">
                             <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 text-center">
-                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Indeks Komposit</p>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Indeks
+                                    Komposit</p>
                                 <h3 class="text-2xl font-black text-slate-800" id="modal-indeks">0</h3>
                             </div>
                             <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 text-center">
-                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Peringkat Kerentanan</p>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Peringkat
+                                    Kerentanan</p>
                                 <h3 class="text-2xl font-black text-slate-800" id="modal-peringkat">0</h3>
                             </div>
-                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 text-center flex flex-col justify-center items-center" id="modal-prio-container">
-                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Status Prioritas</p>
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 text-center flex flex-col justify-center items-center"
+                                id="modal-prio-container">
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Status
+                                    Prioritas</p>
                                 <div id="modal-prioritas-badge"></div>
                             </div>
                         </div>
@@ -537,7 +796,7 @@
                         <!-- 6 Indicators -->
                         <div>
                             <h4 class="font-bold text-sm text-slate-700 mb-3 flex items-center gap-2">
-                                <i data-lucide="activity" class="w-4 h-4 text-emerald-500"></i> Nilai 6 Indikator FSVA
+                                <i data-lucide="activity" class="w-4 h-4 text-[#117a8b]"></i> Nilai 6 Indikator FSVA
                             </h4>
                             <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
                                 <div class="p-3 bg-white border border-slate-200 rounded-lg shadow-sm">
@@ -580,10 +839,13 @@
                         </div>
 
                         <!-- Footer Info -->
-                        <div class="pt-4 border-t border-slate-100 bg-slate-50 p-3 rounded-lg flex justify-between items-center text-left">
+                        <div
+                            class="pt-4 border-t border-slate-100 bg-slate-50 p-3 rounded-lg flex justify-between items-center text-left">
                             <div>
-                                <p class="text-[11px] text-slate-500">Instansi: <span class="font-semibold text-slate-700" id="modal-instansi">-</span></p>
-                                <p class="text-[11px] text-slate-500 mt-0.5">Oleh: <span class="font-semibold text-slate-700" id="modal-pic">-</span></p>
+                                <p class="text-[11px] text-slate-500">Instansi: <span
+                                        class="font-semibold text-slate-700" id="modal-instansi">-</span></p>
+                                <p class="text-[11px] text-slate-500 mt-0.5">Oleh: <span
+                                        class="font-semibold text-slate-700" id="modal-pic">-</span></p>
                             </div>
                             <div class="text-right">
                                 <p class="text-[10px] text-slate-400">Terakhir Update</p>
@@ -599,25 +861,37 @@
     <script>
         // --- CONSTANTS & STATE ---
         const API_URL = 'https://api.bandungkab.go.id/api/data/food-security-and-vulnerability-atlas-fsva';
-        
+        // --- API & GEODATA CONSTANTS ---
+        const disasterApiUrl = 'https://api.bandungkab.go.id/api/data/laporan-situasi-bencana-bpbd-kabupaten-bandung';
+        const batasKecamatanUrl = 'https://gist.githubusercontent.com/infomugi/b7f82ebe72e1a1830da958ea267e87a5/raw/ebe0bbccca2aaff18521e245c33a4a62d38bd455/gistfile1.txt';
+        const batasDesaUrl = 'https://gist.githubusercontent.com/infomugi/4576f539c1dc958f6ed7ede7cca8976e/raw/694baf71e0db935f26e40b1621db61bf91ff9092/gistfile1.txt';
+
+        // --- MAP STATE ---
+        let leafletMap = null;
+        let desaGeoJsonLayer = null;
+        let kecamatanGeoJsonLayer = null;
+        let cachedDesaGeoData = null;
+        let cachedKecamatanGeoData = null;
+        let desaLayerMap = {}; // normName -> layer
+
         let rawData = [];
         let filteredData = [];
         let currentPage = 1;
         const itemsPerPage = 10;
-        
+
         // --- DOM ELEMENTS ---
         const els = {
             date: document.getElementById('current-date'),
             stats: document.getElementById('stats-container'),
             tableBody: document.getElementById('table-body'),
-            
+
             // Filters Desktop
-            filterTahun: document.getElementById('nav-filter-tahun'), 
+            filterTahun: document.getElementById('nav-filter-tahun'),
             filterKecamatan: document.getElementById('nav-filter-kecamatan'),
             filterPrioritas: document.getElementById('nav-filter-prioritas'),
-            
+
             // Filters Mobile
-            filterTahunMobile: document.getElementById('mobile-filter-tahun'), 
+            filterTahunMobile: document.getElementById('mobile-filter-tahun'),
             filterKecamatanMobile: document.getElementById('mobile-filter-kecamatan'),
             filterPrioritasMobile: document.getElementById('mobile-filter-prioritas'),
 
@@ -626,7 +900,7 @@
             paginationInfo: document.getElementById('showing-info'),
             btnPrev: document.getElementById('btn-prev'),
             btnNext: document.getElementById('btn-next'),
-            
+
             modal: {
                 self: document.getElementById('modal-detail'),
                 backdrop: document.getElementById('modal-backdrop'),
@@ -655,110 +929,17 @@
             const now = new Date();
             els.date.innerText = now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
         };
-        
+
         const getPrioBadge = (prio) => {
             const p = Number(prio);
-            if(p === 1) return `<span class="bg-red-100 text-red-700 px-3 py-1.5 rounded-lg text-xs font-bold border border-red-200 w-max inline-block shadow-sm">Prioritas 1</span>`;
-            if(p === 2) return `<span class="bg-rose-100 text-rose-700 px-3 py-1.5 rounded-lg text-xs font-bold border border-rose-200 w-max inline-block shadow-sm">Prioritas 2</span>`;
-            if(p === 3) return `<span class="bg-orange-100 text-orange-700 px-3 py-1.5 rounded-lg text-xs font-bold border border-orange-200 w-max inline-block shadow-sm">Prioritas 3</span>`;
-            if(p === 4) return `<span class="bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-lg text-xs font-bold border border-emerald-200 w-max inline-block shadow-sm">Prioritas 4</span>`;
-            if(p === 5) return `<span class="bg-green-100 text-green-700 px-3 py-1.5 rounded-lg text-xs font-bold border border-green-200 w-max inline-block shadow-sm">Prioritas 5</span>`;
-            if(p === 6) return `<span class="bg-teal-100 text-teal-700 px-3 py-1.5 rounded-lg text-xs font-bold border border-teal-200 w-max inline-block shadow-sm">Prioritas 6</span>`;
+            if (p === 1) return `<span class="bg-red-100 text-red-700 px-3 py-1.5 rounded-lg text-xs font-bold border border-red-200 w-max inline-block shadow-sm">Prioritas 1</span>`;
+            if (p === 2) return `<span class="bg-rose-100 text-rose-700 px-3 py-1.5 rounded-lg text-xs font-bold border border-rose-200 w-max inline-block shadow-sm">Prioritas 2</span>`;
+            if (p === 3) return `<span class="bg-orange-100 text-orange-700 px-3 py-1.5 rounded-lg text-xs font-bold border border-orange-200 w-max inline-block shadow-sm">Prioritas 3</span>`;
+            if (p === 4) return `<span class="bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-lg text-xs font-bold border border-emerald-200 w-max inline-block shadow-sm">Prioritas 4</span>`;
+            if (p === 5) return `<span class="bg-green-100 text-green-700 px-3 py-1.5 rounded-lg text-xs font-bold border border-green-200 w-max inline-block shadow-sm">Prioritas 5</span>`;
+            if (p === 6) return `<span class="bg-teal-100 text-teal-700 px-3 py-1.5 rounded-lg text-xs font-bold border border-teal-200 w-max inline-block shadow-sm">Prioritas 6</span>`;
             return `<span class="bg-slate-100 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 inline-block">${prio || '-'}</span>`;
         };
-
-        // --- MAP INITIALIZATION ---
-        let leafletMap = null;
-        let geojsonLayer = null;
-
-        async function renderMap() {
-            if(!leafletMap) {
-                leafletMap = L.map('fsva-map').setView([-7.025253, 107.528343], 10);
-                L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-                    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom',
-                    maxZoom: 19
-                }).addTo(leafletMap);
-            }
-
-            try {
-                // Mencoba memuat file GeoJSON lokal
-                const response = await fetch('bandung.geojson');
-                if(!response.ok) {
-                    const warnEl = document.getElementById('geojson-warning');
-                    if(warnEl) warnEl.classList.remove('hidden');
-                    return;
-                }
-                
-                const warnEl = document.getElementById('geojson-warning');
-                if(warnEl) warnEl.classList.add('hidden');
-
-                const geoData = await response.json();
-                
-                if(geojsonLayer) leafletMap.removeLayer(geojsonLayer);
-
-                geojsonLayer = L.geoJSON(geoData, {
-                    style: function(feature) {
-                        // Sesuaikan properti GeoJSON dengan data API
-                        let namaDesaGeo = (feature.properties.DESA || feature.properties.NAMOBJ || feature.properties.nama_desa || feature.properties.Name || "").toLowerCase();
-                        
-                        // Cari desa di data API
-                        let dataDesa = filteredData.find(d => 
-                            (d.detail?.nama_desa || "").toLowerCase() === namaDesaGeo
-                        );
-
-                        let bgColor = '#e2e8f0'; // Default gray jika tidak ada data
-                        let borderOp = 0.5;
-                        
-                        if(dataDesa) {
-                            borderOp = 1;
-                            let p = Number(dataDesa.detail.prio_komp);
-                            if(p === 1) bgColor = '#dc2626'; // Sangat Rentan
-                            else if(p === 2) bgColor = '#f87171'; // Rentan
-                            else if(p === 3) bgColor = '#fbcfe8'; // Agak Rentan
-                            else if(p === 4) bgColor = '#bbf7d0'; // Agak Tahan
-                            else if(p === 5) bgColor = '#22c55e'; // Tahan
-                            else if(p === 6) bgColor = '#14532d'; // Sangat Tahan
-                        }
-
-                        return {
-                            fillColor: bgColor,
-                            weight: 1,
-                            opacity: borderOp,
-                            color: '#ffffff',
-                            fillOpacity: 0.9
-                        };
-                    },
-                    onEachFeature: function(feature, layer) {
-                        let namaDesaGeo = (feature.properties.DESA || feature.properties.NAMOBJ || feature.properties.nama_desa || feature.properties.Name || "Tidak Diketahui");
-                        
-                        // Cari data
-                        let dataDesa = filteredData.find(d => 
-                            (d.detail?.nama_desa || "").toLowerCase() === namaDesaGeo.toLowerCase()
-                        );
-
-                        if(dataDesa) {
-                            const d = dataDesa.detail;
-                            const popupHTML = `
-                                <div class="p-3 min-w-[220px] font-sans">
-                                    <table class="w-full text-xs text-slate-700">
-                                        <tr class="border-b border-slate-100"><td class="py-2 font-semibold text-slate-500">Kecamatan</td><td class="py-2 text-right font-bold text-slate-800 uppercase">${d.nama_kecamatan || '-'}</td></tr>
-                                        <tr class="border-b border-slate-100"><td class="py-2 font-semibold text-slate-500">Desa</td><td class="py-2 text-right font-bold text-slate-800 uppercase">${d.nama_desa || '-'}</td></tr>
-                                        <tr class="border-b border-slate-100"><td class="py-2 font-semibold text-slate-500">Prioritas</td><td class="py-2 text-right font-black text-emerald-600 text-sm">${d.prio_komp || '-'}</td></tr>
-                                        <tr class="border-b border-slate-100"><td class="py-2 font-semibold text-slate-500">Peringkat</td><td class="py-2 text-right font-bold">${d.peringkat || '-'}</td></tr>
-                                        <tr><td class="py-2 font-semibold text-slate-500 align-top">Penyebab</td><td class="py-2 text-right text-[10px] leading-relaxed text-slate-600 max-w-[140px] font-medium">${d.penyebab || '-'}</td></tr>
-                                    </table>
-                                </div>
-                            `;
-                            layer.bindPopup(popupHTML, { className: 'custom-popup' });
-                        } else {
-                            layer.bindPopup(`<div class="p-3 text-center text-sm font-bold text-slate-700 uppercase">${namaDesaGeo}<br><span class="text-xs text-red-500 font-normal mt-1 block">Data API tidak tersedia untuk desa ini</span></div>`);
-                        }
-                    }
-                }).addTo(leafletMap);
-            } catch (err) {
-                console.error("Gagal memuat atau memproses GeoJSON:", err);
-            }
-        }
 
         // --- FETCH DATA ---
         async function fetchData() {
@@ -766,11 +947,11 @@
             const loadingBar = document.getElementById('loading-bar-inner');
             const loadingPct = document.getElementById('loading-pct');
             const loadingScreen = document.getElementById('loading-screen');
-            
+
             function updateProgress(pct, msg) {
-                if(loadingBar) loadingBar.style.width = `${pct}%`;
-                if(loadingPct) loadingPct.innerText = `${pct}%`;
-                if(loadingText) loadingText.innerText = msg;
+                if (loadingBar) loadingBar.style.width = `${pct}%`;
+                if (loadingPct) loadingPct.innerText = `${pct}%`;
+                if (loadingText) loadingText.innerText = msg;
             }
 
             try {
@@ -778,7 +959,7 @@
                 const res = await fetch(API_URL);
                 updateProgress(60, "Mengunduh Data Ketahanan Pangan...");
                 const json = await res.json();
-                
+
                 updateProgress(90, "Memproses Data...");
 
                 // Setel Judul Dashboard Secara Dinamis dari API
@@ -797,12 +978,12 @@
                         return numA - numB;
                     });
                     filteredData = [...rawData];
-                    
+
                     initDashboard();
                     updateProgress(100, "Selesai!");
-                    
+
                     setTimeout(() => {
-                        if(loadingScreen) {
+                        if (loadingScreen) {
                             loadingScreen.classList.add('opacity-0');
                             setTimeout(() => loadingScreen.classList.add('hidden'), 700);
                         }
@@ -812,7 +993,7 @@
                 }
             } catch (err) {
                 console.error(err);
-                if(loadingText) {
+                if (loadingText) {
                     loadingText.innerText = "Gagal memuat data! Silakan refresh.";
                     loadingText.classList.add('text-red-500');
                 }
@@ -820,14 +1001,218 @@
             }
         }
 
+        // --- STRING NORMALIZATION FOR GEODATA MATCHING ---
+        const normStr = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+
+        // --- PRIORITY COLOR MAPPING ---
+        function getPrioColor(prio) {
+            const p = Number(prio);
+            if (p === 1) return '#dc2626'; // Sangat Rentan
+            if (p === 2) return '#f87171'; // Rentan
+            if (p === 3) return '#fbcfe8'; // Agak Rentan
+            if (p === 4) return '#bbf7d0'; // Agak Tahan
+            if (p === 5) return '#22c55e'; // Tahan
+            if (p === 6) return '#14532d'; // Sangat Tahan
+            return '#e2e8f0'; // Default gray
+        }
+
+        // --- MAP INITIALIZATION & RENDERING ---
+        async function renderMap() {
+            const mapContainer = document.getElementById('fsva-map');
+            if (!mapContainer) return;
+
+            if (!leafletMap) {
+                leafletMap = L.map('fsva-map', {
+                    zoomControl: true,
+                    attributionControl: false
+                }).setView([-7.025253, 107.528343], 10);
+
+                L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+                    maxZoom: 18
+                }).addTo(leafletMap);
+            }
+
+            const mapLoader = document.getElementById('map-loader');
+            if (mapLoader) mapLoader.classList.remove('hidden');
+
+            try {
+                // Fetch GeoJSON Batas Desa (Gist Raw with local fallback)
+                if (!cachedDesaGeoData) {
+                    try {
+                        const res = await fetch(batasDesaUrl);
+                        if (res.ok) cachedDesaGeoData = await res.json();
+                    } catch (e) {
+                        console.warn("Gist batasDesa fetch failed, trying local fallback:", e);
+                    }
+                    if (!cachedDesaGeoData) {
+                        const localRes = await fetch('bandung_desa.geojson');
+                        if (localRes.ok) cachedDesaGeoData = await localRes.json();
+                    }
+                }
+
+                // Fetch GeoJSON Batas Kecamatan (Gist Raw with local fallback)
+                if (!cachedKecamatanGeoData) {
+                    try {
+                        const res = await fetch(batasKecamatanUrl);
+                        if (res.ok) cachedKecamatanGeoData = await res.json();
+                    } catch (e) {
+                        console.warn("Gist batasKecamatan fetch failed, trying local fallback:", e);
+                    }
+                    if (!cachedKecamatanGeoData) {
+                        const localRes = await fetch('bandung_kecamatan.geojson');
+                        if (localRes.ok) cachedKecamatanGeoData = await localRes.json();
+                    }
+                }
+
+                if (cachedDesaGeoData) {
+                    updateMapPolygons();
+                }
+
+                // Add Kecamatan outline boundary for clarity
+                if (cachedKecamatanGeoData && !kecamatanGeoJsonLayer) {
+                    kecamatanGeoJsonLayer = L.geoJSON(cachedKecamatanGeoData, {
+                        style: {
+                            color: '#0a4b57',
+                            weight: 2,
+                            opacity: 0.85,
+                            fillColor: 'transparent',
+                            fillOpacity: 0
+                        },
+                        interactive: false
+                    }).addTo(leafletMap);
+                }
+
+            } catch (err) {
+                console.error("Gagal memuat peta FSVA:", err);
+            } finally {
+                if (mapLoader) {
+                    mapLoader.classList.add('opacity-0');
+                    setTimeout(() => mapLoader.classList.add('hidden'), 400);
+                }
+            }
+        }
+
+        // --- UPDATE MAP POLYGON STYLES & POPUPS ---
+        function updateMapPolygons() {
+            if (!leafletMap || !cachedDesaGeoData) return;
+
+            if (desaGeoJsonLayer) {
+                leafletMap.removeLayer(desaGeoJsonLayer);
+            }
+            desaLayerMap = {};
+
+            // Build fast lookup by normalized desa name & kecamatan
+            const apiLookup = {};
+            filteredData.forEach(item => {
+                const d = item.detail || {};
+                const kDesa = normStr(d.nama_desa);
+                const kKec = normStr(d.nama_kecamatan);
+                if (kDesa) {
+                    apiLookup[`${kKec}_${kDesa}`] = d;
+                    if (!apiLookup[kDesa]) apiLookup[kDesa] = d;
+                }
+            });
+
+            desaGeoJsonLayer = L.geoJSON(cachedDesaGeoData, {
+                style: function (feature) {
+                    const p = feature.properties || {};
+                    const gDesa = normStr(p.DESA || p.desa || p.NAMOBJ);
+                    const gKec = normStr(p.KECAMATAN || p.kecamatan);
+                    const d = apiLookup[`${gKec}_${gDesa}`] || apiLookup[gDesa];
+
+                    const fillColor = d ? getPrioColor(d.prio_komp) : '#e2e8f0';
+
+                    return {
+                        fillColor: fillColor,
+                        weight: 1,
+                        opacity: 0.9,
+                        color: '#ffffff',
+                        fillOpacity: 0.85
+                    };
+                },
+                onEachFeature: function (feature, layer) {
+                    const p = feature.properties || {};
+                    const rawDesa = p.DESA || p.desa || p.NAMOBJ || 'Tidak Diketahui';
+                    const rawKec = p.KECAMATAN || p.kecamatan || '-';
+                    const gDesa = normStr(rawDesa);
+                    const gKec = normStr(rawKec);
+                    const d = apiLookup[`${gKec}_${gDesa}`] || apiLookup[gDesa];
+
+                    desaLayerMap[`${gKec}_${gDesa}`] = layer;
+                    desaLayerMap[gDesa] = layer;
+
+                    // Hover effects
+                    layer.on({
+                        mouseover: function (e) {
+                            const l = e.target;
+                            l.setStyle({
+                                weight: 2.5,
+                                color: '#1d2d35',
+                                fillOpacity: 0.95
+                            });
+                            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                                l.bringToFront();
+                            }
+                        },
+                        mouseout: function (e) {
+                            desaGeoJsonLayer.resetStyle(e.target);
+                        }
+                    });
+
+                    // Popup (Sesuai Screenshot Persis)
+                    if (d) {
+                        const popupHtml = `
+                            <div class="p-3.5 min-w-[230px] font-sans">
+                                <table class="w-full text-xs text-slate-700">
+                                    <tr class="border-b border-slate-100">
+                                        <td class="py-1.5 font-semibold text-slate-500">Kecamatan</td>
+                                        <td class="py-1.5 text-right font-bold text-slate-800 uppercase">${d.nama_kecamatan || rawKec}</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-100">
+                                        <td class="py-1.5 font-semibold text-slate-500">Desa</td>
+                                        <td class="py-1.5 text-right font-bold text-slate-800 uppercase">${d.nama_desa || rawDesa}</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-100">
+                                        <td class="py-1.5 font-semibold text-slate-500">Prioritas</td>
+                                        <td class="py-1.5 text-right font-black text-slate-900 text-sm">${d.prio_komp || '-'}</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-100">
+                                        <td class="py-1.5 font-semibold text-slate-500">Peringkat</td>
+                                        <td class="py-1.5 text-right font-bold">${d.peringkat || '-'}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-1.5 font-semibold text-slate-500 align-top">Penyebab</td>
+                                        <td class="py-1.5 text-right text-[10px] leading-relaxed text-slate-600 font-medium max-w-[150px]">
+                                            ${d.penyebab || 'Tidak tercatat'}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        `;
+                        layer.bindPopup(popupHtml, { className: 'custom-popup' });
+                    } else {
+                        layer.bindPopup(`
+                            <div class="p-3 font-sans text-center">
+                                <p class="text-xs font-bold text-slate-800 uppercase">${rawDesa}</p>
+                                <p class="text-[10px] text-slate-500">Kecamatan ${rawKec}</p>
+                                <span class="inline-block mt-1 text-[10px] text-slate-400 italic">Data belum terdaftar di filter aktif</span>
+                            </div>
+                        `);
+                    }
+                }
+            }).addTo(leafletMap);
+        }
+
         // --- INITIALIZATION ---
         function initDashboard() {
             populateFilters();
+            populateMapFilters();
             renderStats();
             renderMap();
             renderCharts();
             renderTable();
             setupEvents();
+            setupMapEvents();
             lucide.createIcons();
         }
 
@@ -840,46 +1225,82 @@
 
             filteredData.forEach(item => {
                 const d = item.detail || {};
-                if(d.nama_kecamatan) kecamatanSet.add(d.nama_kecamatan);
+                if (d.nama_kecamatan) kecamatanSet.add(d.nama_kecamatan);
                 totalIndeks += (parseFloat(d.indeks_kom) || 0);
-                
-                let p = Number(d.prio_komp);
-                if(p >= 1 && p <= 3) desaRentan++;
-            });
 
-            // Update Map Legend
-            let prio = {1:0, 2:0, 3:0, 4:0, 5:0, 6:0};
-            filteredData.forEach(item => {
-                let p = Number(item.detail?.prio_komp);
-                if(p >= 1 && p <= 6) prio[p]++;
+                let p = Number(d.prio_komp);
+                if (p >= 1 && p <= 3) desaRentan++;
             });
-            document.getElementById('map-total-kec').innerText = kecamatanSet.size;
-            for(let i=1; i<=6; i++) {
-                const el = document.getElementById(`map-prio-${i}`);
-                if(el) el.innerText = prio[i];
-            }
 
             let avgIndeks = totalDesa > 0 ? (totalIndeks / totalDesa) : 0;
 
+            // Update Map Sidebar Legend Counts (Sesuai Screenshot)
+            let prioCountsMap = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
+            filteredData.forEach(item => {
+                let p = Number(item.detail?.prio_komp);
+                if (p >= 1 && p <= 6) prioCountsMap[p]++;
+            });
+
+            const elTotalKec = document.getElementById('map-total-kec');
+            if (elTotalKec) elTotalKec.textContent = kecamatanSet.size;
+
+            for (let i = 1; i <= 6; i++) {
+                const elPrio = document.getElementById(`map-count-prio-${i}`);
+                if (elPrio) elPrio.textContent = prioCountsMap[i] || 0;
+            }
+
             const cards = [
-                { title: 'Total Desa/Kelurahan', val: formatNumber(totalDesa), sub: 'Wilayah Terdokumentasi', icon: 'map', color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-200' },
-                { title: 'Kecamatan', val: formatNumber(kecamatanSet.size), sub: 'Dari filter yang dipilih', icon: 'map-pin', color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-200' },
-                { title: 'Desa Rentan Pangan', val: formatNumber(desaRentan), sub: 'Berada di Prioritas 1-3', icon: 'alert-triangle', color: 'text-red-600', bg: 'bg-red-50', border: 'border-red-200' },
-                { title: 'Rata-rata Indeks', val: formatNumber(avgIndeks), sub: 'Indeks Komposit Wilayah', icon: 'activity', color: 'text-indigo-600', bg: 'bg-indigo-50', border: 'border-indigo-200' }
+                { 
+                    title: 'Total Desa', 
+                    val: formatNumber(totalDesa), 
+                    sub: 'Wilayah Terdokumentasi', 
+                    icon: 'map', 
+                    color: 'text-[#117a8b]', 
+                    bg: 'bg-[#117a8b]/10', 
+                    border: 'border-[#117a8b]/20' 
+                },
+                { 
+                    title: 'Total Kecamatan', 
+                    val: formatNumber(kecamatanSet.size), 
+                    sub: 'Wilayah Terdokumentasi', 
+                    icon: 'map-pin', 
+                    color: 'text-[#0a4b57]', 
+                    bg: 'bg-[#0a4b57]/10', 
+                    border: 'border-[#0a4b57]/20' 
+                },
+                { 
+                    title: 'Desa Rentan Pangan', 
+                    val: formatNumber(desaRentan), 
+                    sub: 'Berada di Prioritas 1-3', 
+                    icon: 'alert-triangle', 
+                    color: 'text-[#dc3545]', 
+                    bg: 'bg-[#dc3545]/10', 
+                    border: 'border-[#dc3545]/20' 
+                },
+                { 
+                    title: 'Indeks Komposit Pangan', 
+                    val: formatNumber(avgIndeks), 
+                    sub: 'IKP', 
+                    icon: 'activity', 
+                    color: 'text-[#117a8b]', 
+                    bg: 'bg-[#117a8b]/10', 
+                    border: 'border-[#117a8b]/20' 
+                }
             ];
 
             els.stats.innerHTML = cards.map(c => `
-                <div class="bg-white p-6 rounded-2xl border ${c.border} shadow-sm hover:shadow-md transition-shadow flex items-center justify-between group">
+                <div class="bg-white p-5 rounded-2xl border ${c.border} shadow-sm hover:shadow-md transition-shadow flex items-center justify-between group">
                     <div>
                         <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">${c.title}</p>
                         <h3 class="text-2xl font-black text-slate-800">${c.val}</h3>
-                        <p class="text-[11px] font-medium text-slate-500 mt-1 line-clamp-1">${c.sub}</p>
+                        <p class="text-[11px] font-medium text-slate-500 mt-1">${c.sub}</p>
                     </div>
                     <div class="${c.bg} p-3 rounded-xl ${c.color} group-hover:scale-110 transition-transform shadow-inner">
                         <i data-lucide="${c.icon}" class="w-6 h-6"></i>
                     </div>
                 </div>
             `).join('');
+            lucide.createIcons();
             lucide.createIcons();
         }
 
@@ -888,28 +1309,28 @@
             const commonOpts = { fontFamily: 'Plus Jakarta Sans, sans-serif', toolbar: { show: false } };
 
             // Data extraction for charts
-            let prioCounts = {1:0, 2:0, 3:0, 4:0, 5:0, 6:0};
+            let prioCounts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
             let kecStats = {}; // { kec_name: { sumIndeks:0, count:0, prios: {1:0...} } }
-            let indicators = { lahan:0, sarana:0, sejahtera:0, jalan:0, air:0, nakes:0 };
-            
+            let indicators = { lahan: 0, sarana: 0, sejahtera: 0, jalan: 0, air: 0, nakes: 0 };
+
             let yearsSet = new Set();
             let yearData = {}; // { year: { sum:0, count:0 } }
 
             filteredData.forEach(item => {
                 const d = item.detail || {};
-                
+
                 // Prioritas
                 let p = Number(d.prio_komp);
-                if(p >= 1 && p <= 6) prioCounts[p]++;
-                
+                if (p >= 1 && p <= 6) prioCounts[p]++;
+
                 // Kecamatan & Indeks
                 let kec = d.nama_kecamatan || 'Lainnya';
                 let idx = parseFloat(d.indeks_kom) || 0;
-                
-                if(!kecStats[kec]) kecStats[kec] = { sumIndeks:0, count:0, prios: {1:0,2:0,3:0,4:0,5:0,6:0} };
+
+                if (!kecStats[kec]) kecStats[kec] = { sumIndeks: 0, count: 0, prios: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 } };
                 kecStats[kec].sumIndeks += idx;
                 kecStats[kec].count++;
-                if(p >= 1 && p <= 6) kecStats[kec].prios[p]++;
+                if (p >= 1 && p <= 6) kecStats[kec].prios[p]++;
 
                 // 6 Indikator
                 indicators.lahan += parseFloat(d._plahan) || 0;
@@ -921,9 +1342,9 @@
 
                 // Year Trend
                 let yr = d.tahun;
-                if(yr) {
+                if (yr) {
                     yearsSet.add(yr);
-                    if(!yearData[yr]) yearData[yr] = { sum:0, count:0 };
+                    if (!yearData[yr]) yearData[yr] = { sum: 0, count: 0 };
                     yearData[yr].sum += idx;
                     yearData[yr].count++;
                 }
@@ -936,21 +1357,21 @@
             // ==========================================
             const prioEl = document.querySelector("#chart-prioritas");
             prioEl.innerHTML = '';
-            
+
             let prioSeries = [prioCounts[1], prioCounts[2], prioCounts[3], prioCounts[4], prioCounts[5], prioCounts[6]];
             let prioLabels = ['Prioritas 1', 'Prioritas 2', 'Prioritas 3', 'Prioritas 4', 'Prioritas 5', 'Prioritas 6'];
-            
-            if(filteredData.length > 0) {
+
+            if (filteredData.length > 0) {
                 new ApexCharts(prioEl, {
                     ...commonOpts,
                     series: [{ name: 'Jumlah Desa', data: prioSeries }],
                     chart: { type: 'bar', height: 320 },
                     colors: ['#ef4444', '#f43f5e', '#f97316', '#10b981', '#22c55e', '#14b8a6'],
-                    plotOptions: { 
-                        bar: { 
-                            horizontal: false, columnWidth: '55%', borderRadius: 4, 
-                            distributed: true, dataLabels: { position: 'top' } 
-                        } 
+                    plotOptions: {
+                        bar: {
+                            horizontal: false, columnWidth: '55%', borderRadius: 4,
+                            distributed: true, dataLabels: { position: 'top' }
+                        }
                     },
                     dataLabels: { enabled: true, offsetY: -20, style: { fontSize: '12px', colors: ["#304758"] } },
                     legend: { show: false },
@@ -966,15 +1387,15 @@
             // ==========================================
             const kecRentanEl = document.querySelector("#chart-kecamatan-rentan");
             kecRentanEl.innerHTML = '';
-            
+
             let arrKecStats = Object.keys(kecStats).map(k => ({
                 kec: k,
                 avg: kecStats[k].sumIndeks / kecStats[k].count
-            })).sort((a,b) => a.avg - b.avg); // Sort Ascending (Lowest index = most vulnerable)
+            })).sort((a, b) => a.avg - b.avg); // Sort Ascending (Lowest index = most vulnerable)
 
             let top5Kec = arrKecStats.slice(0, 5);
-            
-            if(top5Kec.length > 0) {
+
+            if (top5Kec.length > 0) {
                 new ApexCharts(kecRentanEl, {
                     ...commonOpts,
                     series: top5Kec.map(k => parseFloat(k.avg.toFixed(2))),
@@ -1004,7 +1425,7 @@
                 parseFloat((indicators.nakes / total).toFixed(2))
             ];
 
-            if(filteredData.length > 0) {
+            if (filteredData.length > 0) {
                 new ApexCharts(radarEl, {
                     ...commonOpts,
                     series: [{ name: 'Rata-Rata Wilayah', data: radarSeries }],
@@ -1026,16 +1447,16 @@
             desaTerbawahEl.innerHTML = '';
 
             // Sort ascending by indeks, take 10
-            let bottom10Desa = [...filteredData].sort((a,b) => {
+            let bottom10Desa = [...filteredData].sort((a, b) => {
                 let vA = parseFloat(a.detail.indeks_kom) || 999;
                 let vB = parseFloat(b.detail.indeks_kom) || 999;
                 return vA - vB;
             }).slice(0, 10);
 
-            if(bottom10Desa.length > 0) {
+            if (bottom10Desa.length > 0) {
                 new ApexCharts(desaTerbawahEl, {
                     ...commonOpts,
-                    series: [{ name: 'Indeks Komposit', data: bottom10Desa.map(d => parseFloat(d.detail.indeks_kom||0)) }],
+                    series: [{ name: 'Indeks Komposit', data: bottom10Desa.map(d => parseFloat(d.detail.indeks_kom || 0)) }],
                     chart: { type: 'bar', height: 320 },
                     colors: ['#f43f5e'],
                     plotOptions: { bar: { horizontal: true, borderRadius: 2, dataLabels: { position: 'top' } } },
@@ -1048,60 +1469,213 @@
             }
 
             // ==========================================
-            // CHART 5: Area (Tren per Tahun)
+            // CHART 5: Line Chart (Tren Indeks Ketahanan Pangan - IKP)
+            // Pakai grafik garis, warna 3 (#117a8b), lock semua data tahun yang ada
             // ==========================================
             const trenEl = document.querySelector("#chart-tren-tahun");
             trenEl.innerHTML = '';
 
-            let arrYears = Array.from(yearsSet).sort((a, b) => a - b);
-            let trenData = arrYears.map(yr => parseFloat((yearData[yr].sum / yearData[yr].count).toFixed(2)));
+            // Lock semua data tahun yang ada dari rawData
+            let allYearsSet = new Set();
+            let allYearData = {};
+            (rawData || []).forEach(item => {
+                const d = item.detail || {};
+                let yr = d.tahun;
+                let idx = parseFloat(d.indeks_kom) || 0;
+                if (yr) {
+                    allYearsSet.add(yr);
+                    if (!allYearData[yr]) allYearData[yr] = { sum: 0, count: 0 };
+                    allYearData[yr].sum += idx;
+                    allYearData[yr].count++;
+                }
+            });
 
-            if(arrYears.length > 0) {
+            let arrYears = Array.from(allYearsSet).sort((a, b) => a - b);
+            let trenData = arrYears.map(yr => parseFloat((allYearData[yr].sum / allYearData[yr].count).toFixed(2)));
+
+            if (arrYears.length > 0) {
                 new ApexCharts(trenEl, {
                     ...commonOpts,
-                    series: [{ name: 'Rata-rata Indeks', data: trenData }],
-                    chart: { type: 'area', height: 320 },
-                    colors: ['#6366f1'],
-                    dataLabels: { enabled: true },
+                    series: [{ name: 'Indeks Komposit', data: trenData }],
+                    chart: {
+                        type: 'line',
+                        height: 320,
+                        toolbar: {
+                            show: true,
+                            tools: {
+                                download: true,
+                                selection: true,
+                                zoom: true,
+                                zoomin: true,
+                                zoomout: true,
+                                pan: true,
+                                reset: true
+                            }
+                        }
+                    },
+                    colors: ['#117a8b'], // Warna 3 dari panduan
+                    dataLabels: {
+                        enabled: true,
+                        style: {
+                            fontSize: '11px',
+                            fontWeight: '700',
+                            colors: ['#ffffff']
+                        },
+                        background: {
+                            enabled: true,
+                            foreColor: '#ffffff',
+                            borderRadius: 4,
+                            padding: 4,
+                            opacity: 0.95,
+                            borderWidth: 0
+                        }
+                    },
                     stroke: { curve: 'smooth', width: 3 },
-                    fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.5, opacityTo: 0.05 } },
-                    xaxis: { categories: arrYears, title: { text: 'Tahun' } },
-                    yaxis: { title: { text: 'Indeks Komposit' } }
+                    markers: {
+                        size: 5,
+                        colors: ['#ffffff'],
+                        strokeColors: '#117a8b',
+                        strokeWidth: 3,
+                        hover: { size: 7 }
+                    },
+                    fill: {
+                        type: 'gradient',
+                        gradient: {
+                            shade: 'light',
+                            type: 'vertical',
+                            shadeIntensity: 0.5,
+                            gradientToColors: ['#4dbdaf'],
+                            inverseColors: false,
+                            opacityFrom: 0.35,
+                            opacityTo: 0.05,
+                            stops: [0, 100]
+                        }
+                    },
+                    xaxis: {
+                        categories: arrYears,
+                        title: { text: 'Tahun', style: { fontWeight: 700 } }
+                    },
+                    yaxis: {
+                        title: { text: 'Indeks Komposit', style: { fontWeight: 700 } },
+                        min: function (min) { return Math.max(0, Math.floor(min - 2)); },
+                        labels: {
+                            formatter: (val) => val.toFixed(2)
+                        }
+                    },
+                    tooltip: {
+                        y: { formatter: (val) => val + " IKP" }
+                    }
                 }).render();
             } else {
                 trenEl.innerHTML = '<p class="text-sm text-slate-400 italic">Tidak ada data tren tahunan.</p>';
             }
 
             // ==========================================
-            // CHART 6: Stacked Bar (Komposisi Prioritas per Kecamatan)
+            // CHART 6: Stacked Bar (Tren Desa Rentan Pangan Per Tahun)
+            // Prioritas 1-3, lock semua data tahun yang ada, data label untuk total desa
+            // prio 1: #6e1f1f, prio 2: #e85961, prio 3: #f4a1a7
             // ==========================================
-            const komposisiEl = document.querySelector("#chart-komposisi");
-            komposisiEl.innerHTML = '';
+            const rentanEl = document.querySelector("#chart-tren-rentan");
+            rentanEl.innerHTML = '';
 
-            // Only take top 8 kecamatan by total count to avoid clutter
-            let topKecsByCount = Object.keys(kecStats).sort((a,b) => kecStats[b].count - kecStats[a].count).slice(0, 8);
-            
-            let stackSeries = [1,2,3,4,5,6].map(p => {
-                return {
-                    name: `Prio ${p}`,
-                    data: topKecsByCount.map(kec => kecStats[kec].prios[p])
-                };
+            let rentanYearStats = {};
+            arrYears.forEach(yr => {
+                rentanYearStats[yr] = { 1: 0, 2: 0, 3: 0 };
             });
 
-            if(topKecsByCount.length > 0) {
-                new ApexCharts(komposisiEl, {
+            (rawData || []).forEach(item => {
+                const d = item.detail || {};
+                let yr = d.tahun;
+                let p = Number(d.prio_komp);
+                if (yr && (p === 1 || p === 2 || p === 3)) {
+                    if (!rentanYearStats[yr]) rentanYearStats[yr] = { 1: 0, 2: 0, 3: 0 };
+                    rentanYearStats[yr][p]++;
+                }
+            });
+
+            let rentanPrio1 = arrYears.map(yr => rentanYearStats[yr][1] || 0);
+            let rentanPrio2 = arrYears.map(yr => rentanYearStats[yr][2] || 0);
+            let rentanPrio3 = arrYears.map(yr => rentanYearStats[yr][3] || 0);
+
+            if (arrYears.length > 0) {
+                new ApexCharts(rentanEl, {
                     ...commonOpts,
-                    series: stackSeries,
-                    chart: { type: 'bar', height: 320, stacked: true },
-                    colors: ['#ef4444', '#f43f5e', '#f97316', '#10b981', '#22c55e', '#14b8a6'],
-                    plotOptions: { bar: { horizontal: false, borderRadius: 2 } },
-                    xaxis: { categories: topKecsByCount, labels: { style: { fontSize: '10px' } } },
-                    yaxis: { title: { text: 'Jumlah Desa' } },
-                    legend: { position: 'right', offsetY: 40 },
-                    fill: { opacity: 1 }
+                    series: [
+                        { name: 'Prioritas 1', data: rentanPrio1 },
+                        { name: 'Prioritas 2', data: rentanPrio2 },
+                        { name: 'Prioritas 3', data: rentanPrio3 }
+                    ],
+                    chart: {
+                        type: 'bar',
+                        height: 320,
+                        stacked: true,
+                        toolbar: {
+                            show: true,
+                            tools: {
+                                download: true,
+                                selection: true,
+                                zoom: true,
+                                zoomin: true,
+                                zoomout: true,
+                                pan: true,
+                                reset: true
+                            }
+                        }
+                    },
+                    colors: ['#6e1f1f', '#e85961', '#f4a1a7'],
+                    plotOptions: {
+                        bar: {
+                            horizontal: false,
+                            borderRadius: 4,
+                            columnWidth: '40%',
+                            dataLabels: {
+                                total: {
+                                    enabled: true,
+                                    style: {
+                                        fontSize: '11px',
+                                        fontWeight: 700,
+                                        color: '#1e293b'
+                                    },
+                                    formatter: function (val) {
+                                        return val > 0 ? val : '';
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    dataLabels: {
+                        enabled: true,
+                        formatter: function (val) {
+                            return val > 0 ? val : '';
+                        },
+                        style: {
+                            fontSize: '10px',
+                            fontWeight: '600',
+                            colors: ['#ffffff']
+                        }
+                    },
+                    xaxis: {
+                        categories: arrYears,
+                        title: { text: 'Tahun', style: { fontWeight: 700 } }
+                    },
+                    yaxis: {
+                        title: { text: 'Jumlah Desa Rentan', style: { fontWeight: 700 } },
+                        labels: {
+                            formatter: (val) => Math.round(val)
+                        }
+                    },
+                    legend: {
+                        position: 'top',
+                        horizontalAlign: 'right'
+                    },
+                    tooltip: {
+                        y: {
+                            formatter: (val) => val + ' Desa'
+                        }
+                    }
                 }).render();
             } else {
-                komposisiEl.innerHTML = '<p class="text-sm text-slate-400 italic">Tidak ada data.</p>';
+                rentanEl.innerHTML = '<p class="text-sm text-slate-400 italic">Tidak ada data tren kerentanan.</p>';
             }
         }
 
@@ -1110,27 +1684,27 @@
             let tahunSet = new Set();
             let kecamatanSet = new Set();
             let prioritasSet = new Set();
-            
-            rawData.forEach(i => { 
+
+            rawData.forEach(i => {
                 const d = i.detail || {};
-                if(d.tahun) tahunSet.add(d.tahun);
-                if(d.nama_kecamatan) kecamatanSet.add(d.nama_kecamatan);
-                if(d.prio_komp) prioritasSet.add(d.prio_komp);
+                if (d.tahun) tahunSet.add(d.tahun);
+                if (d.nama_kecamatan) kecamatanSet.add(d.nama_kecamatan);
+                if (d.prio_komp) prioritasSet.add(d.prio_komp);
             });
-            
-            const appendOptions = (elDesktop, elMobile, dataArray, isNumber=false) => {
-                let optionsHtml = elDesktop.querySelector('option').outerHTML; 
-                let sortedData = isNumber ? dataArray.sort((a,b)=>a-b) : dataArray.sort();
-                
+
+            const appendOptions = (elDesktop, elMobile, dataArray, isNumber = false) => {
+                let optionsHtml = elDesktop.querySelector('option').outerHTML;
+                let sortedData = isNumber ? dataArray.sort((a, b) => a - b) : dataArray.sort();
+
                 sortedData.forEach(val => {
                     optionsHtml += `<option value="${val}">${isNumber ? 'Prioritas ' + val : val}</option>`;
                 });
-                
+
                 elDesktop.innerHTML = optionsHtml;
                 elMobile.innerHTML = optionsHtml;
             };
 
-            appendOptions(els.filterTahun, els.filterTahunMobile, Array.from(tahunSet).sort((a,b)=>b-a)); 
+            appendOptions(els.filterTahun, els.filterTahunMobile, Array.from(tahunSet).sort((a, b) => b - a));
             appendOptions(els.filterKecamatan, els.filterKecamatanMobile, Array.from(kecamatanSet));
             appendOptions(els.filterPrioritas, els.filterPrioritasMobile, Array.from(prioritasSet), true);
         }
@@ -1143,7 +1717,7 @@
                 valTahun = els.filterTahun.value;
                 valKecamatan = els.filterKecamatan.value;
                 valPrioritas = els.filterPrioritas.value;
-                
+
                 els.filterTahunMobile.value = valTahun;
                 els.filterKecamatanMobile.value = valKecamatan;
                 els.filterPrioritasMobile.value = valPrioritas;
@@ -1163,9 +1737,9 @@
 
             // Update Label
             let label = [];
-            if(valTahun !== 'all') label.push(`Thn: ${valTahun}`);
-            if(valKecamatan !== 'all') label.push(`Kec: ${valKecamatan}`);
-            if(valPrioritas !== 'all') label.push(`Prio: ${valPrioritas}`);
+            if (valTahun !== 'all') label.push(`Thn: ${valTahun}`);
+            if (valKecamatan !== 'all') label.push(`Kec: ${valKecamatan}`);
+            if (valPrioritas !== 'all') label.push(`Prio: ${valPrioritas}`);
             els.activeFilterLabel.textContent = label.length > 0 ? label.join(', ') : 'Semua Data';
 
             const term = els.search.value.toLowerCase();
@@ -1175,19 +1749,20 @@
                 const matchTahun = valTahun === 'all' || String(d.tahun) === valTahun;
                 const matchKec = valKecamatan === 'all' || d.nama_kecamatan === valKecamatan;
                 const matchPrio = valPrioritas === 'all' || String(d.prio_komp) === valPrioritas;
-                
-                const matchSearch = !term || 
-                                    (d.nama_desa||'').toLowerCase().includes(term) ||
-                                    (d.nama_kecamatan||'').toLowerCase().includes(term) ||
-                                    String(d.tahun||'').includes(term);
-                
+
+                const matchSearch = !term ||
+                    (d.nama_desa || '').toLowerCase().includes(term) ||
+                    (d.nama_kecamatan || '').toLowerCase().includes(term) ||
+                    String(d.tahun || '').includes(term);
+
                 return matchTahun && matchKec && matchPrio && matchSearch;
             });
 
             currentPage = 1;
-            renderStats(); 
-            renderCharts(); 
+            renderStats();
+            renderCharts();
             renderTable();
+            if (typeof updateMapPolygons === 'function') updateMapPolygons();
         }
 
         // --- TABLE LOGIC ---
@@ -1202,30 +1777,130 @@
 
             els.tableBody.innerHTML = pageData.map(item => {
                 const d = item.detail || {};
-                
+
                 return `
                 <tr class="hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-none group">
                     <td class="px-6 py-4 font-semibold text-slate-700">${d.nama_kecamatan || '-'}</td>
                     <td class="px-6 py-4 font-bold text-slate-800">${d.nama_desa || '-'}</td>
                     <td class="px-6 py-4 text-center text-sm text-slate-600">${d.tahun || '-'}</td>
-                    <td class="px-6 py-4 text-right font-mono text-emerald-600 font-bold text-base">
+                    <td class="px-6 py-4 text-right font-mono text-[#117a8b] font-bold text-base">
                         ${formatNumber(d.indeks_kom)}
                     </td>
                     <td class="px-6 py-4 text-center font-mono text-slate-500 text-sm">#${d.peringkat || '-'}</td>
                     <td class="px-6 py-4 text-center">${getPrioBadge(d.prio_komp)}</td>
                     <td class="px-6 py-4 text-center">
-                        <button onclick="openDetail(${item.id})" class="text-emerald-500 hover:text-emerald-700 hover:bg-emerald-50 p-2 rounded-xl transition-all border border-transparent hover:border-emerald-100" title="Lihat Detail Indikator">
+                        <button onclick="openDetail(${item.id})" class="text-[#117a8b] hover:text-[#0a4b57] hover:bg-[#117a8b]/10 p-2 rounded-xl transition-all border border-transparent hover:border-[#117a8b]/20" title="Lihat Detail Indikator">
                             <i data-lucide="layout-grid" class="w-5 h-5"></i>
                         </button>
                     </td>
                 </tr>
                 `;
             }).join('');
-            
-            if(filteredData.length === 0) {
+
+            if (filteredData.length === 0) {
                 els.tableBody.innerHTML = `<tr><td colspan="7" class="text-center py-12 text-slate-400 bg-slate-50">Tidak ada data ditemukan untuk kriteria tersebut.</td></tr>`;
             }
             lucide.createIcons();
+        }
+
+        // --- MAP FILTERS LOGIC ---
+        function populateMapFilters() {
+            const elKec = document.getElementById('map-filter-kecamatan');
+            const elDesa = document.getElementById('map-filter-desa');
+            if (!elKec || !elDesa) return;
+
+            let kecSet = new Set();
+            rawData.forEach(item => {
+                const k = item.detail?.nama_kecamatan;
+                if (k) kecSet.add(k);
+            });
+
+            let kecOptions = '<option value="all">Semua Kecamatan</option>';
+            Array.from(kecSet).sort().forEach(k => {
+                kecOptions += `<option value="${k}">${k}</option>`;
+            });
+            elKec.innerHTML = kecOptions;
+
+            updateMapDesaDropdown('all');
+        }
+
+        function updateMapDesaDropdown(selectedKec) {
+            const elDesa = document.getElementById('map-filter-desa');
+            if (!elDesa) return;
+
+            let desaSet = new Set();
+            rawData.forEach(item => {
+                const d = item.detail || {};
+                if (selectedKec === 'all' || d.nama_kecamatan === selectedKec) {
+                    if (d.nama_desa) desaSet.add(d.nama_desa);
+                }
+            });
+
+            let desaOptions = '<option value="all">Semua Desa/Kelurahan</option>';
+            Array.from(desaSet).sort().forEach(d => {
+                desaOptions += `<option value="${d}">${d}</option>`;
+            });
+            elDesa.innerHTML = desaOptions;
+        }
+
+        function setupMapEvents() {
+            const elKec = document.getElementById('map-filter-kecamatan');
+            const elDesa = document.getElementById('map-filter-desa');
+            const btnFilter = document.getElementById('map-btn-filter');
+            const btnReset = document.getElementById('map-btn-reset');
+
+            if (elKec) {
+                elKec.addEventListener('change', () => {
+                    updateMapDesaDropdown(elKec.value);
+                });
+            }
+
+            if (btnFilter) {
+                btnFilter.addEventListener('click', () => {
+                    const valKec = elKec ? elKec.value : 'all';
+                    const valDesa = elDesa ? elDesa.value : 'all';
+
+                    // Sync with main navbar kecamatan filter
+                    if (els.filterKecamatan) {
+                        els.filterKecamatan.value = valKec;
+                        filterData('nav');
+                    }
+
+                    // Zoom to selected village or kecamatan
+                    if (valDesa !== 'all') {
+                        const targetLayer = desaLayerMap[`${normStr(valKec)}_${normStr(valDesa)}`] || desaLayerMap[normStr(valDesa)];
+                        if (targetLayer && leafletMap) {
+                            leafletMap.fitBounds(targetLayer.getBounds(), { maxZoom: 14 });
+                            targetLayer.openPopup();
+                        }
+                    } else if (valKec !== 'all') {
+                        // Zoom to all villages of this kecamatan
+                        const bounds = L.latLngBounds([]);
+                        Object.keys(desaLayerMap).forEach(k => {
+                            if (k.startsWith(`${normStr(valKec)}_`)) {
+                                bounds.extend(desaLayerMap[k].getBounds());
+                            }
+                        });
+                        if (bounds.isValid() && leafletMap) {
+                            leafletMap.fitBounds(bounds, { maxZoom: 12 });
+                        }
+                    }
+                });
+            }
+
+            if (btnReset) {
+                btnReset.addEventListener('click', () => {
+                    if (elKec) elKec.value = 'all';
+                    updateMapDesaDropdown('all');
+                    if (els.filterKecamatan) {
+                        els.filterKecamatan.value = 'all';
+                        filterData('nav');
+                    }
+                    if (leafletMap) {
+                        leafletMap.setView([-7.025253, 107.528343], 10);
+                    }
+                });
+            }
         }
 
         // --- EVENT LISTENERS ---
@@ -1239,9 +1914,9 @@
             els.filterPrioritasMobile.addEventListener('change', () => filterData('mobile'));
 
             els.search.addEventListener('input', () => filterData('search'));
-            
-            els.btnPrev.addEventListener('click', () => { if(currentPage > 1) { currentPage--; renderTable(); } });
-            els.btnNext.addEventListener('click', () => { if(currentPage * itemsPerPage < filteredData.length) { currentPage++; renderTable(); } });
+
+            els.btnPrev.addEventListener('click', () => { if (currentPage > 1) { currentPage--; renderTable(); } });
+            els.btnNext.addEventListener('click', () => { if (currentPage * itemsPerPage < filteredData.length) { currentPage++; renderTable(); } });
 
             // Export Excel
             document.getElementById('btn-export').addEventListener('click', () => {
@@ -1266,11 +1941,11 @@
                         Tanggal_Rekam: item.created_at
                     };
                 });
-                
+
                 const ws = XLSX.utils.json_to_sheet(dataToExport);
                 const wb = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(wb, ws, "Data FSVA");
-                XLSX.writeFile(wb, `Data_FSVA_Kab_Bandung_${new Date().toISOString().slice(0,10)}.xlsx`);
+                XLSX.writeFile(wb, `Data_FSVA_Kab_Bandung_${new Date().toISOString().slice(0, 10)}.xlsx`);
             });
 
             els.modal.backdrop.addEventListener('click', closeModal);
@@ -1280,24 +1955,24 @@
         // --- MODAL ---
         window.openDetail = (id) => {
             const item = rawData.find(x => x.id === id);
-            if(!item) return;
+            if (!item) return;
             const d = item.detail || {};
 
             els.modal.desa.textContent = d.nama_desa || 'Tidak Tersedia';
             els.modal.kecamatan.textContent = `Kecamatan ${d.nama_kecamatan || '-'}`;
             els.modal.tahun.textContent = `Tahun ${d.tahun || '-'}`;
-            
+
             els.modal.indeks.textContent = formatNumber(d.indeks_kom);
             els.modal.peringkat.textContent = `#${d.peringkat || '-'}`;
             els.modal.prioritasBadge.innerHTML = getPrioBadge(d.prio_komp);
-            
+
             els.modal.p1.textContent = d._plahan !== null ? d._plahan : '-';
             els.modal.p2.textContent = d._psarana !== null ? d._psarana : '-';
             els.modal.p3.textContent = d._ptdk_sejah !== null ? d._ptdk_sejah : '-';
             els.modal.p4.textContent = d._pjalan !== null ? d._pjalan : '-';
             els.modal.p5.textContent = d._pnowater !== null ? d._pnowater : '-';
             els.modal.p6.textContent = d._ptenkes !== null ? d._ptenkes : '-';
-            
+
             els.modal.pic.textContent = item.created_by || '-';
             els.modal.instansi.textContent = item.department_nama || '-';
             els.modal.created.textContent = item.created_at || '-';
@@ -1315,4 +1990,5 @@
         fetchData();
     </script>
 </body>
+
 </html>
