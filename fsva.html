@@ -43,8 +43,10 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <!-- Leaflet CSS & JS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
     <style>
         body {
@@ -115,15 +117,18 @@
                 transform: rotate(360deg);
             }
         }
+
         .leaflet-popup-content-wrapper {
             border-radius: 12px;
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
             padding: 0;
             overflow: hidden;
         }
+
         .leaflet-popup-content {
             margin: 0;
         }
+
         .custom-popup table td {
             padding: 4px 8px;
         }
@@ -171,12 +176,18 @@
                         </div>
                         <div class="block">
                             <h1 class="text-lg font-bold text-slate-900 leading-tight tracking-tight">ATLAS FSVA</h1>
-                            <p class="text-[10px] font-semibold text-emerald-600 uppercase tracking-widest">Kabupaten
+                            <p class="text-[10px] font-semibold text-[#117a8b] uppercase tracking-widest">Kabupaten
                                 Bandung</p>
                         </div>
                     </div>
-                    <!-- Mobile Refresh -->
+                    <!-- Mobile Actions -->
                     <div class="lg:hidden flex items-center gap-2">
+                        <a href="https://aplikasi.bandungkab.go.id/publik/dispakan-portal-dashboard"
+                            class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-50 text-slate-700 hover:text-[#117a8b] hover:bg-[#117a8b]/10 border border-slate-200 text-[11px] font-bold transition shadow-2xs"
+                            title="Kembali ke Portal DISPAKAN">
+                            <i data-lucide="layout-dashboard" class="w-3.5 h-3.5 text-[#117a8b]"></i>
+                            <span>Kembali ke Portal DISPAKAN</span>
+                        </a>
                         <span class="relative flex h-2 w-2">
                             <span
                                 class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4dbdaf] opacity-75"></span>
@@ -235,6 +246,12 @@
 
                 <!-- Right Actions (Date & Live) -->
                 <div class="hidden lg:flex items-center gap-4">
+                    <a href="https://aplikasi.bandungkab.go.id/publik/dispakan-portal-dashboard"
+                        class="flex items-center gap-2 px-3.5 py-2 text-xs font-bold text-slate-700 bg-white border border-slate-200 rounded-xl hover:bg-[#117a8b]/10 hover:text-[#117a8b] hover:border-[#117a8b]/30 transition-all shadow-sm"
+                        title="Kembali ke Portal DISPAKAN">
+                        <i data-lucide="layout-dashboard" class="w-4 h-4 text-[#117a8b]"></i>
+                        <span>Kembali ke Portal DISPAKAN</span>
+                    </a>
                     <div class="flex flex-col items-end">
                         <span class="text-xs font-medium text-slate-500" id="current-date">Loading...</span>
                         <div class="flex items-center gap-1.5">
@@ -312,26 +329,26 @@
             </h1>
 
             <!-- Penjelasan / Info Banner (Warna 4: #4dbdaf) -->
-            <div
-                style="background: rgba(77, 189, 175, 0.12); border: 1px solid rgba(77, 189, 175, 0.45); border-left: 4px solid #4dbdaf;"
+            <div style="background: rgba(77, 189, 175, 0.12); border: 1px solid rgba(77, 189, 175, 0.45); border-left: 4px solid #4dbdaf;"
                 class="rounded-xl p-4 md:p-5 mt-4 flex items-start gap-3.5 shadow-sm text-slate-700 text-sm leading-relaxed">
                 <i data-lucide="info" class="w-5 h-5 text-[#117a8b] shrink-0 mt-0.5"></i>
                 <div class="flex-1">
                     <p class="mb-3 text-slate-700 leading-relaxed font-medium">
-                        Peta Ketahanan dan Kerentanan Pangan (<em>Food Security and Vulnerability Atlas</em> atau FSVA) merupakan peta tematik yang menyajikan visualisasi geografis hasil analisis indikator ketahanan dan kerentanan pangan suatu wilayah.
+                        Peta Ketahanan dan Kerentanan Pangan (<em>Food Security and Vulnerability Atlas</em> atau FSVA)
+                        merupakan peta tematik yang menyajikan visualisasi geografis hasil analisis indikator ketahanan
+                        dan kerentanan pangan suatu wilayah.
                     </p>
                     <div class="flex flex-wrap gap-2 pt-2" style="border-top: 1px solid rgba(77, 189, 175, 0.3);">
-                        <div
-                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/95 border text-xs font-semibold text-[#0a4b57] shadow-2xs"
+                        <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/95 border text-xs font-semibold text-[#0a4b57] shadow-2xs"
                             style="border-color: rgba(77, 189, 175, 0.5);">
                             <i data-lucide="server" class="w-3.5 h-3.5 text-[#117a8b]"></i>
                             <span>API Terhubung</span>
                         </div>
-                        <div
-                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/95 border text-xs font-semibold text-[#0a4b57] shadow-2xs"
+                        <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/95 border text-xs font-semibold text-[#0a4b57] shadow-2xs"
                             style="border-color: rgba(77, 189, 175, 0.5);">
                             <i data-lucide="filter" class="w-3.5 h-3.5 text-[#117a8b]"></i>
-                            <span>Filter Aktif: <span id="active-filter-label" class="font-bold text-slate-900">Semua Data</span></span>
+                            <span>Filter Aktif: <span id="active-filter-label" class="font-bold text-slate-900">Semua
+                                    Data</span></span>
                         </div>
                     </div>
                 </div>
@@ -378,41 +395,48 @@
         <!-- PETA FSVA (Sesuai Screenshot) -->
         <section class="mb-8 bg-white rounded-3xl shadow-soft border border-slate-100 overflow-hidden">
             <!-- Filter Bar Peta -->
-            <div class="p-4 sm:p-5 border-b border-slate-100 bg-slate-50/70 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div
+                class="p-4 sm:p-5 border-b border-slate-100 bg-slate-50/70 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-[#117a8b]/10 text-[#117a8b] flex items-center justify-center border border-[#117a8b]/20 shrink-0">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-[#117a8b]/10 text-[#117a8b] flex items-center justify-center border border-[#117a8b]/20 shrink-0">
                         <i data-lucide="map" class="w-5 h-5"></i>
                     </div>
                     <div>
                         <h3 class="font-bold text-slate-800 text-base leading-tight">Peta Kerawanan Pangan</h3>
-                        <p class="text-xs text-slate-500">Peta tematik visualisasi geografis status ketahanan pangan per desa</p>
+                        <p class="text-xs text-slate-500">Peta tematik visualisasi geografis status ketahanan pangan per
+                            desa</p>
                     </div>
                 </div>
 
                 <!-- Controls: Filter Kecamatan, Desa, dan Tombol Filter/Reset -->
                 <div class="flex flex-wrap items-center gap-2.5">
                     <div class="relative min-w-[170px]">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+                        <div
+                            class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
                             <i data-lucide="map-pin" class="w-3.5 h-3.5 text-[#117a8b]"></i>
                         </div>
                         <select id="map-filter-kecamatan"
                             class="w-full bg-white border border-slate-200 text-slate-700 text-xs font-semibold rounded-xl pl-9 pr-8 py-2.5 focus:ring-2 focus:ring-[#117a8b] focus:border-[#117a8b] appearance-none cursor-pointer shadow-2xs hover:bg-slate-50 transition">
                             <option value="all">Semua Kecamatan</option>
                         </select>
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
+                        <div
+                            class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
                             <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
                         </div>
                     </div>
 
                     <div class="relative min-w-[170px]">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+                        <div
+                            class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
                             <i data-lucide="home" class="w-3.5 h-3.5 text-[#117a8b]"></i>
                         </div>
                         <select id="map-filter-desa"
                             class="w-full bg-white border border-slate-200 text-slate-700 text-xs font-semibold rounded-xl pl-9 pr-8 py-2.5 focus:ring-2 focus:ring-[#117a8b] focus:border-[#117a8b] appearance-none cursor-pointer shadow-2xs hover:bg-slate-50 transition">
                             <option value="all">Semua Desa/Kelurahan</option>
                         </select>
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
+                        <div
+                            class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
                             <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
                         </div>
                     </div>
@@ -437,7 +461,8 @@
                 <!-- Map Area -->
                 <div class="lg:col-span-3 p-4 sm:p-6 border-b lg:border-b-0 lg:border-r border-slate-100 relative">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3 px-1">
-                        <h4 class="font-extrabold text-slate-800 text-sm sm:text-base tracking-tight flex items-center gap-2">
+                        <h4
+                            class="font-extrabold text-slate-800 text-sm sm:text-base tracking-tight flex items-center gap-2">
                             <span class="w-2.5 h-2.5 rounded-full bg-[#117a8b] inline-block"></span>
                             Peta Ketahanan dan Kerentanan Pangan Kabupaten Bandung (FSVA)
                         </h4>
@@ -447,25 +472,42 @@
                     </div>
 
                     <!-- Map Canvas -->
-                    <div id="fsva-map" class="w-full h-[520px] rounded-2xl z-0 bg-slate-50 border border-slate-200 relative overflow-hidden">
-                        <div id="map-loader" class="absolute inset-0 bg-white/80 backdrop-blur-xs flex flex-col items-center justify-center z-[500] transition-opacity">
+                    <div id="fsva-map"
+                        class="w-full h-[520px] rounded-2xl z-0 bg-slate-50 border border-slate-200 relative overflow-hidden">
+                        <div id="map-loader"
+                            class="absolute inset-0 bg-white/80 backdrop-blur-xs flex flex-col items-center justify-center z-[500] transition-opacity">
                             <div class="loader mb-2"></div>
-                            <span class="text-xs font-semibold text-[#117a8b]">Memuat batas wilayah desa & kelereng FSVA...</span>
+                            <span class="text-xs font-semibold text-[#117a8b]">Memuat batas wilayah desa & kelereng
+                                FSVA...</span>
                         </div>
                     </div>
 
                     <!-- Floating Mini Legend (Kiri Bawah Peta - Sesuai Screenshot) -->
-                    <div class="absolute bottom-8 left-8 bg-white/95 backdrop-blur-md p-3.5 rounded-xl shadow-lg border border-slate-200/90 z-[400] text-[11px] font-medium hidden sm:block">
-                        <div class="font-extrabold text-slate-800 mb-2 pb-1 border-b border-slate-100 text-[10px] uppercase tracking-wider">
+                    <div
+                        class="absolute bottom-8 left-8 bg-white/95 backdrop-blur-md p-3.5 rounded-xl shadow-lg border border-slate-200/90 z-[400] text-[11px] font-medium hidden sm:block">
+                        <div
+                            class="font-extrabold text-slate-800 mb-2 pb-1 border-b border-slate-100 text-[10px] uppercase tracking-wider">
                             Peringkat / Tingkat Kerentanan
                         </div>
                         <div class="space-y-1.5">
-                            <div class="flex items-center gap-2"><span class="w-3.5 h-3.5 rounded-xs inline-block bg-[#dc2626] border border-[#991b1b]"></span><span class="text-slate-700">Sangat Rentan</span></div>
-                            <div class="flex items-center gap-2"><span class="w-3.5 h-3.5 rounded-xs inline-block bg-[#f87171] border border-[#b91c1c]"></span><span class="text-slate-700">Rentan</span></div>
-                            <div class="flex items-center gap-2"><span class="w-3.5 h-3.5 rounded-xs inline-block bg-[#fbcfe8] border border-[#db2777]"></span><span class="text-slate-700">Agak Rentan</span></div>
-                            <div class="flex items-center gap-2"><span class="w-3.5 h-3.5 rounded-xs inline-block bg-[#bbf7d0] border border-[#16a34a]"></span><span class="text-slate-700">Agak Tahan</span></div>
-                            <div class="flex items-center gap-2"><span class="w-3.5 h-3.5 rounded-xs inline-block bg-[#22c55e] border border-[#15803d]"></span><span class="text-slate-700">Tahan</span></div>
-                            <div class="flex items-center gap-2"><span class="w-3.5 h-3.5 rounded-xs inline-block bg-[#14532d] border border-[#052e16]"></span><span class="text-slate-700">Sangat Tahan</span></div>
+                            <div class="flex items-center gap-2"><span
+                                    class="w-3.5 h-3.5 rounded-xs inline-block bg-[#dc2626] border border-[#991b1b]"></span><span
+                                    class="text-slate-700">Sangat Rentan</span></div>
+                            <div class="flex items-center gap-2"><span
+                                    class="w-3.5 h-3.5 rounded-xs inline-block bg-[#f87171] border border-[#b91c1c]"></span><span
+                                    class="text-slate-700">Rentan</span></div>
+                            <div class="flex items-center gap-2"><span
+                                    class="w-3.5 h-3.5 rounded-xs inline-block bg-[#fbcfe8] border border-[#db2777]"></span><span
+                                    class="text-slate-700">Agak Rentan</span></div>
+                            <div class="flex items-center gap-2"><span
+                                    class="w-3.5 h-3.5 rounded-xs inline-block bg-[#bbf7d0] border border-[#16a34a]"></span><span
+                                    class="text-slate-700">Agak Tahan</span></div>
+                            <div class="flex items-center gap-2"><span
+                                    class="w-3.5 h-3.5 rounded-xs inline-block bg-[#22c55e] border border-[#15803d]"></span><span
+                                    class="text-slate-700">Tahan</span></div>
+                            <div class="flex items-center gap-2"><span
+                                    class="w-3.5 h-3.5 rounded-xs inline-block bg-[#14532d] border border-[#052e16]"></span><span
+                                    class="text-slate-700">Sangat Tahan</span></div>
                         </div>
                     </div>
                 </div>
@@ -475,7 +517,9 @@
                     <div>
                         <!-- Logo Kabupaten Bandung -->
                         <div class="flex justify-center mb-5">
-                            <img src="https://bandungkab.go.id/uploads/images/logo_bandungkab.png" alt="Logo Kabupaten Bandung" class="h-24 object-contain drop-shadow-sm hover:scale-105 transition-transform">
+                            <img src="https://bandungkab.go.id/uploads/images/logo_bandungkab.png"
+                                alt="Logo Kabupaten Bandung"
+                                class="h-24 object-contain drop-shadow-sm hover:scale-105 transition-transform">
                         </div>
 
                         <div class="text-center mb-5">
@@ -483,59 +527,85 @@
                                 KETERANGAN<br>KERAWANAN PANGAN :
                             </h4>
                             <p class="text-[11px] font-bold text-[#117a8b] mt-2">
-                                Total Kecamatan: <span id="map-total-kec" class="font-mono font-black text-slate-800">31</span>
+                                Total Kecamatan: <span id="map-total-kec"
+                                    class="font-mono font-black text-slate-800">31</span>
                             </p>
                         </div>
 
                         <!-- Legend Items with Counts -->
                         <ul class="space-y-3 text-xs">
-                            <li class="flex items-center justify-between p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
+                            <li
+                                class="flex items-center justify-between p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
                                 <div class="flex items-center gap-2.5">
-                                    <span class="w-4 h-4 rounded-xs bg-[#dc2626] shrink-0 border border-[#991b1b]"></span>
+                                    <span
+                                        class="w-4 h-4 rounded-xs bg-[#dc2626] shrink-0 border border-[#991b1b]"></span>
                                     <span class="font-bold text-slate-700 text-[11px]">SANGAT RENTAN</span>
                                 </div>
-                                <span class="font-black text-slate-800 font-mono text-xs"><span id="map-count-prio-1">0</span> <span class="text-[10px] font-normal text-slate-500">Desa</span></span>
+                                <span class="font-black text-slate-800 font-mono text-xs"><span
+                                        id="map-count-prio-1">0</span> <span
+                                        class="text-[10px] font-normal text-slate-500">Desa</span></span>
                             </li>
-                            <li class="flex items-center justify-between p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
+                            <li
+                                class="flex items-center justify-between p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
                                 <div class="flex items-center gap-2.5">
-                                    <span class="w-4 h-4 rounded-xs bg-[#f87171] shrink-0 border border-[#b91c1c]"></span>
+                                    <span
+                                        class="w-4 h-4 rounded-xs bg-[#f87171] shrink-0 border border-[#b91c1c]"></span>
                                     <span class="font-bold text-slate-700 text-[11px]">RENTAN</span>
                                 </div>
-                                <span class="font-black text-slate-800 font-mono text-xs"><span id="map-count-prio-2">0</span> <span class="text-[10px] font-normal text-slate-500">Desa</span></span>
+                                <span class="font-black text-slate-800 font-mono text-xs"><span
+                                        id="map-count-prio-2">0</span> <span
+                                        class="text-[10px] font-normal text-slate-500">Desa</span></span>
                             </li>
-                            <li class="flex items-center justify-between p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
+                            <li
+                                class="flex items-center justify-between p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
                                 <div class="flex items-center gap-2.5">
-                                    <span class="w-4 h-4 rounded-xs bg-[#fbcfe8] shrink-0 border border-[#db2777]"></span>
+                                    <span
+                                        class="w-4 h-4 rounded-xs bg-[#fbcfe8] shrink-0 border border-[#db2777]"></span>
                                     <span class="font-bold text-slate-700 text-[11px]">AGAK RENTAN</span>
                                 </div>
-                                <span class="font-black text-slate-800 font-mono text-xs"><span id="map-count-prio-3">0</span> <span class="text-[10px] font-normal text-slate-500">Desa</span></span>
+                                <span class="font-black text-slate-800 font-mono text-xs"><span
+                                        id="map-count-prio-3">0</span> <span
+                                        class="text-[10px] font-normal text-slate-500">Desa</span></span>
                             </li>
-                            <li class="flex items-center justify-between p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
+                            <li
+                                class="flex items-center justify-between p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
                                 <div class="flex items-center gap-2.5">
-                                    <span class="w-4 h-4 rounded-xs bg-[#bbf7d0] shrink-0 border border-[#16a34a]"></span>
+                                    <span
+                                        class="w-4 h-4 rounded-xs bg-[#bbf7d0] shrink-0 border border-[#16a34a]"></span>
                                     <span class="font-bold text-slate-700 text-[11px]">AGAK TAHAN</span>
                                 </div>
-                                <span class="font-black text-slate-800 font-mono text-xs"><span id="map-count-prio-4">0</span> <span class="text-[10px] font-normal text-slate-500">Desa</span></span>
+                                <span class="font-black text-slate-800 font-mono text-xs"><span
+                                        id="map-count-prio-4">0</span> <span
+                                        class="text-[10px] font-normal text-slate-500">Desa</span></span>
                             </li>
-                            <li class="flex items-center justify-between p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
+                            <li
+                                class="flex items-center justify-between p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
                                 <div class="flex items-center gap-2.5">
-                                    <span class="w-4 h-4 rounded-xs bg-[#22c55e] shrink-0 border border-[#15803d]"></span>
+                                    <span
+                                        class="w-4 h-4 rounded-xs bg-[#22c55e] shrink-0 border border-[#15803d]"></span>
                                     <span class="font-bold text-slate-700 text-[11px]">TAHAN</span>
                                 </div>
-                                <span class="font-black text-slate-800 font-mono text-xs"><span id="map-count-prio-5">0</span> <span class="text-[10px] font-normal text-slate-500">Desa</span></span>
+                                <span class="font-black text-slate-800 font-mono text-xs"><span
+                                        id="map-count-prio-5">0</span> <span
+                                        class="text-[10px] font-normal text-slate-500">Desa</span></span>
                             </li>
-                            <li class="flex items-center justify-between p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
+                            <li
+                                class="flex items-center justify-between p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
                                 <div class="flex items-center gap-2.5">
-                                    <span class="w-4 h-4 rounded-xs bg-[#14532d] shrink-0 border border-[#052e16]"></span>
+                                    <span
+                                        class="w-4 h-4 rounded-xs bg-[#14532d] shrink-0 border border-[#052e16]"></span>
                                     <span class="font-bold text-slate-700 text-[11px]">SANGAT TAHAN</span>
                                 </div>
-                                <span class="font-black text-slate-800 font-mono text-xs"><span id="map-count-prio-6">0</span> <span class="text-[10px] font-normal text-slate-500">Desa</span></span>
+                                <span class="font-black text-slate-800 font-mono text-xs"><span
+                                        id="map-count-prio-6">0</span> <span
+                                        class="text-[10px] font-normal text-slate-500">Desa</span></span>
                             </li>
                         </ul>
                     </div>
 
                     <!-- Footer Note -->
-                    <div class="mt-8 pt-4 border-t border-slate-200/70 text-[10px] text-slate-400 text-center leading-relaxed">
+                    <div
+                        class="mt-8 pt-4 border-t border-slate-200/70 text-[10px] text-slate-400 text-center leading-relaxed">
                         Pemerintah Kabupaten Bandung<br>
                         <span class="font-semibold text-slate-600">Dinas Ketahanan Pangan dan Perikanan</span>
                     </div>
@@ -543,8 +613,8 @@
             </div>
         </section>
 
-        <!-- Charts Grid 1 -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <!-- Charts Grid 1 (Hidden) -->
+        <div class="hidden grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
             <!-- Chart 1: Distribusi Prioritas -->
             <div class="bg-white p-6 rounded-2xl shadow-soft border border-slate-100 lg:col-span-2">
                 <div class="flex items-center justify-between mb-4">
@@ -574,8 +644,8 @@
             </div>
         </div>
 
-        <!-- Charts Grid 2 -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <!-- Charts Grid 2 (Hidden) -->
+        <div class="hidden grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             <!-- Chart 3: Profil 6 Indikator -->
             <div class="bg-white p-6 rounded-2xl shadow-soft border border-slate-100">
                 <div class="flex items-center justify-between mb-4">
@@ -611,15 +681,18 @@
             <div class="bg-white p-6 rounded-2xl shadow-soft border border-slate-100">
                 <div class="flex items-center justify-between mb-4">
                     <div class="flex items-center gap-2.5">
-                        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white shrink-0 shadow-sm" style="background-color: #117a8b;">
+                        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white shrink-0 shadow-sm"
+                            style="background-color: #117a8b;">
                             <i data-lucide="trending-up" class="w-4 h-4"></i>
                         </div>
                         <div>
-                            <h3 class="font-bold text-slate-800 text-base leading-tight">Tren Indeks Ketahanan Pangan (IKP)</h3>
+                            <h3 class="font-bold text-slate-800 text-base leading-tight">Tren Indeks Ketahanan Pangan
+                                (IKP)</h3>
                             <p class="text-xs text-slate-500 font-medium">Tren Rata-Rata Indeks Komposit per Tahun</p>
                         </div>
                     </div>
-                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#117a8b]/10 text-[#117a8b] border border-[#117a8b]/20">
+                    <span
+                        class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#117a8b]/10 text-[#117a8b] border border-[#117a8b]/20">
                         <i data-lucide="lock" class="w-3 h-3"></i> Terkunci
                     </span>
                 </div>
@@ -632,15 +705,18 @@
             <div class="bg-white p-6 rounded-2xl shadow-soft border border-slate-100">
                 <div class="flex items-center justify-between mb-4">
                     <div class="flex items-center gap-2.5">
-                        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white shrink-0 shadow-sm" style="background-color: #6e1f1f;">
+                        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white shrink-0 shadow-sm"
+                            style="background-color: #6e1f1f;">
                             <i data-lucide="bar-chart-2" class="w-4 h-4"></i>
                         </div>
                         <div>
-                            <h3 class="font-bold text-slate-800 text-base leading-tight">Tren Desa Rentan Pangan Per Tahun</h3>
+                            <h3 class="font-bold text-slate-800 text-base leading-tight">Tren Desa Rentan Pangan Per
+                                Tahun</h3>
                             <p class="text-xs text-slate-500 font-medium">Prioritas 1 - 3 (Semua Tahun)</p>
                         </div>
                     </div>
-                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#6e1f1f]/10 text-[#6e1f1f] border border-[#6e1f1f]/20">
+                    <span
+                        class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#6e1f1f]/10 text-[#6e1f1f] border border-[#6e1f1f]/20">
                         <i data-lucide="lock" class="w-3 h-3"></i> Terkunci
                     </span>
                 </div>
@@ -1250,41 +1326,41 @@
             }
 
             const cards = [
-                { 
-                    title: 'Total Desa', 
-                    val: formatNumber(totalDesa), 
-                    sub: 'Wilayah Terdokumentasi', 
-                    icon: 'map', 
-                    color: 'text-[#117a8b]', 
-                    bg: 'bg-[#117a8b]/10', 
-                    border: 'border-[#117a8b]/20' 
+                {
+                    title: 'Total Desa',
+                    val: formatNumber(totalDesa),
+                    sub: 'Wilayah Terdokumentasi',
+                    icon: 'map',
+                    color: 'text-[#117a8b]',
+                    bg: 'bg-[#117a8b]/10',
+                    border: 'border-[#117a8b]/20'
                 },
-                { 
-                    title: 'Total Kecamatan', 
-                    val: formatNumber(kecamatanSet.size), 
-                    sub: 'Wilayah Terdokumentasi', 
-                    icon: 'map-pin', 
-                    color: 'text-[#0a4b57]', 
-                    bg: 'bg-[#0a4b57]/10', 
-                    border: 'border-[#0a4b57]/20' 
+                {
+                    title: 'Total Kecamatan',
+                    val: formatNumber(kecamatanSet.size),
+                    sub: 'Wilayah Terdokumentasi',
+                    icon: 'map-pin',
+                    color: 'text-[#0a4b57]',
+                    bg: 'bg-[#0a4b57]/10',
+                    border: 'border-[#0a4b57]/20'
                 },
-                { 
-                    title: 'Desa Rentan Pangan', 
-                    val: formatNumber(desaRentan), 
-                    sub: 'Berada di Prioritas 1-3', 
-                    icon: 'alert-triangle', 
-                    color: 'text-[#dc3545]', 
-                    bg: 'bg-[#dc3545]/10', 
-                    border: 'border-[#dc3545]/20' 
+                {
+                    title: 'Desa Rentan Pangan',
+                    val: formatNumber(desaRentan),
+                    sub: 'Berada di Prioritas 1-3',
+                    icon: 'alert-triangle',
+                    color: 'text-[#dc3545]',
+                    bg: 'bg-[#dc3545]/10',
+                    border: 'border-[#dc3545]/20'
                 },
-                { 
-                    title: 'Indeks Komposit Pangan', 
-                    val: formatNumber(avgIndeks), 
-                    sub: 'IKP', 
-                    icon: 'activity', 
-                    color: 'text-[#117a8b]', 
-                    bg: 'bg-[#117a8b]/10', 
-                    border: 'border-[#117a8b]/20' 
+                {
+                    title: 'Indeks Komposit Pangan',
+                    val: formatNumber(avgIndeks),
+                    sub: 'IKP',
+                    icon: 'activity',
+                    color: 'text-[#117a8b]',
+                    bg: 'bg-[#117a8b]/10',
+                    border: 'border-[#117a8b]/20'
                 }
             ];
 
@@ -1514,8 +1590,21 @@
                         }
                     },
                     colors: ['#117a8b'], // Warna 3 dari panduan
+                    stroke: {
+                        curve: 'straight',
+                        width: 3.5,
+                        colors: ['#117a8b']
+                    },
+                    markers: {
+                        size: 6,
+                        colors: ['#117a8b'],
+                        strokeColors: '#ffffff',
+                        strokeWidth: 2,
+                        hover: { size: 8 }
+                    },
                     dataLabels: {
                         enabled: true,
+                        offsetY: -8,
                         style: {
                             fontSize: '11px',
                             fontWeight: '700',
@@ -1524,32 +1613,18 @@
                         background: {
                             enabled: true,
                             foreColor: '#ffffff',
+                            color: '#117a8b',
                             borderRadius: 4,
                             padding: 4,
-                            opacity: 0.95,
+                            opacity: 1,
                             borderWidth: 0
                         }
                     },
-                    stroke: { curve: 'smooth', width: 3 },
-                    markers: {
-                        size: 5,
-                        colors: ['#ffffff'],
-                        strokeColors: '#117a8b',
-                        strokeWidth: 3,
-                        hover: { size: 7 }
-                    },
-                    fill: {
-                        type: 'gradient',
-                        gradient: {
-                            shade: 'light',
-                            type: 'vertical',
-                            shadeIntensity: 0.5,
-                            gradientToColors: ['#4dbdaf'],
-                            inverseColors: false,
-                            opacityFrom: 0.35,
-                            opacityTo: 0.05,
-                            stops: [0, 100]
-                        }
+                    grid: {
+                        borderColor: '#e2e8f0',
+                        strokeDashArray: 0,
+                        yaxis: { lines: { show: true } },
+                        xaxis: { lines: { show: false } }
                     },
                     xaxis: {
                         categories: arrYears,
