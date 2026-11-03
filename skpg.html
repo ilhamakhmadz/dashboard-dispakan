@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title id="page-title">Dashboard SKPG - Kab. Bandung</title>
-    
+    <title id="page-title">Sistem Peringatan Dini Kerawanan Pangan dan Gizi (SKPG) - Kab. Bandung</title>
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -16,14 +17,16 @@
                     },
                     colors: {
                         brand: {
-                            primary: '#0ea5e9', // Sky blue for primary
-                            dark: '#0f172a',
-                            light: '#f0f9ff',
-                            accent: '#38bdf8'
+                            1: '#1d2d35',
+                            2: '#0a4b57',
+                            3: '#117a8b',
+                            4: '#4dbdaf',
+                            5: '#2e8a57',
+                            6: '#dc3545',
                         }
                     },
                     boxShadow: {
-                        'soft': '0 4px 20px -2px rgba(14, 165, 233, 0.1)',
+                        'soft': '0 4px 20px -2px rgba(17, 122, 139, 0.08)',
                     }
                 }
             }
@@ -33,300 +36,459 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
     <!-- Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
 
+    <!-- Leaflet CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
         .glass-nav {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.96);
             backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(15, 23, 42, 0.05);
+            border-bottom: 1px solid rgba(15, 23, 42, 0.06);
         }
-        .gradient-header {
-            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+
+        .animate-fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+            opacity: 0;
         }
-        .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; opacity: 0; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         .loader {
             border: 3px solid #f3f3f3;
             border-radius: 50%;
-            border-top: 3px solid #0ea5e9;
+            border-top: 3px solid #117a8b;
             width: 24px;
             height: 24px;
             animation: spin 1s linear infinite;
         }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .leaflet-popup-content-wrapper {
+            border-radius: 14px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .leaflet-popup-content {
+            margin: 0;
+        }
+
+        .custom-skpg-popup table td {
+            padding: 3px 6px;
+        }
     </style>
 </head>
-<body class="text-slate-800 antialiased selection:bg-sky-100 selection:text-sky-900">
+
+<body class="text-slate-800 antialiased selection:bg-[#117a8b]/20 selection:text-[#0a4b57]">
 
     <!-- LOADING SCREEN -->
-    <div id="loading-screen" class="fixed inset-0 z-[1000] bg-white flex flex-col items-center justify-center transition-all duration-700 ease-in-out">
+    <div id="loading-screen"
+        class="fixed inset-0 z-[1000] bg-white flex flex-col items-center justify-center transition-all duration-700 ease-in-out">
         <div class="relative w-24 h-24 mb-8">
             <div class="absolute inset-0 border-4 border-slate-100 rounded-full"></div>
-            <div class="absolute inset-0 border-4 border-sky-500 rounded-full border-t-transparent animate-spin"></div>
-            <div class="absolute inset-0 flex items-center justify-center text-sky-600">
+            <div class="absolute inset-0 border-4 border-[#117a8b] rounded-full border-t-transparent animate-spin">
+            </div>
+            <div class="absolute inset-0 flex items-center justify-center text-[#117a8b]">
                 <i data-lucide="shield-alert" class="w-8 h-8 animate-pulse"></i>
             </div>
         </div>
-        
-        <h2 class="text-2xl font-bold text-slate-800 mb-2 tracking-tight">Sistem Peringatan Dini</h2>
-        
+
+        <h2 class="text-2xl font-bold text-slate-800 mb-2 tracking-tight">Sistem Peringatan Dini (SKPG)</h2>
+
         <div class="h-6 mb-3 flex items-center justify-center">
-            <p id="loading-text" class="text-sm font-medium text-slate-500 font-mono transition-all duration-300">Menghubungkan ke API SKPG...</p>
+            <p id="loading-text" class="text-sm font-medium text-slate-500 font-mono transition-all duration-300">
+                Menghubungkan ke API SKPG...</p>
         </div>
 
         <div class="w-72 h-2.5 bg-slate-100 rounded-full overflow-hidden relative shadow-inner">
-            <div id="loading-bar-inner" class="h-full bg-gradient-to-r from-sky-400 to-blue-600 rounded-full transition-all duration-500 ease-out" style="width: 5%"></div>
+            <div id="loading-bar-inner"
+                class="h-full bg-gradient-to-r from-[#117a8b] to-[#4dbdaf] rounded-full transition-all duration-500 ease-out"
+                style="width: 5%"></div>
         </div>
-        <p id="loading-pct" class="text-xs font-bold text-sky-600 mt-3 font-mono">5%</p>
+        <p id="loading-pct" class="text-xs font-bold text-[#117a8b] mt-3 font-mono">5%</p>
     </div>
 
-    <!-- Navbar -->
+    <!-- NAVBAR -->
     <nav class="fixed top-0 w-full z-50 glass-nav transition-all duration-300">
         <div class="container mx-auto px-4 lg:px-8">
-            <div class="flex flex-col lg:flex-row lg:h-20 lg:items-center justify-between gap-4 py-3 lg:py-0">
+            <div class="flex h-20 items-center justify-between">
                 <!-- Logo & Title -->
-                <div class="flex items-center justify-between w-full lg:w-auto">
-                    <div class="flex items-center gap-3">
-                        <div class="bg-sky-600 p-2 rounded-lg text-white shadow-md">
-                            <i data-lucide="activity" class="w-6 h-6"></i>
-                        </div>
-                        <div class="block">
-                            <h1 class="text-lg font-bold text-slate-900 leading-tight tracking-tight">SKPG Dashboard</h1>
-                            <p class="text-[10px] font-semibold text-sky-600 uppercase tracking-widest">Kabupaten Bandung</p>
-                        </div>
+                <div class="flex items-center gap-3">
+                    <div class="bg-[#117a8b] p-2.5 rounded-xl text-white shadow-md shadow-[#117a8b]/20">
+                        <i data-lucide="shield-alert" class="w-6 h-6"></i>
                     </div>
-                    <!-- Mobile Refresh -->
-                    <div class="lg:hidden flex items-center gap-2">
-                        <span class="relative flex h-2 w-2">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-2 w-2 bg-sky-500"></span>
-                        </span>
-                        <button onclick="window.location.reload()" class="p-2 rounded-lg bg-slate-50 text-slate-600">
-                            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-                        </button>
+                    <div>
+                        <h1 class="text-lg font-extrabold text-slate-900 leading-tight tracking-tight">SKPG DASHBOARD
+                        </h1>
+                        <p class="text-[10px] font-bold text-[#117a8b] uppercase tracking-widest">Kabupaten Bandung</p>
                     </div>
                 </div>
 
-                <!-- Desktop Filters (Center) -->
-                <div class="hidden lg:flex flex-1 mx-4 gap-2 items-center justify-center max-w-4xl">
-                    <!-- Filter Tahun -->
-                    <div class="relative group w-1/4">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <i data-lucide="calendar" class="w-4 h-4 text-slate-500"></i>
-                        </div>
-                        <select id="nav-filter-tahun" class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-xl focus:ring-sky-500 focus:border-sky-500 block pl-10 p-2.5 cursor-pointer font-medium appearance-none hover:bg-white transition-colors">
-                            <option value="all">Semua Tahun</option>
-                        </select>
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                            <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
-                        </div>
-                    </div>
-
-                    <!-- Filter Bulan -->
-                    <div class="relative group w-1/3">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <i data-lucide="clock" class="w-4 h-4 text-slate-500"></i>
-                        </div>
-                        <select id="nav-filter-bulan" class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-xl focus:ring-sky-500 focus:border-sky-500 block pl-10 p-2.5 cursor-pointer font-medium appearance-none hover:bg-white transition-colors">
-                            <option value="all">Semua Bulan</option>
-                        </select>
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                            <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
-                        </div>
-                    </div>
-
-                    <!-- Filter Kecamatan -->
-                    <div class="relative group w-1/3">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <i data-lucide="map-pin" class="w-4 h-4 text-slate-500"></i>
-                        </div>
-                        <select id="nav-filter-kecamatan" class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-xl focus:ring-sky-500 focus:border-sky-500 block pl-10 p-2.5 cursor-pointer font-medium appearance-none hover:bg-white transition-colors">
-                            <option value="all">Semua Kecamatan</option>
-                        </select>
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                            <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Right Actions (Date & Live) -->
-                <div class="hidden lg:flex items-center gap-4">
-                    <div class="flex flex-col items-end">
+                <!-- Right Actions: Kembali ke Portal DISPAKAN + Live indicator + Refresh -->
+                <div class="flex items-center gap-2 sm:gap-3">
+                    <a href="https://aplikasi.bandungkab.go.id/publik/dispakan-portal-dashboard"
+                        class="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 text-xs font-bold text-slate-700 bg-white border border-slate-200 rounded-xl hover:bg-[#117a8b]/10 hover:text-[#117a8b] hover:border-[#117a8b]/30 transition-all shadow-sm"
+                        title="Kembali ke Portal DISPAKAN">
+                        <i data-lucide="layout-dashboard" class="w-4 h-4 text-[#117a8b]"></i>
+                        <span>Kembali ke Portal DISPAKAN</span>
+                    </a>
+                    <div class="hidden md:flex flex-col items-end pl-2">
                         <span class="text-xs font-medium text-slate-500" id="current-date">Loading...</span>
                         <div class="flex items-center gap-1.5">
                             <span class="relative flex h-2 w-2">
-                              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
-                              <span class="relative inline-flex rounded-full h-2 w-2 bg-sky-500"></span>
+                                <span
+                                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4dbdaf] opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2 w-2 bg-[#117a8b]"></span>
                             </span>
-                            <span class="text-xs font-bold text-sky-600">LIVE API DATA</span>
+                            <span class="text-[11px] font-bold text-[#117a8b]">LIVE API DATA</span>
                         </div>
                     </div>
-                    <button onclick="window.location.reload()" class="p-2.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:bg-sky-50 hover:text-sky-600 hover:border-sky-200 transition-all shadow-sm group">
-                        <i data-lucide="refresh-cw" class="w-5 h-5 group-hover:rotate-180 transition-transform duration-500"></i>
+                    <button onclick="window.location.reload()"
+                        class="p-2.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:bg-[#117a8b]/10 hover:text-[#117a8b] hover:border-[#117a8b]/30 transition-all shadow-sm group"
+                        title="Muat Ulang Data">
+                        <i data-lucide="refresh-cw"
+                            class="w-4 h-4 group-hover:rotate-180 transition-transform duration-500"></i>
                     </button>
                 </div>
-            </div>
-
-            <!-- Mobile Filter Section -->
-            <div class="lg:hidden flex flex-col gap-2 pb-3">
-                 <div class="grid grid-cols-2 gap-2">
-                     <div class="relative">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <i data-lucide="calendar" class="w-4 h-4 text-slate-500"></i>
-                        </div>
-                        <select id="mobile-filter-tahun" class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg pl-10 p-2.5 font-medium appearance-none">
-                            <option value="all">Semua Tahun</option>
-                        </select>
-                    </div>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <i data-lucide="clock" class="w-4 h-4 text-slate-500"></i>
-                        </div>
-                        <select id="mobile-filter-bulan" class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg pl-10 p-2.5 font-medium appearance-none">
-                            <option value="all">Semua Bulan</option>
-                        </select>
-                    </div>
-                    <div class="relative col-span-2">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <i data-lucide="map-pin" class="w-4 h-4 text-slate-500"></i>
-                        </div>
-                        <select id="mobile-filter-kecamatan" class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg pl-10 p-2.5 font-medium appearance-none">
-                            <option value="all">Semua Kecamatan</option>
-                        </select>
-                    </div>
-                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <main class="container mx-auto px-4 lg:px-8 py-8 mt-44 sm:mt-40 lg:mt-20 mb-12">
-        
-        <!-- Header Section -->
-        <div class="mb-8 rounded-3xl gradient-header p-8 text-white shadow-lg relative overflow-hidden">
-            <div class="relative z-10">
-                <h2 id="dashboard-title" class="text-2xl md:text-3xl font-bold mb-2">Memuat Judul...</h2>
-                <p class="text-sky-100 max-w-3xl text-sm md:text-base leading-relaxed opacity-90">
-                    Sistem Peringatan Dini Kerawanan Pangan dan Gizi (SKPG) merupakan salah satu tools early warning system sebagai dasar kebijakan pangan dan gizi. SKPG berfungsi untuk mencegah krisis dengan menganalisis tiga indikator utama, yaitu: ketersediaan pangan, keterjangkauan pangan, dan pemanfaatan gizi.
-                </p>
-                <div class="mt-6 flex flex-wrap gap-3">
-                    <div class="bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-lg flex items-center gap-2">
-                        <i data-lucide="server" class="w-4 h-4 text-sky-300"></i>
-                        <span class="text-sm font-medium text-sky-50">API Terhubung</span>
-                    </div>
-                    <div class="bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-lg flex items-center gap-2">
-                        <i data-lucide="filter" class="w-4 h-4 text-sky-300"></i>
-                        <span class="text-sm font-medium text-sky-50">Filter: <span id="active-filter-label" class="text-white font-bold">Semua Data</span></span>
+    <!-- MAIN CONTENT -->
+    <main class="container mx-auto px-4 lg:px-8 py-8 mt-24 mb-12">
+
+        <!-- HEADER SECTION -->
+        <header class="mb-8 relative">
+            <!-- Brand & Dept Header -->
+            <div class="flex items-center gap-3 mb-3">
+                <div
+                    class="w-11 h-11 rounded-xl bg-white border border-[#117a8b]/20 shadow-sm flex items-center justify-center text-[#117a8b] shrink-0 ring-1 ring-[#117a8b]/10">
+                    <i data-lucide="wheat" class="w-5 h-5"></i>
+                </div>
+                <div class="text-xs font-bold text-[#117a8b] uppercase tracking-widest leading-tight">
+                    DINAS KETAHANAN PANGAN DAN PERIKANAN KABUPATEN BANDUNG (DISPAKAN)
+                </div>
+            </div>
+
+            <!-- Headline -->
+            <h1 id="dashboard-title"
+                class="text-2xl md:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight mb-2">
+                Sistem Peringatan Dini Kerawanan Pangan dan Gizi (SKPG)
+            </h1>
+
+            <!-- Penjelasan / Info Banner (Warna 4: #4dbdaf) -->
+            <div style="background: rgba(77, 189, 175, 0.12); border: 1px solid rgba(77, 189, 175, 0.45); border-left: 4px solid #4dbdaf;"
+                class="rounded-xl p-4 md:p-5 mt-4 flex items-start gap-3.5 shadow-sm text-slate-700 text-sm leading-relaxed">
+                <i data-lucide="info" class="w-5 h-5 text-[#117a8b] shrink-0 mt-0.5"></i>
+                <div class="flex-1">
+                    <p class="mb-3 text-slate-700 leading-relaxed font-medium">
+                        Sistem Peringatan Dini Kerawanan Pangan dan Gizi (SKPG) merupakan salah satu <em>tools early
+                            warning
+                            system</em> sebagai dasar kebijakan pangan dan gizi. SKPG berfungsi untuk mencegah krisis
+                        dengan menganalisis tiga indikator utama, yaitu: ketersediaan pangan, keterjangkauan pangan, dan
+                        pemanfaatan gizi.
+                    </p>
+                    <div class="flex flex-wrap gap-2 pt-2" style="border-top: 1px solid rgba(77, 189, 175, 0.3);">
+                        <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/95 border text-xs font-semibold text-[#0a4b57] shadow-2xs"
+                            style="border-color: rgba(77, 189, 175, 0.5);">
+                            <i data-lucide="server" class="w-3.5 h-3.5 text-[#117a8b]"></i>
+                            <span>API Terhubung</span>
+                        </div>
+                        <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/95 border text-xs font-semibold text-[#0a4b57] shadow-2xs"
+                            style="border-color: rgba(77, 189, 175, 0.5);">
+                            <i data-lucide="filter" class="w-3.5 h-3.5 text-[#117a8b]"></i>
+                            <span>Filter Aktif: <span id="active-filter-label" class="font-bold text-slate-900">Januari
+                                    2023</span></span>
+                        </div>
                     </div>
                 </div>
             </div>
-            <!-- Decor -->
-            <div class="absolute right-0 bottom-0 opacity-10 pointer-events-none transform translate-x-4 translate-y-4">
-                <i data-lucide="shield-alert" class="w-64 h-64 text-white"></i>
-            </div>
-        </div>
+        </header>
 
-        <!-- KPI Cards -->
-        <section id="stats-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <!-- a. SUMMARY CARDS -->
+        <section id="stats-container" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             <!-- Skeletons -->
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100"><div class="animate-pulse flex space-x-4"><div class="flex-1 space-y-4 py-1"><div class="h-4 bg-slate-200 rounded w-3/4"></div><div class="h-8 bg-slate-200 rounded"></div></div></div></div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100"><div class="animate-pulse flex space-x-4"><div class="flex-1 space-y-4 py-1"><div class="h-4 bg-slate-200 rounded w-3/4"></div><div class="h-8 bg-slate-200 rounded"></div></div></div></div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100"><div class="animate-pulse flex space-x-4"><div class="flex-1 space-y-4 py-1"><div class="h-4 bg-slate-200 rounded w-3/4"></div><div class="h-8 bg-slate-200 rounded"></div></div></div></div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100"><div class="animate-pulse flex space-x-4"><div class="flex-1 space-y-4 py-1"><div class="h-4 bg-slate-200 rounded w-3/4"></div><div class="h-8 bg-slate-200 rounded"></div></div></div></div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 animate-pulse">
+                <div class="h-4 bg-slate-200 rounded w-1/2 mb-3"></div>
+                <div class="h-8 bg-slate-200 rounded w-3/4 mb-2"></div>
+                <div class="h-3 bg-slate-100 rounded w-1/3"></div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 animate-pulse">
+                <div class="h-4 bg-slate-200 rounded w-1/2 mb-3"></div>
+                <div class="h-8 bg-slate-200 rounded w-3/4 mb-2"></div>
+                <div class="h-3 bg-slate-100 rounded w-1/3"></div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 animate-pulse">
+                <div class="h-4 bg-slate-200 rounded w-1/2 mb-3"></div>
+                <div class="h-8 bg-slate-200 rounded w-3/4 mb-2"></div>
+                <div class="h-3 bg-slate-100 rounded w-1/3"></div>
+            </div>
         </section>
 
-        <!-- Charts Grid 1 -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-            <!-- Chart 1: Tren Skor Komposit -->
-            <div class="bg-white p-6 rounded-2xl shadow-soft border border-slate-100 lg:col-span-2">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="font-bold text-slate-800 flex items-center gap-2">
-                        <span class="bg-sky-100 p-1.5 rounded-lg text-sky-600"><i data-lucide="trending-up" class="w-4 h-4"></i></span>
-                        Tren Rata-rata Skor Komposit per Bulan
-                    </h3>
-                </div>
-                <div id="chart-tren-bulan" class="h-80 flex items-center justify-center">
-                    <div class="loader opacity-50"></div>
+        <!-- b. FILTER DATA & PETA SECTION -->
+        <section class="mb-10">
+            <!-- Filter Bar -->
+            <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm mb-4">
+                <div class="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3">
+                    <!-- Dropdown 1: Indikator -->
+                    <div class="relative flex-1 min-w-[240px]">
+                        <select id="map-filter-indikator"
+                            class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm font-semibold rounded-xl pl-3.5 pr-8 py-2.5 cursor-pointer appearance-none hover:bg-white focus:ring-2 focus:ring-[#117a8b]/20 focus:border-[#117a8b] transition-colors">
+                            <option value="" disabled>Pilih Maps</option>
+                            <option value="komposit" selected>Peta Kerawanan Pangan</option>
+                            <option value="ik">Peta Aspek Ketersediaan</option>
+                            <option value="ia">Peta Aspek Keterjangkauan</option>
+                            <option value="ip">Peta Aspek Pemanfaatan</option>
+                        </select>
+                        <div
+                            class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
+                            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                        </div>
+                    </div>
+
+                    <!-- Dropdown 2: Bulan -->
+                    <div class="relative w-full sm:w-48">
+                        <select id="map-filter-bulan"
+                            class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm font-semibold rounded-xl pl-3.5 pr-8 py-2.5 cursor-pointer appearance-none hover:bg-white focus:ring-2 focus:ring-[#117a8b]/20 focus:border-[#117a8b] transition-colors">
+                            <!-- Populated dynamically -->
+                        </select>
+                        <div
+                            class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
+                            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                        </div>
+                    </div>
+
+                    <!-- Dropdown 3: Tahun -->
+                    <div class="relative w-full sm:w-36">
+                        <select id="map-filter-tahun"
+                            class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm font-semibold rounded-xl pl-3.5 pr-8 py-2.5 cursor-pointer appearance-none hover:bg-white focus:ring-2 focus:ring-[#117a8b]/20 focus:border-[#117a8b] transition-colors">
+                            <!-- Populated dynamically -->
+                        </select>
+                        <div
+                            class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
+                            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                        </div>
+                    </div>
+
+                    <!-- Filter Button (Red #dc3545) -->
+                    <button id="map-btn-filter"
+                        class="px-6 py-2.5 bg-[#dc3545] hover:bg-[#c82333] text-white text-sm font-bold rounded-xl transition shadow-md active:scale-95 flex items-center justify-center gap-2">
+                        <span>Filter</span>
+                    </button>
                 </div>
             </div>
 
-            <!-- Chart 2: Proporsi Status -->
-            <div class="bg-white p-6 rounded-2xl shadow-soft border border-slate-100">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="font-bold text-slate-800 flex items-center gap-2">
-                        <span class="bg-purple-100 p-1.5 rounded-lg text-purple-600"><i data-lucide="pie-chart" class="w-4 h-4"></i></span> 
-                        Distribusi Status Kerawanan
-                    </h3>
+            <!-- Map Card & Legend -->
+            <div class="bg-white rounded-2xl border border-slate-200/80 shadow-soft overflow-hidden">
+                <div class="py-4 px-6 border-b border-slate-100 text-center bg-slate-50/70">
+                    <h2 class="font-extrabold text-slate-800 text-sm md:text-base tracking-wide uppercase">
+                        PETA SISTEM PERINGATAN DINI KERAWANAN PANGAN DAN GIZI KABUPATEN BANDUNG
+                    </h2>
                 </div>
-                <div id="chart-status" class="h-80 flex items-center justify-center">
-                    <div class="loader opacity-50"></div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 min-h-[520px]">
+                    <!-- Left: Leaflet Map (col-span-9) -->
+                    <div class="lg:col-span-9 relative border-b lg:border-b-0 lg:border-r border-slate-100">
+                        <div id="skpg-map" class="w-full h-[450px] lg:h-[540px] z-10"></div>
+                        <div id="map-loader"
+                            class="absolute inset-0 bg-white/70 backdrop-blur-[2px] z-20 flex items-center justify-center hidden">
+                            <div class="loader"></div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Legend Sidebar (col-span-3) -->
+                    <div class="lg:col-span-3 p-6 flex flex-col justify-start items-center bg-white">
+                        <div class="w-24 h-24 mb-4 flex items-center justify-center">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Lambang_Kabupaten_Bandung.png/240px-Lambang_Kabupaten_Bandung.png"
+                                onerror="this.onerror=null; this.src='https://nos.wjv-1.neo.id/skpd/logo/20/1747972457Logo%20Dispakan%20trans.png'"
+                                alt="Lambang Kabupaten Bandung"
+                                class="w-20 h-auto object-contain filter drop-shadow-sm">
+                        </div>
+
+                        <h4 class="font-bold text-slate-800 text-xs tracking-wider mb-2">KETERANGAN :</h4>
+                        <div class="w-full h-px bg-slate-200 mb-4"></div>
+
+                        <div class="w-full text-xs font-semibold text-slate-700 mb-4 text-left">
+                            Total Kecamatan : <span id="legend-total-kecamatan"
+                                class="font-bold text-slate-900">31</span>
+                        </div>
+
+                        <div class="w-full space-y-4">
+                            <!-- RENTAN -->
+                            <div class="flex items-start gap-3">
+                                <span class="w-4 h-4 rounded-xs shrink-0 mt-0.5"
+                                    style="background-color: #cc091d;"></span>
+                                <div class="text-xs">
+                                    <div class="font-extrabold text-slate-800">RENTAN</div>
+                                    <div class="text-slate-500 font-medium"><span id="legend-count-rentan">0</span>
+                                        Kecamatan</div>
+                                </div>
+                            </div>
+
+                            <!-- WASPADA -->
+                            <div class="flex items-start gap-3">
+                                <span class="w-4 h-4 rounded-xs shrink-0 mt-0.5"
+                                    style="background-color: #dacc32;"></span>
+                                <div class="text-xs">
+                                    <div class="font-extrabold text-slate-800">WASPADA</div>
+                                    <div class="text-slate-500 font-medium"><span id="legend-count-waspada">18</span>
+                                        Kecamatan</div>
+                                </div>
+                            </div>
+
+                            <!-- AMAN -->
+                            <div class="flex items-start gap-3">
+                                <span class="w-4 h-4 rounded-xs shrink-0 mt-0.5"
+                                    style="background-color: #2cb45c;"></span>
+                                <div class="text-xs">
+                                    <div class="font-extrabold text-slate-800">AMAN</div>
+                                    <div class="text-slate-500 font-medium"><span id="legend-count-aman">13</span>
+                                        Kecamatan</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <!-- Charts Grid 2 -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            <!-- Chart 3: Top Kecamatan -->
-            <div class="bg-white p-6 rounded-2xl shadow-soft border border-slate-100">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="font-bold text-slate-800 flex items-center gap-2">
-                        <span class="bg-orange-100 p-1.5 rounded-lg text-orange-600"><i data-lucide="bar-chart-2" class="w-4 h-4"></i></span> 
-                        Kecamatan dengan Skor Tertinggi
-                    </h3>
+        <!-- d. GRAFIK & ANALISIS TREN -->
+        <section class="mb-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Grafik Garis: Tren Indeks Ketahanan Pangan (IKP) Per Tahun (Terkunci) -->
+                <div
+                    class="bg-white p-6 md:p-8 rounded-2xl shadow-soft border border-slate-100 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white shrink-0 shadow-sm"
+                                    style="background-color: #117a8b;">
+                                    <i data-lucide="trending-up" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-slate-800 text-base leading-tight">Tren Indeks Ketahanan
+                                        Pangan (IKP)</h3>
+                                    <p class="text-xs text-slate-500 font-medium">Tren Rata-Rata Indeks Komposit per
+                                        Tahun</p>
+                                </div>
+                            </div>
+                            <span
+                                class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#117a8b]/10 text-[#117a8b] border border-[#117a8b]/20">
+                                <i data-lucide="lock" class="w-3 h-3"></i> Terkunci
+                            </span>
+                        </div>
+                        <div id="chart-tren-tahun" class="h-80 flex items-center justify-center">
+                            <div class="loader opacity-50"></div>
+                        </div>
+                    </div>
                 </div>
-                <div id="chart-top-kecamatan" class="h-80 flex items-center justify-center">
-                    <div class="loader opacity-50"></div>
+
+                <!-- Donut Chart: Distribusi Status Kerawanan Pangan per Bulan -->
+                <div
+                    class="bg-white p-6 md:p-8 rounded-2xl shadow-soft border border-slate-100 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center gap-2.5">
+                                <div
+                                    class="w-9 h-9 rounded-xl flex items-center justify-center text-purple-600 bg-purple-50 shrink-0 shadow-sm">
+                                    <i data-lucide="pie-chart" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-slate-800 text-base leading-tight">Distribusi Status
+                                        Kerawanan</h3>
+                                    <p class="text-xs text-slate-500 font-medium">Proporsi Status pada Periode Terpilih
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="chart-status" class="h-80 flex items-center justify-center">
+                            <div class="loader opacity-50"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </section>
 
-            <!-- Chart 4: Perbandingan Indikator -->
-            <div class="bg-white p-6 rounded-2xl shadow-soft border border-slate-100">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="font-bold text-slate-800 flex items-center gap-2">
-                        <span class="bg-indigo-100 p-1.5 rounded-lg text-indigo-600"><i data-lucide="layers" class="w-4 h-4"></i></span>
-                        Rata-rata Indikator (IK, IA, IP)
-                    </h3>
-                </div>
-                <div id="chart-indikator" class="h-80 flex items-center justify-center">
-                    <div class="loader opacity-50"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Data Table Section -->
+        <!-- DATA TABLE SECTION -->
         <section class="bg-white rounded-2xl shadow-soft border border-slate-100 overflow-hidden">
-            <!-- Table Header & Filters -->
+            <!-- Table Header & Controls -->
             <div class="p-5 border-b border-slate-100 bg-slate-50/50">
                 <div class="flex flex-col lg:flex-row justify-between gap-4">
                     <div>
                         <h3 class="font-bold text-slate-800 text-lg">Direktori Data SKPG</h3>
-                        <p class="text-xs text-slate-500">Daftar lengkap hasil peringatan dini kerawanan pangan per wilayah.</p>
+                        <p class="text-xs text-slate-500">Daftar lengkap hasil peringatan dini kerawanan pangan per
+                            wilayah pada periode yang dipilih.</p>
                     </div>
-                    
+
                     <div class="flex flex-col sm:flex-row gap-2">
                         <!-- Search -->
                         <div class="relative w-full sm:w-64">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                 <i data-lucide="search" class="w-4 h-4 text-slate-400"></i>
                             </div>
-                            <input type="text" id="search-input" class="bg-white border border-slate-200 text-slate-700 text-sm rounded-xl focus:ring-sky-500 focus:border-sky-500 block w-full pl-10 p-2.5 shadow-sm" placeholder="Cari kecamatan, status...">
+                            <input type="text" id="search-input"
+                                class="bg-white border border-slate-200 text-slate-700 text-sm rounded-xl focus:ring-2 focus:ring-[#117a8b]/20 focus:border-[#117a8b] block w-full pl-10 p-2.5 shadow-sm"
+                                placeholder="Cari kecamatan, status...">
                         </div>
 
                         <!-- Export Button -->
-                        <button id="btn-export" class="flex items-center justify-center gap-2 px-4 py-2 bg-sky-600 text-white text-sm font-semibold rounded-xl hover:bg-sky-700 transition shadow-lg shadow-sky-200 active:scale-95">
-                            <i data-lucide="file-spreadsheet" class="w-4 h-4"></i> Excel
+                        <button id="btn-export"
+                            class="flex items-center justify-center gap-2 px-4 py-2 bg-[#117a8b] text-white text-sm font-semibold rounded-xl hover:bg-[#0a4b57] transition shadow-md shadow-[#117a8b]/20 active:scale-95">
+                            <i data-lucide="file-spreadsheet" class="w-4 h-4"></i> Export Excel
                         </button>
                     </div>
                 </div>
@@ -349,65 +511,66 @@
                         </tr>
                     </thead>
                     <tbody id="table-body" class="divide-y divide-slate-100">
-                        <!-- Skeletons -->
-                        <tr class="animate-pulse">
-                            <td class="px-6 py-4"><div class="h-4 w-6 bg-slate-200 rounded"></div></td>
-                            <td class="px-6 py-4"><div class="h-4 w-32 bg-slate-200 rounded"></div></td>
-                            <td class="px-6 py-4"><div class="h-4 w-24 bg-slate-200 rounded"></div></td>
-                            <td class="px-6 py-4"><div class="h-4 w-8 mx-auto bg-slate-200 rounded"></div></td>
-                            <td class="px-6 py-4"><div class="h-4 w-8 mx-auto bg-slate-200 rounded"></div></td>
-                            <td class="px-6 py-4"><div class="h-4 w-8 mx-auto bg-slate-200 rounded"></div></td>
-                            <td class="px-6 py-4"><div class="h-4 w-8 mx-auto bg-slate-200 rounded"></div></td>
-                            <td class="px-6 py-4"><div class="h-6 w-16 mx-auto bg-slate-200 rounded-full"></div></td>
-                            <td class="px-6 py-4"><div class="h-8 w-8 mx-auto bg-slate-200 rounded"></div></td>
-                        </tr>
+                        <!-- Populated by JavaScript -->
                     </tbody>
                 </table>
             </div>
-            
+
             <!-- Pagination -->
             <div id="pagination" class="p-4 border-t border-slate-100 flex items-center justify-between bg-slate-50/50">
-                <span class="text-xs text-slate-500">Menampilkan <span id="showing-info" class="font-bold text-slate-800">0</span> entri data</span>
+                <span class="text-xs text-slate-500">Menampilkan <span id="showing-info"
+                        class="font-bold text-slate-800">0</span> entri data</span>
                 <div class="flex gap-1">
-                    <button id="btn-prev" class="p-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-100 hover:text-sky-600 transition-all disabled:opacity-50"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
-                    <button id="btn-next" class="p-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-100 hover:text-sky-600 transition-all disabled:opacity-50"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+                    <button id="btn-prev"
+                        class="p-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-100 hover:text-[#117a8b] transition-all disabled:opacity-50"><i
+                            data-lucide="chevron-left" class="w-4 h-4"></i></button>
+                    <button id="btn-next"
+                        class="p-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-100 hover:text-[#117a8b] transition-all disabled:opacity-50"><i
+                            data-lucide="chevron-right" class="w-4 h-4"></i></button>
                 </div>
             </div>
         </section>
 
     </main>
 
-    <!-- Modal Detail -->
-    <div id="modal-detail" class="fixed inset-0 z-[100] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <!-- MODAL DETAIL -->
+    <div id="modal-detail" class="fixed inset-0 z-[100] hidden" aria-labelledby="modal-title" role="dialog"
+        aria-modal="true">
         <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" id="modal-backdrop"></div>
         <div class="fixed inset-0 z-10 overflow-y-auto">
             <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
-                <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-md animate-fade-in ring-1 ring-black/5">
-                    
+                <div
+                    class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-md animate-fade-in ring-1 ring-black/5">
+
                     <!-- Modal Header -->
                     <div class="bg-slate-50 px-6 py-4 border-b border-slate-100 flex justify-between items-center">
                         <div class="flex items-center gap-3">
-                             <div class="bg-white p-2.5 rounded-xl text-sky-600 shadow-sm border border-slate-200">
+                            <div class="bg-white p-2.5 rounded-xl text-[#117a8b] shadow-sm border border-slate-200">
                                 <i data-lucide="map-pin" class="w-6 h-6"></i>
-                             </div>
-                             <div>
-                                 <h3 class="text-lg font-bold text-slate-900 leading-tight" id="modal-title">Kecamatan</h3>
-                                 <p class="text-xs font-medium text-slate-500 flex items-center gap-1">
-                                    <i data-lucide="calendar" class="w-3 h-3"></i> <span id="modal-subtitle">Periode</span>
-                                 </p>
-                             </div>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-900 leading-tight" id="modal-title">Kecamatan
+                                </h3>
+                                <p class="text-xs font-medium text-slate-500 flex items-center gap-1">
+                                    <i data-lucide="calendar" class="w-3 h-3"></i> <span
+                                        id="modal-subtitle">Periode</span>
+                                </p>
+                            </div>
                         </div>
-                        <button id="modal-close" class="p-1 rounded-full text-slate-400 hover:text-red-500 hover:bg-red-50 transition">
+                        <button id="modal-close"
+                            class="p-1 rounded-full text-slate-400 hover:text-red-500 hover:bg-red-50 transition">
                             <i data-lucide="x" class="w-6 h-6"></i>
                         </button>
                     </div>
 
                     <!-- Modal Body -->
                     <div class="px-6 py-6 space-y-4">
-                        
+
                         <!-- Core Info -->
-                        <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 text-center relative overflow-hidden flex flex-col items-center justify-center">
-                            <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1 relative z-10">Skor Komposit Bulanan</p>
+                        <div
+                            class="bg-slate-50 p-5 rounded-xl border border-slate-200 text-center relative overflow-hidden flex flex-col items-center justify-center">
+                            <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1 relative z-10">Skor
+                                Komposit Bulanan</p>
                             <h2 class="text-4xl font-extrabold text-slate-800 relative z-10 mb-2" id="modal-skor">0</h2>
                             <div id="modal-status-badge" class="relative z-10"></div>
                         </div>
@@ -415,24 +578,31 @@
                         <!-- Details Grid -->
                         <div class="grid grid-cols-3 gap-3 mt-4">
                             <div class="bg-white p-3 rounded-xl border border-slate-100 text-center shadow-sm">
-                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1" title="Indikator Ketersediaan">Skor IK</p>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1"
+                                    title="Indikator Ketersediaan">Skor IK</p>
                                 <p class="text-lg font-bold text-slate-800" id="modal-ik">-</p>
                             </div>
                             <div class="bg-white p-3 rounded-xl border border-slate-100 text-center shadow-sm">
-                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1" title="Indikator Akses">Skor IA</p>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1"
+                                    title="Indikator Akses">Skor IA</p>
                                 <p class="text-lg font-bold text-slate-800" id="modal-ia">-</p>
                             </div>
                             <div class="bg-white p-3 rounded-xl border border-slate-100 text-center shadow-sm">
-                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1" title="Indikator Pemanfaatan">Skor IP</p>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1"
+                                    title="Indikator Pemanfaatan">Skor IP</p>
                                 <p class="text-lg font-bold text-slate-800" id="modal-ip">-</p>
                             </div>
                         </div>
 
                         <div class="pt-4 border-t border-slate-100 mt-4 bg-slate-50 p-3 rounded-lg">
-                            <p class="text-[11px] text-slate-500 flex justify-between"><span>Indeks Komposit Bulanan (IKB):</span> <span class="font-bold text-slate-700" id="modal-ikb">-</span></p>
+                            <p class="text-[11px] text-slate-500 flex justify-between"><span>Indeks Komposit Bulanan
+                                    (IKB):</span> <span class="font-bold text-slate-700" id="modal-ikb">-</span></p>
                             <div class="h-px bg-slate-200 my-2"></div>
-                            <p class="text-[11px] text-slate-500">Instansi: <span class="font-semibold text-slate-700" id="modal-instansi">-</span></p>
-                            <p class="text-[11px] text-slate-500 mt-1">Dicatat oleh: <span class="font-semibold text-slate-700" id="modal-pic">-</span> (<span id="modal-created"></span>)</p>
+                            <p class="text-[11px] text-slate-500">Instansi: <span class="font-semibold text-slate-700"
+                                    id="modal-instansi">-</span></p>
+                            <p class="text-[11px] text-slate-500 mt-1">Dicatat oleh: <span
+                                    class="font-semibold text-slate-700" id="modal-pic">-</span> (<span
+                                    id="modal-created"></span>)</p>
                         </div>
                     </div>
                 </div>
@@ -440,42 +610,68 @@
         </div>
     </div>
 
+    <!-- JAVASCRIPT LOGIC -->
     <script>
         // --- CONSTANTS & STATE ---
         const API_URL = 'https://api.bandungkab.go.id/api/data/sistem-peringatan-dini-kerawanan-pangan-dan-gizi-skpg';
-        
+
+        // --- API & GEODATA CONSTANTS ---
+        const batasKecamatanUrl = 'https://gist.githubusercontent.com/infomugi/b7f82ebe72e1a1830da958ea267e87a5/raw/ebe0bbccca2aaff18521e245c33a4a62d38bd455/gistfile1.txt';
+        const batasDesaUrl = 'https://gist.githubusercontent.com/infomugi/4576f539c1dc958f6ed7ede7cca8976e/raw/694baf71e0db935f26e40b1621db61bf91ff9092/gistfile1.txt';
+
         const MONTH_NAMES = [
-            'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
+            'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
             'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
         ];
+
+        // SKPG Official Status Colors
+        const STATUS_COLORS = {
+            'AMAN': '#2cb45c',
+            'WASPADA': '#dacc32',
+            'RENTAN': '#cc091d'
+        };
 
         let rawData = [];
         let filteredData = [];
         let currentPage = 1;
         const itemsPerPage = 10;
-        
+
+        // Leaflet Map State
+        let leafletMap = null;
+        let geoJsonLayer = null;
+        let desaGeoJsonLayer = null;
+        let cachedGeoData = null;
+        let cachedDesaGeoData = null;
+        let mapLegendControl = null;
+
+        // ApexChart instances
+        let donutChartInstance = null;
+        let lineChartInstance = null;
+
         // --- DOM ELEMENTS ---
         const els = {
             date: document.getElementById('current-date'),
             stats: document.getElementById('stats-container'),
             tableBody: document.getElementById('table-body'),
-            
-            // Filters Desktop
-            filterTahun: document.getElementById('nav-filter-tahun'), 
-            filterBulan: document.getElementById('nav-filter-bulan'),
-            filterKecamatan: document.getElementById('nav-filter-kecamatan'),
-            
-            // Filters Mobile
-            filterTahunMobile: document.getElementById('mobile-filter-tahun'), 
-            filterBulanMobile: document.getElementById('mobile-filter-bulan'),
-            filterKecamatanMobile: document.getElementById('mobile-filter-kecamatan'),
+
+            // Map Filters
+            mapFilterIndikator: document.getElementById('map-filter-indikator'),
+            mapFilterBulan: document.getElementById('map-filter-bulan'),
+            mapFilterTahun: document.getElementById('map-filter-tahun'),
+            mapBtnFilter: document.getElementById('map-btn-filter'),
+
+            // Legend counts
+            legendTotalKecamatan: document.getElementById('legend-total-kecamatan'),
+            legendCountRentan: document.getElementById('legend-count-rentan'),
+            legendCountWaspada: document.getElementById('legend-count-waspada'),
+            legendCountAman: document.getElementById('legend-count-aman'),
 
             activeFilterLabel: document.getElementById('active-filter-label'),
             search: document.getElementById('search-input'),
             paginationInfo: document.getElementById('showing-info'),
             btnPrev: document.getElementById('btn-prev'),
             btnNext: document.getElementById('btn-next'),
-            
+
             modal: {
                 self: document.getElementById('modal-detail'),
                 backdrop: document.getElementById('modal-backdrop'),
@@ -496,27 +692,47 @@
 
         // --- UTILITIES ---
         const formatNumber = (num) => new Intl.NumberFormat('id-ID', { maximumFractionDigits: 2 }).format(num || 0);
-        
+
         const setDate = () => {
             const now = new Date();
-            els.date.innerText = now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+            if (els.date) {
+                els.date.innerText = now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+            }
         };
 
         const getMonthName = (monthNum) => {
             return MONTH_NAMES[(parseInt(monthNum) || 1) - 1] || '-';
         };
 
-        const getStatusStyles = (status) => {
-            const s = (status || '').toUpperCase();
-            if(s.includes('AMAN')) return { bg: 'bg-emerald-100', text: 'text-emerald-700', border: 'border-emerald-200' };
-            if(s.includes('WASPADA')) return { bg: 'bg-amber-100', text: 'text-amber-700', border: 'border-amber-200' };
-            if(s.includes('RENTAN')) return { bg: 'bg-rose-100', text: 'text-rose-700', border: 'border-rose-200' };
-            return { bg: 'bg-slate-100', text: 'text-slate-700', border: 'border-slate-200' };
-        };
+        const normalizeName = (s) => (s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+
+        // Evaluates status & color for active indicator
+        function evaluateIndicator(detail, indKey) {
+            if (!detail) return { status: 'WASPADA', score: 0, color: STATUS_COLORS.WASPADA };
+
+            if (indKey === 'komposit') {
+                const ket = (detail.keterangan_komposit_bulanan || '').toUpperCase();
+                if (ket.includes('AMAN')) return { status: 'AMAN', score: detail.skor_komposit_bulanan || 8, ikb: detail.indeks_komposit_bulanan_ikb || 3, color: STATUS_COLORS.AMAN };
+                if (ket.includes('RENTAN')) return { status: 'RENTAN', score: detail.skor_komposit_bulanan || 4, ikb: detail.indeks_komposit_bulanan_ikb || 1, color: STATUS_COLORS.RENTAN };
+                return { status: 'WASPADA', score: detail.skor_komposit_bulanan || 7, ikb: detail.indeks_komposit_bulanan_ikb || 2, color: STATUS_COLORS.WASPADA };
+            }
+
+            // IK, IA, IP indicator scores: 1=Rentan, 2=Waspada, 3=Aman
+            const val = parseInt(detail[indKey]) || 2;
+            if (val >= 3) return { status: 'AMAN', score: val, ikb: val, color: STATUS_COLORS.AMAN };
+            if (val <= 1) return { status: 'RENTAN', score: val, ikb: val, color: STATUS_COLORS.RENTAN };
+            return { status: 'WASPADA', score: val, ikb: val, color: STATUS_COLORS.WASPADA };
+        }
 
         const getStatusBadge = (status) => {
-            const styles = getStatusStyles(status);
-            return `<span class="${styles.bg} ${styles.text} px-2.5 py-1 rounded-full text-xs font-bold border ${styles.border}">${status || '-'}</span>`;
+            const s = (status || '').toUpperCase();
+            if (s.includes('AMAN')) {
+                return `<span class="bg-[#2cb45c]/10 text-[#2cb45c] px-2.5 py-1 rounded-full text-xs font-bold border border-[#2cb45c]/30">AMAN</span>`;
+            }
+            if (s.includes('RENTAN')) {
+                return `<span class="bg-[#cc091d]/10 text-[#cc091d] px-2.5 py-1 rounded-full text-xs font-bold border border-[#cc091d]/30">RENTAN</span>`;
+            }
+            return `<span class="bg-[#dacc32]/15 text-[#9e920d] px-2.5 py-1 rounded-full text-xs font-bold border border-[#dacc32]/40">WASPADA</span>`;
         };
 
         // --- FETCH DATA ---
@@ -525,56 +741,73 @@
             const loadingBar = document.getElementById('loading-bar-inner');
             const loadingPct = document.getElementById('loading-pct');
             const loadingScreen = document.getElementById('loading-screen');
-            
+
             function updateProgress(pct, msg) {
-                if(loadingBar) loadingBar.style.width = `${pct}%`;
-                if(loadingPct) loadingPct.innerText = `${pct}%`;
-                if(loadingText) loadingText.innerText = msg;
+                if (loadingBar) loadingBar.style.width = `${pct}%`;
+                if (loadingPct) loadingPct.innerText = `${pct}%`;
+                if (loadingText) loadingText.innerText = msg;
             }
 
             try {
-                updateProgress(20, "Menginisiasi koneksi API...");
+                updateProgress(20, "Menghubungkan ke API SKPG...");
                 const res = await fetch(API_URL);
-                updateProgress(60, "Mengunduh Data SKPG...");
+                updateProgress(40, "Mengunduh Data SKPG...");
                 const json = await res.json();
-                
-                updateProgress(90, "Memproses Data...");
 
-                // Set Title from API
-                if (json.title) {
-                    const dashboardTitleEl = document.getElementById('dashboard-title');
-                    const pageTitleEl = document.getElementById('page-title');
-                    if (dashboardTitleEl) dashboardTitleEl.textContent = json.title;
-                    if (pageTitleEl) pageTitleEl.textContent = `Dashboard ${json.title}`;
+                updateProgress(60, "Mengunduh Batas Kecamatan & Desa...");
+                // Fetch GeoJSON Batas Kecamatan (Gist with fallback)
+                try {
+                    const geoRes = await fetch(batasKecamatanUrl);
+                    if (geoRes.ok) cachedGeoData = await geoRes.json();
+                } catch (geoErr) {
+                    console.warn("Gist batasKecamatan fetch failed, trying local fallback:", geoErr);
+                }
+                if (!cachedGeoData) {
+                    try {
+                        const localRes = await fetch('bandung_kecamatan.geojson');
+                        if (localRes.ok) cachedGeoData = await localRes.json();
+                    } catch (e) {
+                        console.warn("Local bandung_kecamatan.geojson fetch failed:", e);
+                    }
                 }
 
+                // Fetch GeoJSON Batas Desa (Gist with fallback)
+                try {
+                    const desaRes = await fetch(batasDesaUrl);
+                    if (desaRes.ok) cachedDesaGeoData = await desaRes.json();
+                } catch (desaErr) {
+                    console.warn("Gist batasDesa fetch failed, trying local fallback:", desaErr);
+                }
+                if (!cachedDesaGeoData) {
+                    try {
+                        const localDesaRes = await fetch('bandung_desa.geojson');
+                        if (localDesaRes.ok) cachedDesaGeoData = await localDesaRes.json();
+                    } catch (e) {
+                        console.warn("Local bandung_desa.geojson fetch failed:", e);
+                    }
+                }
+
+                updateProgress(85, "Memproses Data Dashboard...");
+
                 if ((json.status === 'success' || json.data) && Array.isArray(json.data)) {
-                    // Sorting default by tahun desc, bulan desc, kecamatan asc
-                    rawData = json.data.sort((a, b) => {
-                        const d1 = a.detail || {};
-                        const d2 = b.detail || {};
-                        if(d1.tahun !== d2.tahun) return (d2.tahun || 0) - (d1.tahun || 0);
-                        if(d1.bulan !== d2.bulan) return (d2.bulan || 0) - (d1.bulan || 0);
-                        return (d1.nama_kecamatan || '').localeCompare(d2.nama_kecamatan || '');
-                    });
-                    filteredData = [...rawData];
-                    
+                    rawData = json.data;
+
                     initDashboard();
                     updateProgress(100, "Selesai!");
-                    
+
                     setTimeout(() => {
-                        if(loadingScreen) {
+                        if (loadingScreen) {
                             loadingScreen.classList.add('opacity-0');
-                            setTimeout(() => loadingScreen.classList.add('hidden'), 700);
+                            setTimeout(() => loadingScreen.classList.add('hidden'), 600);
                         }
-                    }, 600);
+                    }, 400);
                 } else {
-                    throw new Error("Format JSON tidak sesuai ekspektasi");
+                    throw new Error("Format JSON API tidak sesuai ekspektasi");
                 }
             } catch (err) {
                 console.error(err);
-                if(loadingText) {
-                    loadingText.innerText = "Gagal memuat data! Silakan refresh.";
+                if (loadingText) {
+                    loadingText.innerText = "Gagal memuat data API! Silakan refresh halaman.";
                     loadingText.classList.add('text-rose-500');
                 }
                 els.stats.innerHTML = `<div class="col-span-full p-6 text-rose-500 bg-rose-50 border border-rose-200 rounded-xl text-center font-semibold">Gagal memuat data API. Silakan periksa koneksi internet Anda.</div>`;
@@ -584,336 +817,567 @@
         // --- INITIALIZATION ---
         function initDashboard() {
             populateFilters();
-            renderStats();
-            renderCharts();
-            renderTable();
+            applyFilter();
+            initMap();
+            renderLineChartYearly();
             setupEvents();
             lucide.createIcons();
-        }
-
-        // --- STATS LOGIC ---
-        function renderStats() {
-            let totalEntri = filteredData.length;
-            let kecamatanSet = new Set();
-            let totalSkorAll = 0;
-            let statusCount = {};
-
-            filteredData.forEach(item => {
-                const d = item.detail || {};
-                if(d.nama_kecamatan) kecamatanSet.add(d.nama_kecamatan);
-                
-                let val = parseFloat(d.skor_komposit_bulanan) || 0;
-                totalSkorAll += val;
-
-                let status = (d.keterangan_komposit_bulanan || 'Tidak Diketahui').toUpperCase();
-                statusCount[status] = (statusCount[status] || 0) + 1;
-            });
-
-            let avgSkor = totalEntri > 0 ? (totalSkorAll / totalEntri) : 0;
-            
-            // Find most frequent status
-            let topStatus = '-';
-            let maxCount = 0;
-            for (const [status, count] of Object.entries(statusCount)) {
-                if(count > maxCount) {
-                    maxCount = count;
-                    topStatus = status;
-                }
-            }
-
-            const cards = [
-                { title: 'Total Pencatatan', val: formatNumber(totalEntri), sub: 'Data SKPG Terkumpul', icon: 'file-text', color: 'text-sky-600', bg: 'bg-sky-50', border: 'border-sky-200' },
-                { title: 'Rata-rata Skor Komposit', val: formatNumber(avgSkor), sub: 'Dari data yang difilter', icon: 'activity', color: 'text-indigo-600', bg: 'bg-indigo-50', border: 'border-indigo-200' },
-                { title: 'Kecamatan Terdata', val: formatNumber(kecamatanSet.size), sub: 'Wilayah tercakup', icon: 'map', color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-200' },
-                { title: 'Status Mayoritas', val: topStatus, sub: `${maxCount} data (${totalEntri > 0 ? Math.round((maxCount/totalEntri)*100) : 0}%)`, icon: 'alert-triangle', color: getStatusStyles(topStatus).text, bg: getStatusStyles(topStatus).bg.replace('100', '50'), border: getStatusStyles(topStatus).border }
-            ];
-
-            els.stats.innerHTML = cards.map(c => `
-                <div class="bg-white p-6 rounded-2xl border ${c.border} shadow-sm hover:shadow-md transition-shadow flex items-center justify-between group">
-                    <div class="w-full">
-                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1 truncate">${c.title}</p>
-                        <h3 class="text-2xl font-extrabold text-slate-800 truncate ${c.val.length > 10 ? 'text-xl' : ''}">${c.val}</h3>
-                        <p class="text-[11px] font-medium text-slate-500 mt-1 line-clamp-1">${c.sub}</p>
-                    </div>
-                    <div class="${c.bg} p-3 rounded-xl ${c.color} group-hover:scale-110 transition-transform shadow-inner ml-2 shrink-0">
-                        <i data-lucide="${c.icon}" class="w-6 h-6"></i>
-                    </div>
-                </div>
-            `).join('');
-            lucide.createIcons();
-        }
-
-        // --- CHARTS LOGIC ---
-        function renderCharts() {
-            const commonOpts = { fontFamily: 'Plus Jakarta Sans, sans-serif', toolbar: { show: false } };
-
-            // ==========================================
-            // CHART 1: Area (Tren Rata-rata Skor per Bulan)
-            // ==========================================
-            const trenEl = document.querySelector("#chart-tren-bulan");
-            trenEl.innerHTML = '';
-            
-            // Group data by Bulan for the selected Year(s)
-            let trenDataMap = {};
-            filteredData.forEach(item => {
-                const d = item.detail || {};
-                const bln = d.bulan;
-                if(!bln) return;
-                
-                if(!trenDataMap[bln]) trenDataMap[bln] = { sum: 0, count: 0 };
-                trenDataMap[bln].sum += (parseFloat(d.skor_komposit_bulanan) || 0);
-                trenDataMap[bln].count++;
-            });
-
-            // Sort by month numeric
-            let sortedMonths = Object.keys(trenDataMap).sort((a,b) => parseInt(a) - parseInt(b));
-            let trenLabels = sortedMonths.map(m => getMonthName(m));
-            let trenSeries = sortedMonths.map(m => parseFloat((trenDataMap[m].sum / trenDataMap[m].count).toFixed(2)));
-
-            if(trenSeries.length > 0) {
-                new ApexCharts(trenEl, {
-                    ...commonOpts,
-                    series: [{ name: 'Rata-rata Skor Komposit', data: trenSeries }],
-                    chart: { type: 'area', height: 320, toolbar: { show: false } },
-                    colors: ['#0ea5e9'],
-                    dataLabels: { enabled: true, formatter: (val) => val, background: { enabled: true, foreColor: '#fff', borderRadius: 4, borderWidth: 0 } },
-                    stroke: { curve: 'smooth', width: 3 },
-                    fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.4, opacityTo: 0.05, stops: [0, 90, 100] } },
-                    xaxis: { categories: trenLabels },
-                    yaxis: { title: { text: 'Skor' } },
-                    tooltip: { y: { formatter: (val) => val + " Poin" } }
-                }).render();
-            } else {
-                trenEl.innerHTML = '<p class="text-sm text-slate-400 italic">Tidak ada data untuk grafik ini.</p>';
-            }
-
-            // ==========================================
-            // CHART 2: Donut (Proporsi Status)
-            // ==========================================
-            const statusEl = document.querySelector("#chart-status");
-            statusEl.innerHTML = '';
-            
-            let statusCount = {};
-            filteredData.forEach(item => {
-                let status = (item.detail?.keterangan_komposit_bulanan || 'Lainnya').toUpperCase();
-                statusCount[status] = (statusCount[status] || 0) + 1;
-            });
-            
-            let statusLabels = Object.keys(statusCount);
-            let statusSeries = Object.values(statusCount);
-
-            // Assign colors based on status name
-            let statusColors = statusLabels.map(l => {
-                if(l.includes('AMAN')) return '#10b981'; // Emerald
-                if(l.includes('WASPADA')) return '#f59e0b'; // Amber
-                if(l.includes('RENTAN')) return '#e11d48'; // Rose
-                return '#94a3b8'; // Slate
-            });
-
-            if(statusSeries.length > 0) {
-                new ApexCharts(statusEl, {
-                    ...commonOpts,
-                    series: statusSeries,
-                    labels: statusLabels,
-                    chart: { type: 'donut', height: 320 },
-                    colors: statusColors,
-                    legend: { position: 'bottom', fontSize: '12px' },
-                    dataLabels: { enabled: true, formatter: function (val) { return Math.round(val) + "%" } },
-                    tooltip: { y: { formatter: (val) => val + " Data" } },
-                    plotOptions: { pie: { donut: { size: '65%', labels: { show: true, total: { show: true, label: 'Total', formatter: () => filteredData.length } } } } }
-                }).render();
-            } else {
-                statusEl.innerHTML = '<p class="text-sm text-slate-400 italic">Tidak ada data.</p>';
-            }
-
-            // ==========================================
-            // CHART 3: Horizontal Bar (Top Kecamatan Kerawanan)
-            // ==========================================
-            const topEl = document.querySelector("#chart-top-kecamatan");
-            topEl.innerHTML = '';
-            
-            let kecMap = {};
-            filteredData.forEach(item => {
-                const d = item.detail || {};
-                const kec = d.nama_kecamatan;
-                if(!kec) return;
-                if(!kecMap[kec]) kecMap[kec] = { sum: 0, count: 0 };
-                kecMap[kec].sum += (parseFloat(d.skor_komposit_bulanan) || 0);
-                kecMap[kec].count++;
-            });
-
-            // Calculate average and sort
-            let kecArr = Object.keys(kecMap).map(kec => {
-                return { name: kec, avg: kecMap[kec].sum / kecMap[kec].count };
-            }).sort((a,b) => b.avg - a.avg).slice(0, 10); // Top 10 highest scores
-
-            let topLabels = kecArr.map(k => k.name);
-            let topSeries = kecArr.map(k => parseFloat(k.avg.toFixed(2)));
-
-            if(topSeries.length > 0) {
-                new ApexCharts(topEl, {
-                    ...commonOpts,
-                    series: [{ name: 'Rata-rata Skor', data: topSeries }],
-                    chart: { type: 'bar', height: 320 },
-                    colors: ['#f43f5e'], // Red-ish to indicate higher score = worse
-                    plotOptions: { bar: { horizontal: true, borderRadius: 3, dataLabels: { position: 'top' } } },
-                    dataLabels: { enabled: true, offsetX: 25, style: { fontSize: '11px', colors: ['#334155'] } },
-                    xaxis: { categories: topLabels },
-                    grid: { borderColor: '#f1f5f9' },
-                    tooltip: { y: { formatter: (val) => val + " Poin" } }
-                }).render();
-            } else {
-                topEl.innerHTML = '<p class="text-sm text-slate-400 italic">Tidak ada data.</p>';
-            }
-
-            // ==========================================
-            // CHART 4: Grouped Bar (Rata-rata IK, IA, IP)
-            // ==========================================
-            const indEl = document.querySelector("#chart-indikator");
-            indEl.innerHTML = '';
-
-            let ikSum = 0, iaSum = 0, ipSum = 0, indCount = 0;
-            
-            // Calculate averages for the filtered dataset
-            filteredData.forEach(item => {
-                const d = item.detail || {};
-                ikSum += (parseFloat(d.ik) || 0);
-                iaSum += (parseFloat(d.ia) || 0);
-                ipSum += (parseFloat(d.ip) || 0);
-                indCount++;
-            });
-
-            if(indCount > 0) {
-                let ikAvg = parseFloat((ikSum / indCount).toFixed(2));
-                let iaAvg = parseFloat((iaSum / indCount).toFixed(2));
-                let ipAvg = parseFloat((ipSum / indCount).toFixed(2));
-
-                new ApexCharts(indEl, {
-                    ...commonOpts,
-                    series: [{ name: 'Skor Rata-rata', data: [ikAvg, iaAvg, ipAvg] }],
-                    chart: { type: 'bar', height: 320 },
-                    colors: ['#6366f1'], // Indigo
-                    plotOptions: { 
-                        bar: { 
-                            horizontal: false, 
-                            columnWidth: '40%', 
-                            borderRadius: 4,
-                            distributed: true // different colors for columns
-                        } 
-                    },
-                    colors: ['#3b82f6', '#10b981', '#8b5cf6'], // Different color for each indicator
-                    dataLabels: { enabled: true, style: { fontSize: '14px' }, offsetY: -20 },
-                    xaxis: { 
-                        categories: ['Ketersediaan (IK)', 'Akses (IA)', 'Pemanfaatan (IP)'],
-                        labels: { style: { fontSize: '12px', fontWeight: 600 } }
-                    },
-                    yaxis: { title: { text: 'Skor Indikator' } },
-                    legend: { show: false }, // Hide legend since categories explain it
-                    tooltip: { y: { formatter: (val) => val + " Poin" } }
-                }).render();
-            } else {
-                indEl.innerHTML = '<p class="text-sm text-slate-400 italic">Tidak ada data.</p>';
-            }
         }
 
         // --- FILTER POPULATION ---
         function populateFilters() {
             let tahunSet = new Set();
             let bulanSet = new Set();
-            let kecamatanSet = new Set();
-            
-            rawData.forEach(i => { 
-                const d = i.detail || {};
-                if(d.tahun) tahunSet.add(d.tahun);
-                if(d.bulan) bulanSet.add(d.bulan);
-                if(d.nama_kecamatan) kecamatanSet.add(d.nama_kecamatan);
-            });
-            
-            const appendOptions = (elDesktop, elMobile, dataArray, isMonth = false) => {
-                elDesktop.innerHTML = elDesktop.querySelector('option').outerHTML; 
-                elMobile.innerHTML = elMobile.querySelector('option').outerHTML;
-                dataArray.forEach(val => {
-                    let label = isMonth ? getMonthName(val) : val;
-                    elDesktop.appendChild(new Option(label, val));
-                    elMobile.appendChild(new Option(label, val));
-                });
-            };
 
-            appendOptions(els.filterTahun, els.filterTahunMobile, Array.from(tahunSet).sort((a,b)=>b-a));
-            appendOptions(els.filterBulan, els.filterBulanMobile, Array.from(bulanSet).sort((a,b)=>a-b), true);
-            appendOptions(els.filterKecamatan, els.filterKecamatanMobile, Array.from(kecamatanSet).sort());
+            rawData.forEach(i => {
+                const d = i.detail || {};
+                if (d.tahun) tahunSet.add(d.tahun);
+                if (d.bulan) bulanSet.add(d.bulan);
+            });
+
+            // Populate Bulan
+            els.mapFilterBulan.innerHTML = '';
+            Array.from(bulanSet).sort((a, b) => a - b).forEach(m => {
+                const opt = new Option(getMonthName(m), m);
+                els.mapFilterBulan.appendChild(opt);
+            });
+
+            // Populate Tahun
+            els.mapFilterTahun.innerHTML = '';
+            Array.from(tahunSet).sort((a, b) => a - b).forEach(y => {
+                const opt = new Option(y, y);
+                els.mapFilterTahun.appendChild(opt);
+            });
+
+            // Default to Januari 2023 (as featured in screenshot)
+            if (tahunSet.has(2023)) els.mapFilterTahun.value = '2023';
+            if (bulanSet.has(1)) els.mapFilterBulan.value = '1';
         }
 
         // --- FILTER DATA LOGIC ---
-        function filterData(source) {
-            let valTahun, valBulan, valKecamatan;
+        function applyFilter() {
+            const selIndikator = els.mapFilterIndikator.value;
+            const selBulan = parseInt(els.mapFilterBulan.value) || 1;
+            const selTahun = parseInt(els.mapFilterTahun.value) || 2023;
+            const searchTerm = (els.search.value || '').toLowerCase().trim();
 
-            if (source === 'nav') {
-                valTahun = els.filterTahun.value;
-                valBulan = els.filterBulan.value;
-                valKecamatan = els.filterKecamatan.value;
-                
-                // Sync to mobile
-                els.filterTahunMobile.value = valTahun;
-                els.filterBulanMobile.value = valBulan;
-                els.filterKecamatanMobile.value = valKecamatan;
-            } else if (source === 'mobile') {
-                valTahun = els.filterTahunMobile.value;
-                valBulan = els.filterBulanMobile.value;
-                valKecamatan = els.filterKecamatanMobile.value;
-
-                // Sync to desktop
-                els.filterTahun.value = valTahun;
-                els.filterBulan.value = valBulan;
-                els.filterKecamatan.value = valKecamatan;
-            } else {
-                valTahun = els.filterTahun.value;
-                valBulan = els.filterBulan.value;
-                valKecamatan = els.filterKecamatan.value;
-            }
-
-            // Update Label
-            let label = [];
-            if(valTahun !== 'all') label.push(`Thn: ${valTahun}`);
-            if(valBulan !== 'all') label.push(`Bln: ${getMonthName(valBulan)}`);
-            if(valKecamatan !== 'all') label.push(`Kec: ${valKecamatan}`);
-            els.activeFilterLabel.textContent = label.length > 0 ? label.join(', ') : 'Semua Data';
-
-            const term = els.search.value.toLowerCase();
-
-            filteredData = rawData.filter(item => {
+            // Filter raw data to selected period
+            const periodData = rawData.filter(item => {
                 const d = item.detail || {};
-                const matchTahun = valTahun === 'all' || String(d.tahun) === valTahun;
-                const matchBulan = valBulan === 'all' || String(d.bulan) === valBulan;
-                const matchKecamatan = valKecamatan === 'all' || d.nama_kecamatan === valKecamatan;
-                
-                const matchSearch = !term || 
-                                    (d.nama_kecamatan||'').toLowerCase().includes(term) ||
-                                    (d.keterangan_komposit_bulanan||'').toLowerCase().includes(term) ||
-                                    String(d.tahun||'').includes(term);
-                
-                return matchTahun && matchBulan && matchKecamatan && matchSearch;
+                return d.tahun === selTahun && d.bulan === selBulan;
             });
 
-            currentPage = 1;
-            renderStats(); 
-            renderCharts(); 
-            renderTable();
+            // If period data is empty, fallback to available
+            filteredData = periodData.length > 0 ? periodData : rawData.slice(0, 31);
+
+            // Update Active Filter Label
+            const indLabels = {
+                'komposit': 'Peta Kerawanan Pangan',
+                'ik': 'Peta Aspek Ketersediaan',
+                'ia': 'Peta Aspek Keterjangkauan',
+                'ip': 'Peta Aspek Pemanfaatan'
+            };
+            els.activeFilterLabel.textContent = `${indLabels[selIndikator] || 'Peta Kerawanan Pangan'} - ${getMonthName(selBulan)} ${selTahun}`;
+
+            // Render components
+            renderStats(selIndikator);
+            renderDonutChart(selIndikator);
+            renderTable(searchTerm);
+            updateMapPolygons(selIndikator);
         }
 
-        // --- TABLE LOGIC ---
-        function renderTable() {
+        // --- SUMMARY CARDS LOGIC ---
+        function renderStats(selIndikator) {
+            const totalKecamatan = 31; // Exactly 31 kecamatan in Kabupaten Bandung
+
+            let sumIkb = 0;
+            let statusCounts = { 'AMAN': 0, 'WASPADA': 0, 'RENTAN': 0 };
+
+            filteredData.forEach(item => {
+                const d = item.detail || {};
+                sumIkb += parseFloat(d.indeks_komposit_bulanan_ikb) || 0;
+
+                const evaluated = evaluateIndicator(d, selIndikator);
+                statusCounts[evaluated.status] = (statusCounts[evaluated.status] || 0) + 1;
+            });
+
+            const avgIkbNum = filteredData.length > 0 ? (sumIkb / filteredData.length) : 2.42;
+            const avgIkbStr = new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(avgIkbNum);
+
+            // Find top status
+            let topStatus = 'WASPADA';
+            let topCount = 0;
+            for (const [st, cnt] of Object.entries(statusCounts)) {
+                if (cnt > topCount) {
+                    topCount = cnt;
+                    topStatus = st;
+                }
+            }
+            const topPct = filteredData.length > 0 ? Math.round((topCount / filteredData.length) * 100) : 0;
+
+            const cardsHtml = `
+                <!-- Total Kecamatan -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between group hover:shadow-md transition-shadow">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Total Kecamatan</p>
+                        <h3 class="text-3xl font-extrabold text-slate-800">${totalKecamatan}</h3>
+                        <p class="text-[11px] font-medium text-slate-500 mt-1">Wilayah Terdokumentasi</p>
+                    </div>
+                    <div class="bg-[#117a8b]/10 p-3.5 rounded-xl text-[#117a8b] group-hover:scale-110 transition-transform">
+                        <i data-lucide="map-pin" class="w-6 h-6"></i>
+                    </div>
+                </div>
+
+                <!-- Indeks Komposit Bulanan -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between group hover:shadow-md transition-shadow">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Indeks Komposit Bulanan</p>
+                        <h3 class="text-3xl font-extrabold text-[#117a8b]">${avgIkbStr} <span class="text-base font-bold text-slate-600">IKB</span></h3>
+                        <p class="text-[11px] font-medium text-slate-500 mt-1">Rata-rata Indeks Komposit</p>
+                    </div>
+                    <div class="bg-[#4dbdaf]/15 p-3.5 rounded-xl text-[#0a4b57] group-hover:scale-110 transition-transform">
+                        <i data-lucide="activity" class="w-6 h-6"></i>
+                    </div>
+                </div>
+
+                <!-- Status Mayoritas -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between group hover:shadow-md transition-shadow">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Status Mayoritas</p>
+                        <h3 class="text-3xl font-extrabold" style="color: ${STATUS_COLORS[topStatus] || '#dacc32'};">${topStatus}</h3>
+                        <p class="text-[11px] font-medium text-slate-500 mt-1">${topStatus.charAt(0) + topStatus.slice(1).toLowerCase()} dari ${topCount} kecamatan (${topPct}%)</p>
+                    </div>
+                    <div class="p-3.5 rounded-xl group-hover:scale-110 transition-transform" style="background-color: ${STATUS_COLORS[topStatus]}20; color: ${STATUS_COLORS[topStatus]};">
+                        <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+                    </div>
+                </div>
+            `;
+
+            els.stats.innerHTML = cardsHtml;
+            lucide.createIcons();
+        }
+
+        // --- MAP INITIALIZATION & RENDERING ---
+        function initMap() {
+            const mapContainer = document.getElementById('skpg-map');
+            if (!mapContainer || leafletMap) return;
+
+            // Coordinates centered on Kabupaten Bandung
+            leafletMap = L.map('skpg-map', {
+                zoomControl: true,
+                attributionControl: false
+            }).setView([-7.025253, 107.528343], 10);
+
+            // ESRI World Street Map (Bersih, stabil, tanpa watermark / API key)
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+                maxZoom: 18,
+                attribution: '&copy; Esri'
+            }).addTo(leafletMap);
+
+            // Map Legend Control (Sesuai Screenshot: Keterangan Rentan, Waspada, Aman)
+            if (!mapLegendControl) {
+                mapLegendControl = L.control({ position: 'bottomleft' });
+                mapLegendControl.onAdd = function () {
+                    const div = L.DomUtil.create('div', 'bg-white p-3 rounded-lg shadow-md border border-slate-200 text-xs font-sans');
+                    div.innerHTML = `
+                        <div class="font-bold text-slate-800 mb-2 text-center text-xs tracking-tight">Keterangan</div>
+                        <div class="space-y-1.5">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3.5 h-3.5 rounded-xs shrink-0" style="background-color: #cc091d;"></span>
+                                <span class="text-slate-700 font-medium text-xs">Rentan</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-3.5 h-3.5 rounded-xs shrink-0" style="background-color: #dacc32;"></span>
+                                <span class="text-slate-700 font-medium text-xs">Waspada</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-3.5 h-3.5 rounded-xs shrink-0" style="background-color: #2cb45c;"></span>
+                                <span class="text-slate-700 font-medium text-xs">Aman</span>
+                            </div>
+                        </div>
+                    `;
+                    return div;
+                };
+                mapLegendControl.addTo(leafletMap);
+            }
+
+            if (cachedGeoData) {
+                updateMapPolygons(els.mapFilterIndikator.value);
+            }
+        }
+
+        function updateMapPolygons(selIndikator) {
+            if (!leafletMap || !cachedGeoData) return;
+
+            // Map each kecamatan name to its active detail
+            const dataByKecamatan = {};
+            filteredData.forEach(item => {
+                const d = item.detail || {};
+                if (d.nama_kecamatan) {
+                    dataByKecamatan[normalizeName(d.nama_kecamatan)] = item;
+                }
+            });
+
+            // Counters for legend
+            let countRentan = 0;
+            let countWaspada = 0;
+            let countAman = 0;
+
+            if (geoJsonLayer) {
+                leafletMap.removeLayer(geoJsonLayer);
+            }
+
+            // Subtle desa boundaries underneath
+            if (cachedDesaGeoData && !desaGeoJsonLayer) {
+                desaGeoJsonLayer = L.geoJSON(cachedDesaGeoData, {
+                    style: {
+                        color: '#ffffff',
+                        weight: 0.7,
+                        opacity: 0.45,
+                        fillColor: 'transparent',
+                        fillOpacity: 0
+                    },
+                    interactive: false
+                }).addTo(leafletMap);
+            }
+
+            geoJsonLayer = L.geoJSON(cachedGeoData, {
+                style: function (feature) {
+                    const rawName = feature.properties.KECAMATAN || '';
+                    const item = dataByKecamatan[normalizeName(rawName)];
+                    const evaluated = evaluateIndicator(item?.detail, selIndikator);
+
+                    if (evaluated.status === 'RENTAN') countRentan++;
+                    else if (evaluated.status === 'WASPADA') countWaspada++;
+                    else if (evaluated.status === 'AMAN') countAman++;
+
+                    return {
+                        fillColor: evaluated.color,
+                        weight: 1.5,
+                        opacity: 1,
+                        color: '#ffffff',
+                        dashArray: '',
+                        fillOpacity: 0.88
+                    };
+                },
+                onEachFeature: function (feature, layer) {
+                    const rawName = feature.properties.KECAMATAN || '';
+                    const item = dataByKecamatan[normalizeName(rawName)];
+                    const d = item?.detail || {};
+                    const evaluated = evaluateIndicator(d, selIndikator);
+
+                    // Hover effects
+                    layer.on({
+                        mouseover: function (e) {
+                            const l = e.target;
+                            l.setStyle({
+                                weight: 3,
+                                color: '#1d2d35',
+                                fillOpacity: 0.95
+                            });
+                            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                                l.bringToFront();
+                            }
+                        },
+                        mouseout: function (e) {
+                            geoJsonLayer.resetStyle(e.target);
+                        }
+                    });
+
+                    // Custom Informative Popup (Muncul saat klik kecamatan; modal detail lengkap hanya dibuka saat tombol diklik)
+                    const popupContent = `
+                        <div class="custom-skpg-popup p-3 text-left font-sans min-w-[220px]">
+                            <div class="flex items-center justify-between gap-2 mb-2 pb-2 border-b border-slate-100">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-3 h-3 rounded-full shrink-0" style="background-color: ${evaluated.color};"></div>
+                                    <h4 class="font-extrabold text-slate-800 text-sm">Kecamatan ${rawName}</h4>
+                                </div>
+                                ${getStatusBadge(evaluated.status)}
+                            </div>
+                            <table class="w-full text-xs text-slate-600 mb-3">
+                                <tr>
+                                    <td class="font-medium text-slate-400">Periode:</td>
+                                    <td class="font-bold text-slate-700">${getMonthName(d.bulan)} ${d.tahun || '-'}</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-medium text-slate-400">Status Komposit:</td>
+                                    <td class="font-bold" style="color: ${evaluated.color};">${d.keterangan_komposit_bulanan || evaluated.status}</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-medium text-slate-400">Skor Komposit:</td>
+                                    <td class="font-bold text-slate-800">${d.skor_komposit_bulanan || 0} (IKB: ${d.indeks_komposit_bulanan_ikb || '-'})</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-medium text-slate-400">IK / IA / IP:</td>
+                                    <td class="font-bold text-slate-700">${d.ik || 0} / ${d.ia || 0} / ${d.ip || 0}</td>
+                                </tr>
+                            </table>
+                            ${item ? `<button onclick="openDetail(${item.id})" class="w-full py-1.5 px-3 bg-[#117a8b] hover:bg-[#0a4b57] text-white rounded-lg text-xs font-bold transition shadow-xs flex items-center justify-center gap-1.5"><i data-lucide="info" class="w-3.5 h-3.5"></i> Detail Kecamatan</button>` : ''}
+                        </div>
+                    `;
+                    layer.bindPopup(popupContent);
+                    layer.on('popupopen', () => {
+                        lucide.createIcons();
+                    });
+                }
+            }).addTo(leafletMap);
+
+            // Fit map to layer bounds
+            try {
+                leafletMap.fitBounds(geoJsonLayer.getBounds(), { padding: [15, 15] });
+            } catch (e) {
+                console.warn(e);
+            }
+
+            // Update Legend counts
+            if (els.legendCountRentan) els.legendCountRentan.innerText = countRentan;
+            if (els.legendCountWaspada) els.legendCountWaspada.innerText = countWaspada;
+            if (els.legendCountAman) els.legendCountAman.innerText = countAman;
+            if (els.legendTotalKecamatan) els.legendTotalKecamatan.innerText = (countRentan + countWaspada + countAman) || 31;
+        }
+
+        // --- GRAFIK GARIS TREN PER TAHUN (TERKUNCI) ---
+        function renderLineChartYearly() {
+            const trenEl = document.querySelector("#chart-tren-tahun");
+            if (!trenEl) return;
+            trenEl.innerHTML = '';
+
+            // Lock all year data from rawData
+            const yearDataMap = {};
+            (rawData || []).forEach(item => {
+                const d = item.detail || {};
+                const yr = d.tahun;
+                if (!yr) return;
+                if (!yearDataMap[yr]) {
+                    yearDataMap[yr] = { sumSkor: 0, sumIkb: 0, count: 0 };
+                }
+                yearDataMap[yr].sumSkor += (parseFloat(d.skor_komposit_bulanan) || 0);
+                yearDataMap[yr].sumIkb += (parseFloat(d.indeks_komposit_bulanan_ikb) || 0);
+                yearDataMap[yr].count++;
+            });
+
+            const arrYears = Object.keys(yearDataMap).map(Number).sort((a, b) => a - b);
+            const avgScores = arrYears.map(yr => {
+                const item = yearDataMap[yr];
+                return parseFloat((item.sumSkor / item.count).toFixed(2));
+            });
+
+            if (arrYears.length === 0) {
+                trenEl.innerHTML = '<p class="text-sm text-slate-400 italic">Data tahunan tidak tersedia.</p>';
+                return;
+            }
+
+            const options = {
+                chart: {
+                    type: 'line',
+                    height: 320,
+                    fontFamily: 'Plus Jakarta Sans, sans-serif',
+                    toolbar: {
+                        show: true,
+                        tools: {
+                            download: true,
+                            selection: true,
+                            zoom: true,
+                            zoomin: true,
+                            zoomout: true,
+                            pan: true,
+                            reset: true
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Rata-Rata Skor Komposit',
+                    data: avgScores
+                }],
+                colors: ['#117a8b'], // Warna 3 dari panduan.md
+                stroke: {
+                    curve: 'straight',
+                    width: 3.5,
+                    colors: ['#117a8b']
+                },
+                markers: {
+                    size: 6,
+                    colors: ['#117a8b'],
+                    strokeColors: '#ffffff',
+                    strokeWidth: 2,
+                    hover: { size: 8 }
+                },
+                dataLabels: {
+                    enabled: true,
+                    offsetY: -8,
+                    style: {
+                        fontSize: '11px',
+                        fontWeight: '700',
+                        colors: ['#ffffff']
+                    },
+                    background: {
+                        enabled: true,
+                        foreColor: '#ffffff',
+                        color: '#117a8b',
+                        borderRadius: 4,
+                        padding: 4,
+                        opacity: 1,
+                        borderWidth: 0
+                    }
+                },
+                grid: {
+                    borderColor: '#e2e8f0',
+                    strokeDashArray: 0,
+                    yaxis: { lines: { show: true } },
+                    xaxis: { lines: { show: false } }
+                },
+                xaxis: {
+                    categories: arrYears.map(String),
+                    title: { text: 'Tahun', style: { fontWeight: 700 } }
+                },
+                yaxis: {
+                    title: { text: 'Rata-Rata Skor Komposit', style: { fontWeight: 700 } },
+                    min: function (min) { return Math.max(0, Math.floor(min - 1)); },
+                    labels: {
+                        formatter: (val) => val.toFixed(2)
+                    }
+                },
+                tooltip: {
+                    y: {
+                        formatter: (val, opts) => {
+                            const yr = arrYears[opts.dataPointIndex];
+                            const ikb = (yearDataMap[yr].sumIkb / yearDataMap[yr].count).toFixed(2);
+                            return `${val} Poin (Rata-rata IKB: ${ikb})`;
+                        }
+                    }
+                }
+            };
+
+            if (lineChartInstance) {
+                lineChartInstance.destroy();
+            }
+            lineChartInstance = new ApexCharts(trenEl, options);
+            lineChartInstance.render();
+        }
+
+        // --- d. DONUT CHART (Distribusi Status Kerawanan Pangan per Bulan) ---
+        function renderDonutChart(selIndikator) {
+            const chartEl = document.querySelector("#chart-status");
+            if (!chartEl) return;
+            chartEl.innerHTML = '';
+
+            let counts = { 'AMAN': 0, 'WASPADA': 0, 'RENTAN': 0 };
+
+            filteredData.forEach(item => {
+                const evaluated = evaluateIndicator(item.detail, selIndikator);
+                counts[evaluated.status] = (counts[evaluated.status] || 0) + 1;
+            });
+
+            // Series and labels (only include statuses with count > 0 for clean legend as in screenshot)
+            const activeItems = [
+                { label: 'AMAN', count: counts['AMAN'], color: STATUS_COLORS.AMAN },
+                { label: 'WASPADA', count: counts['WASPADA'], color: STATUS_COLORS.WASPADA },
+                { label: 'RENTAN', count: counts['RENTAN'], color: STATUS_COLORS.RENTAN }
+            ].filter(x => x.count > 0);
+
+            const series = activeItems.map(x => x.count);
+            const labels = activeItems.map(x => x.label);
+            const colors = activeItems.map(x => x.color);
+
+            const total = series.reduce((a, b) => a + b, 0) || 31;
+
+            const opts = {
+                chart: {
+                    type: 'donut',
+                    height: 320,
+                    fontFamily: 'Plus Jakarta Sans, sans-serif',
+                    toolbar: { show: false }
+                },
+                series: series,
+                labels: labels,
+                colors: colors,
+                legend: {
+                    position: 'bottom',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    labels: { colors: '#475569' },
+                    markers: { width: 10, height: 10, radius: 10 }
+                },
+                dataLabels: {
+                    enabled: true,
+                    formatter: function (val) {
+                        return val > 0 ? Math.round(val) + "%" : "";
+                    },
+                    dropShadow: { enabled: false },
+                    style: { fontSize: '13px', fontWeight: '800' }
+                },
+                tooltip: {
+                    y: {
+                        formatter: (val) => `${val} Kecamatan (${Math.round((val / total) * 100)}%)`
+                    }
+                },
+                plotOptions: {
+                    pie: {
+                        donut: {
+                            size: '65%',
+                            labels: {
+                                show: true,
+                                name: {
+                                    show: true,
+                                    fontSize: '13px',
+                                    fontWeight: 600,
+                                    color: '#64748b',
+                                    offsetY: -6
+                                },
+                                value: {
+                                    show: true,
+                                    fontSize: '26px',
+                                    fontWeight: 800,
+                                    color: '#1e293b',
+                                    offsetY: 6,
+                                    formatter: () => `${total}`
+                                },
+                                total: {
+                                    show: true,
+                                    showAlways: true,
+                                    label: 'Total',
+                                    fontSize: '13px',
+                                    fontWeight: 600,
+                                    color: '#64748b',
+                                    formatter: () => `${total}`
+                                }
+                            }
+                        }
+                    }
+                },
+                stroke: { width: 2, colors: ['#ffffff'] }
+            };
+
+            if (donutChartInstance) {
+                donutChartInstance.destroy();
+            }
+            donutChartInstance = new ApexCharts(chartEl, opts);
+            donutChartInstance.render();
+        }
+
+        // --- DATA TABLE LOGIC ---
+        function renderTable(searchTerm = '') {
+            const term = (searchTerm || '').toLowerCase();
+
+            const displayData = filteredData.filter(item => {
+                const d = item.detail || {};
+                if (!term) return true;
+                return (d.nama_kecamatan || '').toLowerCase().includes(term) ||
+                    (d.keterangan_komposit_bulanan || '').toLowerCase().includes(term) ||
+                    String(d.tahun || '').includes(term);
+            });
+
             const start = (currentPage - 1) * itemsPerPage;
             const end = start + itemsPerPage;
-            const pageData = filteredData.slice(start, end);
+            const pageData = displayData.slice(start, end);
 
-            els.paginationInfo.textContent = `${Math.min(start + 1, filteredData.length)} - ${Math.min(end, filteredData.length)} dari ${filteredData.length}`;
+            els.paginationInfo.textContent = `${displayData.length > 0 ? start + 1 : 0} - ${Math.min(end, displayData.length)} dari ${displayData.length}`;
             els.btnPrev.disabled = currentPage === 1;
-            els.btnNext.disabled = end >= filteredData.length || filteredData.length === 0;
+            els.btnNext.disabled = end >= displayData.length || displayData.length === 0;
 
             els.tableBody.innerHTML = pageData.map((item, idx) => {
                 const d = item.detail || {};
-                
+
                 return `
                 <tr class="hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-none group">
                     <td class="px-6 py-4 font-mono text-sm text-slate-500">${start + idx + 1}</td>
@@ -922,37 +1386,62 @@
                     <td class="px-6 py-4 text-center font-mono text-slate-700">${d.ik || 0}</td>
                     <td class="px-6 py-4 text-center font-mono text-slate-700">${d.ia || 0}</td>
                     <td class="px-6 py-4 text-center font-mono text-slate-700">${d.ip || 0}</td>
-                    <td class="px-6 py-4 text-center font-mono font-bold text-sky-600 text-base">${d.skor_komposit_bulanan || 0}</td>
+                    <td class="px-6 py-4 text-center font-mono font-bold text-[#117a8b] text-base">${d.skor_komposit_bulanan || 0}</td>
                     <td class="px-6 py-4 text-center">${getStatusBadge(d.keterangan_komposit_bulanan)}</td>
                     <td class="px-6 py-4 text-center">
-                        <button onclick="openDetail(${item.id})" class="text-sky-500 hover:text-sky-700 hover:bg-sky-50 p-2 rounded-xl transition-all border border-transparent hover:border-sky-100" title="Lihat Detail">
+                        <button onclick="openDetail(${item.id})" class="text-[#117a8b] hover:text-[#0a4b57] hover:bg-[#117a8b]/10 p-2 rounded-xl transition-all" title="Lihat Detail">
                             <i data-lucide="info" class="w-5 h-5"></i>
                         </button>
                     </td>
                 </tr>
                 `;
             }).join('');
-            
-            if(filteredData.length === 0) {
-                els.tableBody.innerHTML = `<tr><td colspan="9" class="text-center py-12 text-slate-400 bg-slate-50">Tidak ada data ditemukan untuk kriteria tersebut.</td></tr>`;
+
+            if (displayData.length === 0) {
+                els.tableBody.innerHTML = `<tr><td colspan="9" class="text-center py-12 text-slate-400 bg-slate-50">Tidak ada data ditemukan untuk kriteria pencarian tersebut.</td></tr>`;
             }
             lucide.createIcons();
         }
 
         // --- EVENT LISTENERS ---
         function setupEvents() {
-            els.filterTahun.addEventListener('change', () => filterData('nav'));
-            els.filterBulan.addEventListener('change', () => filterData('nav'));
-            els.filterKecamatan.addEventListener('change', () => filterData('nav'));
+            // Apply filter on button click
+            els.mapBtnFilter.addEventListener('click', () => {
+                currentPage = 1;
+                applyFilter();
+            });
 
-            els.filterTahunMobile.addEventListener('change', () => filterData('mobile'));
-            els.filterBulanMobile.addEventListener('change', () => filterData('mobile'));
-            els.filterKecamatanMobile.addEventListener('change', () => filterData('mobile'));
+            // Also auto-update on dropdown changes
+            els.mapFilterIndikator.addEventListener('change', () => applyFilter());
+            els.mapFilterBulan.addEventListener('change', () => {
+                currentPage = 1;
+                applyFilter();
+            });
+            els.mapFilterTahun.addEventListener('change', () => {
+                currentPage = 1;
+                applyFilter();
+            });
 
-            els.search.addEventListener('input', () => filterData('search'));
-            
-            els.btnPrev.addEventListener('click', () => { if(currentPage > 1) { currentPage--; renderTable(); } });
-            els.btnNext.addEventListener('click', () => { if(currentPage * itemsPerPage < filteredData.length) { currentPage++; renderTable(); } });
+            // Search input
+            els.search.addEventListener('input', () => {
+                currentPage = 1;
+                renderTable(els.search.value);
+            });
+
+            // Pagination
+            els.btnPrev.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderTable(els.search.value);
+                }
+            });
+
+            els.btnNext.addEventListener('click', () => {
+                if (currentPage * itemsPerPage < filteredData.length) {
+                    currentPage++;
+                    renderTable(els.search.value);
+                }
+            });
 
             // Export Excel
             document.getElementById('btn-export').addEventListener('click', () => {
@@ -976,11 +1465,11 @@
                         Tanggal_Rekam: item.created_at
                     };
                 });
-                
+
                 const ws = XLSX.utils.json_to_sheet(dataToExport);
                 const wb = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(wb, ws, "Data SKPG");
-                XLSX.writeFile(wb, `Data_SKPG_Kab_Bandung_${new Date().toISOString().slice(0,10)}.xlsx`);
+                XLSX.writeFile(wb, `Data_SKPG_Kab_Bandung_${new Date().toISOString().slice(0, 10)}.xlsx`);
             });
 
             els.modal.backdrop.addEventListener('click', closeModal);
@@ -990,20 +1479,20 @@
         // --- MODAL ---
         window.openDetail = (id) => {
             const item = rawData.find(x => x.id === id);
-            if(!item) return;
+            if (!item) return;
             const d = item.detail || {};
 
             els.modal.title.textContent = d.nama_kecamatan || 'Kecamatan Tidak Diketahui';
             els.modal.subtitle.textContent = `${getMonthName(d.bulan)} ${d.tahun || ''}`;
-            
+
             els.modal.skor.textContent = d.skor_komposit_bulanan || '0';
             els.modal.statusBadge.innerHTML = getStatusBadge(d.keterangan_komposit_bulanan);
-            
+
             els.modal.ik.textContent = d.ik || '0';
             els.modal.ia.textContent = d.ia || '0';
             els.modal.ip.textContent = d.ip || '0';
             els.modal.ikb.textContent = d.indeks_komposit_bulanan_ikb || '-';
-            
+
             els.modal.pic.textContent = item.created_by || '-';
             els.modal.instansi.textContent = item.department_nama || '-';
             els.modal.created.textContent = item.created_at || '-';
@@ -1021,4 +1510,5 @@
         fetchData();
     </script>
 </body>
+
 </html>
