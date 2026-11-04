@@ -1,0 +1,2162 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title id="page-title">Keamanan Pangan (PSAT) - Kab. Bandung</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            1: '#1d2d35',
+                            2: '#0a4b57',
+                            3: '#117a8b',
+                            4: '#4dbdaf',
+                            5: '#2e8a57',
+                            6: '#dc3545',
+                            7: '#e07a5f',
+                            8: '#f4a261',
+                            9: '#e9c46a',
+                            10: '#f5f0da',
+                            11: '#94a3a8',
+                            emerald: '#10b981',
+                            dark: '#064e3b',
+                            light: '#ecfdf5',
+                            accent: '#34d399'
+                        }
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(17, 122, 139, 0.08)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Leaflet CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(15, 23, 42, 0.05);
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .loader {
+            border: 2.5px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 2.5px solid #117a8b;
+            width: 22px;
+            height: 22px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Map styling */
+        #psat-map {
+            background-color: #1a1d20;
+        }
+
+        .leaflet-container {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #1a1d20 !important;
+        }
+
+        /* Custom Pin Marker (Orange circle with white border and monitor icon) */
+        .psat-pin-marker {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease;
+        }
+
+        .psat-pin-marker:hover {
+            transform: scale(1.2);
+            z-index: 9999 !important;
+        }
+
+        .psat-pin-circle {
+            width: 24px;
+            height: 24px;
+            border-radius: 9999px;
+            background: #ea580c;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+        }
+
+        /* Kecamatan Label Pill */
+        .kecamatan-label-pill {
+            background: #ffffff;
+            border: 1px solid #94a3b8;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+            padding: 1px 4.5px;
+            font-size: 8px;
+            font-weight: 800;
+            color: #0f172a;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .leaflet-popup-content-wrapper {
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .leaflet-popup-content {
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body class="text-slate-800 antialiased selection:bg-[#117a8b]/20 selection:text-[#0a4b57]">
+
+    <!-- Loading Screen (Identical style with FSVA) -->
+    <div id="loading-screen"
+        class="fixed inset-0 z-[1000] bg-white flex flex-col items-center justify-center transition-all duration-500 ease-in-out">
+        <div class="relative w-20 h-20 mb-6">
+            <div class="absolute inset-0 border-4 border-slate-100 rounded-full"></div>
+            <div class="absolute inset-0 border-4 border-[#117a8b] rounded-full border-t-transparent animate-spin">
+            </div>
+            <div class="absolute inset-0 flex items-center justify-center text-[#117a8b]">
+                <i data-lucide="shield-check" class="w-8 h-8 animate-pulse"></i>
+            </div>
+        </div>
+
+        <h2 class="text-xl font-bold text-slate-800 mb-2 tracking-tight">Keamanan Pangan (PSAT)</h2>
+
+        <div class="h-6 mb-3 flex items-center justify-center">
+            <p id="loading-text" class="text-xs font-medium text-slate-500 font-mono transition-all duration-300">
+                Menarik data dari API Kabupaten Bandung...</p>
+        </div>
+
+        <div class="w-64 h-2 bg-slate-100 rounded-full overflow-hidden relative shadow-inner">
+            <div id="loading-bar-inner"
+                class="h-full bg-gradient-to-r from-[#117a8b] to-[#4dbdaf] rounded-full transition-all duration-500 ease-out"
+                style="width: 25%"></div>
+        </div>
+        <p id="loading-pct" class="text-xs font-bold text-[#117a8b] mt-2.5 font-mono">25%</p>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="fixed top-0 w-full z-50 glass-nav transition-all duration-300">
+        <div class="container mx-auto px-4 lg:px-8">
+            <div class="flex flex-col lg:flex-row lg:h-20 lg:items-center justify-between gap-4 py-3 lg:py-0">
+                <!-- Logo & Title -->
+                <div class="flex items-center justify-between w-full lg:w-auto">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-[#117a8b] p-2 rounded-lg text-white shadow-md">
+                            <i data-lucide="shield-check" class="w-6 h-6"></i>
+                        </div>
+                        <div class="block">
+                            <h1 class="text-lg font-bold text-slate-900 leading-tight tracking-tight">KEAMANAN PANGAN
+                                (PSAT)</h1>
+                            <p class="text-[10px] font-semibold text-[#117a8b] uppercase tracking-widest">Kabupaten
+                                Bandung</p>
+                        </div>
+                    </div>
+                    <!-- Mobile Actions -->
+                    <div class="lg:hidden flex items-center gap-2">
+                        <a href="https://aplikasi.bandungkab.go.id/publik/dispakan-portal-dashboard"
+                            class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-50 text-slate-700 hover:text-[#117a8b] hover:bg-[#117a8b]/10 border border-slate-200 text-[11px] font-bold transition shadow-2xs"
+                            title="Kembali ke Portal DISPAKAN">
+                            <i data-lucide="layout-dashboard" class="w-3.5 h-3.5 text-[#117a8b]"></i>
+                            <span>Kembali ke Portal DISPAKAN</span>
+                        </a>
+                        <span class="relative flex h-2 w-2">
+                            <span
+                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4dbdaf] opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-[#117a8b]"></span>
+                        </span>
+                        <button onclick="window.location.reload()" class="p-2 rounded-lg bg-slate-50 text-slate-600">
+                            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Desktop Filters (Center) -->
+                <div class="hidden lg:flex flex-1 mx-2 xl:mx-4 gap-2 items-center justify-center">
+                    <!-- Filter Bulan -->
+                    <div class="relative group min-w-[145px] shrink-0">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                            <i data-lucide="calendar" class="w-4 h-4 text-slate-500"></i>
+                        </div>
+                        <select id="nav-filter-bulan" onchange="syncNavFilter('bulan', this.value)"
+                            class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-xs sm:text-sm rounded-xl focus:ring-[#117a8b] focus:border-[#117a8b] block pl-9 pr-7 py-2.5 cursor-pointer font-medium appearance-none hover:bg-white transition-colors">
+                            <option value="all">Semua Bulan</option>
+                            <option value="1">Januari</option>
+                            <option value="2">Februari</option>
+                            <option value="3">Maret</option>
+                            <option value="4">April</option>
+                            <option value="5">Mei</option>
+                            <option value="6">Juni</option>
+                            <option value="7">Juli</option>
+                            <option value="8">Agustus</option>
+                            <option value="9">September</option>
+                            <option value="10">Oktober</option>
+                            <option value="11">November</option>
+                            <option value="12">Desember</option>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none">
+                            <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
+                        </div>
+                    </div>
+
+                    <!-- Filter Tahun -->
+                    <div class="relative group min-w-[135px] shrink-0">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                            <i data-lucide="calendar" class="w-4 h-4 text-slate-500"></i>
+                        </div>
+                        <select id="nav-filter-tahun" onchange="syncNavFilter('tahun', this.value)"
+                            class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-xs sm:text-sm rounded-xl focus:ring-[#117a8b] focus:border-[#117a8b] block pl-9 pr-7 py-2.5 cursor-pointer font-medium appearance-none hover:bg-white transition-colors">
+                            <option value="all">Semua Tahun</option>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none">
+                            <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
+                        </div>
+                    </div>
+
+                    <!-- Filter Asal Sampel -->
+                    <div class="relative group min-w-[170px] max-w-[260px] flex-1">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                            <i data-lucide="map-pin" class="w-4 h-4 text-slate-500"></i>
+                        </div>
+                        <select id="nav-filter-asal-sampel" onchange="syncNavFilter('asal', this.value)"
+                            class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-xs sm:text-sm rounded-xl focus:ring-[#117a8b] focus:border-[#117a8b] block pl-9 pr-7 py-2.5 cursor-pointer font-medium appearance-none hover:bg-white transition-colors truncate">
+                            <option value="all">Semua Asal Sampel</option>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none">
+                            <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Actions (Date & Live) -->
+                <div class="hidden lg:flex items-center gap-3 xl:gap-4 shrink-0">
+                    <a href="https://aplikasi.bandungkab.go.id/publik/dispakan-portal-dashboard"
+                        class="flex items-center gap-2 px-3.5 py-2 text-xs font-bold text-slate-700 bg-white border border-slate-200 rounded-xl hover:bg-[#117a8b]/10 hover:text-[#117a8b] hover:border-[#117a8b]/30 transition-all shadow-sm"
+                        title="Kembali ke Portal DISPAKAN">
+                        <i data-lucide="layout-dashboard" class="w-4 h-4 text-[#117a8b]"></i>
+                        <span>Kembali ke Portal DISPAKAN</span>
+                    </a>
+                    <div class="flex flex-col items-end">
+                        <span class="text-xs font-medium text-slate-500" id="current-date">Loading...</span>
+                        <div class="flex items-center gap-1.5">
+                            <span class="relative flex h-2 w-2">
+                                <span
+                                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4dbdaf] opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2 w-2 bg-[#117a8b]"></span>
+                            </span>
+                            <span class="text-xs font-bold text-[#117a8b]">LIVE API DATA</span>
+                        </div>
+                    </div>
+                    <button onclick="window.location.reload()"
+                        class="p-2.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:bg-[#117a8b]/10 hover:text-[#117a8b] hover:border-[#117a8b]/30 transition-all shadow-sm group">
+                        <i data-lucide="refresh-cw"
+                            class="w-5 h-5 group-hover:rotate-180 transition-transform duration-500"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Filter Section -->
+            <div class="lg:hidden flex flex-col gap-2 pb-3">
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                            <i data-lucide="calendar" class="w-4 h-4 text-slate-500"></i>
+                        </div>
+                        <select id="mobile-filter-bulan" onchange="syncNavFilter('bulan', this.value)"
+                            class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg pl-10 p-2.5 font-medium appearance-none">
+                            <option value="all">Semua Bulan</option>
+                            <option value="1">Januari</option>
+                            <option value="2">Februari</option>
+                            <option value="3">Maret</option>
+                            <option value="4">April</option>
+                            <option value="5">Mei</option>
+                            <option value="6">Juni</option>
+                            <option value="7">Juli</option>
+                            <option value="8">Agustus</option>
+                            <option value="9">September</option>
+                            <option value="10">Oktober</option>
+                            <option value="11">November</option>
+                            <option value="12">Desember</option>
+                        </select>
+                    </div>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                            <i data-lucide="calendar" class="w-4 h-4 text-slate-500"></i>
+                        </div>
+                        <select id="mobile-filter-tahun" onchange="syncNavFilter('tahun', this.value)"
+                            class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg pl-10 p-2.5 font-medium appearance-none">
+                            <option value="all">Semua Tahun</option>
+                        </select>
+                    </div>
+                    <div class="relative col-span-2">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                            <i data-lucide="map-pin" class="w-4 h-4 text-slate-500"></i>
+                        </div>
+                        <select id="mobile-filter-asal-sampel" onchange="syncNavFilter('asal', this.value)"
+                            class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg pl-10 p-2.5 font-medium appearance-none">
+                            <option value="all">Semua Asal Sampel</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 lg:px-8 py-8 mt-44 sm:mt-40 lg:mt-20 mb-12">
+
+        <!-- Header Section -->
+        <header class="mb-8 relative">
+            <!-- Brand & Dept Header -->
+            <div class="flex items-center gap-3 mb-3">
+                <div
+                    class="w-11 h-11 rounded-xl bg-white border border-[#117a8b]/20 shadow-sm flex items-center justify-center text-[#117a8b] shrink-0 ring-1 ring-[#117a8b]/10">
+                    <i data-lucide="wheat" class="w-5 h-5"></i>
+                </div>
+                <div class="text-xs font-bold text-[#117a8b] uppercase tracking-widest leading-tight">
+                    DINAS KETAHANAN PANGAN DAN PERIKANAN KABUPATEN BANDUNG (DISPAKAN)
+                </div>
+            </div>
+
+            <!-- Headline -->
+            <h1 id="dashboard-title"
+                class="text-2xl md:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight mb-2">
+                Keamanan Pangan Segar Asal Tumbuhan (PSAT)
+            </h1>
+
+            <!-- Penjelasan / Info Banner (Warna 4: #4dbdaf - Persis format FSVA) -->
+            <div style="background: rgba(77, 189, 175, 0.12); border: 1px solid rgba(77, 189, 175, 0.45); border-left: 4px solid #4dbdaf;"
+                class="rounded-xl p-4 md:p-5 mt-4 flex items-start gap-3.5 shadow-sm text-slate-700 text-sm leading-relaxed">
+                <i data-lucide="info" class="w-5 h-5 text-[#117a8b] shrink-0 mt-0.5"></i>
+                <div class="flex-1">
+                    <p class="mb-3 text-slate-700 leading-relaxed font-medium">
+                        Keamanan Pangan Segar Asal Tumbuhan (PSAT) merupakan upaya dalam menjamin produk pangan segar
+                        bebas dari cemaran biologis, kimia, dan fisik yang membahayakan kesehatan. Sebagai bentuk
+                        pengawasan, pengujian cepat (Rapid Test) residu pestisida dilakukan pada sampel PSAT yang
+                        diambil langsung dari lapangan.
+                    </p>
+                    <div class="flex flex-wrap gap-2 pt-2" style="border-top: 1px solid rgba(77, 189, 175, 0.3);">
+                        <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/95 border text-xs font-semibold text-[#0a4b57] shadow-2xs"
+                            style="border-color: rgba(77, 189, 175, 0.5);">
+                            <i data-lucide="server" class="w-3.5 h-3.5 text-[#117a8b]"></i>
+                            <span>API Terhubung</span>
+                        </div>
+                        <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/95 border text-xs font-semibold text-[#0a4b57] shadow-2xs"
+                            style="border-color: rgba(77, 189, 175, 0.5);">
+                            <i data-lucide="filter" class="w-3.5 h-3.5 text-[#117a8b]"></i>
+                            <span>Filter Aktif: <span id="active-filter-label" class="font-bold text-slate-900">Semua
+                                    Data</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- KPI Cards (Compact Proportions matching FSVA) -->
+        <section id="stats-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5 mb-6">
+            <!-- Card 1: Total Sampel -->
+            <div
+                class="bg-white p-4 rounded-xl border border-[#117a8b]/20 shadow-xs hover:shadow-sm transition-all flex items-center justify-between group">
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Total Sampel Diuji
+                    </p>
+                    <h3 id="stat-total-sampel" class="text-xl sm:text-2xl font-black text-slate-800">-</h3>
+                    <p class="text-[10px] font-medium text-slate-500 mt-0.5">Rapid test pestisida</p>
+                </div>
+                <div
+                    class="bg-[#117a8b]/10 p-2.5 rounded-xl text-[#117a8b] group-hover:scale-105 transition-transform shadow-inner">
+                    <i data-lucide="flask-conical" class="w-5 h-5"></i>
+                </div>
+            </div>
+
+            <!-- Card 2: Status Aman -->
+            <div
+                class="bg-white p-4 rounded-xl border border-[#2e8a57]/20 shadow-xs hover:shadow-sm transition-all flex items-center justify-between group">
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Status Keamanan
+                        (Aman)</p>
+                    <h3 id="stat-aman" class="text-xl sm:text-2xl font-black text-[#2e8a57]">-</h3>
+                    <p class="text-[10px] font-medium text-slate-500 mt-0.5">Bebas residu pestisida</p>
+                </div>
+                <div
+                    class="bg-[#2e8a57]/10 p-2.5 rounded-xl text-[#2e8a57] group-hover:scale-105 transition-transform shadow-inner">
+                    <i data-lucide="shield-check" class="w-5 h-5"></i>
+                </div>
+            </div>
+
+            <!-- Card 3: Temuan Kritis -->
+            <div
+                class="bg-white p-4 rounded-xl border border-[#dc3545]/20 shadow-xs hover:shadow-sm transition-all flex items-center justify-between group">
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Temuan Kritis (Tidak
+                        Aman)</p>
+                    <h3 id="stat-tidak-aman" class="text-xl sm:text-2xl font-black text-[#dc3545]">-</h3>
+                    <p class="text-[10px] font-medium text-slate-500 mt-0.5">Perlu pembinaan pasokan</p>
+                </div>
+                <div
+                    class="bg-[#dc3545]/10 p-2.5 rounded-xl text-[#dc3545] group-hover:scale-105 transition-transform shadow-inner">
+                    <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+                </div>
+            </div>
+
+            <!-- Card 4: Cakupan Lokasi -->
+            <div
+                class="bg-white p-4 rounded-xl border border-[#f4a261]/20 shadow-xs hover:shadow-sm transition-all flex items-center justify-between group">
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Cakupan Lokasi</p>
+                    <h3 id="stat-cakupan-lokasi" class="text-xl sm:text-2xl font-black text-slate-800">-</h3>
+                    <p class="text-[10px] font-medium text-slate-500 mt-0.5">Titik asal sampel diuji</p>
+                </div>
+                <div
+                    class="bg-[#f4a261]/10 p-2.5 rounded-xl text-[#e07a5f] group-hover:scale-105 transition-transform shadow-inner">
+                    <i data-lucide="map-pin" class="w-5 h-5"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- PETA SEBARAN PSAT (Layout 3 Cols Map + 1 Col Sidebar Persis Seperti Peta FSVA) -->
+        <section class="mb-6 bg-white rounded-2xl shadow-soft border border-slate-100 overflow-hidden">
+            <!-- Filter Bar Peta -->
+            <div
+                class="p-3.5 sm:p-4 border-b border-slate-100 bg-slate-50/70 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                <div class="flex items-center gap-2.5">
+                    <div
+                        class="w-9 h-9 rounded-xl bg-[#117a8b]/10 text-[#117a8b] flex items-center justify-center border border-[#117a8b]/20 shrink-0">
+                        <i data-lucide="map" class="w-4.5 h-4.5"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-sm sm:text-base leading-tight">Peta Titik Pengawasan
+                            PSAT</h3>
+                        <p class="text-[11px] text-slate-500">Sebaran titik sampling PSAT & batas wilayah kecamatan
+                            Kabupaten Bandung</p>
+                    </div>
+                </div>
+
+                <!-- Controls: Filter Bulan, Tahun, Asal Sampel, dan Tombol Reset -->
+                <div class="flex flex-wrap items-center gap-2">
+                    <!-- Filter Bulan -->
+                    <div class="relative min-w-[130px]">
+                        <select id="filter-bulan" onchange="applyFilters()"
+                            class="w-full bg-white border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg pl-3 pr-7 py-2 focus:ring-2 focus:ring-[#117a8b] focus:border-[#117a8b] appearance-none cursor-pointer shadow-2xs hover:bg-slate-50 transition">
+                            <option value="all">Semua Bulan</option>
+                            <option value="1">Januari</option>
+                            <option value="2">Februari</option>
+                            <option value="3">Maret</option>
+                            <option value="4">April</option>
+                            <option value="5">Mei</option>
+                            <option value="6">Juni</option>
+                            <option value="7">Juli</option>
+                            <option value="8">Agustus</option>
+                            <option value="9">September</option>
+                            <option value="10">Oktober</option>
+                            <option value="11">November</option>
+                            <option value="12">Desember</option>
+                        </select>
+                        <div
+                            class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none text-slate-400">
+                            <i data-lucide="chevron-down" class="w-3 h-3"></i>
+                        </div>
+                    </div>
+
+                    <!-- Filter Tahun -->
+                    <div class="relative min-w-[110px]">
+                        <select id="filter-tahun" onchange="applyFilters()"
+                            class="w-full bg-white border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg pl-3 pr-7 py-2 focus:ring-2 focus:ring-[#117a8b] focus:border-[#117a8b] appearance-none cursor-pointer shadow-2xs hover:bg-slate-50 transition">
+                            <option value="all">Semua Tahun</option>
+                        </select>
+                        <div
+                            class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none text-slate-400">
+                            <i data-lucide="chevron-down" class="w-3 h-3"></i>
+                        </div>
+                    </div>
+
+                    <!-- Filter Asal Sampel -->
+                    <div class="relative min-w-[160px]">
+                        <select id="filter-asal-sampel" onchange="applyFilters()"
+                            class="w-full bg-white border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg pl-3 pr-7 py-2 focus:ring-2 focus:ring-[#117a8b] focus:border-[#117a8b] appearance-none cursor-pointer shadow-2xs hover:bg-slate-50 transition">
+                            <option value="all">Semua Asal Sampel</option>
+                        </select>
+                        <div
+                            class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none text-slate-400">
+                            <i data-lucide="chevron-down" class="w-3 h-3"></i>
+                        </div>
+                    </div>
+
+                    <!-- Reset Button -->
+                    <button onclick="resetFilters()"
+                        class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition flex items-center gap-1.5 active:scale-95 shadow-2xs">
+                        <i data-lucide="rotate-ccw" class="w-3 h-3"></i>
+                        <span>Reset</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Map Layout Grid (Map 3 Cols, Sidebar 1 Col - Sesuai Layout FSVA) -->
+            <div class="grid grid-cols-1 lg:grid-cols-4">
+                <!-- Map Area -->
+                <div class="lg:col-span-3 p-3 sm:p-4 border-b lg:border-b-0 lg:border-r border-slate-100 relative">
+                    <div class="flex items-center justify-between mb-2 px-1">
+                        <span
+                            class="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-[#117a8b] inline-block"></span>
+                            Peta Sebaran Sampling PSAT Kabupaten Bandung
+                        </span>
+                        <span class="text-[10px] font-semibold text-slate-400">Zoom Out Otomatis</span>
+                    </div>
+
+                    <div
+                        class="relative w-full h-[440px] rounded-xl overflow-hidden bg-[#1a1d20] border border-slate-200/40">
+                        <div id="psat-map" class="w-full h-full z-10 bg-[#1a1d20]"></div>
+
+                        <!-- Floating Mini Legend (Kiri Bawah Peta) -->
+                        <div
+                            class="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md p-2.5 rounded-lg shadow-md border border-slate-200 z-[400] text-[10px] font-medium hidden sm:flex items-center gap-3">
+                            <div class="flex items-center gap-1.5">
+                                <span
+                                    class="w-3 h-3 rounded-full bg-[#ea580c] border border-white inline-block shadow-2xs"></span>
+                                <span class="text-slate-700">Titik Sampling PSAT</span>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <span
+                                    class="w-3 h-2.5 rounded bg-[#00b493] border border-slate-700 inline-block shadow-2xs"></span>
+                                <span class="text-slate-700">Kecamatan Terpantau</span>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <span
+                                    class="w-3 h-2.5 rounded bg-[#c5ded7] border border-slate-700 inline-block shadow-2xs"></span>
+                                <span class="text-slate-700">Wilayah Sekitar</span>
+                            </div>
+                        </div>
+
+                        <!-- Map Loading Spinner -->
+                        <div id="map-loading"
+                            class="absolute inset-0 z-30 bg-[#1a1d20]/80 flex flex-col items-center justify-center text-white transition-opacity duration-300">
+                            <div class="loader mb-2"></div>
+                            <p class="text-[11px] font-semibold text-slate-200">Memuat batas wilayah & pin lokasi...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar Kanan (Logo Kab Bandung & Ringkasan Keterangan PSAT - Sesuai FSVA) -->
+                <div class="lg:col-span-1 p-4 sm:p-5 flex flex-col justify-between bg-slate-50/50">
+                    <div>
+                        <!-- Logo Kabupaten Bandung -->
+                        <div class="flex justify-center mb-3">
+                            <img src="https://bandungkab.go.id/uploads/images/logo_bandungkab.png"
+                                alt="Logo Kabupaten Bandung"
+                                class="h-20 object-contain drop-shadow-xs hover:scale-105 transition-transform">
+                        </div>
+
+                        <div class="text-center mb-4">
+                            <h4 class="text-[11px] font-black text-slate-800 tracking-wider uppercase leading-tight">
+                                KETERANGAN<br>PENGAWASAN PSAT :
+                            </h4>
+                            <p class="text-[11px] font-bold text-[#117a8b] mt-1.5">
+                                Total Titik Sampel: <span id="side-stat-titik"
+                                    class="font-mono font-black text-slate-800">-</span>
+                            </p>
+                        </div>
+
+                        <!-- Legend Items with Counts -->
+                        <ul class="space-y-2 text-xs">
+                            <li
+                                class="flex items-center justify-between p-2 rounded-lg bg-white border border-slate-200/90 shadow-2xs">
+                                <div class="flex items-center gap-2">
+                                    <span
+                                        class="w-3.5 h-3.5 rounded-full bg-[#ea580c] border border-white shrink-0 shadow-2xs"></span>
+                                    <span class="font-bold text-slate-700 text-[10.5px]">Titik Sampling</span>
+                                </div>
+                                <span class="font-black text-slate-800 font-mono text-xs"><span
+                                        id="side-stat-titik-list">0</span> <span
+                                        class="text-[9.5px] font-normal text-slate-500">Titik</span></span>
+                            </li>
+                            <li
+                                class="flex items-center justify-between p-2 rounded-lg bg-white border border-slate-200/90 shadow-2xs">
+                                <div class="flex items-center gap-2">
+                                    <span
+                                        class="w-3.5 h-3.5 rounded-xs bg-[#2e8a57] shrink-0 border border-[#1b5e37]"></span>
+                                    <span class="font-bold text-slate-700 text-[10.5px]">Sampel Aman</span>
+                                </div>
+                                <span class="font-black text-[#2e8a57] font-mono text-xs"><span
+                                        id="side-stat-aman">0</span> <span
+                                        class="text-[9.5px] font-normal text-slate-500">Sampel</span></span>
+                            </li>
+                            <li
+                                class="flex items-center justify-between p-2 rounded-lg bg-white border border-slate-200/90 shadow-2xs">
+                                <div class="flex items-center gap-2">
+                                    <span
+                                        class="w-3.5 h-3.5 rounded-xs bg-[#dc3545] shrink-0 border border-[#991b1b]"></span>
+                                    <span class="font-bold text-slate-700 text-[10.5px]">Temuan Kritis</span>
+                                </div>
+                                <span class="font-black text-[#dc3545] font-mono text-xs"><span
+                                        id="side-stat-tidak-aman">0</span> <span
+                                        class="text-[9.5px] font-normal text-slate-500">Sampel</span></span>
+                            </li>
+                            <li
+                                class="flex items-center justify-between p-2 rounded-lg bg-white border border-slate-200/90 shadow-2xs">
+                                <div class="flex items-center gap-2">
+                                    <span
+                                        class="w-3.5 h-3.5 rounded-xs bg-[#00b493] shrink-0 border border-[#007f68]"></span>
+                                    <span class="font-bold text-slate-700 text-[10.5px]">Kec. Terpantau</span>
+                                </div>
+                                <span class="font-black text-slate-800 font-mono text-xs"><span
+                                        id="side-stat-kecamatan">0</span> <span
+                                        class="text-[9.5px] font-normal text-slate-500">Kec</span></span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Footer Note -->
+                    <div
+                        class="mt-4 pt-3 border-t border-slate-200/70 text-[9.5px] text-slate-400 text-center leading-relaxed">
+                        Pemerintah Kabupaten Bandung<br>
+                        <span class="font-semibold text-slate-600">Dinas Ketahanan Pangan dan Perikanan</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Charts Grid 1: 2 Kolom Persis Seperti FSVA (Compact Heights & Sizing) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+            <!-- Chart 1: Rasio Keamanan Sampel (Gambar 2: Donut Chart Warna 5 & 6) -->
+            <div class="bg-white p-4.5 rounded-xl shadow-xs border border-slate-100">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white shrink-0 shadow-2xs"
+                            style="background-color: #2e8a57;">
+                            <i data-lucide="pie-chart" class="w-4 h-4"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm leading-tight">Rasio Keamanan Sampel</h3>
+                            <p class="text-[10.5px] text-slate-500 font-medium">Aman (Warna 5 #2e8a57) vs Tidak Aman
+                                (Warna 6 #dc3545)</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="chart-keamanan" class="h-60 flex items-center justify-center">
+                    <div class="loader opacity-50"></div>
+                </div>
+            </div>
+
+            <!-- Chart 2: Rasio Keamanan per Kategori (Gambar 3 - Urutan: Pasar, Pelaku Usaha, SPPG) -->
+            <div class="bg-white p-4.5 rounded-xl shadow-xs border border-slate-100">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white shrink-0 shadow-2xs"
+                            style="background-color: #117a8b;">
+                            <i data-lucide="bar-chart-2" class="w-4 h-4"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm leading-tight">Rasio Keamanan per Kategori
+                                Pengawasan</h3>
+                            <p class="text-[10.5px] text-slate-500 font-medium">Urutan Kategori: Pasar, Pelaku Usaha,
+                                SPPG</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="chart-kategori-rasio" class="h-60 flex items-center justify-center">
+                    <div class="loader opacity-50"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Grid 2: 2 Kolom Persis Seperti FSVA (Compact Heights & Sizing) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+            <!-- Chart 3: 10 Komoditi Paling Banyak Diuji (Gambar 3) -->
+            <div class="bg-white p-4.5 rounded-xl shadow-xs border border-slate-100">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white shrink-0 shadow-2xs"
+                            style="background-color: #f4a261;">
+                            <i data-lucide="shopping-basket" class="w-4 h-4"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm leading-tight">10 Komoditi Paling Banyak Diuji
+                            </h3>
+                            <p class="text-[10.5px] text-slate-500 font-medium">Frekuensi pengujian cepat residu
+                                pestisida per komoditi</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="chart-komoditi" class="h-60 flex items-center justify-center">
+                    <div class="loader opacity-50"></div>
+                </div>
+            </div>
+
+            <!-- Chart 4: Tren Pengujian Sampel Bulanan -->
+            <div class="bg-white p-4.5 rounded-xl shadow-xs border border-slate-100">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white shrink-0 shadow-2xs"
+                            style="background-color: #4dbdaf;">
+                            <i data-lucide="calendar" class="w-4 h-4"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm leading-tight">Tren Pengujian Sampel Bulanan
+                            </h3>
+                            <p class="text-[10.5px] text-slate-500 font-medium">Distribusi sampel diuji per bulan (Aman
+                                vs Tidak Aman)</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="chart-tren-bulanan" class="h-60 flex items-center justify-center">
+                    <div class="loader opacity-50"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabel Temuan Komoditi Tidak Aman (Sesuai Gambar 4: Header Merah Warna 6 #dc3545) -->
+        <section class="bg-white rounded-xl shadow-xs border border-slate-100 overflow-hidden mb-6"
+            id="section-tabel-tidak-aman">
+            <div
+                class="p-3.5 sm:p-4 border-b border-slate-100 bg-red-50/40 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                <div class="flex items-center gap-2.5">
+                    <div class="p-1.5 rounded-lg bg-[#dc3545] text-white shadow-2xs">
+                        <i data-lucide="alert-octagon" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h3 class="font-bold text-slate-800 text-sm">Tabel Temuan Komoditi Tidak Aman</h3>
+                            <span id="badge-count-tidak-aman"
+                                class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-red-100 text-[#dc3545] border border-red-200">
+                                0 Data
+                            </span>
+                        </div>
+                        <p class="text-[10.5px] text-slate-500">Daftar komoditi terindikasi residu pestisida melebihi
+                            batas aman</p>
+                    </div>
+                </div>
+                <div class="text-[11px] font-semibold text-[#dc3545] flex items-center gap-1.5">
+                    <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i>
+                    <span>Tindak lanjut pembinaan & surveilans</span>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead style="background-color: #dc3545;"
+                        class="text-white font-bold uppercase tracking-wider text-[10.5px]">
+                        <tr>
+                            <th class="py-2.5 px-3.5 w-10 text-center">No</th>
+                            <th class="py-2.5 px-3.5">Tanggal</th>
+                            <th class="py-2.5 px-3.5">Asal Sampel</th>
+                            <th class="py-2.5 px-3.5">Kategori</th>
+                            <th class="py-2.5 px-3.5">Komoditi</th>
+                            <th class="py-2.5 px-3.5 text-center">Hasil</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-tidak-aman-body"
+                        class="divide-y divide-red-100 text-slate-700 font-medium text-xs">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Data Table Section: Direktori Lengkap Pengujian PSAT (Persis format FSVA) -->
+        <section class="bg-white rounded-xl shadow-xs border border-slate-100 overflow-hidden">
+            <!-- Table Header & Controls -->
+            <div class="p-3.5 sm:p-4 border-b border-slate-100 bg-slate-50/50">
+                <div class="flex flex-col lg:flex-row justify-between gap-3">
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-sm sm:text-base">Direktori Pengujian PSAT</h3>
+                        <p class="text-[11px] text-slate-500" id="table-summary-count">Daftar lengkap hasil rapid test
+                            residu pestisida.</p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row items-center gap-2">
+                        <!-- Search Input -->
+                        <div class="relative w-full sm:w-60">
+                            <div
+                                class="absolute inset-y-0 left-0 flex items-center pl-2.5 pointer-events-none text-slate-400">
+                                <i data-lucide="search" class="w-3.5 h-3.5"></i>
+                            </div>
+                            <input type="text" id="filter-search" oninput="applyFilters()"
+                                class="bg-white border border-slate-200 text-slate-700 text-xs rounded-lg focus:ring-[#117a8b] focus:border-[#117a8b] block w-full pl-8 py-2 shadow-2xs font-medium"
+                                placeholder="Cari komoditi atau lokasi...">
+                        </div>
+
+                        <!-- Per Page Picker -->
+                        <select id="table-per-page" onchange="changePerPage(this.value)"
+                            class="bg-white border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2.5 py-2 focus:ring-[#117a8b] focus:border-[#117a8b] shadow-2xs">
+                            <option value="10">10 baris</option>
+                            <option value="25" selected>25 baris</option>
+                            <option value="50">50 baris</option>
+                            <option value="100">100 baris</option>
+                        </select>
+
+                        <!-- Export Button -->
+                        <button onclick="exportToExcel()"
+                            class="px-3 py-2 bg-[#2e8a57] hover:bg-[#257248] text-white text-xs font-bold rounded-lg shadow-2xs transition flex items-center gap-1.5 active:scale-95 shrink-0">
+                            <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5"></i>
+                            <span>Excel</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Body -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead
+                        class="bg-slate-50 text-slate-600 font-bold uppercase tracking-wider text-[10.5px] border-b border-slate-200/70">
+                        <tr>
+                            <th class="py-2.5 px-3.5 text-center w-10">No</th>
+                            <th class="py-2.5 px-3.5">Waktu Pengambilan</th>
+                            <th class="py-2.5 px-3.5">Komoditi</th>
+                            <th class="py-2.5 px-3.5">Kategori</th>
+                            <th class="py-2.5 px-3.5">Asal Sampel</th>
+                            <th class="py-2.5 px-3.5 text-center">Status Hasil Uji</th>
+                            <th class="py-2.5 px-3.5 text-center w-16">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body" class="divide-y divide-slate-100 text-slate-700 font-medium text-xs">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Table Footer & Pagination -->
+            <div
+                class="p-3 border-t border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row items-center justify-between gap-2.5 text-xs">
+                <div class="text-slate-500 font-medium text-[11px]" id="pagination-info">
+                    Halaman 1 dari 1
+                </div>
+                <div class="flex items-center gap-1" id="pagination-controls">
+                    <!-- Pagination buttons -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal Detail Sampel -->
+    <div id="detail-modal"
+        class="fixed inset-0 z-[2000] hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+        <div
+            class="bg-white rounded-2xl max-w-lg w-full shadow-2xl border border-slate-100 overflow-hidden transform transition-all animate-fade-in">
+            <div
+                class="p-4 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-slate-50 to-white">
+                <div class="flex items-center gap-2.5">
+                    <div id="modal-status-icon"
+                        class="w-7 h-7 rounded-lg flex items-center justify-center text-white bg-[#117a8b]">
+                        <i data-lucide="shield-check" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold text-slate-900" id="modal-title">Detail Sampel PSAT</h4>
+                        <p class="text-[10px] text-slate-500" id="modal-subtitle">Informasi lengkap hasil uji pengawasan
+                        </p>
+                    </div>
+                </div>
+                <button onclick="closeModal()"
+                    class="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <div class="p-4 space-y-3 text-xs" id="modal-content">
+                <!-- Dynamically filled -->
+            </div>
+
+            <div class="p-3 bg-slate-50 border-t border-slate-100 flex justify-end">
+                <button onclick="closeModal()"
+                    class="px-3.5 py-1.5 text-xs font-bold text-white bg-[#117a8b] hover:bg-[#0a4b57] rounded-lg transition">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200/80 py-5 text-center text-xs text-slate-500 mt-auto">
+        <div class="container mx-auto max-w-7xl px-4">
+            <p class="font-bold text-slate-700 mb-0.5 text-xs">Dinas Ketahanan Pangan dan Perikanan (DISPAKAN)
+                Pemerintah Kabupaten Bandung</p>
+            <p class="text-[11px]">Data Sumber: API Keamanan Pangan PSAT (Rapid Test Residu Pestisida) &bull; Sistem
+                Informasi Pangan dan Perikanan</p>
+        </div>
+    </footer>
+
+    <!-- Application Script -->
+    <script>
+        // API Endpoint
+        const API_URL = 'https://api.bandungkab.go.id/api/bnba/keamanan-pangan-psat?per_page=1000';
+
+        // GeoJSON URLs
+        const batasKecamatanUrl = 'https://gist.githubusercontent.com/infomugi/b7f82ebe72e1a1830da958ea267e87a5/raw/ebe0bbccca2aaff18521e245c33a4a62d38bd455/gistfile1.txt';
+        const batasDesaUrl = 'https://gist.githubusercontent.com/infomugi/4576f539c1dc958f6ed7ede7cca8976e/raw/694baf71e0db935f26e40b1621db61bf91ff9092/gistfile1.txt';
+
+        // Precomputed accurate coordinates for all 60 sampling locations across Kab. Bandung
+        const PRECOMPUTED_LOCATIONS = {
+            "SPPG Bandung Banjaran Neglasari": [-7.0862, 107.6081],
+            "SPPG Bandung Banjaran Margahurip 3": [-7.0766, 107.5957],
+            "Pasar Ciwidey": [-7.0938, 107.4491],
+            "SPPG Bandung Pamengpeuk Bojongkunci 3": [-7.0213, 107.5899],
+            "SPPG Bandung Pamengpeuk Bojongkunci": [-7.0183, 107.5916],
+            "SPPG Bandung Soreang Soreang 3": [-7.0384, 107.5312],
+            "SPPG Bandung Kutawaringin": [-6.9910, 107.5044],
+            "SPPG Bandung Banjaran Ciapus 2": [-7.0738, 107.5886],
+            "SPPG Bandung Banjaran Ciapus": [-7.0721, 107.5920],
+            "SPPG Bandung Cangkuang Ciluncat": [-7.0413, 107.5418],
+            "SPPG Bandung Cangkuang Tanjungsari": [-7.0548, 107.5537],
+            "Pasar Baleendah": [-7.0179, 107.6314],
+            "Pasar Segar Kopo": [-6.9813, 107.5502],
+            "Pasar Margahayu": [-6.9760, 107.5808],
+            "SPPG Bandung Ciwidey Lebakmuncang 4": [-7.0967, 107.4450],
+            "SPPG Bandung Ciwidey Lebakmuncang 1": [-7.1060, 107.4486],
+            "SPPG Bandung Kutawaringin Jelegong 2": [-6.9802, 107.5279],
+            "SPPG Bandung Kutawaringin Jelegong": [-6.9819, 107.5196],
+            "Pasar Banjaran": [-7.0570, 107.5964],
+            "Pasar Soreang": [-7.0332, 107.5306],
+            "SPPG Bandung Katapang Sangkanhurip 4": [-7.0030, 107.5659],
+            "SPPG Bandung Katapang Gandasari": [-7.0037, 107.5510],
+            "SPPG Bandung Katapang Gandasari 2": [-6.9993, 107.5377],
+            "Central Strawberry Rancabali": [-7.1895, 107.3477],
+            "AR Fresh Rancabali": [-7.1751, 107.3466],
+            "SPPG Bandung Banjaran Kamasan": [-7.0524, 107.5844],
+            "SPPG Bandung Banjaran Tarajusari": [-7.0544, 107.5982],
+            "Pasar Desa Wisata Pangalengan": [-7.1867, 107.5795],
+            "Pasar Majalaya": [-7.0460, 107.7555],
+            "SPPG Bandung Cangkuang 3": [-7.0678, 107.5526],
+            "SPPG Bandung Soreang 4": [-7.0328, 107.5224],
+            "SPPG Bandung Pasirjambu Cibodas 2": [-7.1496, 107.4690],
+            "SPPG Bandung Baleendah Manggahang": [-7.0224, 107.6473],
+            "SPPG Bandung Cimaung Campakamulya": [-7.1006, 107.5639],
+            "Pasar Cileunyi": [-6.9265, 107.7414],
+            "Pasar Cicalengka": [-6.9893, 107.8544],
+            "SPPG Bandung Margahayu Sulaiman 3": [-6.9777, 107.5750],
+            "SPPG Bandung Margahayu Sulaiman 2": [-6.9703, 107.5790],
+            "SPPG Bandung Margahayu Sulaiman 1": [-6.9755, 107.5660],
+            "SPPG Bandung Katapang Sangkanhurip 5": [-7.0080, 107.5773],
+            "SPPG Bandung Soreang Cingcin 5": [-7.0322, 107.5306],
+            "SPPG Bandung Banjaran Kiangroke 3": [-7.0557, 107.5869],
+            "SPPG Bandung Soreang Kramatmulya 2": [-7.0328, 107.5398],
+            "Pasar Sehat Cicalengka": [-6.9926, 107.8519],
+            "SPPG Bandung DayeuhKolot Cangkuang Kulon": [-6.9834, 107.5983],
+            "SPPG Bandung DayeuhKolot DayeuhKolot": [-6.9778, 107.6262],
+            "SPPG Bandung Ciwidey Sukawening 2": [-7.0816, 107.4612],
+            "SPPG Bandung Ciwidey Sukawening 1": [-7.0815, 107.4708],
+            "SPPG Bandung Margaasih Margaasih": [-6.9491, 107.5449],
+            "SPPG Bandung Rancaekek Linggar 2": [-6.9828, 107.7809],
+            "SPPG Bandung Rancaekek Linggar": [-6.9718, 107.7896],
+            "SPPG Bandung Rancaekek Rancaekek Wetan 4": [-6.9673, 107.7461],
+            "SPPG Bandung Rancaekek Rancaekek Wetan 3": [-6.9711, 107.7599],
+            "SPPG Bandung Pangalengan Sukamanah 3": [-7.1906, 107.5688],
+            "SPPG Bandung Pangalengan Sukamanah 1": [-7.1929, 107.5622],
+            "SPPG Padasuka": [-6.8849, 107.6715],
+            "SPPG Kutawaringin": [-6.9978, 107.5045],
+            "SPPG Bandung Cimaung Malasari": [-7.0919, 107.5579],
+            "SPPG Bandung Cimaung Cipinang": [-7.0945, 107.5675],
+            "SPPG Bandung Cimaung Cimaung": [-7.1095, 107.5669]
+        };
+
+        // State Store
+        let rawData = [];
+        let filteredData = [];
+        let currentPage = 1;
+        let perPage = 25;
+
+        // Leaflet Map & Layer State
+        let mapInstance = null;
+        let kecamatanLayer = null;
+        let markersLayerGroup = null;
+        let kecamatanLabelGroup = null;
+        let cachedKecGeoData = null;
+        let cachedDesaGeoData = null;
+        let locationCoordsMap = {};
+
+        // ApexCharts Instances
+        let chartKeamanan = null;
+        let chartKategoriRasio = null;
+        let chartKomoditi = null;
+        let chartTrenBulanan = null;
+
+        const NAMA_BULAN = [
+            '', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+            'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+        ];
+
+        // Central Bandung coordinate (Centered for zoomed-out atlas view)
+        const BANDUNG_CENTER = [-7.025253, 107.56];
+
+        // Spaced labels matching screenshot
+        const PROMINENT_KEC_LABELS = [
+            'CILENGKRANG', 'CILEUNYI', 'CIKANCUNG', 'PASEH', 'IBUN',
+            'PACET', 'CIMAUNG', 'BANJARAN', 'PASIRJAMBU', 'RANCABALI',
+            'PANGALENGAN', 'KERTASARI'
+        ];
+
+        // --- 1. INITIALIZE LEAFLET MAP ---
+        function initLeafletMap() {
+            if (mapInstance) return;
+
+            // Initialize with zoomed-out level 9.7 so entire Kab. Bandung is visible
+            mapInstance = L.map('psat-map', {
+                center: BANDUNG_CENTER,
+                zoom: 9.7,
+                zoomControl: true,
+                attributionControl: false
+            });
+
+            // Clean dark basemap (Zero watermark, high performance)
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+                maxZoom: 18
+            }).addTo(mapInstance);
+
+            markersLayerGroup = L.layerGroup().addTo(mapInstance);
+            kecamatanLabelGroup = L.layerGroup().addTo(mapInstance);
+
+            loadGeoBoundaries();
+        }
+
+        function resetMapView() {
+            if (mapInstance && kecamatanLayer) {
+                mapInstance.fitBounds(kecamatanLayer.getBounds(), { padding: [35, 35], maxZoom: 10 });
+            } else if (mapInstance) {
+                mapInstance.setView(BANDUNG_CENTER, 9.7);
+            }
+        }
+
+        function calculateGeometryCenter(coords) {
+            let pts = [];
+            function extract(arr) {
+                if (typeof arr[0] === 'number') pts.push(arr);
+                else arr.forEach(extract);
+            }
+            extract(coords);
+            let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+            pts.forEach(([x, y]) => {
+                if (x < minX) minX = x; if (x > maxX) maxX = x;
+                if (y < minY) minY = y; if (y > maxY) maxY = y;
+            });
+            return [(minY + maxY) / 2, (minX + maxX) / 2];
+        }
+
+        function getActiveKecamatanSet() {
+            const activeSet = new Set();
+            filteredData.forEach(item => {
+                const asal = (item.detail?.asal_sampel || '').toLowerCase();
+                for (const kec of PROMINENT_KEC_LABELS) {
+                    if (asal.includes(kec.toLowerCase())) {
+                        activeSet.add(kec.toLowerCase());
+                    }
+                }
+            });
+            return activeSet;
+        }
+
+        async function loadGeoBoundaries() {
+            const mapLoading = document.getElementById('map-loading');
+            try {
+                if (!cachedKecGeoData) {
+                    try {
+                        const resKec = await fetch(batasKecamatanUrl);
+                        if (resKec.ok) cachedKecGeoData = await resKec.json();
+                    } catch (e) {
+                        console.warn("Batas kecamatan remote fetch failed, trying local fallback:", e);
+                    }
+                    if (!cachedKecGeoData) {
+                        const localResKec = await fetch('bandung_kecamatan.geojson');
+                        if (localResKec.ok) cachedKecGeoData = await localResKec.json();
+                    }
+                }
+
+                if (!cachedDesaGeoData) {
+                    try {
+                        const resDesa = await fetch(batasDesaUrl);
+                        if (resDesa.ok) cachedDesaGeoData = await resDesa.json();
+                    } catch (e) {
+                        console.warn("Batas desa remote fetch failed, trying local fallback:", e);
+                    }
+                    if (!cachedDesaGeoData) {
+                        const localResDesa = await fetch('bandung_desa.geojson');
+                        if (localResDesa.ok) cachedDesaGeoData = await localResDesa.json();
+                    }
+                }
+
+                if (cachedKecGeoData && !kecamatanLayer) {
+                    renderKecamatanPolygons();
+                }
+
+                buildLocationCoordinatesMap();
+                updateMapMarkers();
+
+            } catch (err) {
+                console.error("Gagal memuat batas wilayah peta:", err);
+            } finally {
+                if (mapLoading) {
+                    mapLoading.classList.add('opacity-0');
+                    setTimeout(() => mapLoading.classList.add('hidden'), 300);
+                }
+            }
+        }
+
+        function renderKecamatanPolygons() {
+            if (!cachedKecGeoData || !mapInstance) return;
+
+            if (kecamatanLayer) {
+                mapInstance.removeLayer(kecamatanLayer);
+            }
+            kecamatanLabelGroup.clearLayers();
+
+            const activeSet = getActiveKecamatanSet();
+
+            kecamatanLayer = L.geoJSON(cachedKecGeoData, {
+                style: function (feature) {
+                    const props = feature.properties || {};
+                    const k = (props.KECAMATAN || props.kecamatan || '').toLowerCase();
+                    const isActive = activeSet.has(k);
+
+                    return {
+                        fillColor: isActive ? '#00b493' : '#c5ded7',
+                        fillOpacity: 0.92,
+                        color: '#1e293b',
+                        weight: 1.2,
+                        opacity: 0.85
+                    };
+                },
+                onEachFeature: function (feature, layer) {
+                    const props = feature.properties || {};
+                    const rawKecName = (props.KECAMATAN || props.kecamatan || '').toUpperCase();
+
+                    if (PROMINENT_KEC_LABELS.includes(rawKecName)) {
+                        const center = layer.getBounds().getCenter();
+                        const labelIcon = L.divIcon({
+                            className: 'kec-label-wrapper',
+                            html: `<div class="kecamatan-label-pill">${escapeHtml(rawKecName)}</div>`,
+                            iconSize: [75, 18],
+                            iconAnchor: [37, 9]
+                        });
+                        L.marker(center, { icon: labelIcon, interactive: false }).addTo(kecamatanLabelGroup);
+                    }
+
+                    layer.on({
+                        mouseover: function (e) {
+                            e.target.setStyle({
+                                weight: 2.2,
+                                color: '#ffffff',
+                                fillOpacity: 1
+                            });
+                        },
+                        mouseout: function (e) {
+                            kecamatanLayer.resetStyle(e.target);
+                        }
+                    });
+                }
+            }).addTo(mapInstance);
+
+            // Zoomed out fitBounds so it doesn't zoom in too close
+            mapInstance.fitBounds(kecamatanLayer.getBounds(), { padding: [35, 35], maxZoom: 10 });
+        }
+
+        function buildLocationCoordinatesMap() {
+            locationCoordsMap = { ...PRECOMPUTED_LOCATIONS, ...locationCoordsMap };
+
+            const desaLookup = {};
+            if (cachedDesaGeoData && cachedDesaGeoData.features) {
+                cachedDesaGeoData.features.forEach(f => {
+                    const d = (f.properties?.DESA || f.properties?.desa || '').toLowerCase();
+                    const k = (f.properties?.KECAMATAN || f.properties?.kecamatan || '').toLowerCase();
+                    const center = calculateGeometryCenter(f.geometry.coordinates);
+                    if (d) desaLookup[`${k}_${d}`] = center;
+                    if (d && !desaLookup[d]) desaLookup[d] = center;
+                });
+            }
+
+            const kecLookup = {};
+            if (cachedKecGeoData && cachedKecGeoData.features) {
+                cachedKecGeoData.features.forEach(f => {
+                    const k = (f.properties?.KECAMATAN || f.properties?.kecamatan || '').toLowerCase();
+                    const center = calculateGeometryCenter(f.geometry.coordinates);
+                    if (k) kecLookup[k] = center;
+                });
+            }
+
+            const allAsal = new Set(rawData.map(i => (i.detail?.asal_sampel || '').trim()).filter(Boolean));
+            allAsal.forEach(asal => {
+                if (locationCoordsMap[asal]) return;
+
+                const clean = asal.toLowerCase();
+                let foundCoord = null;
+
+                for (const [key, coord] of Object.entries(desaLookup)) {
+                    const parts = key.split('_');
+                    const dName = parts[1] || parts[0];
+                    if (dName.length > 3 && clean.includes(dName)) {
+                        foundCoord = coord;
+                        break;
+                    }
+                }
+
+                if (!foundCoord) {
+                    for (const [kName, coord] of Object.entries(kecLookup)) {
+                        if (clean.includes(kName)) {
+                            foundCoord = coord;
+                            break;
+                        }
+                    }
+                }
+
+                if (foundCoord) {
+                    const jitterLat = (Math.random() - 0.5) * 0.007;
+                    const jitterLng = (Math.random() - 0.5) * 0.007;
+                    locationCoordsMap[asal] = [foundCoord[0] + jitterLat, foundCoord[1] + jitterLng];
+                } else {
+                    locationCoordsMap[asal] = [BANDUNG_CENTER[0] + (Math.random() - 0.5) * 0.035, BANDUNG_CENTER[1] + (Math.random() - 0.5) * 0.035];
+                }
+            });
+        }
+
+        function updateMapMarkers() {
+            if (!mapInstance || !markersLayerGroup) return;
+
+            markersLayerGroup.clearLayers();
+
+            if (kecamatanLayer) {
+                const activeSet = getActiveKecamatanSet();
+                kecamatanLayer.setStyle(function (feature) {
+                    const props = feature.properties || {};
+                    const k = (props.KECAMATAN || props.kecamatan || '').toLowerCase();
+                    const isActive = activeSet.has(k);
+                    return {
+                        fillColor: isActive ? '#00b493' : '#c5ded7',
+                        fillOpacity: 0.92,
+                        color: '#1e293b',
+                        weight: 1.2,
+                        opacity: 0.85
+                    };
+                });
+            }
+
+            const locationStats = {};
+            filteredData.forEach(item => {
+                const d = item.detail || {};
+                const asal = d.asal_sampel || 'Tidak Diketahui';
+                if (!locationStats[asal]) {
+                    locationStats[asal] = {
+                        asal: asal,
+                        kategori: d.kategori || 'Umum',
+                        total: 0,
+                        aman: 0,
+                        tidakAman: 0,
+                        komoditiList: new Set(),
+                        samples: []
+                    };
+                }
+                locationStats[asal].total++;
+                const hasil = (d.hasil || '').toLowerCase();
+                if (hasil.includes('tidak aman')) locationStats[asal].tidakAman++;
+                else locationStats[asal].aman++;
+                if (d.komoditi) locationStats[asal].komoditiList.add(d.komoditi);
+                locationStats[asal].samples.push(item);
+            });
+
+            const uniqueLocations = Object.values(locationStats);
+
+            // Update Map Sidebar Counters
+            const sideStatTitik = document.getElementById('side-stat-titik');
+            const sideStatTitikList = document.getElementById('side-stat-titik-list');
+            const sideStatAman = document.getElementById('side-stat-aman');
+            const sideStatTidakAman = document.getElementById('side-stat-tidak-aman');
+            const sideStatKecamatan = document.getElementById('side-stat-kecamatan');
+
+            let totalAman = 0;
+            let totalTidakAman = 0;
+            uniqueLocations.forEach(loc => {
+                totalAman += loc.aman;
+                totalTidakAman += loc.tidakAman;
+            });
+
+            if (sideStatTitik) sideStatTitik.innerText = uniqueLocations.length;
+            if (sideStatTitikList) sideStatTitikList.innerText = uniqueLocations.length;
+            if (sideStatAman) sideStatAman.innerText = totalAman;
+            if (sideStatTidakAman) sideStatTidakAman.innerText = totalTidakAman;
+            if (sideStatKecamatan) sideStatKecamatan.innerText = getActiveKecamatanSet().size;
+
+            uniqueLocations.forEach(loc => {
+                const coord = locationCoordsMap[loc.asal] || PRECOMPUTED_LOCATIONS[loc.asal] || BANDUNG_CENTER;
+                const hasKritis = loc.tidakAman > 0;
+
+                const pinHtml = `
+                    <div class="psat-pin-circle" title="${escapeHtml(loc.asal)}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/>
+                        </svg>
+                    </div>
+                `;
+
+                const customIcon = L.divIcon({
+                    className: 'psat-pin-marker',
+                    html: pinHtml,
+                    iconSize: [24, 24],
+                    iconAnchor: [12, 12]
+                });
+
+                const komoditiArray = Array.from(loc.komoditiList).slice(0, 5);
+                const komoditiText = komoditiArray.join(', ') + (loc.komoditiList.size > 5 ? ' dll.' : '');
+
+                const popupHtml = `
+                    <div class="p-3 min-w-[220px] font-sans">
+                        <div class="flex items-center justify-between pb-1 mb-1 border-b border-slate-100">
+                            <span class="px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-[#117a8b]/10 text-[#117a8b] uppercase">
+                                ${escapeHtml(loc.kategori)}
+                            </span>
+                            <span class="text-[9.5px] font-bold ${hasKritis ? 'text-[#dc3545]' : 'text-[#2e8a57]'}">
+                                ${hasKritis ? '⚠️ Ada Temuan Kritis' : '✓ Semua Aman'}
+                            </span>
+                        </div>
+                        <h4 class="font-bold text-slate-900 text-xs mb-1 leading-snug">${escapeHtml(loc.asal)}</h4>
+                        <div class="grid grid-cols-2 gap-1.5 my-1.5 py-1.5 bg-slate-50 rounded-lg text-center text-xs">
+                            <div>
+                                <span class="text-slate-400 text-[9.5px] block">Total Diuji</span>
+                                <span class="font-extrabold text-slate-800">${loc.total} Sampel</span>
+                            </div>
+                            <div>
+                                <span class="text-slate-400 text-[9.5px] block">Status Aman</span>
+                                <span class="font-extrabold text-[#2e8a57]">${loc.aman} (${((loc.aman / loc.total) * 100).toFixed(0)}%)</span>
+                            </div>
+                        </div>
+                        <div class="text-[10.5px] text-slate-500 mb-2">
+                            <span class="font-semibold text-slate-700">Komoditi:</span> ${escapeHtml(komoditiText || '-')}
+                        </div>
+                        <button onclick="filterByLocation('${escapeHtml(loc.asal)}')"
+                            class="w-full py-1 px-2.5 bg-[#117a8b] hover:bg-[#0a4b57] text-white text-[11px] font-bold rounded-md transition text-center shadow-xs">
+                            Filter Lokasi Ini
+                        </button>
+                    </div>
+                `;
+
+                const marker = L.marker(coord, { icon: customIcon });
+                marker.bindPopup(popupHtml);
+                markersLayerGroup.addLayer(marker);
+            });
+
+            const currentAsalFilter = document.getElementById('filter-asal-sampel').value;
+            if (currentAsalFilter !== 'all' && locationCoordsMap[currentAsalFilter]) {
+                mapInstance.flyTo(locationCoordsMap[currentAsalFilter], 13, { duration: 1 });
+            }
+        }
+
+        function filterByLocation(asal) {
+            document.getElementById('filter-asal-sampel').value = asal;
+            applyFilters();
+        }
+
+        // --- 2. FETCH DATA FROM API ---
+        async function fetchData() {
+            const loadingScreen = document.getElementById('loading-screen');
+            const loadingBar = document.getElementById('loading-bar-inner');
+            const loadingPct = document.getElementById('loading-pct');
+            const loadingText = document.getElementById('loading-text');
+
+            if (loadingScreen) {
+                loadingScreen.classList.remove('hidden', 'opacity-0');
+                loadingBar.style.width = '30%';
+                loadingPct.innerText = '30%';
+                loadingText.innerText = 'Menghubungkan ke API Kabupaten Bandung...';
+            }
+
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+
+                loadingBar.style.width = '70%';
+                loadingPct.innerText = '70%';
+                loadingText.innerText = 'Memproses data sampel PSAT...';
+
+                const result = await response.json();
+
+                if (result && Array.isArray(result.data)) {
+                    rawData = result.data;
+                    initFilters();
+                    buildLocationCoordinatesMap();
+                    applyFilters();
+
+                    loadingBar.style.width = '100%';
+                    loadingPct.innerText = '100%';
+                    loadingText.innerText = 'Selesai!';
+
+                    setTimeout(() => {
+                        if (loadingScreen) {
+                            loadingScreen.classList.add('opacity-0');
+                            setTimeout(() => loadingScreen.classList.add('hidden'), 500);
+                        }
+                        if (mapInstance) {
+                            mapInstance.invalidateSize();
+                            if (kecamatanLayer) {
+                                mapInstance.fitBounds(kecamatanLayer.getBounds(), { padding: [35, 35], maxZoom: 10 });
+                            } else {
+                                mapInstance.setView(BANDUNG_CENTER, 9.7);
+                            }
+                        }
+                    }, 400);
+                } else {
+                    throw new Error('Format data API tidak sesuai');
+                }
+            } catch (err) {
+                console.error('Fetch error:', err);
+                if (loadingText) {
+                    loadingText.innerText = 'Gagal memuat data API. Silakan periksa koneksi internet.';
+                    loadingText.classList.add('text-red-500');
+                }
+            }
+        }
+
+        function syncNavFilter(type, val) {
+            if (type === 'bulan') {
+                ['nav-filter-bulan', 'mobile-filter-bulan', 'filter-bulan'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = val;
+                });
+            } else if (type === 'tahun') {
+                ['nav-filter-tahun', 'mobile-filter-tahun', 'filter-tahun'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = val;
+                });
+            } else if (type === 'asal') {
+                ['nav-filter-asal-sampel', 'mobile-filter-asal-sampel', 'filter-asal-sampel'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = val;
+                });
+            }
+            applyFilters();
+        }
+
+        function initFilters() {
+            // Set current date in navbar
+            const dateEl = document.getElementById('current-date');
+            if (dateEl) {
+                const now = new Date();
+                dateEl.innerText = now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+            }
+
+            const tahunSet = new Set();
+            const asalSet = new Set();
+
+            rawData.forEach(item => {
+                const d = item.detail || {};
+                if (d.tahun) tahunSet.add(d.tahun);
+                if (d.asal_sampel) asalSet.add(d.asal_sampel.trim());
+            });
+
+            const sortedTahun = Array.from(tahunSet).sort((a, b) => b - a);
+            const sortedAsal = Array.from(asalSet).sort();
+
+            ['nav-filter-tahun', 'mobile-filter-tahun', 'filter-tahun'].forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.innerHTML = '<option value="all">Semua Tahun</option>';
+                sortedTahun.forEach(t => {
+                    const opt = document.createElement('option');
+                    opt.value = t;
+                    opt.innerText = t;
+                    el.appendChild(opt);
+                });
+            });
+
+            ['nav-filter-asal-sampel', 'mobile-filter-asal-sampel', 'filter-asal-sampel'].forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.innerHTML = '<option value="all">Semua Asal Sampel</option>';
+                sortedAsal.forEach(asal => {
+                    const opt = document.createElement('option');
+                    opt.value = asal;
+                    opt.innerText = asal;
+                    el.appendChild(opt);
+                });
+            });
+        }
+
+        function applyFilters() {
+            const filterBulan = (document.getElementById('nav-filter-bulan') || document.getElementById('filter-bulan'))?.value || 'all';
+            const filterTahun = (document.getElementById('nav-filter-tahun') || document.getElementById('filter-tahun'))?.value || 'all';
+            const filterAsal = (document.getElementById('nav-filter-asal-sampel') || document.getElementById('filter-asal-sampel'))?.value || 'all';
+            const searchQuery = document.getElementById('filter-search')?.value.toLowerCase().trim() || '';
+
+            filteredData = rawData.filter(item => {
+                const d = item.detail || {};
+
+                if (filterBulan !== 'all' && String(d.bulan) !== String(filterBulan)) return false;
+                if (filterTahun !== 'all' && String(d.tahun) !== String(filterTahun)) return false;
+                if (filterAsal !== 'all' && (d.asal_sampel || '').trim() !== filterAsal) return false;
+
+                if (searchQuery) {
+                    const matchText = [
+                        d.nomor, d.komoditi, d.asal_sampel, d.kategori, d.waktu_pengambilan_sampel, d.hasil
+                    ].join(' ').toLowerCase();
+                    if (!matchText.includes(searchQuery)) return false;
+                }
+
+                return true;
+            });
+
+            let filterLabelParts = [];
+            if (filterBulan !== 'all') filterLabelParts.push(`Bulan: ${NAMA_BULAN[parseInt(filterBulan)]}`);
+            if (filterTahun !== 'all') filterLabelParts.push(`Tahun: ${filterTahun}`);
+            if (filterAsal !== 'all') filterLabelParts.push(`Asal: ${filterAsal}`);
+            if (searchQuery) filterLabelParts.push(`Pencarian: "${searchQuery}"`);
+
+            const activeFilterLabel = document.getElementById('active-filter-label');
+            if (activeFilterLabel) {
+                activeFilterLabel.innerText = filterLabelParts.length > 0 ? filterLabelParts.join(' | ') : 'Semua Data';
+            }
+
+            currentPage = 1;
+
+            updateKPIs();
+            renderCharts();
+            renderTidakAmanTable();
+            renderMainTable();
+            updateMapMarkers();
+        }
+
+        function resetFilters() {
+            syncNavFilter('bulan', 'all');
+            syncNavFilter('tahun', 'all');
+            syncNavFilter('asal', 'all');
+            const searchInput = document.getElementById('filter-search');
+            if (searchInput) searchInput.value = '';
+
+            applyFilters();
+            resetMapView();
+        }
+
+        // --- 3. UPDATE KPI CARDS ---
+        function updateKPIs() {
+            const total = filteredData.length;
+            let aman = 0;
+            let tidakAman = 0;
+            const lokasiSet = new Set();
+
+            filteredData.forEach(item => {
+                const d = item.detail || {};
+                const hasil = (d.hasil || '').toLowerCase();
+                if (hasil.includes('tidak aman')) tidakAman++;
+                else if (hasil.includes('aman')) aman++;
+
+                if (d.asal_sampel) lokasiSet.add(d.asal_sampel.trim());
+            });
+
+            const pctAman = total > 0 ? ((aman / total) * 100).toFixed(1) : 0;
+            const pctTidakAman = total > 0 ? ((tidakAman / total) * 100).toFixed(1) : 0;
+
+            document.getElementById('stat-total-sampel').innerText = `${total.toLocaleString('id-ID')} Sampel`;
+            document.getElementById('stat-aman').innerText = `${aman.toLocaleString('id-ID')} Sampel (${pctAman}%)`;
+            document.getElementById('stat-tidak-aman').innerText = `${tidakAman.toLocaleString('id-ID')} Sampel (${pctTidakAman}%)`;
+            document.getElementById('stat-cakupan-lokasi').innerText = `${lokasiSet.size} Titik Lokasi`;
+        }
+
+        // --- 4. RENDER CHARTS (APEXCHARTS - Compact Heights & Proportions) ---
+        function renderCharts() {
+            // Chart 1: Donut Rasio Keamanan Sampel (Gambar 2: Warna 5 #2e8a57, Warna 6 #dc3545)
+            let amanCount = 0;
+            let tidakAmanCount = 0;
+            filteredData.forEach(item => {
+                const h = (item.detail?.hasil || '').toLowerCase();
+                if (h.includes('tidak aman')) tidakAmanCount++;
+                else if (h.includes('aman')) amanCount++;
+            });
+
+            const keamananOptions = {
+                series: [amanCount, tidakAmanCount],
+                labels: ['Aman', 'Tidak Aman'],
+                chart: {
+                    type: 'donut',
+                    height: 240,
+                    fontFamily: 'Plus Jakarta Sans, sans-serif'
+                },
+                colors: ['#2e8a57', '#dc3545'], // Warna 5 & 6
+                plotOptions: {
+                    pie: {
+                        donut: {
+                            size: '66%',
+                            labels: {
+                                show: true,
+                                name: { show: true, fontSize: '11px', fontWeight: 600, color: '#64748b' },
+                                value: {
+                                    show: true,
+                                    fontSize: '17px',
+                                    fontWeight: 800,
+                                    color: '#1d2d35',
+                                    formatter: val => val + ' Sampel'
+                                },
+                                total: {
+                                    show: true,
+                                    label: 'Total',
+                                    fontSize: '11px',
+                                    fontWeight: 700,
+                                    color: '#0a4b57',
+                                    formatter: () => (amanCount + tidakAmanCount) + ' Sampel'
+                                }
+                            }
+                        }
+                    }
+                },
+                dataLabels: { enabled: false },
+                legend: { position: 'bottom', horizontalAlign: 'center', fontWeight: 600, fontSize: '11px', itemMargin: { horizontal: 8, vertical: 0 } },
+                stroke: { width: 2, colors: ['#fff'] },
+                tooltip: {
+                    y: {
+                        formatter: val => {
+                            const tot = amanCount + tidakAmanCount;
+                            const pct = tot > 0 ? ((val / tot) * 100).toFixed(1) : 0;
+                            return `${val} Sampel (${pct}%)`;
+                        }
+                    }
+                }
+            };
+
+            if (chartKeamanan) chartKeamanan.destroy();
+            chartKeamanan = new ApexCharts(document.querySelector("#chart-keamanan"), keamananOptions);
+            chartKeamanan.render();
+
+            // Chart 2: Grouped Horizontal Bar - Rasio Keamanan per Kategori (Gambar 3 - Urutan: Pasar, Pelaku Usaha, SPPG)
+            const kategoriOrder = ['Pasar', 'Pelaku Usaha', 'SPPG'];
+            const katStats = {
+                'Pasar': { aman: 0, tidakAman: 0 },
+                'Pelaku Usaha': { aman: 0, tidakAman: 0 },
+                'SPPG': { aman: 0, tidakAman: 0 }
+            };
+
+            filteredData.forEach(item => {
+                const d = item.detail || {};
+                const k = (d.kategori || '').trim();
+                let matchedKategori = 'SPPG';
+                if (k.toLowerCase().includes('pasar')) matchedKategori = 'Pasar';
+                else if (k.toLowerCase().includes('usaha')) matchedKategori = 'Pelaku Usaha';
+
+                const h = (d.hasil || '').toLowerCase();
+                if (h.includes('tidak aman')) katStats[matchedKategori].tidakAman++;
+                else katStats[matchedKategori].aman++;
+            });
+
+            const kategoriRasioOptions = {
+                series: [
+                    {
+                        name: 'Aman',
+                        data: [katStats['Pasar'].aman, katStats['Pelaku Usaha'].aman, katStats['SPPG'].aman]
+                    },
+                    {
+                        name: 'Tidak Aman',
+                        data: [katStats['Pasar'].tidakAman, katStats['Pelaku Usaha'].tidakAman, katStats['SPPG'].tidakAman]
+                    }
+                ],
+                chart: {
+                    type: 'bar',
+                    height: 240,
+                    toolbar: { show: false },
+                    fontFamily: 'Plus Jakarta Sans, sans-serif'
+                },
+                plotOptions: {
+                    bar: {
+                        horizontal: true,
+                        barHeight: '48%',
+                        borderRadius: 4,
+                        dataLabels: { position: 'top' }
+                    }
+                },
+                colors: ['#2e8a57', '#dc3545'], // Warna 5 & 6
+                dataLabels: {
+                    enabled: true,
+                    offsetX: 14,
+                    style: { fontSize: '9px', fontWeight: 700, colors: ['#1d2d35'] }
+                },
+                xaxis: {
+                    categories: kategoriOrder,
+                    labels: { style: { fontSize: '10px', fontWeight: 600 } }
+                },
+                yaxis: {
+                    labels: { style: { fontSize: '10px', fontWeight: 600 } }
+                },
+                legend: { position: 'top', horizontalAlign: 'right', fontWeight: 600, fontSize: '10.5px' },
+                grid: { borderColor: '#f1f5f9' },
+                tooltip: {
+                    shared: true,
+                    intersect: false,
+                    y: { formatter: val => val + ' Sampel' }
+                }
+            };
+
+            if (chartKategoriRasio) chartKategoriRasio.destroy();
+            chartKategoriRasio = new ApexCharts(document.querySelector("#chart-kategori-rasio"), kategoriRasioOptions);
+            chartKategoriRasio.render();
+
+            // Chart 3: 10 Komoditi Paling Banyak Diuji (Gambar 3 - Horizontal Bar)
+            const komoditiMap = {};
+            filteredData.forEach(item => {
+                const c = (item.detail?.komoditi || 'Lainnya').trim();
+                komoditiMap[c] = (komoditiMap[c] || 0) + 1;
+            });
+
+            const sortedKomoditi = Object.entries(komoditiMap)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 10);
+
+            const komoditiLabels = sortedKomoditi.map(s => s[0]);
+            const komoditiValues = sortedKomoditi.map(s => s[1]);
+
+            const komoditiOptions = {
+                series: [{ name: 'Total Sampel', data: komoditiValues }],
+                chart: {
+                    type: 'bar',
+                    height: 240,
+                    toolbar: { show: false },
+                    fontFamily: 'Plus Jakarta Sans, sans-serif'
+                },
+                plotOptions: {
+                    bar: {
+                        horizontal: true,
+                        borderRadius: 4,
+                        barHeight: '46%',
+                        distributed: true
+                    }
+                },
+                colors: ['#117a8b', '#13899c', '#1899ae', '#1ea9c0', '#25bad3', '#39c4db', '#4dbdaf', '#62c6b9', '#78cfc4', '#8fd9cf'],
+                dataLabels: {
+                    enabled: true,
+                    formatter: val => val + ' sampel',
+                    style: { fontSize: '9px', fontWeight: 700 }
+                },
+                xaxis: {
+                    categories: komoditiLabels,
+                    labels: { style: { fontSize: '9px', fontWeight: 600 } }
+                },
+                yaxis: {
+                    labels: { style: { fontSize: '9.5px', fontWeight: 600 } }
+                },
+                legend: { show: false },
+                grid: { borderColor: '#f1f5f9' },
+                tooltip: {
+                    y: { formatter: val => val + ' Sampel' }
+                }
+            };
+
+            if (chartKomoditi) chartKomoditi.destroy();
+            chartKomoditi = new ApexCharts(document.querySelector("#chart-komoditi"), komoditiOptions);
+            chartKomoditi.render();
+
+            // Chart 4: Tren Bulanan (Stacked Bar)
+            const bulanMap = {};
+            for (let i = 1; i <= 12; i++) {
+                bulanMap[i] = { aman: 0, tidakAman: 0 };
+            }
+            filteredData.forEach(item => {
+                const d = item.detail || {};
+                const b = parseInt(d.bulan);
+                if (b >= 1 && b <= 12) {
+                    const h = (d.hasil || '').toLowerCase();
+                    if (h.includes('tidak aman')) bulanMap[b].tidakAman++;
+                    else bulanMap[b].aman++;
+                }
+            });
+
+            const activeMonthIndices = [];
+            for (let i = 1; i <= 12; i++) {
+                if (bulanMap[i].aman > 0 || bulanMap[i].tidakAman > 0) {
+                    activeMonthIndices.push(i);
+                }
+            }
+            const displayMonths = activeMonthIndices.length > 0 ? activeMonthIndices : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+            const categoriesBulan = displayMonths.map(b => NAMA_BULAN[b]);
+            const seriesAman = displayMonths.map(b => bulanMap[b].aman);
+            const seriesTidakAman = displayMonths.map(b => bulanMap[b].tidakAman);
+
+            const trenOptions = {
+                series: [
+                    { name: 'Aman', data: seriesAman },
+                    { name: 'Tidak Aman', data: seriesTidakAman }
+                ],
+                chart: {
+                    type: 'bar',
+                    height: 240,
+                    stacked: true,
+                    toolbar: { show: false },
+                    fontFamily: 'Plus Jakarta Sans, sans-serif'
+                },
+                colors: ['#2e8a57', '#dc3545'],
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        columnWidth: '38%',
+                        borderRadius: 4
+                    }
+                },
+                dataLabels: {
+                    enabled: true,
+                    style: { fontSize: '8.5px', fontWeight: 700 }
+                },
+                xaxis: {
+                    categories: categoriesBulan,
+                    labels: { style: { fontSize: '9.5px', fontWeight: 600 } }
+                },
+                yaxis: {
+                    labels: { style: { fontSize: '9.5px', fontWeight: 600 } }
+                },
+                legend: { position: 'top', horizontalAlign: 'right', fontWeight: 600, fontSize: '10.5px' },
+                grid: { borderColor: '#f1f5f9' },
+                tooltip: {
+                    shared: true,
+                    intersect: false,
+                    y: { formatter: val => val + ' Sampel' }
+                }
+            };
+
+            if (chartTrenBulanan) chartTrenBulanan.destroy();
+            chartTrenBulanan = new ApexCharts(document.querySelector("#chart-tren-bulanan"), trenOptions);
+            chartTrenBulanan.render();
+        }
+
+        // --- 5. RENDER TABEL TEMUAN KOMODITI TIDAK AMAN (Sesuai Gambar 4) ---
+        function renderTidakAmanTable() {
+            const tableBody = document.getElementById('table-tidak-aman-body');
+            const badgeCount = document.getElementById('badge-count-tidak-aman');
+
+            const tidakAmanList = filteredData.filter(item => {
+                const hasil = (item.detail?.hasil || '').toLowerCase();
+                return hasil.includes('tidak aman');
+            });
+
+            badgeCount.innerText = `${tidakAmanList.length} Temuan`;
+
+            if (tidakAmanList.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="py-6 text-center text-slate-400 italic bg-white">
+                            <div class="flex flex-col items-center justify-center gap-1.5 text-slate-400">
+                                <i data-lucide="shield-check" class="w-6 h-6 text-[#2e8a57]"></i>
+                                <span class="text-xs font-semibold text-slate-600">Tidak ada temuan komoditi tidak aman pada filter yang dipilih.</span>
+                                <span class="text-[10.5px]">Semua sampel teruji memenuhi standar mutu keamanan pangan.</span>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            tableBody.innerHTML = tidakAmanList.map((item, index) => {
+                const d = item.detail || {};
+                const tgl = d.waktu_pengambilan_sampel || `${d.bulan || '-'}/${d.tahun || '-'}`;
+                return `
+                    <tr class="hover:bg-red-50/60 transition-colors bg-white">
+                        <td class="py-2.5 px-3.5 text-center font-bold text-slate-500">${index + 1}</td>
+                        <td class="py-2.5 px-3.5 font-semibold text-slate-800 whitespace-nowrap">${escapeHtml(tgl)}</td>
+                        <td class="py-2.5 px-3.5 font-bold text-slate-900">${escapeHtml(d.asal_sampel || '-')}</td>
+                        <td class="py-2.5 px-3.5">
+                            <span class="inline-flex px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700">
+                                ${escapeHtml(d.kategori || '-')}
+                            </span>
+                        </td>
+                        <td class="py-2.5 px-3.5 font-bold text-slate-800">${escapeHtml(d.komoditi || '-')}</td>
+                        <td class="py-2.5 px-3.5 text-center">
+                            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-[#dc3545] text-white shadow-2xs">
+                                <i data-lucide="alert-triangle" class="w-2.5 h-2.5"></i>
+                                ${escapeHtml(d.hasil || 'Tidak Aman')}
+                            </span>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        // --- 6. RENDER DIREKTORI PENGUJIAN PSAT TABLE (Full Table + Pagination) ---
+        function renderMainTable() {
+            const tableBody = document.getElementById('table-body');
+            const summaryCount = document.getElementById('table-summary-count');
+            const paginationInfo = document.getElementById('pagination-info');
+            const paginationControls = document.getElementById('pagination-controls');
+
+            const total = filteredData.length;
+            summaryCount.innerText = `Menampilkan ${total.toLocaleString('id-ID')} riwayat hasil pengujian cepat residu pestisida.`;
+
+            if (total === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="py-8 text-center text-slate-400 italic">
+                            Tidak ada data pengujian yang sesuai dengan filter yang dipilih.
+                        </td>
+                    </tr>
+                `;
+                paginationInfo.innerText = '0 data';
+                paginationControls.innerHTML = '';
+                return;
+            }
+
+            const totalPages = Math.ceil(total / perPage);
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            const startIndex = (currentPage - 1) * perPage;
+            const endIndex = Math.min(startIndex + perPage, total);
+            const pageData = filteredData.slice(startIndex, endIndex);
+
+            tableBody.innerHTML = pageData.map((item, i) => {
+                const d = item.detail || {};
+                const globalIndex = startIndex + i + 1;
+                const isAman = (d.hasil || '').toLowerCase().includes('aman') && !(d.hasil || '').toLowerCase().includes('tidak');
+
+                return `
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="py-2 px-3 text-center text-slate-400 font-medium">${globalIndex}</td>
+                        <td class="py-2 px-3 whitespace-nowrap text-slate-700">${escapeHtml(d.waktu_pengambilan_sampel || '-')}</td>
+                        <td class="py-2 px-3 font-bold text-slate-900">${escapeHtml(d.komoditi || '-')}</td>
+                        <td class="py-2 px-3">
+                            <span class="inline-flex px-1.5 py-0.5 rounded text-[9.5px] font-semibold bg-slate-100 text-slate-700">
+                                ${escapeHtml(d.kategori || '-')}
+                            </span>
+                        </td>
+                        <td class="py-2 px-3 text-slate-700">${escapeHtml(d.asal_sampel || '-')}</td>
+                        <td class="py-2 px-3 text-center whitespace-nowrap">
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${isAman ? 'bg-[#2e8a57]/10 text-[#2e8a57] border border-[#2e8a57]/20' : 'bg-[#dc3545]/10 text-[#dc3545] border border-[#dc3545]/20'
+                    }">
+                                <span class="w-1.5 h-1.5 rounded-full ${isAman ? 'bg-[#2e8a57]' : 'bg-[#dc3545]'}"></span>
+                                ${escapeHtml(d.hasil || '-')}
+                            </span>
+                        </td>
+                        <td class="py-2 px-3 text-center">
+                            <button onclick="showDetail(${startIndex + i})"
+                                class="p-1 rounded-lg text-slate-500 hover:text-[#117a8b] hover:bg-[#117a8b]/10 transition" title="Lihat Detail">
+                                <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            paginationInfo.innerText = `Menampilkan ${startIndex + 1} - ${endIndex} dari ${total.toLocaleString('id-ID')} data (Hal ${currentPage}/${totalPages})`;
+
+            let buttonsHtml = '';
+            buttonsHtml += `
+                <button onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}
+                    class="px-2 py-1 rounded border border-slate-200 text-slate-600 hover:bg-slate-100 disabled:opacity-30 disabled:pointer-events-none text-xs">
+                    Prev
+                </button>
+            `;
+
+            let startPage = Math.max(1, currentPage - 2);
+            let endPage = Math.min(totalPages, currentPage + 2);
+
+            for (let p = startPage; p <= endPage; p++) {
+                buttonsHtml += `
+                    <button onclick="goToPage(${p})"
+                        class="px-2.5 py-1 rounded text-xs font-semibold ${p === currentPage ? 'bg-[#117a8b] text-white' : 'border border-slate-200 text-slate-700 hover:bg-slate-50'
+                    }">
+                        ${p}
+                    </button>
+                `;
+            }
+
+            buttonsHtml += `
+                <button onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}
+                    class="px-2 py-1 rounded border border-slate-200 text-slate-600 hover:bg-slate-100 disabled:opacity-30 disabled:pointer-events-none text-xs">
+                    Next
+                </button>
+            `;
+
+            paginationControls.innerHTML = buttonsHtml;
+            lucide.createIcons();
+        }
+
+        function goToPage(page) {
+            currentPage = page;
+            renderMainTable();
+        }
+
+        function changePerPage(val) {
+            perPage = parseInt(val);
+            currentPage = 1;
+            renderMainTable();
+        }
+
+        // --- 7. MODAL DETAIL ---
+        function showDetail(index) {
+            const item = filteredData[index];
+            if (!item) return;
+
+            const d = item.detail || {};
+            const isAman = (d.hasil || '').toLowerCase().includes('aman') && !(d.hasil || '').toLowerCase().includes('tidak');
+
+            document.getElementById('modal-title').innerText = d.komoditi || 'Detail Sampel';
+            document.getElementById('modal-subtitle').innerText = `Nomor Sampel: ${d.nomor || '-'}`;
+
+            const iconContainer = document.getElementById('modal-status-icon');
+            iconContainer.className = `w-7 h-7 rounded-lg flex items-center justify-center text-white ${isAman ? 'bg-[#2e8a57]' : 'bg-[#dc3545]'}`;
+            iconContainer.innerHTML = `<i data-lucide="${isAman ? 'shield-check' : 'alert-triangle'}" class="w-4 h-4"></i>`;
+
+            const contentHtml = `
+                <div class="grid grid-cols-2 gap-2.5">
+                    <div class="p-2 rounded-lg bg-slate-50 border border-slate-100">
+                        <span class="text-slate-400 text-[10px] block font-semibold">Hasil Pengujian</span>
+                        <span class="font-extrabold ${isAman ? 'text-[#2e8a57]' : 'text-[#dc3545]'} text-xs">
+                            ${escapeHtml(d.hasil || '-')}
+                        </span>
+                    </div>
+                    <div class="p-2 rounded-lg bg-slate-50 border border-slate-100">
+                        <span class="text-slate-400 text-[10px] block font-semibold">Kategori</span>
+                        <span class="font-bold text-slate-800 text-xs">${escapeHtml(d.kategori || '-')}</span>
+                    </div>
+                </div>
+                <div class="space-y-1.5 pt-1 text-xs">
+                    <div class="flex justify-between py-1 border-b border-slate-100">
+                        <span class="text-slate-500">Komoditi:</span>
+                        <span class="font-bold text-slate-800">${escapeHtml(d.komoditi || '-')}</span>
+                    </div>
+                    <div class="flex justify-between py-1 border-b border-slate-100">
+                        <span class="text-slate-500">Asal Sampel / Lokasi:</span>
+                        <span class="font-bold text-slate-800">${escapeHtml(d.asal_sampel || '-')}</span>
+                    </div>
+                    <div class="flex justify-between py-1 border-b border-slate-100">
+                        <span class="text-slate-500">Waktu Pengambilan:</span>
+                        <span class="font-bold text-slate-800">${escapeHtml(d.waktu_pengambilan_sampel || '-')}</span>
+                    </div>
+                    <div class="flex justify-between py-1 border-b border-slate-100">
+                        <span class="text-slate-500">Bulan / Tahun:</span>
+                        <span class="font-bold text-slate-800">${NAMA_BULAN[parseInt(d.bulan)] || d.bulan || '-'} ${d.tahun || '-'}</span>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('modal-content').innerHTML = contentHtml;
+            document.getElementById('detail-modal').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeModal() {
+            document.getElementById('detail-modal').classList.add('hidden');
+        }
+
+        // --- 8. EXCEL EXPORT ---
+        function exportToExcel() {
+            if (filteredData.length === 0) {
+                alert('Tidak ada data yang dapat diekspor.');
+                return;
+            }
+
+            const exportRows = filteredData.map((item, idx) => {
+                const d = item.detail || {};
+                return {
+                    'No': idx + 1,
+                    'Nomor Sampel': d.nomor || '',
+                    'Waktu Pengambilan': d.waktu_pengambilan_sampel || '',
+                    'Bulan': d.bulan || '',
+                    'Tahun': d.tahun || '',
+                    'Komoditi': d.komoditi || '',
+                    'Kategori': d.kategori || '',
+                    'Asal Sampel': d.asal_sampel || '',
+                    'Hasil Uji': d.hasil || ''
+                };
+            });
+
+            const worksheet = XLSX.utils.json_to_sheet(exportRows);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Keamanan PSAT");
+
+            const dateStr = new Date().toISOString().slice(0, 10);
+            XLSX.writeFile(workbook, `Data_Keamanan_PSAT_Kab_Bandung_${dateStr}.xlsx`);
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        // --- DOM Ready Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            initLeafletMap();
+            fetchData();
+        });
+    </script>
+</body>
+
+</html>
