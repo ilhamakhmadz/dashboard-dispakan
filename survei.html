@@ -39,6 +39,21 @@
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
 
+        <!-- Leaflet CSS & JS for PPH Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <style>
+        .pph-map-popup .leaflet-popup-content-wrapper {
+            border-radius: 14px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            padding: 0;
+            overflow: hidden;
+        }
+        .pph-map-popup .leaflet-popup-content {
+            margin: 0;
+            line-height: 1.4;
+        }
+    </style>
     <!-- Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -485,6 +500,82 @@
             </div>
         </section>
 
+        <!-- ========================================== -->
+        <!-- SECTION: PETA SKOR PPH KECAMATAN           -->
+        <!-- ========================================== -->
+        <div class="glass-panel mb-8" style="padding: 1.5rem;">
+            <!-- Header Card (Sesuai Referensi UI Screenshot) -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 pb-3 border-b border-slate-100">
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="px-2.5 py-0.5 rounded-md text-[10px] font-extrabold uppercase tracking-wider bg-[#117a8b]/10 text-[#117a8b]">
+                            Survey
+                        </span>
+                        <span class="text-xs text-slate-300">•</span>
+                        <span class="text-xs font-semibold text-slate-500">Pola Pangan Harapan</span>
+                    </div>
+                    <h3 class="font-extrabold text-slate-800 text-lg sm:text-xl flex items-center gap-2">
+                        <span class="bg-[#117a8b]/10 p-1.5 rounded-lg text-[#117a8b]">
+                            <i data-lucide="map" class="w-5 h-5"></i>
+                        </span>
+                        Skor PPH Kecamatan
+                    </h3>
+                    <p class="text-xs text-slate-500 mt-1">
+                        Peta sebaran capaian Skor Pola Pangan Harapan (PPH) Konsumsi per Kecamatan di Kabupaten Bandung berdasarkan hasil Survei.
+                    </p>
+                </div>
+
+                <!-- Filter Tahun di Sisi Kanan (Sesuai Screenshot: Tahun *) -->
+                <div class="flex items-center gap-3">
+                    <div class="relative min-w-[130px] sm:min-w-[150px]">
+                        <label for="map-filter-tahun" class="block text-[11px] font-bold text-slate-600 mb-1">
+                            Tahun <span class="text-rose-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <select id="map-filter-tahun" onchange="syncMapYear(this.value)"
+                                class="w-full bg-white border border-slate-200 text-slate-700 text-xs sm:text-sm font-semibold rounded-xl pl-3.5 pr-8 py-2 focus:ring-2 focus:ring-[#117a8b] focus:border-[#117a8b] cursor-pointer appearance-none shadow-xs transition hover:border-[#117a8b]/40">
+                                <option value="2023" selected>2023</option>
+                                <option value="2024">2024</option>
+                                <option value="2025">2025</option>
+                            </select>
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
+                                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="button" onclick="resetMapPphView()"
+                        class="self-end mb-0.5 p-2 bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-[#117a8b] rounded-xl transition shadow-xs"
+                        title="Pusatkan Kembali Tampilan Peta">
+                        <i data-lucide="maximize-2" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Kontainer Peta & Floating Legend -->
+            <div class="relative w-full rounded-2xl overflow-hidden border border-slate-200 shadow-inner bg-white">
+                <!-- Map Leaflet Canvas -->
+                <div id="map-pph-kecamatan" class="w-full h-[520px] sm:h-[600px] lg:h-[640px] z-10 bg-white">
+                    <div class="w-full h-full flex flex-col items-center justify-center bg-slate-50 text-slate-400">
+                        <div class="loader mb-2"></div>
+                        <span class="text-xs font-semibold">Memuat batas peta & data survei PPH...</span>
+                    </div>
+                </div>
+
+                <!-- Custom Floating Legend (Sesuai Screenshot: di sisi kiri bawah) -->
+                <div id="map-pph-legend"
+                    class="absolute bottom-5 left-5 z-[500] bg-white/95 backdrop-blur-md p-3.5 sm:p-4 rounded-xl border border-slate-200/90 shadow-lg text-slate-700 text-xs font-medium space-y-2 pointer-events-auto min-w-[160px] sm:min-w-[180px]">
+                    <div class="text-[11px] font-extrabold uppercase tracking-wider text-slate-500 mb-2 border-b border-slate-100 pb-1.5 flex items-center justify-between">
+                        <span>Legenda Skor PPH</span>
+                        <span id="legend-year-badge" class="font-bold text-[#117a8b]">2023</span>
+                    </div>
+                    <div id="legend-items-container" class="space-y-1.5 font-semibold text-xs text-slate-700">
+                        <!-- Item legenda dinamis dibuat oleh JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Main Chart Section: Skor Pola Pangan Harapan (PPH) Konsumsi Kecamatan -->
         <div class="glass-panel mb-8" style="padding: 1.5rem;">
             <div
@@ -766,6 +857,26 @@
 
     <script>
         // --- CONSTANTS & STATE ---
+        // --- GEOJSON BOUNDARIES FOR PPH MAP (REQUEST USER) ---
+        const batasKecamatanUrl = 'https://gist.githubusercontent.com/infomugi/b7f82ebe72e1a1830da958ea267e87a5/raw/ebe0bbccca2aaff18521e245c33a4a62d38bd455/gistfile1.txt';
+        const batasDesaUrl = 'https://gist.githubusercontent.com/infomugi/4576f539c1dc958f6ed7ede7cca8976e/raw/694baf71e0db935f26e40b1621db61bf91ff9092/gistfile1.txt';
+
+        // PPH Leaflet Map State
+        let pphMap = null;
+        let pphGeoJsonLayer = null;
+        let pphDesaLayer = null;
+        let cachedBatasKecamatan = null;
+        let cachedBatasDesa = null;
+
+        // 5-Level Green Gradient Palettes matching Screenshot reference
+        const PPH_MAP_COLORS = [
+            '#edf7ed', // Level 1: Paling terang / off-white mint
+            '#c0ddbe', // Level 2: Hijau muda lembut
+            '#80b979', // Level 3: Hijau medium
+            '#558b4b', // Level 4: Hijau zaitun gelap
+            '#355c26'  // Level 5: Hijau hutan pekat (deep forest green)
+        ];
+
         const API_URL = 'https://api.bandungkab.go.id/api/data/skor-pola-pangan-harapan-pph-konsumsi-per-kecamatan-6bZ0l';
         const API_PERKEMBANGAN_URL = 'https://api.bandungkab.go.id/api/data/perkembangan-skor-pph-konsumsi-syZsr';
         const API_KELOMPOK_PANGAN_URL = 'https://api.bandungkab.go.id/api/bnba/perbandingan-skor-pph-survey--susenas';
@@ -1024,6 +1135,34 @@
                     console.warn("API Kelompok Pangan unavailable, using default dataset:", e);
                 }
 
+                
+                // Fetch GeoJSON Batas Wilayah untuk Peta PPH
+                try {
+                    const geoRes = await fetch(batasKecamatanUrl);
+                    if (geoRes.ok) cachedBatasKecamatan = await geoRes.json();
+                } catch (e) {
+                    console.warn("Gist batasKecamatan fetch failed, trying local fallback:", e);
+                }
+                if (!cachedBatasKecamatan) {
+                    try {
+                        const localRes = await fetch('bandung_kecamatan.geojson');
+                        if (localRes.ok) cachedBatasKecamatan = await localRes.json();
+                    } catch (e) { console.warn("Local bandung_kecamatan fallback failed:", e); }
+                }
+
+                try {
+                    const desaRes = await fetch(batasDesaUrl);
+                    if (desaRes.ok) cachedBatasDesa = await desaRes.json();
+                } catch (e) {
+                    console.warn("Gist batasDesa fetch failed, trying local fallback:", e);
+                }
+                if (!cachedBatasDesa) {
+                    try {
+                        const localDesaRes = await fetch('bandung_desa.geojson');
+                        if (localDesaRes.ok) cachedBatasDesa = await localDesaRes.json();
+                    } catch (e) { console.warn("Local bandung_desa fallback failed:", e); }
+                }
+
                 updateProgress(55, "Mengunduh Data Skor PPH Kecamatan...");
 
                 // 3. Fetch Kecamatan PPH Data
@@ -1205,6 +1344,7 @@
             renderKomparasiChart();
             renderKelompokPanganChart();
             renderCharts();
+            initPphMap();
             renderTable();
             setupEvents();
             lucide.createIcons();
@@ -1230,6 +1370,16 @@
 
             appendOptions(els.filterTahun);
             appendOptions(els.filterTahunMobile);
+
+            const mapYearEl = document.getElementById('map-filter-tahun');
+            if (mapYearEl && yearsArr.length > 0) {
+                mapYearEl.innerHTML = '';
+                yearsArr.forEach(val => {
+                    const opt = new Option(val, val);
+                    if (val === '2023') opt.selected = true;
+                    mapYearEl.appendChild(opt);
+                });
+            }
         }
 
         // --- SUMMARY CARDS (Skor Susenas, Skor Survei, Proyeksi, Gap) ---
@@ -1784,6 +1934,7 @@
             renderSummaryCards();
             renderKelompokPanganChart();
             renderCharts();
+            updatePphMap();
             renderTable();
         }
 
@@ -1898,6 +2049,262 @@
         setDate();
         fetchData();
     </script>
+<script>
+        // --- PPH MAP FUNCTIONS (SESUAI GAMBAR REFERENSI USER) ---
+        function normalizeKecName(str) {
+            return (str || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        }
+
+        function computeBinsForYear(scores, year) {
+            // For 2023, exact bins matching screenshot reference
+            if (year === 2023) {
+                return [
+                    { min: 79.85, max: 81.52, label: '79,85 - 81,52', color: PPH_MAP_COLORS[0] },
+                    { min: 81.53, max: 83.20, label: '82,22 - 83,2', color: PPH_MAP_COLORS[1] },
+                    { min: 83.21, max: 84.00, label: '83,68 - 84', color: PPH_MAP_COLORS[2] },
+                    { min: 84.01, max: 85.93, label: '84,57 - 85,93', color: PPH_MAP_COLORS[3] },
+                    { min: 85.94, max: 999.0, label: '86,5 +', color: PPH_MAP_COLORS[4] }
+                ];
+            }
+
+            // For other years (e.g. 2024, 2025), calculate dynamic quintiles from scores
+            if (!scores || scores.length === 0) {
+                return [
+                    { min: 0, max: 80, label: '< 80', color: PPH_MAP_COLORS[0] },
+                    { min: 80, max: 83, label: '80 - 83', color: PPH_MAP_COLORS[1] },
+                    { min: 83, max: 86, label: '83 - 86', color: PPH_MAP_COLORS[2] },
+                    { min: 86, max: 88, label: '86 - 88', color: PPH_MAP_COLORS[3] },
+                    { min: 88, max: 999, label: '88 +', color: PPH_MAP_COLORS[4] }
+                ];
+            }
+
+            const sorted = [...scores].sort((a, b) => a - b);
+            const n = sorted.length;
+            const q1 = sorted[Math.floor(n * 0.28)];
+            const q2 = sorted[Math.floor(n * 0.48)];
+            const q3 = sorted[Math.floor(n * 0.58)];
+            const q4 = sorted[Math.floor(n * 0.84)];
+
+            const fmt = (v) => Number(v).toLocaleString('id-ID', { minimumFractionDigits: 1, maximumFractionDigits: 2 });
+
+            return [
+                { min: sorted[0], max: q1, label: `${fmt(sorted[0])} - ${fmt(q1)}`, color: PPH_MAP_COLORS[0] },
+                { min: q1 + 0.01, max: q2, label: `${fmt(q1 + 0.01)} - ${fmt(q2)}`, color: PPH_MAP_COLORS[1] },
+                { min: q2 + 0.01, max: q3, label: `${fmt(q2 + 0.01)} - ${fmt(q3)}`, color: PPH_MAP_COLORS[2] },
+                { min: q3 + 0.01, max: q4, label: `${fmt(q3 + 0.01)} - ${fmt(q4)}`, color: PPH_MAP_COLORS[3] },
+                { min: q4 + 0.01, max: 999, label: `${fmt(q4 + 0.01)} +`, color: PPH_MAP_COLORS[4] }
+            ];
+        }
+
+        function getColorForScore(score, bins) {
+            if (score === null || score === undefined || isNaN(score)) return '#e2e8f0';
+            for (let i = 0; i < bins.length; i++) {
+                if (score <= bins[i].max) {
+                    return bins[i].color;
+                }
+            }
+            return bins[bins.length - 1].color;
+        }
+
+        function renderMapLegend(bins, year) {
+            const container = document.getElementById('legend-items-container');
+            const yearBadge = document.getElementById('legend-year-badge');
+            if (yearBadge) yearBadge.innerText = year;
+            if (!container) return;
+
+            container.innerHTML = bins.map(b => `
+                <div class="flex items-center gap-2.5 text-xs text-slate-700 font-semibold">
+                    <span class="w-3.5 h-3.5 rounded-full shrink-0 shadow-2xs border border-black/10" style="background-color: ${b.color};"></span>
+                    <span>${b.label}</span>
+                </div>
+            `).join('');
+        }
+
+        function initPphMap() {
+            const mapContainer = document.getElementById('map-pph-kecamatan');
+            if (!mapContainer || pphMap) return;
+
+            mapContainer.innerHTML = '';
+            pphMap = L.map('map-pph-kecamatan', {
+                center: [-7.025, 107.55],
+                zoom: 10,
+                zoomControl: true,
+                attributionControl: false
+            });
+
+            // Clean light canvas tile layer
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+                maxZoom: 18,
+                opacity: 0.55,
+                attribution: '&copy; Esri'
+            }).addTo(pphMap);
+
+            updatePphMap();
+        }
+
+        function updatePphMap() {
+            if (!pphMap || !cachedBatasKecamatan) return;
+
+            // 1. Tentukan tahun terpilih untuk peta
+            const mapYearSel = document.getElementById('map-filter-tahun');
+            let activeYear = mapYearSel ? parseInt(mapYearSel.value) || 2023 : 2023;
+
+            // Sinkronkan dropdown tahun peta jika tersedia
+            if (mapYearSel && els.filterTahun && els.filterTahun.value !== 'all') {
+                const currentDashYear = parseInt(els.filterTahun.value);
+                if (currentDashYear && [2023, 2024, 2025].includes(currentDashYear)) {
+                    mapYearSel.value = String(currentDashYear);
+                    activeYear = currentDashYear;
+                }
+            }
+
+            // 2. Ambil data skor kecamatan untuk tahun ini
+            const yearItems = rawData.filter(d => {
+                const yr = d.detail?.tahun;
+                return yr == activeYear;
+            });
+
+            const dataMap = {};
+            const scoreList = [];
+            yearItems.forEach(item => {
+                const d = item.detail || {};
+                const normName = normalizeKecName(d.nama_kecamatan);
+                const val = parseFloat(d.total);
+                if (!isNaN(val)) {
+                    dataMap[normName] = { item: item, skor: val, rawName: d.nama_kecamatan };
+                    scoreList.push(val);
+                }
+            });
+
+            // 3. Hitung interval 5 level gradasi warna dan tampilkan legenda
+            const bins = computeBinsForYear(scoreList, activeYear);
+            renderMapLegend(bins, activeYear);
+
+            // 4. Bersihkan layer poligon sebelumnya
+            if (pphDesaLayer) {
+                pphMap.removeLayer(pphDesaLayer);
+                pphDesaLayer = null;
+            }
+            if (pphGeoJsonLayer) {
+                pphMap.removeLayer(pphGeoJsonLayer);
+                pphGeoJsonLayer = null;
+            }
+
+            // 5. Tambahkan garis batas desa (subtle white interior borders)
+            if (cachedBatasDesa) {
+                pphDesaLayer = L.geoJSON(cachedBatasDesa, {
+                    style: {
+                        color: '#ffffff',
+                        weight: 0.75,
+                        opacity: 0.45,
+                        fillColor: 'transparent',
+                        fillOpacity: 0
+                    },
+                    interactive: false
+                }).addTo(pphMap);
+            }
+
+            // 6. Tambahkan batas kecamatan dengan choropleth gradient
+            pphGeoJsonLayer = L.geoJSON(cachedBatasKecamatan, {
+                style: function (feature) {
+                    const rawName = feature.properties.KECAMATAN || '';
+                    const normName = normalizeKecName(rawName);
+                    const data = dataMap[normName];
+                    const score = data ? data.skor : null;
+                    const color = getColorForScore(score, bins);
+
+                    return {
+                        fillColor: color,
+                        weight: 1.5,
+                        opacity: 1,
+                        color: '#ffffff',
+                        dashArray: '',
+                        fillOpacity: 0.94
+                    };
+                },
+                onEachFeature: function (feature, layer) {
+                    const rawName = feature.properties.KECAMATAN || '';
+                    const normName = normalizeKecName(rawName);
+                    const data = dataMap[normName];
+                    const score = data ? data.skor : 0;
+                    const cat = getKategoriData(score);
+
+                    layer.on({
+                        mouseover: function (e) {
+                            const l = e.target;
+                            l.setStyle({
+                                weight: 2.8,
+                                color: '#117a8b',
+                                fillOpacity: 1
+                            });
+                            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                                l.bringToFront();
+                            }
+                        },
+                        mouseout: function (e) {
+                            pphGeoJsonLayer.resetStyle(e.target);
+                        }
+                    });
+
+                    const scoreFormatted = Number(score).toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+                    const popupHtml = `
+                        <div class="p-3 text-left font-sans min-w-[210px]">
+                            <div class="flex items-center justify-between gap-2 mb-2 pb-2 border-b border-slate-100">
+                                <h4 class="font-extrabold text-slate-800 text-sm">Kec. ${rawName}</h4>
+                                <span class="${cat.bgClass} px-2.5 py-0.5 rounded-full text-[11px] font-bold border">${cat.label}</span>
+                            </div>
+                            <div class="space-y-1.5 text-xs text-slate-600 mb-3">
+                                <div class="flex justify-between">
+                                    <span class="text-slate-400">Tahun:</span>
+                                    <span class="font-bold text-slate-700">${activeYear}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-slate-400">Skor PPH:</span>
+                                    <span class="font-black text-slate-900 text-sm" style="color: ${cat.hex};">${scoreFormatted}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-slate-400">Kategori Mutu:</span>
+                                    <span class="font-semibold text-slate-700">${cat.label}</span>
+                                </div>
+                            </div>
+                            ${data?.item ? `
+                                <button onclick="openDetail(${data.item.id})" class="w-full py-1.5 px-3 bg-[#117a8b] hover:bg-[#0a4b57] text-white rounded-lg text-xs font-bold transition shadow-xs flex items-center justify-center gap-1.5">
+                                    <i data-lucide="info" class="w-3.5 h-3.5"></i> Detail Kecamatan
+                                </button>
+                            ` : ''}
+                        </div>
+                    `;
+                    layer.bindPopup(popupHtml, { className: 'pph-map-popup' });
+                    layer.on('popupopen', () => { if (window.lucide) lucide.createIcons(); });
+                }
+            }).addTo(pphMap);
+
+            // Fit map to layer bounds
+            try {
+                pphMap.fitBounds(pphGeoJsonLayer.getBounds(), { padding: [15, 15] });
+            } catch (e) {
+                console.warn(e);
+            }
+        }
+
+        function syncMapYear(val) {
+            // Also sync dashboard global filter if option exists
+            if (els.filterTahun && Array.from(els.filterTahun.options).some(o => o.value === String(val))) {
+                els.filterTahun.value = String(val);
+                if (els.filterTahunMobile) els.filterTahunMobile.value = String(val);
+                filterData('map');
+            } else {
+                updatePphMap();
+            }
+        }
+
+        function resetMapPphView() {
+            if (pphMap && pphGeoJsonLayer) {
+                pphMap.fitBounds(pphGeoJsonLayer.getBounds(), { padding: [15, 15] });
+            }
+        }
+</script>
 </body>
 
 </html>
