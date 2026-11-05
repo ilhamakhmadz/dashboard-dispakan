@@ -200,43 +200,15 @@
                 </div>
 
                 <!-- Desktop Filters (Center) -->
-                <div class="hidden lg:flex flex-1 mx-4 gap-2 items-center justify-center max-w-4xl">
+                <div class="hidden lg:flex flex-1 mx-4 gap-2 items-center justify-center max-w-xs">
                     <!-- Filter Tahun -->
-                    <div class="relative group w-1/4">
+                    <div class="relative group w-full">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <i data-lucide="calendar" class="w-4 h-4 text-slate-500"></i>
                         </div>
                         <select id="nav-filter-tahun"
                             class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-xl focus:ring-[#117a8b] focus:border-[#117a8b] block pl-10 p-2.5 cursor-pointer font-medium appearance-none hover:bg-white transition-colors">
                             <option value="all">Semua Tahun</option>
-                        </select>
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                            <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
-                        </div>
-                    </div>
-
-                    <!-- Filter Kecamatan -->
-                    <div class="relative group w-1/3">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <i data-lucide="map-pin" class="w-4 h-4 text-slate-500"></i>
-                        </div>
-                        <select id="nav-filter-kecamatan"
-                            class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-xl focus:ring-[#117a8b] focus:border-[#117a8b] block pl-10 p-2.5 cursor-pointer font-medium appearance-none hover:bg-white transition-colors">
-                            <option value="all">Semua Kecamatan</option>
-                        </select>
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                            <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
-                        </div>
-                    </div>
-
-                    <!-- Filter Prioritas -->
-                    <div class="relative group w-1/3">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <i data-lucide="alert-triangle" class="w-4 h-4 text-slate-500"></i>
-                        </div>
-                        <select id="nav-filter-prioritas"
-                            class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-xl focus:ring-[#117a8b] focus:border-[#117a8b] block pl-10 p-2.5 cursor-pointer font-medium appearance-none hover:bg-white transition-colors">
-                            <option value="all">Semua Prioritas</option>
                         </select>
                         <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                             <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
@@ -273,33 +245,16 @@
 
             <!-- Mobile Filter Section -->
             <div class="lg:hidden flex flex-col gap-2 pb-3">
-                <div class="grid grid-cols-2 gap-2">
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <i data-lucide="calendar" class="w-4 h-4 text-slate-500"></i>
-                        </div>
-                        <select id="mobile-filter-tahun"
-                            class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg pl-10 p-2.5 font-medium appearance-none">
-                            <option value="all">Semua Tahun</option>
-                        </select>
+                <div class="relative w-full">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <i data-lucide="calendar" class="w-4 h-4 text-slate-500"></i>
                     </div>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <i data-lucide="alert-triangle" class="w-4 h-4 text-slate-500"></i>
-                        </div>
-                        <select id="mobile-filter-prioritas"
-                            class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg pl-10 p-2.5 font-medium appearance-none">
-                            <option value="all">Semua Prioritas</option>
-                        </select>
-                    </div>
-                    <div class="relative col-span-2">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <i data-lucide="map-pin" class="w-4 h-4 text-slate-500"></i>
-                        </div>
-                        <select id="mobile-filter-kecamatan"
-                            class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg pl-10 p-2.5 font-medium appearance-none">
-                            <option value="all">Semua Kecamatan</option>
-                        </select>
+                    <select id="mobile-filter-tahun"
+                        class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg pl-10 p-2.5 font-medium appearance-none">
+                        <option value="all">Semua Tahun</option>
+                    </select>
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
                     </div>
                 </div>
             </div>
@@ -403,53 +358,63 @@
                         <i data-lucide="map" class="w-5 h-5"></i>
                     </div>
                     <div>
-                        <h3 class="font-bold text-slate-800 text-base leading-tight">Peta Kerawanan Pangan</h3>
-                        <p class="text-xs text-slate-500">Peta tematik visualisasi geografis status ketahanan pangan per
-                            desa</p>
+                        <h3 id="map-header-title" class="font-bold text-slate-800 text-base leading-tight">Peta Kerawanan Pangan</h3>
+                        <p id="map-header-desc" class="text-xs text-slate-500">Peta tematik visualisasi geografis status ketahanan pangan per desa</p>
                     </div>
                 </div>
 
-                <!-- Controls: Filter Kecamatan, Desa, dan Tombol Filter/Reset -->
-                <div class="flex flex-wrap items-center gap-2.5">
-                    <div class="relative min-w-[170px]">
-                        <div
-                            class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
-                            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-[#117a8b]"></i>
-                        </div>
-                        <select id="map-filter-kecamatan"
-                            class="w-full bg-white border border-slate-200 text-slate-700 text-xs font-semibold rounded-xl pl-9 pr-8 py-2.5 focus:ring-2 focus:ring-[#117a8b] focus:border-[#117a8b] appearance-none cursor-pointer shadow-2xs hover:bg-slate-50 transition">
-                            <option value="all">Semua Kecamatan</option>
-                        </select>
-                        <div
-                            class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
-                            <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+                <!-- Controls: Filter Dropdown Pilih Maps & Reset -->
+                <div class="flex items-center gap-2.5">
+                    <!-- Dropdown Pilih Maps Sesuai Gambar -->
+                    <div class="relative min-w-[240px] sm:min-w-[280px]" id="map-layer-dropdown-container">
+                        <!-- Dropdown Button -->
+                        <button type="button" id="map-layer-btn"
+                            class="w-full flex items-center justify-between bg-white border border-rose-300 hover:border-rose-400 text-slate-700 text-xs font-semibold rounded-xl px-4 py-2.5 shadow-2xs transition focus:outline-none focus:ring-2 focus:ring-rose-200">
+                            <span id="map-layer-selected-label" class="truncate">Pilih Maps</span>
+                            <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200" id="map-layer-chevron"></i>
+                        </button>
+
+                        <!-- Dropdown Menu Box -->
+                        <div id="map-layer-menu"
+                            class="hidden absolute right-0 mt-1.5 w-full sm:w-[320px] bg-white border border-rose-200 rounded-2xl shadow-xl z-50 p-2.5 space-y-2">
+                            <!-- Search Input -->
+                            <div class="relative">
+                                <input type="text" id="map-layer-search" placeholder="Cari jenis peta..."
+                                    class="w-full bg-slate-50 border border-slate-200 focus:bg-white text-slate-800 text-xs rounded-xl px-3 py-2 focus:outline-none focus:border-rose-400 transition" />
+                            </div>
+                            <!-- Options List -->
+                            <div id="map-layer-options" class="max-h-60 overflow-y-auto space-y-1 text-xs font-medium text-slate-700 custom-scrollbar">
+                                <div class="map-layer-opt px-3 py-2.5 rounded-lg hover:bg-slate-100 cursor-pointer transition flex items-center justify-between bg-slate-100 font-bold text-slate-900" data-value="prio_komp" data-label="Pilih Maps">
+                                    <span>Pilih Maps</span>
+                                </div>
+                                <div class="map-layer-opt px-3 py-2.5 rounded-lg hover:bg-slate-100 cursor-pointer transition flex items-center justify-between" data-value="prio_komp" data-label="Peta Kerawanan Pangan">
+                                    <span>Peta Kerawanan Pangan</span>
+                                </div>
+                                <div class="map-layer-opt px-3 py-2.5 rounded-lg hover:bg-slate-100 cursor-pointer transition flex items-center justify-between" data-value="_plahan" data-label="Peta Aspek Lahan">
+                                    <span>Peta Aspek Lahan</span>
+                                </div>
+                                <div class="map-layer-opt px-3 py-2.5 rounded-lg hover:bg-slate-100 cursor-pointer transition flex items-center justify-between" data-value="_psarana" data-label="Peta Aspek Sarana">
+                                    <span>Peta Aspek Sarana</span>
+                                </div>
+                                <div class="map-layer-opt px-3 py-2.5 rounded-lg hover:bg-slate-100 cursor-pointer transition flex items-center justify-between" data-value="_ptdk_sejah" data-label="Peta Aspek Penduduk Tidak Sejahtera">
+                                    <span>Peta Aspek Penduduk Tidak Sejahtera</span>
+                                </div>
+                                <div class="map-layer-opt px-3 py-2.5 rounded-lg hover:bg-slate-100 cursor-pointer transition flex items-center justify-between" data-value="_pjalan" data-label="Peta Aspek Akses Jalan">
+                                    <span>Peta Aspek Akses Jalan</span>
+                                </div>
+                                <div class="map-layer-opt px-3 py-2.5 rounded-lg hover:bg-slate-100 cursor-pointer transition flex items-center justify-between" data-value="_pnowater" data-label="Peta Aspek Air Bersih">
+                                    <span>Peta Aspek Air Bersih</span>
+                                </div>
+                                <div class="map-layer-opt px-3 py-2.5 rounded-lg hover:bg-slate-100 cursor-pointer transition flex items-center justify-between" data-value="_ptenkes" data-label="Peta Aspek Tenaga Kesehatan">
+                                    <span>Peta Aspek Tenaga Kesehatan</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="relative min-w-[170px]">
-                        <div
-                            class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
-                            <i data-lucide="home" class="w-3.5 h-3.5 text-[#117a8b]"></i>
-                        </div>
-                        <select id="map-filter-desa"
-                            class="w-full bg-white border border-slate-200 text-slate-700 text-xs font-semibold rounded-xl pl-9 pr-8 py-2.5 focus:ring-2 focus:ring-[#117a8b] focus:border-[#117a8b] appearance-none cursor-pointer shadow-2xs hover:bg-slate-50 transition">
-                            <option value="all">Semua Desa/Kelurahan</option>
-                        </select>
-                        <div
-                            class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
-                            <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
-                        </div>
-                    </div>
-
-                    <button id="map-btn-filter"
-                        class="px-4 py-2.5 bg-[#dc3545] hover:bg-[#b02a37] text-white text-xs font-bold rounded-xl shadow-sm transition flex items-center gap-1.5 active:scale-95">
-                        <i data-lucide="filter" class="w-3.5 h-3.5"></i>
-                        <span>Filter</span>
-                    </button>
 
                     <button id="map-btn-reset"
                         class="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-bold rounded-xl transition flex items-center gap-1.5 active:scale-95"
-                        title="Reset tampilan peta ke seluruh wilayah">
+                        title="Reset tampilan peta ke default">
                         <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
                         <span>Reset</span>
                     </button>
@@ -517,13 +482,13 @@
                     <div>
                         <!-- Logo Kabupaten Bandung -->
                         <div class="flex justify-center mb-5">
-                            <img src="https://bandungkab.go.id/uploads/images/logo_bandungkab.png"
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2e/Lambang_Kabupaten_Bandung.png"
                                 alt="Logo Kabupaten Bandung"
                                 class="h-24 object-contain drop-shadow-sm hover:scale-105 transition-transform">
                         </div>
 
                         <div class="text-center mb-5">
-                            <h4 class="text-xs font-black text-slate-800 tracking-wider uppercase leading-tight">
+                            <h4 id="map-sidebar-legend-title" class="text-xs font-black text-slate-800 tracking-wider uppercase leading-tight">
                                 KETERANGAN<br>KERAWANAN PANGAN :
                             </h4>
                             <p class="text-[11px] font-bold text-[#117a8b] mt-2">
@@ -952,6 +917,52 @@
 
         let rawData = [];
         let filteredData = [];
+        let currentMapAspect = 'prio_komp';
+
+        const MAP_ASPECTS = {
+            'prio_komp': {
+                name: 'Kerawanan Pangan',
+                title: 'Peta Kerawanan Pangan',
+                desc: 'Peta tematik visualisasi geografis status ketahanan pangan per desa',
+                legendTitle: 'KETERANGAN<br>KERAWANAN PANGAN :'
+            },
+            '_plahan': {
+                name: 'Aspek Lahan',
+                title: 'Peta Aspek Lahan',
+                desc: 'Peta tematik rasio luas lahan baku pertanian terhadap luas wilayah per desa',
+                legendTitle: 'KETERANGAN<br>ASPEK LAHAN :'
+            },
+            '_psarana': {
+                name: 'Aspek Sarana',
+                title: 'Peta Aspek Sarana',
+                desc: 'Peta tematik rasio sarana prasarana penyedia pangan per desa',
+                legendTitle: 'KETERANGAN<br>ASPEK SARANA :'
+            },
+            '_ptdk_sejah': {
+                name: 'Aspek Penduduk Tidak Sejahtera',
+                title: 'Peta Aspek Penduduk Tidak Sejahtera',
+                desc: 'Peta tematik persentase penduduk tidak sejahtera per desa',
+                legendTitle: 'KETERANGAN<br>PENDUDUK TIDAK SEJAHTERA :'
+            },
+            '_pjalan': {
+                name: 'Aspek Akses Jalan',
+                title: 'Peta Aspek Akses Jalan',
+                desc: 'Peta tematik aksesibilitas jalan per desa',
+                legendTitle: 'KETERANGAN<br>ASPEK AKSES JALAN :'
+            },
+            '_pnowater': {
+                name: 'Aspek Air Bersih',
+                title: 'Peta Aspek Air Bersih',
+                desc: 'Peta tematik persentase rumah tangga tanpa akses air bersih per desa',
+                legendTitle: 'KETERANGAN<br>ASPEK AIR BERSIH :'
+            },
+            '_ptenkes': {
+                name: 'Aspek Tenaga Kesehatan',
+                title: 'Peta Aspek Tenaga Kesehatan',
+                desc: 'Peta tematik rasio ketersediaan tenaga kesehatan per desa',
+                legendTitle: 'KETERANGAN<br>ASPEK TENAGA KESEHATAN :'
+            }
+        };
         let currentPage = 1;
         const itemsPerPage = 10;
 
@@ -961,15 +972,9 @@
             stats: document.getElementById('stats-container'),
             tableBody: document.getElementById('table-body'),
 
-            // Filters Desktop
+            // Filters
             filterTahun: document.getElementById('nav-filter-tahun'),
-            filterKecamatan: document.getElementById('nav-filter-kecamatan'),
-            filterPrioritas: document.getElementById('nav-filter-prioritas'),
-
-            // Filters Mobile
             filterTahunMobile: document.getElementById('mobile-filter-tahun'),
-            filterKecamatanMobile: document.getElementById('mobile-filter-kecamatan'),
-            filterPrioritasMobile: document.getElementById('mobile-filter-prioritas'),
 
             activeFilterLabel: document.getElementById('active-filter-label'),
             search: document.getElementById('search-input'),
@@ -1196,7 +1201,8 @@
                     const gKec = normStr(p.KECAMATAN || p.kecamatan);
                     const d = apiLookup[`${gKec}_${gDesa}`] || apiLookup[gDesa];
 
-                    const fillColor = d ? getPrioColor(d.prio_komp) : '#e2e8f0';
+                    const valPrio = d ? d[currentMapAspect] : null;
+                    const fillColor = valPrio ? getPrioColor(valPrio) : '#e2e8f0';
 
                     return {
                         fillColor: fillColor,
@@ -1235,10 +1241,14 @@
                         }
                     });
 
-                    // Popup (Sesuai Screenshot Persis)
+                    // Popup
                     if (d) {
+                        const aspectInfo = MAP_ASPECTS[currentMapAspect] || MAP_ASPECTS['prio_komp'];
+                        const aspectVal = d[currentMapAspect] || '-';
+                        const isNonDefault = currentMapAspect !== 'prio_komp';
+
                         const popupHtml = `
-                            <div class="p-3.5 min-w-[230px] font-sans">
+                            <div class="p-3.5 min-w-[240px] font-sans">
                                 <table class="w-full text-xs text-slate-700">
                                     <tr class="border-b border-slate-100">
                                         <td class="py-1.5 font-semibold text-slate-500">Kecamatan</td>
@@ -1249,9 +1259,15 @@
                                         <td class="py-1.5 text-right font-bold text-slate-800 uppercase">${d.nama_desa || rawDesa}</td>
                                     </tr>
                                     <tr class="border-b border-slate-100">
-                                        <td class="py-1.5 font-semibold text-slate-500">Prioritas</td>
+                                        <td class="py-1.5 font-semibold text-slate-500">Prioritas Komposit</td>
                                         <td class="py-1.5 text-right font-black text-slate-900 text-sm">${d.prio_komp || '-'}</td>
                                     </tr>
+                                    ${isNonDefault ? `
+                                    <tr class="border-b border-slate-100 bg-[#117a8b]/10">
+                                        <td class="py-1.5 font-bold text-[#117a8b]">${aspectInfo.name}</td>
+                                        <td class="py-1.5 text-right font-black text-[#117a8b] text-sm">Prioritas ${aspectVal}</td>
+                                    </tr>
+                                    ` : ''}
                                     <tr class="border-b border-slate-100">
                                         <td class="py-1.5 font-semibold text-slate-500">Peringkat</td>
                                         <td class="py-1.5 text-right font-bold">${d.peringkat || '-'}</td>
@@ -1310,10 +1326,10 @@
 
             let avgIndeks = totalDesa > 0 ? (totalIndeks / totalDesa) : 0;
 
-            // Update Map Sidebar Legend Counts (Sesuai Screenshot)
+            // Update Map Sidebar Legend Counts berdasarkan currentMapAspect
             let prioCountsMap = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
             filteredData.forEach(item => {
-                let p = Number(item.detail?.prio_komp);
+                let p = Number(item.detail?.[currentMapAspect]);
                 if (p >= 1 && p <= 6) prioCountsMap[p]++;
             });
 
@@ -1325,16 +1341,8 @@
                 if (elPrio) elPrio.textContent = prioCountsMap[i] || 0;
             }
 
+            // Urutan Sesuai Request: total kecamatan - total desa - desa rentan pangan - indeks ketahanan pangan
             const cards = [
-                {
-                    title: 'Total Desa',
-                    val: formatNumber(totalDesa),
-                    sub: 'Wilayah Terdokumentasi',
-                    icon: 'map',
-                    color: 'text-[#117a8b]',
-                    bg: 'bg-[#117a8b]/10',
-                    border: 'border-[#117a8b]/20'
-                },
                 {
                     title: 'Total Kecamatan',
                     val: formatNumber(kecamatanSet.size),
@@ -1343,6 +1351,15 @@
                     color: 'text-[#0a4b57]',
                     bg: 'bg-[#0a4b57]/10',
                     border: 'border-[#0a4b57]/20'
+                },
+                {
+                    title: 'Total Desa',
+                    val: formatNumber(totalDesa),
+                    sub: 'Wilayah Terdokumentasi',
+                    icon: 'home',
+                    color: 'text-[#117a8b]',
+                    bg: 'bg-[#117a8b]/10',
+                    border: 'border-[#117a8b]/20'
                 },
                 {
                     title: 'Desa Rentan Pangan',
@@ -1354,10 +1371,10 @@
                     border: 'border-[#dc3545]/20'
                 },
                 {
-                    title: 'Indeks Komposit Pangan',
-                    val: formatNumber(avgIndeks),
-                    sub: 'IKP',
-                    icon: 'activity',
+                    title: 'Indeks Ketahanan Pangan',
+                    val: `${formatNumber(avgIndeks)} <span class="text-sm font-bold text-slate-500">Skor</span>`,
+                    sub: 'Rata-rata Skor Komposit',
+                    icon: 'award',
                     color: 'text-[#117a8b]',
                     bg: 'bg-[#117a8b]/10',
                     border: 'border-[#117a8b]/20'
@@ -1376,7 +1393,6 @@
                     </div>
                 </div>
             `).join('');
-            lucide.createIcons();
             lucide.createIcons();
         }
 
@@ -1757,80 +1773,62 @@
         // --- FILTER POPULATION ---
         function populateFilters() {
             let tahunSet = new Set();
-            let kecamatanSet = new Set();
-            let prioritasSet = new Set();
-
-            rawData.forEach(i => {
-                const d = i.detail || {};
-                if (d.tahun) tahunSet.add(d.tahun);
-                if (d.nama_kecamatan) kecamatanSet.add(d.nama_kecamatan);
-                if (d.prio_komp) prioritasSet.add(d.prio_komp);
+            rawData.forEach(item => {
+                const t = item.detail?.tahun;
+                if (t) tahunSet.add(t);
             });
 
-            const appendOptions = (elDesktop, elMobile, dataArray, isNumber = false) => {
-                let optionsHtml = elDesktop.querySelector('option').outerHTML;
-                let sortedData = isNumber ? dataArray.sort((a, b) => a - b) : dataArray.sort();
-
-                sortedData.forEach(val => {
-                    optionsHtml += `<option value="${val}">${isNumber ? 'Prioritas ' + val : val}</option>`;
+            const appendOptions = (elDesktop, elMobile, dataArray) => {
+                if (!elDesktop && !elMobile) return;
+                let optionsHtml = '<option value="all">Semua Tahun</option>';
+                dataArray.sort((a, b) => b - a).forEach(val => {
+                    optionsHtml += `<option value="${val}">${val}</option>`;
                 });
 
-                elDesktop.innerHTML = optionsHtml;
-                elMobile.innerHTML = optionsHtml;
+                if (elDesktop) elDesktop.innerHTML = optionsHtml;
+                if (elMobile) elMobile.innerHTML = optionsHtml;
             };
 
-            appendOptions(els.filterTahun, els.filterTahunMobile, Array.from(tahunSet).sort((a, b) => b - a));
-            appendOptions(els.filterKecamatan, els.filterKecamatanMobile, Array.from(kecamatanSet));
-            appendOptions(els.filterPrioritas, els.filterPrioritasMobile, Array.from(prioritasSet), true);
+            appendOptions(els.filterTahun, els.filterTahunMobile, Array.from(tahunSet));
         }
 
         // --- FILTER DATA LOGIC ---
         function filterData(source) {
-            let valTahun, valKecamatan, valPrioritas;
+            let valTahun = 'all';
 
             if (source === 'nav') {
-                valTahun = els.filterTahun.value;
-                valKecamatan = els.filterKecamatan.value;
-                valPrioritas = els.filterPrioritas.value;
-
-                els.filterTahunMobile.value = valTahun;
-                els.filterKecamatanMobile.value = valKecamatan;
-                els.filterPrioritasMobile.value = valPrioritas;
+                valTahun = els.filterTahun ? els.filterTahun.value : 'all';
+                if (els.filterTahunMobile) els.filterTahunMobile.value = valTahun;
             } else if (source === 'mobile') {
-                valTahun = els.filterTahunMobile.value;
-                valKecamatan = els.filterKecamatanMobile.value;
-                valPrioritas = els.filterPrioritasMobile.value;
-
-                els.filterTahun.value = valTahun;
-                els.filterKecamatan.value = valKecamatan;
-                els.filterPrioritas.value = valPrioritas;
+                valTahun = els.filterTahunMobile ? els.filterTahunMobile.value : 'all';
+                if (els.filterTahun) els.filterTahun.value = valTahun;
             } else {
-                valTahun = els.filterTahun.value;
-                valKecamatan = els.filterKecamatan.value;
-                valPrioritas = els.filterPrioritas.value;
+                valTahun = els.filterTahun ? els.filterTahun.value : (els.filterTahunMobile ? els.filterTahunMobile.value : 'all');
             }
 
-            // Update Label
+            // Update Active Filter Label
             let label = [];
-            if (valTahun !== 'all') label.push(`Thn: ${valTahun}`);
-            if (valKecamatan !== 'all') label.push(`Kec: ${valKecamatan}`);
-            if (valPrioritas !== 'all') label.push(`Prio: ${valPrioritas}`);
-            els.activeFilterLabel.textContent = label.length > 0 ? label.join(', ') : 'Semua Data';
+            if (valTahun !== 'all') label.push(`Tahun: ${valTahun}`);
+            if (currentMapAspect !== 'prio_komp') {
+                const aspectInfo = MAP_ASPECTS[currentMapAspect];
+                if (aspectInfo) label.push(aspectInfo.name);
+            }
+            if (els.activeFilterLabel) {
+                els.activeFilterLabel.textContent = label.length > 0 ? label.join(' • ') : 'Semua Data';
+            }
 
-            const term = els.search.value.toLowerCase();
+            const term = els.search ? els.search.value.toLowerCase().trim() : '';
 
             filteredData = rawData.filter(item => {
                 const d = item.detail || {};
                 const matchTahun = valTahun === 'all' || String(d.tahun) === valTahun;
-                const matchKec = valKecamatan === 'all' || d.nama_kecamatan === valKecamatan;
-                const matchPrio = valPrioritas === 'all' || String(d.prio_komp) === valPrioritas;
 
                 const matchSearch = !term ||
                     (d.nama_desa || '').toLowerCase().includes(term) ||
                     (d.nama_kecamatan || '').toLowerCase().includes(term) ||
                     String(d.tahun || '').includes(term);
 
-                return matchTahun && matchKec && matchPrio && matchSearch;
+                return matchTahun && matchSearch;
             });
 
             currentPage = 1;
@@ -1880,115 +1878,131 @@
 
         // --- MAP FILTERS LOGIC ---
         function populateMapFilters() {
-            const elKec = document.getElementById('map-filter-kecamatan');
-            const elDesa = document.getElementById('map-filter-desa');
-            if (!elKec || !elDesa) return;
-
-            let kecSet = new Set();
-            rawData.forEach(item => {
-                const k = item.detail?.nama_kecamatan;
-                if (k) kecSet.add(k);
-            });
-
-            let kecOptions = '<option value="all">Semua Kecamatan</option>';
-            Array.from(kecSet).sort().forEach(k => {
-                kecOptions += `<option value="${k}">${k}</option>`;
-            });
-            elKec.innerHTML = kecOptions;
-
-            updateMapDesaDropdown('all');
-        }
-
-        function updateMapDesaDropdown(selectedKec) {
-            const elDesa = document.getElementById('map-filter-desa');
-            if (!elDesa) return;
-
-            let desaSet = new Set();
-            rawData.forEach(item => {
-                const d = item.detail || {};
-                if (selectedKec === 'all' || d.nama_kecamatan === selectedKec) {
-                    if (d.nama_desa) desaSet.add(d.nama_desa);
-                }
-            });
-
-            let desaOptions = '<option value="all">Semua Desa/Kelurahan</option>';
-            Array.from(desaSet).sort().forEach(d => {
-                desaOptions += `<option value="${d}">${d}</option>`;
-            });
-            elDesa.innerHTML = desaOptions;
+            // Handled via custom map layer dropdown
         }
 
         function setupMapEvents() {
-            const elKec = document.getElementById('map-filter-kecamatan');
-            const elDesa = document.getElementById('map-filter-desa');
-            const btnFilter = document.getElementById('map-btn-filter');
+            const dropdownBtn = document.getElementById('map-layer-btn');
+            const dropdownMenu = document.getElementById('map-layer-menu');
+            const searchInput = document.getElementById('map-layer-search');
+            const options = document.querySelectorAll('.map-layer-opt');
+            const selectedLabel = document.getElementById('map-layer-selected-label');
+            const chevron = document.getElementById('map-layer-chevron');
             const btnReset = document.getElementById('map-btn-reset');
 
-            if (elKec) {
-                elKec.addEventListener('change', () => {
-                    updateMapDesaDropdown(elKec.value);
-                });
-            }
-
-            if (btnFilter) {
-                btnFilter.addEventListener('click', () => {
-                    const valKec = elKec ? elKec.value : 'all';
-                    const valDesa = elDesa ? elDesa.value : 'all';
-
-                    // Sync with main navbar kecamatan filter
-                    if (els.filterKecamatan) {
-                        els.filterKecamatan.value = valKec;
-                        filterData('nav');
-                    }
-
-                    // Zoom to selected village or kecamatan
-                    if (valDesa !== 'all') {
-                        const targetLayer = desaLayerMap[`${normStr(valKec)}_${normStr(valDesa)}`] || desaLayerMap[normStr(valDesa)];
-                        if (targetLayer && leafletMap) {
-                            leafletMap.fitBounds(targetLayer.getBounds(), { maxZoom: 14 });
-                            targetLayer.openPopup();
+            if (dropdownBtn && dropdownMenu) {
+                // Toggle Dropdown
+                dropdownBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const isHidden = dropdownMenu.classList.contains('hidden');
+                    if (isHidden) {
+                        dropdownMenu.classList.remove('hidden');
+                        if (chevron) chevron.classList.add('rotate-180');
+                        if (searchInput) {
+                            searchInput.value = '';
+                            options.forEach(opt => opt.style.display = 'flex');
+                            setTimeout(() => searchInput.focus(), 100);
                         }
-                    } else if (valKec !== 'all') {
-                        // Zoom to all villages of this kecamatan
-                        const bounds = L.latLngBounds([]);
-                        Object.keys(desaLayerMap).forEach(k => {
-                            if (k.startsWith(`${normStr(valKec)}_`)) {
-                                bounds.extend(desaLayerMap[k].getBounds());
-                            }
+                    } else {
+                        dropdownMenu.classList.add('hidden');
+                        if (chevron) chevron.classList.remove('rotate-180');
+                    }
+                });
+
+                // Close when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!dropdownMenu.contains(e.target) && !dropdownBtn.contains(e.target)) {
+                        dropdownMenu.classList.add('hidden');
+                        if (chevron) chevron.classList.remove('rotate-180');
+                    }
+                });
+
+                // Search Filter in Dropdown
+                if (searchInput) {
+                    searchInput.addEventListener('input', (e) => {
+                        const q = e.target.value.toLowerCase().trim();
+                        options.forEach(opt => {
+                            const txt = opt.textContent.toLowerCase();
+                            opt.style.display = txt.includes(q) ? 'flex' : 'none';
                         });
-                        if (bounds.isValid() && leafletMap) {
-                            leafletMap.fitBounds(bounds, { maxZoom: 12 });
-                        }
-                    }
+                    });
+                }
+
+                // Select Option
+                options.forEach(opt => {
+                    opt.addEventListener('click', () => {
+                        const val = opt.getAttribute('data-value');
+                        const label = opt.getAttribute('data-label');
+                        currentMapAspect = val;
+
+                        if (selectedLabel) selectedLabel.textContent = label;
+
+                        // Highlight active option
+                        options.forEach(o => {
+                            o.classList.remove('bg-slate-100', 'font-bold', 'text-slate-900');
+                        });
+                        opt.classList.add('bg-slate-100', 'font-bold', 'text-slate-900');
+
+                        // Close dropdown
+                        dropdownMenu.classList.add('hidden');
+                        if (chevron) chevron.classList.remove('rotate-180');
+
+                        // Update Header & Legend Title
+                        const aspectInfo = MAP_ASPECTS[currentMapAspect] || MAP_ASPECTS['prio_komp'];
+                        const headerTitle = document.getElementById('map-header-title');
+                        const headerDesc = document.getElementById('map-header-desc');
+                        const legendTitle = document.getElementById('map-sidebar-legend-title');
+
+                        if (headerTitle) headerTitle.textContent = aspectInfo.title;
+                        if (headerDesc) headerDesc.textContent = aspectInfo.desc;
+                        if (legendTitle) legendTitle.innerHTML = aspectInfo.legendTitle;
+
+                        // Re-render map polygons & stats legend
+                        updateMapPolygons();
+                        renderStats();
+                    });
                 });
             }
 
+            // Reset Button
             if (btnReset) {
                 btnReset.addEventListener('click', () => {
-                    if (elKec) elKec.value = 'all';
-                    updateMapDesaDropdown('all');
-                    if (els.filterKecamatan) {
-                        els.filterKecamatan.value = 'all';
-                        filterData('nav');
-                    }
+                    currentMapAspect = 'prio_komp';
+                    if (selectedLabel) selectedLabel.textContent = 'Pilih Maps';
+
+                    options.forEach((o, idx) => {
+                        if (idx === 0) {
+                            o.classList.add('bg-slate-100', 'font-bold', 'text-slate-900');
+                        } else {
+                            o.classList.remove('bg-slate-100', 'font-bold', 'text-slate-900');
+                        }
+                    });
+
+                    const aspectInfo = MAP_ASPECTS['prio_komp'];
+                    const headerTitle = document.getElementById('map-header-title');
+                    const headerDesc = document.getElementById('map-header-desc');
+                    const legendTitle = document.getElementById('map-sidebar-legend-title');
+
+                    if (headerTitle) headerTitle.textContent = aspectInfo.title;
+                    if (headerDesc) headerDesc.textContent = aspectInfo.desc;
+                    if (legendTitle) legendTitle.innerHTML = aspectInfo.legendTitle;
+
                     if (leafletMap) {
                         leafletMap.setView([-7.025253, 107.528343], 10);
                     }
+
+                    updateMapPolygons();
+                    renderStats();
                 });
             }
         }
 
         // --- EVENT LISTENERS ---
         function setupEvents() {
-            els.filterTahun.addEventListener('change', () => filterData('nav'));
-            els.filterKecamatan.addEventListener('change', () => filterData('nav'));
-            els.filterPrioritas.addEventListener('change', () => filterData('nav'));
+            if (els.filterTahun) els.filterTahun.addEventListener('change', () => filterData('nav'));
+            if (els.filterTahunMobile) els.filterTahunMobile.addEventListener('change', () => filterData('mobile'));
 
-            els.filterTahunMobile.addEventListener('change', () => filterData('mobile'));
-            els.filterKecamatanMobile.addEventListener('change', () => filterData('mobile'));
-            els.filterPrioritasMobile.addEventListener('change', () => filterData('mobile'));
-
-            els.search.addEventListener('input', () => filterData('search'));
+            if (els.search) els.search.addEventListener('input', () => filterData('search'));
 
             els.btnPrev.addEventListener('click', () => { if (currentPage > 1) { currentPage--; renderTable(); } });
             els.btnNext.addEventListener('click', () => { if (currentPage * itemsPerPage < filteredData.length) { currentPage++; renderTable(); } });
