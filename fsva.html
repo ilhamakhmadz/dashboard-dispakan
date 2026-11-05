@@ -672,8 +672,7 @@
                             <i data-lucide="trending-up" class="w-4 h-4"></i>
                         </div>
                         <div>
-                            <h3 class="font-bold text-slate-800 text-base leading-tight">Tren Indeks Ketahanan Pangan
-                                (IKP)</h3>
+                            <h3 class="font-bold text-slate-800 text-base leading-tight">Tren Rata-Rata per Tahun</h3>
                             <p class="text-xs text-slate-500 font-medium">Tren Rata-Rata Indeks Komposit per Tahun</p>
                         </div>
                     </div>
@@ -698,7 +697,6 @@
                         <div>
                             <h3 class="font-bold text-slate-800 text-base leading-tight">Tren Desa Rentan Pangan Per
                                 Tahun</h3>
-                            <p class="text-xs text-slate-500 font-medium">Prioritas 1 - 3 (Semua Tahun)</p>
                         </div>
                     </div>
                     <span
@@ -1394,7 +1392,7 @@
                 {
                     title: 'Indeks Ketahanan Pangan',
                     val: `${formatNumber(avgIndeks)} <span class="text-sm font-bold text-slate-500">Skor</span>`,
-                    sub: 'Rata-rata Skor Komposit',
+                    sub: '',
                     icon: 'award',
                     color: 'text-[#117a8b]',
                     bg: 'bg-[#117a8b]/10',
@@ -1407,7 +1405,7 @@
                     <div>
                         <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">${c.title}</p>
                         <h3 class="text-2xl font-black text-slate-800">${c.val}</h3>
-                        <p class="text-[11px] font-medium text-slate-500 mt-1">${c.sub}</p>
+                        ${c.sub ? `<p class="text-[11px] font-medium text-slate-500 mt-1">${c.sub}</p>` : ""}
                     </div>
                     <div class="${c.bg} p-3 rounded-xl ${c.color} group-hover:scale-110 transition-transform shadow-inner">
                         <i data-lucide="${c.icon}" class="w-6 h-6"></i>
