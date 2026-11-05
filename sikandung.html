@@ -2264,7 +2264,13 @@
                 },
                 xaxis: {
                     categories: kecLabels,
-                    labels: { style: { colors: textColor, fontSize: '11px', fontWeight: '600' }, rotate: -30 }
+                    labels: {
+                        style: { colors: textColor, fontSize: '10.5px', fontWeight: '600' },
+                        rotate: -35,
+                        rotateAlways: true,
+                        hideOverlappingLabels: false,
+                        trim: false
+                    }
                 },
                 yaxis: { labels: { style: { colors: textColor } } },
                 grid: { borderColor: isDark ? '#1e293b' : '#f1f5f9' },
@@ -2336,9 +2342,11 @@
                     xaxis: {
                         categories: pemLabels,
                         labels: {
-                            style: { colors: textColor, fontSize: '11px', fontWeight: '600' },
-                            rotate: 0,
-                            rotateAlways: false
+                            style: { colors: textColor, fontSize: '10.5px', fontWeight: '600' },
+                            rotate: -35,
+                            rotateAlways: true,
+                            hideOverlappingLabels: false,
+                            trim: false
                         }
                     },
                     yaxis: {
