@@ -363,60 +363,81 @@
                     </div>
                 </div>
 
-                <!-- Controls: Filter Dropdown Pilih Maps & Reset -->
-                <div class="flex items-center gap-2.5">
-                    <!-- Dropdown Pilih Maps Sesuai Gambar -->
-                    <div class="relative min-w-[240px] sm:min-w-[280px]" id="map-layer-dropdown-container">
+                <!-- Controls: Filter Dropdown Pilih Maps & Pilih Tahun & Reset Sesuai Gambar -->
+                <div class="flex flex-wrap items-center gap-3">
+                    <!-- Dropdown 1: Pilih Maps -->
+                    <div class="relative min-w-[200px] sm:min-w-[240px]" id="map-layer-dropdown-container">
                         <!-- Dropdown Button -->
                         <button type="button" id="map-layer-btn"
-                            class="w-full flex items-center justify-between bg-white border border-rose-300 hover:border-rose-400 text-slate-700 text-xs font-semibold rounded-xl px-4 py-2.5 shadow-2xs transition focus:outline-none focus:ring-2 focus:ring-rose-200">
+                            class="w-full flex items-center justify-between bg-white border border-slate-200 hover:border-slate-300 text-slate-700 text-sm font-medium rounded-2xl px-4 py-2.5 shadow-2xs transition focus:outline-none focus:ring-2 focus:ring-[#117a8b]/20">
                             <span id="map-layer-selected-label" class="truncate">Pilih Maps</span>
                             <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200" id="map-layer-chevron"></i>
                         </button>
 
                         <!-- Dropdown Menu Box -->
                         <div id="map-layer-menu"
-                            class="hidden absolute right-0 mt-1.5 w-full sm:w-[320px] bg-white border border-rose-200 rounded-2xl shadow-xl z-50 p-2.5 space-y-2">
+                            class="hidden absolute left-0 sm:left-auto sm:right-0 mt-1.5 w-full sm:w-[300px] bg-white border border-slate-200 rounded-2xl shadow-xl z-50 p-2.5 space-y-2">
                             <!-- Search Input -->
                             <div class="relative">
                                 <input type="text" id="map-layer-search" placeholder="Cari jenis peta..."
-                                    class="w-full bg-slate-50 border border-slate-200 focus:bg-white text-slate-800 text-xs rounded-xl px-3 py-2 focus:outline-none focus:border-rose-400 transition" />
+                                    class="w-full bg-slate-50 border border-slate-200 focus:bg-white text-slate-800 text-xs rounded-xl px-3 py-2 focus:outline-none focus:border-[#117a8b] transition" />
                             </div>
                             <!-- Options List -->
                             <div id="map-layer-options" class="max-h-60 overflow-y-auto space-y-1 text-xs font-medium text-slate-700 custom-scrollbar">
-                                <div class="map-layer-opt px-3 py-2.5 rounded-lg hover:bg-slate-100 cursor-pointer transition flex items-center justify-between bg-slate-100 font-bold text-slate-900" data-value="prio_komp" data-label="Pilih Maps">
+                                <div class="map-layer-opt px-3 py-2.5 rounded-xl hover:bg-slate-100 cursor-pointer transition flex items-center justify-between bg-slate-100 font-bold text-slate-900" data-value="prio_komp" data-label="Pilih Maps">
                                     <span>Pilih Maps</span>
                                 </div>
-                                <div class="map-layer-opt px-3 py-2.5 rounded-lg hover:bg-slate-100 cursor-pointer transition flex items-center justify-between" data-value="prio_komp" data-label="Peta Kerawanan Pangan">
+                                <div class="map-layer-opt px-3 py-2.5 rounded-xl hover:bg-slate-100 cursor-pointer transition flex items-center justify-between" data-value="prio_komp" data-label="Peta Kerawanan Pangan">
                                     <span>Peta Kerawanan Pangan</span>
                                 </div>
-                                <div class="map-layer-opt px-3 py-2.5 rounded-lg hover:bg-slate-100 cursor-pointer transition flex items-center justify-between" data-value="_plahan" data-label="Peta Aspek Lahan">
+                                <div class="map-layer-opt px-3 py-2.5 rounded-xl hover:bg-slate-100 cursor-pointer transition flex items-center justify-between" data-value="_plahan" data-label="Peta Aspek Lahan">
                                     <span>Peta Aspek Lahan</span>
                                 </div>
-                                <div class="map-layer-opt px-3 py-2.5 rounded-lg hover:bg-slate-100 cursor-pointer transition flex items-center justify-between" data-value="_psarana" data-label="Peta Aspek Sarana">
+                                <div class="map-layer-opt px-3 py-2.5 rounded-xl hover:bg-slate-100 cursor-pointer transition flex items-center justify-between" data-value="_psarana" data-label="Peta Aspek Sarana">
                                     <span>Peta Aspek Sarana</span>
                                 </div>
-                                <div class="map-layer-opt px-3 py-2.5 rounded-lg hover:bg-slate-100 cursor-pointer transition flex items-center justify-between" data-value="_ptdk_sejah" data-label="Peta Aspek Penduduk Tidak Sejahtera">
+                                <div class="map-layer-opt px-3 py-2.5 rounded-xl hover:bg-slate-100 cursor-pointer transition flex items-center justify-between" data-value="_ptdk_sejah" data-label="Peta Aspek Penduduk Tidak Sejahtera">
                                     <span>Peta Aspek Penduduk Tidak Sejahtera</span>
                                 </div>
-                                <div class="map-layer-opt px-3 py-2.5 rounded-lg hover:bg-slate-100 cursor-pointer transition flex items-center justify-between" data-value="_pjalan" data-label="Peta Aspek Akses Jalan">
+                                <div class="map-layer-opt px-3 py-2.5 rounded-xl hover:bg-slate-100 cursor-pointer transition flex items-center justify-between" data-value="_pjalan" data-label="Peta Aspek Akses Jalan">
                                     <span>Peta Aspek Akses Jalan</span>
                                 </div>
-                                <div class="map-layer-opt px-3 py-2.5 rounded-lg hover:bg-slate-100 cursor-pointer transition flex items-center justify-between" data-value="_pnowater" data-label="Peta Aspek Air Bersih">
+                                <div class="map-layer-opt px-3 py-2.5 rounded-xl hover:bg-slate-100 cursor-pointer transition flex items-center justify-between" data-value="_pnowater" data-label="Peta Aspek Air Bersih">
                                     <span>Peta Aspek Air Bersih</span>
                                 </div>
-                                <div class="map-layer-opt px-3 py-2.5 rounded-lg hover:bg-slate-100 cursor-pointer transition flex items-center justify-between" data-value="_ptenkes" data-label="Peta Aspek Tenaga Kesehatan">
+                                <div class="map-layer-opt px-3 py-2.5 rounded-xl hover:bg-slate-100 cursor-pointer transition flex items-center justify-between" data-value="_ptenkes" data-label="Peta Aspek Tenaga Kesehatan">
                                     <span>Peta Aspek Tenaga Kesehatan</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
+                    <!-- Dropdown 2: Pilih Tahun Sesuai Gambar -->
+                    <div class="relative min-w-[170px] sm:min-w-[190px]" id="map-year-dropdown-container">
+                        <!-- Dropdown Button -->
+                        <button type="button" id="map-year-btn"
+                            class="w-full flex items-center justify-between bg-white border border-slate-200 hover:border-slate-300 text-slate-700 text-sm font-medium rounded-2xl px-4 py-2.5 shadow-2xs transition focus:outline-none focus:ring-2 focus:ring-[#117a8b]/20">
+                            <span id="map-year-selected-label" class="truncate">Pilih Tahun</span>
+                            <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200" id="map-year-chevron"></i>
+                        </button>
+
+                        <!-- Dropdown Menu Box -->
+                        <div id="map-year-menu"
+                            class="hidden absolute right-0 mt-1.5 w-full sm:w-[220px] bg-white border border-slate-200 rounded-2xl shadow-xl z-50 p-2.5 space-y-1">
+                            <div id="map-year-options" class="max-h-60 overflow-y-auto space-y-1 text-xs font-medium text-slate-700 custom-scrollbar">
+                                <div class="map-year-opt px-3 py-2 rounded-xl hover:bg-slate-100 cursor-pointer transition flex items-center justify-between bg-slate-100 font-bold text-slate-900" data-value="all">
+                                    <span>Pilih Tahun</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reset Button -->
                     <button id="map-btn-reset"
-                        class="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-bold rounded-xl transition flex items-center gap-1.5 active:scale-95"
-                        title="Reset tampilan peta ke default">
+                        class="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-bold rounded-2xl transition flex items-center gap-1.5 active:scale-95"
+                        title="Reset tampilan peta dan filter ke default">
                         <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
-                        <span>Reset</span>
+                        <span class="hidden sm:inline">Reset</span>
                     </button>
                 </div>
             </div>
@@ -1789,7 +1810,31 @@
                 if (elMobile) elMobile.innerHTML = optionsHtml;
             };
 
-            appendOptions(els.filterTahun, els.filterTahunMobile, Array.from(tahunSet));
+            const sortedYears = Array.from(tahunSet).sort((a, b) => b - a);
+            appendOptions(els.filterTahun, els.filterTahunMobile, sortedYears);
+
+            // Populate Map Year Options
+            populateMapYearOptions(sortedYears);
+        }
+
+        function populateMapYearOptions(years) {
+            const container = document.getElementById('map-year-options');
+            if (!container) return;
+
+            let optsHtml = `
+                <div class="map-year-opt px-3 py-2 rounded-xl hover:bg-slate-100 cursor-pointer transition flex items-center justify-between bg-slate-100 font-bold text-slate-900" data-value="all">
+                    <span>Pilih Tahun</span>
+                </div>
+            `;
+            years.forEach(yr => {
+                optsHtml += `
+                    <div class="map-year-opt px-3 py-2 rounded-xl hover:bg-slate-100 cursor-pointer transition flex items-center justify-between text-slate-700" data-value="${yr}">
+                        <span>${yr}</span>
+                    </div>
+                `;
+            });
+            container.innerHTML = optsHtml;
+            setupMapYearEvents();
         }
 
         // --- FILTER DATA LOGIC ---
@@ -1802,9 +1847,28 @@
             } else if (source === 'mobile') {
                 valTahun = els.filterTahunMobile ? els.filterTahunMobile.value : 'all';
                 if (els.filterTahun) els.filterTahun.value = valTahun;
+            } else if (source === 'map-year') {
+                valTahun = els.filterTahun ? els.filterTahun.value : 'all';
+                if (els.filterTahunMobile) els.filterTahunMobile.value = valTahun;
             } else {
                 valTahun = els.filterTahun ? els.filterTahun.value : (els.filterTahunMobile ? els.filterTahunMobile.value : 'all');
             }
+
+            // Sync Map Year Dropdown Button Label
+            const mapYearLabel = document.getElementById('map-year-selected-label');
+            if (mapYearLabel) {
+                mapYearLabel.textContent = valTahun === 'all' ? 'Pilih Tahun' : valTahun;
+            }
+
+            // Highlight Active Year Option in Map Year Dropdown
+            document.querySelectorAll('.map-year-opt').forEach(opt => {
+                const optVal = opt.getAttribute('data-value');
+                if (optVal === valTahun) {
+                    opt.classList.add('bg-slate-100', 'font-bold', 'text-slate-900');
+                } else {
+                    opt.classList.remove('bg-slate-100', 'font-bold', 'text-slate-900');
+                }
+            });
 
             // Update Active Filter Label
             let label = [];
@@ -1894,6 +1958,12 @@
                 // Toggle Dropdown
                 dropdownBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
+                    // Close year menu if open
+                    const yearMenu = document.getElementById('map-year-menu');
+                    const yearChevron = document.getElementById('map-year-chevron');
+                    if (yearMenu) yearMenu.classList.add('hidden');
+                    if (yearChevron) yearChevron.classList.remove('rotate-180');
+
                     const isHidden = dropdownMenu.classList.contains('hidden');
                     if (isHidden) {
                         dropdownMenu.classList.remove('hidden');
@@ -1987,12 +2057,85 @@
                     if (headerDesc) headerDesc.textContent = aspectInfo.desc;
                     if (legendTitle) legendTitle.innerHTML = aspectInfo.legendTitle;
 
+                    // Reset Year filter
+                    if (els.filterTahun) els.filterTahun.value = 'all';
+                    if (els.filterTahunMobile) els.filterTahunMobile.value = 'all';
+                    const mapYearLabel = document.getElementById('map-year-selected-label');
+                    if (mapYearLabel) mapYearLabel.textContent = 'Pilih Tahun';
+
+                    document.querySelectorAll('.map-year-opt').forEach((o, idx) => {
+                        if (idx === 0) {
+                            o.classList.add('bg-slate-100', 'font-bold', 'text-slate-900');
+                        } else {
+                            o.classList.remove('bg-slate-100', 'font-bold', 'text-slate-900');
+                        }
+                    });
+
                     if (leafletMap) {
                         leafletMap.setView([-7.025253, 107.528343], 10);
                     }
 
-                    updateMapPolygons();
-                    renderStats();
+                    filterData('reset');
+                });
+            }
+
+            setupMapYearEvents();
+        }
+
+        function setupMapYearEvents() {
+            const yearBtn = document.getElementById('map-year-btn');
+            const yearMenu = document.getElementById('map-year-menu');
+            const yearChevron = document.getElementById('map-year-chevron');
+            const yearOptions = document.querySelectorAll('.map-year-opt');
+            const yearSelectedLabel = document.getElementById('map-year-selected-label');
+
+            if (yearBtn && yearMenu) {
+                yearBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    // Close map layer menu if open
+                    const layerMenu = document.getElementById('map-layer-menu');
+                    const layerChevron = document.getElementById('map-layer-chevron');
+                    if (layerMenu) layerMenu.classList.add('hidden');
+                    if (layerChevron) layerChevron.classList.remove('rotate-180');
+
+                    const isHidden = yearMenu.classList.contains('hidden');
+                    if (isHidden) {
+                        yearMenu.classList.remove('hidden');
+                        if (yearChevron) yearChevron.classList.add('rotate-180');
+                    } else {
+                        yearMenu.classList.add('hidden');
+                        if (yearChevron) yearChevron.classList.remove('rotate-180');
+                    }
+                };
+
+                document.addEventListener('click', (e) => {
+                    if (!yearMenu.contains(e.target) && !yearBtn.contains(e.target)) {
+                        yearMenu.classList.add('hidden');
+                        if (yearChevron) yearChevron.classList.remove('rotate-180');
+                    }
+                });
+
+                yearOptions.forEach(opt => {
+                    opt.onclick = () => {
+                        const val = opt.getAttribute('data-value');
+                        const labelText = val === 'all' ? 'Pilih Tahun' : val;
+
+                        if (yearSelectedLabel) yearSelectedLabel.textContent = labelText;
+
+                        yearOptions.forEach(o => {
+                            o.classList.remove('bg-slate-100', 'font-bold', 'text-slate-900');
+                        });
+                        opt.classList.add('bg-slate-100', 'font-bold', 'text-slate-900');
+
+                        yearMenu.classList.add('hidden');
+                        if (yearChevron) yearChevron.classList.remove('rotate-180');
+
+                        // Sync with navbar filter
+                        if (els.filterTahun) els.filterTahun.value = val;
+                        if (els.filterTahunMobile) els.filterTahunMobile.value = val;
+
+                        filterData('map-year');
+                    };
                 });
             }
         }
