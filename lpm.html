@@ -265,8 +265,10 @@
             </div>
         </div>
 
-        <h2 class="text-xl font-extrabold text-slate-800 dark:text-white mb-1 tracking-tight">LUMBUNG PANGAN MASYARAKAT (LPM)</h2>
-        <p class="text-[10px] font-bold text-[#117a8b] uppercase tracking-widest mb-4">Dinas Ketahanan Pangan dan Perikanan</p>
+        <h2 class="text-xl font-extrabold text-slate-800 dark:text-white mb-1 tracking-tight">LUMBUNG PANGAN MASYARAKAT
+            (LPM)</h2>
+        <p class="text-[10px] font-bold text-[#117a8b] uppercase tracking-widest mb-4">Dinas Ketahanan Pangan dan
+            Perikanan</p>
 
         <div class="h-6 mb-3 flex items-center justify-center">
             <p id="loading-text" class="text-xs font-semibold text-slate-500 dark:text-slate-400 font-mono">
@@ -294,11 +296,13 @@
                         class="h-9 w-auto object-contain drop-shadow-xs">
                     <div>
                         <div class="flex items-center gap-1.5">
-                            <h1 class="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white tracking-tight leading-none">
+                            <h1
+                                class="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white tracking-tight leading-none">
                                 LUMBUNG PANGAN MASYARAKAT (LPM)
                             </h1>
                         </div>
-                        <p class="text-[10px] font-bold text-[#117a8b] dark:text-[#4dbdaf] uppercase tracking-wider mt-0.5">
+                        <p
+                            class="text-[10px] font-bold text-[#117a8b] dark:text-[#4dbdaf] uppercase tracking-wider mt-0.5">
                             KABUPATEN BANDUNG
                         </p>
                     </div>
@@ -322,7 +326,7 @@
                         <select id="nav-filter-bulan" onchange="syncFilter('bulan', this.value)"
                             class="w-full bg-slate-50 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold rounded-xl pl-3 pr-7 py-2 focus:ring-2 focus:ring-[#117a8b] outline-none appearance-none cursor-pointer hover:bg-white dark:hover:bg-slate-800 transition">
                             <option value="all">Semua Bulan</option>
-                            <option value="1">Januari</option>
+                            <option value="1" selected>Januari</option>
                             <option value="2">Februari</option>
                             <option value="3">Maret</option>
                             <option value="4">April</option>
@@ -374,13 +378,17 @@
 
                     <!-- Status Data & Date -->
                     <div class="hidden md:flex flex-col items-end">
-                        <span id="current-date-nav" class="text-[11px] font-medium text-slate-500 dark:text-slate-400">Loading date...</span>
+                        <span id="current-date-nav"
+                            class="text-[11px] font-medium text-slate-500 dark:text-slate-400">Loading date...</span>
                         <div class="flex items-center gap-1.5">
                             <span class="relative flex h-2 w-2">
-                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4dbdaf] opacity-75"></span>
+                                <span
+                                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4dbdaf] opacity-75"></span>
                                 <span class="relative inline-flex rounded-full h-2 w-2 bg-[#2e8a57]"></span>
                             </span>
-                            <span class="text-[10px] font-extrabold text-[#2e8a57] dark:text-emerald-400 uppercase tracking-wider">LIVE API DATA</span>
+                            <span
+                                class="text-[10px] font-extrabold text-[#2e8a57] dark:text-emerald-400 uppercase tracking-wider">LIVE
+                                API DATA</span>
                         </div>
                     </div>
 
@@ -395,7 +403,8 @@
                     <button type="button" onclick="refreshData()"
                         class="p-2 rounded-xl bg-[#117a8b]/10 hover:bg-[#117a8b]/20 text-[#117a8b] dark:text-[#4dbdaf] transition shadow-2xs group"
                         title="Muat Ulang Data">
-                        <i data-lucide="refresh-cw" class="w-4 h-4 group-hover:rotate-180 transition-transform duration-500"></i>
+                        <i data-lucide="refresh-cw"
+                            class="w-4 h-4 group-hover:rotate-180 transition-transform duration-500"></i>
                     </button>
                 </div>
 
@@ -415,11 +424,13 @@
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div class="space-y-2">
                     <div class="flex items-center gap-2 flex-wrap">
-                        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-[#117a8b]/10 dark:bg-teal-950/50 text-[#117a8b] dark:text-teal-300 border border-[#117a8b]/20 dark:border-teal-700/50 uppercase tracking-wider">
+                        <span
+                            class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-[#117a8b]/10 dark:bg-teal-950/50 text-[#117a8b] dark:text-teal-300 border border-[#117a8b]/20 dark:border-teal-700/50 uppercase tracking-wider">
                             <i data-lucide="wheat" class="w-3 h-3 text-[#117a8b] dark:text-teal-300"></i>
                             DINAS KETAHANAN PANGAN DAN PERIKANAN KABUPATEN BANDUNG (DISPAKAN)
                         </span>
-                        <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full border border-slate-200 dark:border-slate-700">
+                        <span
+                            class="text-[10px] font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full border border-slate-200 dark:border-slate-700">
                             BNBA Cadangan Pangan
                         </span>
                     </div>
@@ -429,11 +440,14 @@
                     </h2>
 
                     <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-4xl leading-relaxed">
-                        Lumbung Pangan Masyarakat (LPM) merupakan tempat penyimpanan cadangan pangan yang didirikan di wilayah rawan pangan serta kawasan rentan bencana alam, seperti banjir, tanah longsor, dan kekeringan guna menjamin ketersediaan serta mempermudah aksesibilitas pangan bagi masyarakat.
+                        Lumbung Pangan Masyarakat (LPM) merupakan tempat penyimpanan cadangan pangan yang didirikan di
+                        wilayah rawan pangan serta kawasan rentan bencana alam, seperti banjir, tanah longsor, dan
+                        kekeringan guna menjamin ketersediaan serta mempermudah aksesibilitas pangan bagi masyarakat.
                     </p>
                 </div>
 
-                <div class="flex md:flex-col items-start md:items-end justify-between shrink-0 gap-1.5 border-t md:border-t-0 pt-3 md:pt-0 border-slate-100 dark:border-slate-800">
+                <div
+                    class="flex md:flex-col items-start md:items-end justify-between shrink-0 gap-1.5 border-t md:border-t-0 pt-3 md:pt-0 border-slate-100 dark:border-slate-800">
                     <span class="text-[11px] font-medium text-slate-500 dark:text-slate-400">Filter Aktif:</span>
                     <span id="active-filter-badge"
                         class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-[#117a8b]/10 dark:bg-teal-950/40 text-[#117a8b] dark:text-teal-300 border border-[#117a8b]/30">
@@ -448,83 +462,102 @@
         </header>
 
         <!-- ========================================== -->
-        <!-- KPI SUMMARY CARDS                          -->
+        <!-- ========================================== -->
+        <!-- KPI SUMMARY CARDS (a. Summary)             -->
         <!-- ========================================== -->
         <section id="stats-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <!-- Card 1: Total Stok Cadangan Pangan -->
-            <div class="glass-card rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/80 dark:border-slate-800 flex items-center justify-between group hover:shadow-md transition">
+            <!-- Card 1: Total Stok -->
+            <div
+                class="glass-card rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/80 dark:border-slate-800 flex items-center justify-between group hover:shadow-md transition">
                 <div>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Total Stok Cadangan</p>
-                    <h3 id="stat-total-stok" class="text-xl sm:text-2xl font-black text-[#2e8a57] dark:text-emerald-400 font-mono">-</h3>
-                    <p id="stat-sub-stok" class="text-[10px] font-semibold text-slate-500 dark:text-slate-400 mt-0.5">Stok Gabah / Beras Tersimpan</p>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Total Stok</p>
+                    <h3 id="stat-total-stok"
+                        class="text-xl sm:text-2xl font-black text-[#2e8a57] dark:text-emerald-400 font-mono">-</h3>
+                    <p id="stat-sub-stok" class="text-[10px] font-semibold text-slate-500 dark:text-slate-400 mt-0.5">
+                        Memuat data stok...</p>
                 </div>
-                <div class="p-3 rounded-2xl bg-[#2e8a57]/10 text-[#2e8a57] dark:text-emerald-400 group-hover:scale-110 transition-transform shadow-inner">
+                <div
+                    class="p-3 rounded-2xl bg-[#2e8a57]/10 text-[#2e8a57] dark:text-emerald-400 group-hover:scale-110 transition-transform shadow-inner">
                     <i data-lucide="package-check" class="w-6 h-6"></i>
                 </div>
             </div>
 
-            <!-- Card 2: Jumlah Unit LPM -->
-            <div class="glass-card rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/80 dark:border-slate-800 flex items-center justify-between group hover:shadow-md transition">
+            <!-- Card 2: Jumlah Lumbung Aktif -->
+            <div
+                class="glass-card rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/80 dark:border-slate-800 flex items-center justify-between group hover:shadow-md transition">
                 <div>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Unit Lumbung Pangan</p>
-                    <h3 id="stat-total-lpm" class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white font-mono">-</h3>
-                    <p id="stat-sub-lpm" class="text-[10px] font-semibold text-slate-500 dark:text-slate-400 mt-0.5">Kelompok Tani / BUMDes</p>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Jumlah Lumbung Aktif</p>
+                    <h3 id="stat-total-lpm"
+                        class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white font-mono">-</h3>
+                    <p id="stat-sub-lpm" class="text-[10px] font-semibold text-slate-500 dark:text-slate-400 mt-0.5">
+                        Memiliki Cadangan Stok</p>
                 </div>
-                <div class="p-3 rounded-2xl bg-[#117a8b]/10 text-[#117a8b] dark:text-[#4dbdaf] group-hover:scale-110 transition-transform shadow-inner">
+                <div
+                    class="p-3 rounded-2xl bg-[#117a8b]/10 text-[#117a8b] dark:text-[#4dbdaf] group-hover:scale-110 transition-transform shadow-inner">
                     <i data-lucide="warehouse" class="w-6 h-6"></i>
                 </div>
             </div>
 
-            <!-- Card 3: Cakupan Wilayah -->
-            <div class="glass-card rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/80 dark:border-slate-800 flex items-center justify-between group hover:shadow-md transition">
+            <!-- Card 3: Wilayah Rawan: Lumbung dengan stok tipis -->
+            <div
+                class="glass-card rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/80 dark:border-slate-800 flex items-center justify-between group hover:shadow-md transition">
                 <div>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Cakupan Wilayah</p>
-                    <h3 id="stat-cakupan-wilayah" class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white font-mono">-</h3>
-                    <p id="stat-sub-wilayah" class="text-[10px] font-semibold text-slate-500 dark:text-slate-400 mt-0.5">Kawasan Rentan & Rawan</p>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Wilayah Rawan</p>
+                    <h3 id="stat-siaga-stok" class="text-xl sm:text-2xl font-black text-[#dc3545] font-mono">-</h3>
+                    <p id="stat-sub-siaga" class="text-[10px] font-semibold text-slate-500 dark:text-slate-400 mt-0.5">
+                        Lumbung dengan stok tipis</p>
                 </div>
-                <div class="p-3 rounded-2xl bg-[#4dbdaf]/15 text-[#0a4b57] dark:text-[#4dbdaf] group-hover:scale-110 transition-transform shadow-inner">
-                    <i data-lucide="map-pin" class="w-6 h-6"></i>
+                <div
+                    class="p-3 rounded-2xl bg-[#dc3545]/10 text-[#dc3545] group-hover:scale-110 transition-transform shadow-inner">
+                    <i data-lucide="alert-triangle" class="w-6 h-6"></i>
                 </div>
             </div>
 
-            <!-- Card 4: Kesiapsiagaan / Status Ketersediaan -->
-            <div class="glass-card rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/80 dark:border-slate-800 flex items-center justify-between group hover:shadow-md transition">
+            <!-- Card 4: Cakupan Wilayah -->
+            <div
+                class="glass-card rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/80 dark:border-slate-800 flex items-center justify-between group hover:shadow-md transition">
                 <div>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Kesiapsiagaan Stok</p>
-                    <h3 id="stat-siaga-stok" class="text-xl sm:text-2xl font-black text-[#f4a261] font-mono">-</h3>
-                    <p id="stat-sub-siaga" class="text-[10px] font-semibold text-slate-500 dark:text-slate-400 mt-0.5">Lumbung Memiliki Cadangan</p>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Cakupan Wilayah</p>
+                    <h3 id="stat-cakupan-wilayah"
+                        class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white font-mono">-</h3>
+                    <p id="stat-sub-wilayah"
+                        class="text-[10px] font-semibold text-slate-500 dark:text-slate-400 mt-0.5">Kawasan Rentan & Rawan Pangan</p>
                 </div>
-                <div class="p-3 rounded-2xl bg-[#f4a261]/15 text-[#e07a5f] group-hover:scale-110 transition-transform shadow-inner">
-                    <i data-lucide="shield-check" class="w-6 h-6"></i>
+                <div
+                    class="p-3 rounded-2xl bg-[#4dbdaf]/15 text-[#0a4b57] dark:text-[#4dbdaf] group-hover:scale-110 transition-transform shadow-inner">
+                    <i data-lucide="map-pin" class="w-6 h-6"></i>
                 </div>
             </div>
         </section>
 
         <!-- ========================================== -->
-        <!-- PETA SEBARAN LUMBUNG PANGAN MASYARAKAT     -->
+        <!-- PETA SEBARAN LUMBUNG & STATUS STOK         -->
         <!-- ========================================== -->
-        <section class="glass-card rounded-2xl shadow-sm border border-slate-200/80 dark:border-slate-800 overflow-hidden">
+        <section
+            class="glass-card rounded-2xl shadow-sm border border-slate-200/80 dark:border-slate-800 overflow-hidden">
             <!-- Header Bar Peta -->
-            <div class="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div
+                class="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-3">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-[#117a8b]/10 text-[#117a8b] dark:text-[#4dbdaf] flex items-center justify-center border border-[#117a8b]/20 shrink-0">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-[#117a8b]/10 text-[#117a8b] dark:text-[#4dbdaf] flex items-center justify-center border border-[#117a8b]/20 shrink-0">
                         <i data-lucide="map-pinned" class="w-5 h-5"></i>
                     </div>
                     <div>
                         <h3 class="font-extrabold text-slate-900 dark:text-white text-sm sm:text-base leading-tight">
-                            Peta Sebaran Lumbung Pangan Masyarakat (LPM)
+                            Peta Sebaran Lumbung & Status Stok
                         </h3>
                         <p class="text-xs text-slate-500 dark:text-slate-400">
-                            Distribusi lokasi 31 LPM pada wilayah rawan pangan dan batas kecamatan Kabupaten Bandung
+                            Distribusi lokasi 31 LPM pada kawasan rawan pangan Kabupaten Bandung dengan indikator ketersediaan stok
                         </p>
                     </div>
                 </div>
 
                 <div class="flex flex-wrap items-center gap-2">
-                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">Status Pin:</span>
+                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">Indikator Pin:</span>
                     <div class="flex items-center gap-1.5 text-[10px] font-bold">
-                        <span class="px-2.5 py-0.5 rounded bg-[#2e8a57] text-white shadow-2xs">Tersedia Stok</span>
-                        <span class="px-2.5 py-0.5 rounded bg-[#dc3545] text-white shadow-2xs">Stok Kosong</span>
+                        <span class="px-2.5 py-0.5 rounded bg-[#2e8a57] text-white shadow-2xs">Hijau: Stok Tersedia</span>
+                        <span class="px-2.5 py-0.5 rounded bg-[#dc3545] text-white shadow-2xs">Merah: Stok Kosong</span>
                     </div>
                     <button onclick="resetMapView()"
                         class="ml-2 px-3 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold transition flex items-center gap-1 shadow-2xs">
@@ -537,29 +570,36 @@
             <!-- Map Area Grid -->
             <div class="grid grid-cols-1 lg:grid-cols-4">
                 <!-- Leaflet Canvas (3 cols) -->
-                <div class="lg:col-span-3 p-3 sm:p-4 border-b lg:border-b-0 lg:border-r border-slate-100 dark:border-slate-800 relative">
-                    <div class="relative w-full h-[480px] rounded-xl overflow-hidden bg-[#1a1d20] border border-slate-200/50 dark:border-slate-800">
+                <div
+                    class="lg:col-span-3 p-3 sm:p-4 border-b lg:border-b-0 lg:border-r border-slate-100 dark:border-slate-800 relative">
+                    <div
+                        class="relative w-full h-[480px] rounded-xl overflow-hidden bg-[#1a1d20] border border-slate-200/50 dark:border-slate-800">
                         <div id="lpm-map" class="w-full h-full z-10 bg-[#1a1d20]"></div>
 
                         <!-- Map Loading Overlay -->
                         <div id="map-loading"
                             class="absolute inset-0 z-30 bg-[#1a1d20]/80 flex flex-col items-center justify-center text-white transition-opacity duration-300">
                             <div class="loader mb-2"></div>
-                            <p class="text-xs font-semibold text-slate-200">Memuat batas wilayah kecamatan & pin lumbung...</p>
+                            <p class="text-xs font-semibold text-slate-200">Memuat batas wilayah kecamatan & pin
+                                lumbung...</p>
                         </div>
 
                         <!-- Floating Mini Legend -->
-                        <div class="absolute bottom-4 left-4 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-2.5 rounded-xl shadow-md border border-slate-200 dark:border-slate-800 z-[400] text-[10px] font-medium hidden sm:flex items-center gap-3">
+                        <div
+                            class="absolute bottom-4 left-4 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-2.5 rounded-xl shadow-md border border-slate-200 dark:border-slate-800 z-[400] text-[10px] font-medium hidden sm:flex items-center gap-3">
                             <div class="flex items-center gap-1.5">
-                                <span class="w-3.5 h-3.5 rounded-full bg-[#2e8a57] border border-white inline-block shadow-2xs"></span>
+                                <span
+                                    class="w-3.5 h-3.5 rounded-full bg-[#2e8a57] border border-white inline-block shadow-2xs"></span>
                                 <span class="text-slate-700 dark:text-slate-300 font-bold">LPM Cadangan Tersedia</span>
                             </div>
                             <div class="flex items-center gap-1.5">
-                                <span class="w-3.5 h-3.5 rounded-full bg-[#dc3545] border border-white inline-block shadow-2xs"></span>
+                                <span
+                                    class="w-3.5 h-3.5 rounded-full bg-[#dc3545] border border-white inline-block shadow-2xs"></span>
                                 <span class="text-slate-700 dark:text-slate-300 font-bold">LPM Stok Kosong</span>
                             </div>
                             <div class="flex items-center gap-1.5">
-                                <span class="w-3.5 h-2.5 rounded bg-[#117a8b] border border-slate-700 inline-block shadow-2xs"></span>
+                                <span
+                                    class="w-3.5 h-2.5 rounded bg-[#117a8b] border border-slate-700 inline-block shadow-2xs"></span>
                                 <span class="text-slate-700 dark:text-slate-300">Kecamatan Memiliki LPM</span>
                             </div>
                         </div>
@@ -571,55 +611,80 @@
                     <div>
                         <!-- Logo Kabupaten Bandung -->
                         <div class="flex justify-center mb-3">
-                            <img src="https://bandungkab.go.id/uploads/images/logo_bandungkab.png" alt="Logo Kabupaten Bandung"
+                            <img src="https://bandungkab.go.id/uploads/images/logo_bandungkab.png"
+                                alt="Logo Kabupaten Bandung"
                                 class="h-16 object-contain drop-shadow-xs hover:scale-105 transition-transform">
                         </div>
 
                         <div class="text-center mb-3">
-                            <h4 class="text-[11px] font-black text-slate-800 dark:text-slate-100 tracking-wider uppercase leading-tight">
+                            <h4
+                                class="text-[11px] font-black text-slate-800 dark:text-slate-100 tracking-wider uppercase leading-tight">
                                 KETERANGAN LUMBUNG PANGAN :
                             </h4>
                             <p class="text-[10px] font-bold text-[#117a8b] dark:text-[#4dbdaf] mt-1">
-                                Total Cadangan: <span id="map-side-total-stok" class="font-mono font-black text-slate-900 dark:text-white">-</span>
+                                Total Cadangan: <span id="map-side-total-stok"
+                                    class="font-mono font-black text-slate-900 dark:text-white">-</span>
                             </p>
                         </div>
 
                         <!-- Stats Pills in Sidebar -->
                         <ul class="space-y-2 text-xs">
-                            <li class="flex items-center justify-between p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 shadow-2xs">
+                            <li
+                                class="flex items-center justify-between p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 shadow-2xs">
                                 <div class="flex items-center gap-2">
-                                    <span class="w-3.5 h-3.5 rounded-full bg-[#117a8b] border border-white shrink-0"></span>
-                                    <span class="font-bold text-slate-700 dark:text-slate-300 text-[10.5px]">Unit Terdata</span>
+                                    <span
+                                        class="w-3.5 h-3.5 rounded-full bg-[#117a8b] border border-white shrink-0"></span>
+                                    <span class="font-bold text-slate-700 dark:text-slate-300 text-[10.5px]">Unit
+                                        Terdata</span>
                                 </div>
-                                <span class="font-black text-slate-800 dark:text-slate-100 font-mono text-xs"><span id="map-side-total-lpm">0</span> <span class="text-[9.5px] font-normal text-slate-400">LPM</span></span>
+                                <span class="font-black text-slate-800 dark:text-slate-100 font-mono text-xs"><span
+                                        id="map-side-total-lpm">0</span> <span
+                                        class="text-[9.5px] font-normal text-slate-400">LPM</span></span>
                             </li>
-                            <li class="flex items-center justify-between p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 shadow-2xs">
+                            <li
+                                class="flex items-center justify-between p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 shadow-2xs">
                                 <div class="flex items-center gap-2">
-                                    <span class="w-3.5 h-3.5 rounded-full bg-[#2e8a57] border border-white shrink-0"></span>
-                                    <span class="font-bold text-slate-700 dark:text-slate-300 text-[10.5px]">Stok Tersedia</span>
+                                    <span
+                                        class="w-3.5 h-3.5 rounded-full bg-[#2e8a57] border border-white shrink-0"></span>
+                                    <span class="font-bold text-slate-700 dark:text-slate-300 text-[10.5px]">Stok
+                                        Tersedia</span>
                                 </div>
-                                <span class="font-black text-[#2e8a57] dark:text-emerald-400 font-mono text-xs"><span id="map-side-stok-ada">0</span> <span class="text-[9.5px] font-normal text-slate-400">LPM</span></span>
+                                <span class="font-black text-[#2e8a57] dark:text-emerald-400 font-mono text-xs"><span
+                                        id="map-side-stok-ada">0</span> <span
+                                        class="text-[9.5px] font-normal text-slate-400">LPM</span></span>
                             </li>
-                            <li class="flex items-center justify-between p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 shadow-2xs">
+                            <li
+                                class="flex items-center justify-between p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 shadow-2xs">
                                 <div class="flex items-center gap-2">
-                                    <span class="w-3.5 h-3.5 rounded-full bg-[#dc3545] border border-white shrink-0"></span>
-                                    <span class="font-bold text-slate-700 dark:text-slate-300 text-[10.5px]">Stok Kosong</span>
+                                    <span
+                                        class="w-3.5 h-3.5 rounded-full bg-[#dc3545] border border-white shrink-0"></span>
+                                    <span class="font-bold text-slate-700 dark:text-slate-300 text-[10.5px]">Stok
+                                        Kosong</span>
                                 </div>
-                                <span class="font-black text-[#dc3545] font-mono text-xs"><span id="map-side-stok-kosong">0</span> <span class="text-[9.5px] font-normal text-slate-400">LPM</span></span>
+                                <span class="font-black text-[#dc3545] font-mono text-xs"><span
+                                        id="map-side-stok-kosong">0</span> <span
+                                        class="text-[9.5px] font-normal text-slate-400">LPM</span></span>
                             </li>
-                            <li class="flex items-center justify-between p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 shadow-2xs">
+                            <li
+                                class="flex items-center justify-between p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 shadow-2xs">
                                 <div class="flex items-center gap-2">
-                                    <span class="w-3.5 h-3.5 rounded-xs bg-[#4dbdaf] border border-slate-600 shrink-0"></span>
-                                    <span class="font-bold text-slate-700 dark:text-slate-300 text-[10.5px]">Kecamatan</span>
+                                    <span
+                                        class="w-3.5 h-3.5 rounded-xs bg-[#4dbdaf] border border-slate-600 shrink-0"></span>
+                                    <span
+                                        class="font-bold text-slate-700 dark:text-slate-300 text-[10.5px]">Kecamatan</span>
                                 </div>
-                                <span class="font-black text-slate-800 dark:text-slate-100 font-mono text-xs"><span id="map-side-kec-count">0</span> <span class="text-[9.5px] font-normal text-slate-400">Kec</span></span>
+                                <span class="font-black text-slate-800 dark:text-slate-100 font-mono text-xs"><span
+                                        id="map-side-kec-count">0</span> <span
+                                        class="text-[9.5px] font-normal text-slate-400">Kec</span></span>
                             </li>
                         </ul>
                     </div>
 
-                    <div class="mt-4 pt-3 border-t border-slate-200/80 dark:border-slate-800 text-[10px] text-slate-400 text-center leading-relaxed">
+                    <div
+                        class="mt-4 pt-3 border-t border-slate-200/80 dark:border-slate-800 text-[10px] text-slate-400 text-center leading-relaxed">
                         Pemerintah Kabupaten Bandung<br>
-                        <span class="font-semibold text-slate-600 dark:text-slate-300">Dinas Ketahanan Pangan dan Perikanan</span>
+                        <span class="font-semibold text-slate-600 dark:text-slate-300">Dinas Ketahanan Pangan dan
+                            Perikanan</span>
                     </div>
                 </div>
             </div>
@@ -628,79 +693,117 @@
         <!-- ========================================== -->
         <!-- CHARTS SECTION: ANALITIK VISUAL            -->
         <!-- ========================================== -->
+        <!-- CHARTS SECTION: d. Grafik                  -->
+        <!-- ========================================== -->
         <section class="space-y-6">
 
-            <!-- Row 1: Tren Stok Bulanan & Rasio Ketersediaan -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Chart 1: Tren Akumulasi Stok Bulanan (2 cols) -->
-                <div class="glass-card rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-200/80 dark:border-slate-800 lg:col-span-2">
-                    <div class="flex items-center justify-between gap-2 mb-2">
-                        <h3 class="font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                            <div class="p-1.5 bg-[#2e8a57]/15 text-[#2e8a57] dark:text-emerald-400 rounded-lg">
-                                <i data-lucide="trending-up" class="w-4 h-4"></i>
-                            </div>
-                            <span>Tren Akumulasi Stok Cadangan Pangan Bulanan</span>
+            <!-- 1. Grafik Tren Penyaluran & Pemanfaatan Stok (Image 5) -->
+            <div
+                class="glass-card rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-200/80 dark:border-slate-800">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-2">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#117a8b]/10 text-[#117a8b] dark:text-[#4dbdaf] border border-[#117a8b]/20">
+                                <i data-lucide="trending-up" class="w-3 h-3"></i> Dinamika Cadangan Pangan
+                            </span>
+                        </div>
+                        <h3 class="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                            <span>Grafik Tren Penyaluran & Pemanfaatan Stok</span>
                         </h3>
-                        <span id="chart-tren-year-badge" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                            Monitoring volume cadangan bulanan (Jan - Des) per unit lumbung pangan masyarakat
+                        </p>
+                    </div>
+
+                    <!-- Filter Per Lumbung & Tahun -->
+                    <div class="flex flex-wrap items-center gap-2">
+                        <div class="relative min-w-[240px]">
+                            <select id="select-lpm-tren" onchange="changeLpmTren(this.value)"
+                                class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold rounded-xl pl-3 pr-7 py-2 focus:ring-2 focus:ring-[#117a8b] outline-none appearance-none cursor-pointer">
+                                <!-- Populated dynamically -->
+                            </select>
+                            <i data-lucide="chevron-down"
+                                class="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                        </div>
+                        <span id="chart-tren-year-badge"
+                            class="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
                             Tahun 2025
                         </span>
                     </div>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">
-                        Perkembangan total volume cadangan pangan (Kg) dari 31 lumbung sepanjang tahun
-                    </p>
-                    <div id="chart-tren-bulanan" class="min-h-[280px] w-full"></div>
                 </div>
 
-                <!-- Chart 2: Proporsi Status Ketersediaan (1 col) -->
-                <div class="glass-card rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-200/80 dark:border-slate-800">
-                    <div class="flex items-center justify-between gap-2 mb-2">
-                        <h3 class="font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                            <div class="p-1.5 bg-[#117a8b]/15 text-[#117a8b] dark:text-[#4dbdaf] rounded-lg">
-                                <i data-lucide="pie-chart" class="w-4 h-4"></i>
-                            </div>
-                            <span>Rasio Ketersediaan Stok</span>
-                        </h3>
+                <!-- ApexChart Line Container (Warna 3: #117a8b) -->
+                <div id="chart-tren-bulanan" class="min-h-[300px] w-full mt-2"></div>
+
+                <!-- Catatan di bawah grafik (sesuai instruksi Image 5) -->
+                <div class="mt-4 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/80 text-xs text-slate-600 dark:text-slate-300 flex items-start gap-2.5">
+                    <i data-lucide="info" class="w-4 h-4 text-[#117a8b] dark:text-[#4dbdaf] shrink-0 mt-0.5"></i>
+                    <div class="leading-relaxed">
+                        <span class="font-bold text-slate-900 dark:text-white">Catatan:</span>
+                        <span>Penurunan grafik menandakan stok sedang disalurkan/dimanfaatkan oleh masyarakat di daerah rawan/bencana. Kenaikan grafik menandakan adanya pengembalian atau pengisian ulang stok lumbung.</span>
                     </div>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">
-                        Perbandingan unit lumbung dengan status ketersediaan cadangan pangan
-                    </p>
-                    <div id="chart-status-rasio" class="min-h-[280px] flex items-center justify-center"></div>
                 </div>
             </div>
 
-            <!-- Row 2: Sebaran per Kecamatan & Top 10 Lumbung -->
+            <!-- Row 2: 2 Kolom Grafik (Status Ketahanan Lumbung & Distribusi Stok per Kecamatan) -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- Chart 3: Sebaran Stok per Kecamatan -->
-                <div class="glass-card rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-200/80 dark:border-slate-800">
-                    <div class="flex items-center justify-between gap-2 mb-2">
-                        <h3 class="font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                            <div class="p-1.5 bg-[#4dbdaf]/20 text-[#0a4b57] dark:text-[#4dbdaf] rounded-lg">
-                                <i data-lucide="bar-chart-2" class="w-4 h-4"></i>
-                            </div>
-                            <span>Sebaran Stok Pangan per Kecamatan</span>
-                        </h3>
+
+                <!-- 2. Grafik Status Ketahanan Lumbung (Image 3: Donut Chart, Hijau #2e8a57 & Merah #dc3545) -->
+                <div
+                    class="glass-card rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-200/80 dark:border-slate-800 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-1">
+                            <h3 class="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                                <i data-lucide="pie-chart" class="w-4 h-4 text-[#2e8a57]"></i>
+                                <span>Grafik Status Ketahanan Lumbung</span>
+                            </h3>
+                            <span id="badge-status-bulan"
+                                class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#2e8a57]/10 text-[#2e8a57] dark:text-emerald-300 border border-[#2e8a57]/20">
+                                Filter Bulan Aktif
+                            </span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-3">
+                            Proporsi unit lumbung dengan status ketersediaan cadangan pangan (Tersedia vs Kosong)
+                        </p>
+
+                        <!-- Donut Chart -->
+                        <div id="chart-status-rasio" class="min-h-[260px] flex items-center justify-center"></div>
                     </div>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">
-                        Akumulasi volume stok cadangan pangan di masing-masing wilayah kecamatan (Kg)
-                    </p>
-                    <div id="chart-kecamatan-stok" class="min-h-[300px] w-full"></div>
+
+                    <!-- Summary List di bawah donat (sesuai format referensi Image 3) -->
+                    <div id="status-ketahanan-summary-list"
+                        class="space-y-2 mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs">
+                        <!-- Populated by JS -->
+                    </div>
                 </div>
 
-                <!-- Chart 4: Top 10 Lumbung Cadangan Terbesar -->
-                <div class="glass-card rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-200/80 dark:border-slate-800">
-                    <div class="flex items-center justify-between gap-2 mb-2">
-                        <h3 class="font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                            <div class="p-1.5 bg-[#f4a261]/20 text-[#e07a5f] rounded-lg">
-                                <i data-lucide="trophy" class="w-4 h-4"></i>
-                            </div>
-                            <span>10 Lumbung dengan Cadangan Terbesar (Top 10)</span>
-                        </h3>
+                <!-- 3. Grafik Distribusi Stok per Kecamatan (Image 4: Column Chart, Warna 4: #4dbdaf, Largest to Smallest) -->
+                <div
+                    class="glass-card rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-200/80 dark:border-slate-800 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-1">
+                            <h3 class="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                                <i data-lucide="bar-chart-2" class="w-4 h-4 text-[#4dbdaf]"></i>
+                                <span>Grafik Distribusi Stok per Kecamatan</span>
+                            </h3>
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                                Largest to Smallest
+                            </span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-3">
+                            Peringkat akumulasi volume cadangan pangan per wilayah kecamatan (Kg)
+                        </p>
+
+                        <!-- Column Bar Chart (Warna 4: #4dbdaf) -->
+                        <div id="chart-kecamatan-stok" class="min-h-[290px] w-full"></div>
                     </div>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">
-                        Daftar unit LPM dengan total cadangan pangan tertinggi di Kabupaten Bandung
-                    </p>
-                    <div id="chart-top-lumbung" class="min-h-[300px] w-full"></div>
+
+                    <div class="mt-3 pt-2 border-t border-slate-100 dark:border-slate-800 text-[10.5px] text-slate-400 flex items-center justify-between">
+                        <span>Sumber: Dinas Ketahanan Pangan dan Perikanan</span>
+                        <span id="kec-chart-total-info" class="font-bold text-slate-600 dark:text-slate-300">19 Kecamatan</span>
+                    </div>
                 </div>
+
             </div>
 
         </section>
@@ -708,29 +811,34 @@
         <!-- ========================================== -->
         <!-- TABEL DATA DIREKTORI & TRANSAKSI           -->
         <!-- ========================================== -->
-        <section class="glass-card rounded-2xl shadow-sm border border-slate-200/80 dark:border-slate-800 overflow-hidden">
+        <section
+            class="glass-card rounded-2xl shadow-sm border border-slate-200/80 dark:border-slate-800 overflow-hidden">
             <!-- Table Header Controls & Tab Switcher -->
-            <div class="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div
+                class="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <!-- Tab Buttons -->
                 <div class="flex items-center gap-2 bg-slate-200/80 dark:bg-slate-800 p-1 rounded-xl">
                     <button type="button" onclick="switchTableTab('lpm')" id="tab-btn-lpm"
                         class="px-4 py-2 rounded-lg text-xs font-bold transition flex items-center gap-2 bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm">
                         <i data-lucide="warehouse" class="w-3.5 h-3.5 text-[#117a8b] dark:text-[#4dbdaf]"></i>
                         <span>Direktori 31 Unit LPM</span>
-                        <span id="badge-tab-lpm" class="px-1.5 py-0.2 rounded-full text-[10px] bg-[#117a8b]/10 text-[#117a8b] dark:text-teal-300">31</span>
+                        <span id="badge-tab-lpm"
+                            class="px-1.5 py-0.2 rounded-full text-[10px] bg-[#117a8b]/10 text-[#117a8b] dark:text-teal-300">31</span>
                     </button>
                     <button type="button" onclick="switchTableTab('transaksi')" id="tab-btn-transaksi"
                         class="px-4 py-2 rounded-lg text-xs font-semibold transition flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
                         <i data-lucide="receipt" class="w-3.5 h-3.5"></i>
                         <span>Log Transaksi Bulanan</span>
-                        <span id="badge-tab-tx" class="px-1.5 py-0.2 rounded-full text-[10px] bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300">744</span>
+                        <span id="badge-tab-tx"
+                            class="px-1.5 py-0.2 rounded-full text-[10px] bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300">744</span>
                     </button>
                 </div>
 
                 <!-- Search and Export Controls -->
                 <div class="flex flex-wrap items-center gap-2.5">
                     <div class="relative w-full sm:w-64">
-                        <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+                        <i data-lucide="search"
+                            class="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
                         <input type="text" id="table-search-input" oninput="handleTableSearch(this.value)"
                             placeholder="Cari lumbung, desa, kecamatan..."
                             class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs rounded-xl pl-9 pr-3 py-2 outline-none focus:ring-2 focus:ring-[#117a8b] shadow-2xs">
@@ -747,7 +855,8 @@
             <!-- TABEL 1: DIREKTORI 31 UNIT LPM -->
             <div id="table-container-lpm" class="overflow-x-auto">
                 <table class="w-full text-left text-xs text-slate-700 dark:text-slate-200">
-                    <thead class="bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 uppercase font-extrabold text-[10px] tracking-wider border-b border-slate-200 dark:border-slate-700">
+                    <thead
+                        class="bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 uppercase font-extrabold text-[10px] tracking-wider border-b border-slate-200 dark:border-slate-700">
                         <tr>
                             <th class="p-3.5 text-center w-12">No</th>
                             <th class="p-3.5">Nama Lumbung</th>
@@ -769,7 +878,8 @@
             <!-- TABEL 2: LOG TRANSAKSI BULANAN -->
             <div id="table-container-transaksi" class="overflow-x-auto hidden">
                 <table class="w-full text-left text-xs text-slate-700 dark:text-slate-200">
-                    <thead class="bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 uppercase font-extrabold text-[10px] tracking-wider border-b border-slate-200 dark:border-slate-700">
+                    <thead
+                        class="bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 uppercase font-extrabold text-[10px] tracking-wider border-b border-slate-200 dark:border-slate-700">
                         <tr>
                             <th class="p-3.5 text-center w-12">No</th>
                             <th class="p-3.5">Nama Lumbung</th>
@@ -789,8 +899,10 @@
             </div>
 
             <!-- Table Pagination Footer -->
-            <div class="p-4 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 bg-white dark:bg-slate-900/60">
-                <span id="pagination-info" class="text-xs text-slate-500 dark:text-slate-400 font-medium">Menampilkan 0 data</span>
+            <div
+                class="p-4 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 bg-white dark:bg-slate-900/60">
+                <span id="pagination-info" class="text-xs text-slate-500 dark:text-slate-400 font-medium">Menampilkan 0
+                    data</span>
                 <div id="pagination-controls" class="flex items-center gap-1"></div>
             </div>
         </section>
@@ -800,14 +912,18 @@
     <!-- ========================================== -->
     <!-- FOOTER                                     -->
     <!-- ========================================== -->
-    <footer class="mt-12 border-t border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 backdrop-blur-md py-6 text-xs text-slate-500 dark:text-slate-400">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <footer
+        class="mt-12 border-t border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 backdrop-blur-md py-6 text-xs text-slate-500 dark:text-slate-400">
+        <div
+            class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-2">
                 <img src="https://bandungkab.go.id/uploads/images/logo_bandungkab.png" alt="Logo" class="h-6 w-auto">
                 <span>&copy; 2026 <b>Dinas Ketahanan Pangan dan Perikanan</b> Kabupaten Bandung.</span>
             </div>
             <div class="flex items-center gap-4">
-                <a href="https://aplikasi.bandungkab.go.id/publik/dispakan-portal-dashboard" class="hover:text-[#117a8b] transition" target="_blank" rel="noopener noreferrer">Portal DISPAKAN</a>
+                <a href="https://aplikasi.bandungkab.go.id/publik/dispakan-portal-dashboard"
+                    class="hover:text-[#117a8b] transition" target="_blank" rel="noopener noreferrer">Portal
+                    DISPAKAN</a>
                 <a href="fsva.html" class="hover:text-[#117a8b] transition">FSVA Atlas</a>
                 <a href="psat.html" class="hover:text-[#117a8b] transition">Keamanan Pangan (PSAT)</a>
                 <a href="sikandung.html" class="hover:text-[#117a8b] transition">SIKANDUNG Perikanan</a>
@@ -818,8 +934,10 @@
     <!-- ========================================== -->
     <!-- MODAL DETAIL LPM                           -->
     <!-- ========================================== -->
-    <div id="detail-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 hidden animate-fade-in">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl">
+    <div id="detail-modal"
+        class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 hidden animate-fade-in">
+        <div
+            class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl">
             <!-- Modal Header -->
             <div class="bg-[#117a8b] text-white p-5 flex items-center justify-between">
                 <div class="flex items-center gap-3">
@@ -827,7 +945,8 @@
                         <i data-lucide="warehouse" class="w-5 h-5"></i>
                     </div>
                     <div>
-                        <h4 id="modal-lpm-title" class="font-extrabold text-base leading-tight">Detail Lumbung Pangan</h4>
+                        <h4 id="modal-lpm-title" class="font-extrabold text-base leading-tight">Detail Lumbung Pangan
+                        </h4>
                         <p id="modal-lpm-subtitle" class="text-xs text-teal-100 font-medium mt-0.5">Kecamatan & Desa</p>
                     </div>
                 </div>
@@ -837,13 +956,16 @@
             </div>
 
             <!-- Modal Content Body -->
-            <div id="modal-lpm-content" class="p-6 space-y-4 max-h-[75vh] overflow-y-auto text-xs text-slate-700 dark:text-slate-300">
+            <div id="modal-lpm-content"
+                class="p-6 space-y-4 max-h-[75vh] overflow-y-auto text-xs text-slate-700 dark:text-slate-300">
                 <!-- Injected via JS -->
             </div>
 
             <!-- Modal Footer -->
-            <div class="p-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 flex justify-end gap-2">
-                <button onclick="closeDetailModal()" class="px-4 py-2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 text-slate-700 dark:text-slate-200 font-bold rounded-xl transition text-xs">
+            <div
+                class="p-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 flex justify-end gap-2">
+                <button onclick="closeDetailModal()"
+                    class="px-4 py-2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 text-slate-700 dark:text-slate-200 font-bold rounded-xl transition text-xs">
                     Tutup
                 </button>
             </div>
@@ -880,10 +1002,11 @@
             rawTransaksi: [],
             filteredLpm: [],
             filteredTransaksi: [],
+            selectedLpmTren: 'Badan Usaha Milik Desa (BUMDes) Bina Karya Sejahtera',
             lpmCoordsMap: {},
             filters: {
-                tahun: 'all',
-                bulan: 'all',
+                tahun: '2025',
+                bulan: '1',
                 kecamatan: 'all',
                 status: 'all',
                 search: ''
@@ -965,7 +1088,17 @@
                 if (loadingBar) loadingBar.style.width = '65%';
                 if (loadingText) loadingText.innerText = 'Mengolah transaksi dan pemetaan lokasi lumbung...';
 
-                state.rawTransaksi = resTx.data || [];
+                // Deduplicate transactions by (nama_lumbung, tahun, bulan)
+                // because API provides redundant records (with and without keterangan)
+                const dedupMap = {};
+                (resTx.data || []).forEach(item => {
+                    const d = item.detail || {};
+                    const key = `${(d.nama_lumbung || '').trim().toLowerCase()}_${d.tahun}_${d.bulan}`;
+                    if (!dedupMap[key] || (d.keterangan && !dedupMap[key].detail?.keterangan)) {
+                        dedupMap[key] = item;
+                    }
+                });
+                state.rawTransaksi = Object.values(dedupMap);
                 state.rawLpm = resLpm.data || [];
 
                 populateFilterDropdowns();
@@ -1042,6 +1175,35 @@
                     selKec.appendChild(opt);
                 });
             }
+
+            // Populate Dropdown Lumbung untuk Grafik Tren Penyaluran & Pemanfaatan Stok (Image 5)
+            const selLpmTren = document.getElementById('select-lpm-tren');
+            if (selLpmTren) {
+                selLpmTren.innerHTML = '';
+                const lpmNames = state.rawLpm
+                    .map(item => item.detail?.nama_lumbung)
+                    .filter(Boolean)
+                    .sort();
+
+                lpmNames.forEach(name => {
+                    const opt = document.createElement('option');
+                    opt.value = name;
+                    opt.innerText = name;
+                    if (name === state.selectedLpmTren || (name.toLowerCase().includes('bina karya sejahtera'))) {
+                        opt.selected = true;
+                        state.selectedLpmTren = name;
+                    }
+                    selLpmTren.appendChild(opt);
+                });
+                if (!state.selectedLpmTren && lpmNames.length > 0) {
+                    state.selectedLpmTren = lpmNames[0];
+                }
+            }
+        }
+
+        function changeLpmTren(val) {
+            state.selectedLpmTren = val;
+            renderChartTren();
         }
 
         function syncFilter(type, val) {
@@ -1122,8 +1284,8 @@
 
         function resetFilters() {
             state.filters = {
-                tahun: 'all',
-                bulan: 'all',
+                tahun: '2025',
+                bulan: '1',
                 kecamatan: 'all',
                 status: 'all',
                 search: ''
@@ -1135,8 +1297,8 @@
             const selS = document.getElementById('nav-filter-status');
             const searchIn = document.getElementById('table-search-input');
 
-            if (selT) selT.value = 'all';
-            if (selB) selB.value = 'all';
+            if (selT) selT.value = '2025';
+            if (selB) selB.value = '1';
             if (selK) selK.value = 'all';
             if (selS) selS.value = 'all';
             if (searchIn) searchIn.value = '';
@@ -1159,7 +1321,7 @@
             return sum;
         }
 
-        // --- 1. UPDATE KPIS ---
+        // --- 1. UPDATE KPIS (a. Summary) ---
         function updateKPIs() {
             let totalStock = 0;
             const lpmSet = new Set();
@@ -1174,12 +1336,7 @@
                 if (d.desa) desaSet.add(d.desa.trim());
             });
 
-            // Fallback for LPM count if transaction filtered is empty
-            const totalLpmCount = lpmSet.size > 0 ? lpmSet.size : state.filteredLpm.length;
-            const totalKecCount = kecSet.size > 0 ? kecSet.size : new Set(state.filteredLpm.map(i => formatKecamatan(i.detail?.kecamatan))).size;
-            const totalDesaCount = desaSet.size > 0 ? desaSet.size : new Set(state.filteredLpm.map(i => i.detail?.desa)).size;
-
-            // Check how many unique LPMs currently have stock > 0
+            // Hitung lumbung aktif (stok > 0) vs wilayah rawan / stok tipis (stok <= 0)
             const lpmStockMap = {};
             state.filteredTransaksi.forEach(item => {
                 const d = item.detail || {};
@@ -1188,39 +1345,43 @@
                 lpmStockMap[name] = (lpmStockMap[name] || 0) + stock;
             });
 
-            let lpmAdaStok = 0;
+            let lpmAktif = 0;
             Object.values(lpmStockMap).forEach(s => {
-                if (s > 0) lpmAdaStok++;
+                if (s > 0) lpmAktif++;
             });
-            const lpmKosong = Math.max(0, totalLpmCount - lpmAdaStok);
-            const pctSiaga = totalLpmCount > 0 ? ((lpmAdaStok / totalLpmCount) * 100).toFixed(0) : 0;
 
-            // Format Total Stok (Kg / Ton)
+            const totalLpmTerdata = state.rawLpm.length || 31;
+            const lpmStokTipis = Math.max(0, totalLpmTerdata - lpmAktif);
+
+            const totalKecCount = kecSet.size > 0 ? kecSet.size : new Set(state.rawLpm.map(i => formatKecamatan(i.detail?.kecamatan))).size;
+            const totalDesaCount = desaSet.size > 0 ? desaSet.size : new Set(state.rawLpm.map(i => i.detail?.desa)).size;
+
+            // Summary 1: Total Stok: XXX Ton
             const statTotalStokEl = document.getElementById('stat-total-stok');
             const statSubStokEl = document.getElementById('stat-sub-stok');
             if (statTotalStokEl) {
-                if (totalStock >= 1000) {
-                    const ton = totalStock / 1000;
-                    statTotalStokEl.innerText = `${totalStock.toLocaleString('id-ID', { maximumFractionDigits: 1 })} Kg`;
-                    if (statSubStokEl) statSubStokEl.innerText = `Setara dengan ${ton.toLocaleString('id-ID', { maximumFractionDigits: 2 })} Ton Cadangan`;
-                } else {
-                    statTotalStokEl.innerText = `${totalStock.toLocaleString('id-ID')} Kg`;
-                    if (statSubStokEl) statSubStokEl.innerText = 'Stok Gabah / Beras Tersimpan';
-                }
+                const ton = totalStock / 1000;
+                statTotalStokEl.innerText = `${ton.toLocaleString('id-ID', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} Ton`;
+                if (statSubStokEl) statSubStokEl.innerText = `${totalStock.toLocaleString('id-ID', { maximumFractionDigits: 0 })} Kg Tersimpan`;
             }
 
+            // Summary 2: Jumlah Lumbung Aktif: XXX Lumbung
             const statTotalLpmEl = document.getElementById('stat-total-lpm');
-            if (statTotalLpmEl) statTotalLpmEl.innerText = `${totalLpmCount} Unit LPM`;
+            const statSubLpmEl = document.getElementById('stat-sub-lpm');
+            if (statTotalLpmEl) statTotalLpmEl.innerText = `${lpmAktif} Lumbung`;
+            if (statSubLpmEl) statSubLpmEl.innerText = 'Memiliki Cadangan Stok';
 
-            const statCakupanEl = document.getElementById('stat-cakupan-wilayah');
-            if (statCakupanEl) statCakupanEl.innerText = `${totalKecCount} Kec / ${totalDesaCount} Desa`;
-
+            // Summary 3: Wilayah Rawan: Lumbung dengan stok tipis XXX Lumbung
             const statSiagaEl = document.getElementById('stat-siaga-stok');
             const statSubSiagaEl = document.getElementById('stat-sub-siaga');
-            if (statSiagaEl) {
-                statSiagaEl.innerText = `${pctSiaga}% Siap`;
-                if (statSubSiagaEl) statSubSiagaEl.innerText = `${lpmAdaStok} LPM Tersedia | ${lpmKosong} Kosong`;
-            }
+            if (statSiagaEl) statSiagaEl.innerText = `${lpmStokTipis} Lumbung`;
+            if (statSubSiagaEl) statSubSiagaEl.innerText = 'Lumbung dengan stok tipis / kosong';
+
+            // Summary 4: Cakupan Wilayah: XXX Kecamatan, XXX Desa
+            const statCakupanEl = document.getElementById('stat-cakupan-wilayah');
+            const statSubWilayahEl = document.getElementById('stat-sub-wilayah');
+            if (statCakupanEl) statCakupanEl.innerText = `${totalKecCount} Kecamatan, ${totalDesaCount} Desa`;
+            if (statSubWilayahEl) statSubWilayahEl.innerText = 'Kawasan Rentan & Rawan Pangan';
 
             // Sidebar Map Counters
             const sideStok = document.getElementById('map-side-total-stok');
@@ -1230,70 +1391,118 @@
             const sideKec = document.getElementById('map-side-kec-count');
 
             if (sideStok) sideStok.innerText = `${(totalStock / 1000).toLocaleString('id-ID', { maximumFractionDigits: 1 })} Ton`;
-            if (sideLpm) sideLpm.innerText = totalLpmCount;
-            if (sideAda) sideAda.innerText = lpmAdaStok;
-            if (sideKosong) sideKosong.innerText = lpmKosong;
+            if (sideLpm) sideLpm.innerText = totalLpmTerdata;
+            if (sideAda) sideAda.innerText = lpmAktif;
+            if (sideKosong) sideKosong.innerText = lpmStokTipis;
             if (sideKec) sideKec.innerText = totalKecCount;
         }
 
-        // --- 2. RENDER CHARTS (APEXCHARTS) ---
+        // --- 2. RENDER CHARTS (d. Grafik) ---
         function renderCharts() {
+            renderChartTren();
+            renderChartStatus();
+            renderChartKecamatan();
+        }
+
+        // Chart 1: Grafik Tren Penyaluran & Pemanfaatan Stok (Image 5: Per lumbung pangan, filter per tahun, warna 3 #117a8b)
+        function renderChartTren() {
             const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
             const textColor = isDark ? '#cbd5e1' : '#475569';
             const gridBorderColor = isDark ? '#1e293b' : '#f1f5f9';
 
-            // 1. Chart Tren Bulanan
-            const monthlyStock = Array(13).fill(0);
-            state.filteredTransaksi.forEach(item => {
+            const selectedLpm = state.selectedLpmTren || (state.rawLpm[0]?.detail?.nama_lumbung || '');
+            const targetTahun = state.filters.tahun !== 'all' ? state.filters.tahun : '2025';
+
+            // Update badge tahun
+            const badgeTahun = document.getElementById('chart-tren-year-badge');
+            if (badgeTahun) badgeTahun.innerText = `Tahun ${targetTahun}`;
+
+            // Ambil 12 data bulan untuk lumbung terpilih
+            const monthlyValues = Array(12).fill(0);
+            state.rawTransaksi.forEach(item => {
                 const d = item.detail || {};
-                const b = parseInt(d.bulan) || 0;
-                const s = parseFloat(d.stock) || 0;
-                if (b >= 1 && b <= 12) monthlyStock[b] += s;
+                if ((d.nama_lumbung || '').trim().toLowerCase() === selectedLpm.trim().toLowerCase()) {
+                    if (String(d.tahun) === String(targetTahun)) {
+                        const m = parseInt(d.bulan) || 0;
+                        if (m >= 1 && m <= 12) {
+                            monthlyValues[m - 1] = parseFloat(d.stock) || 0;
+                        }
+                    }
+                }
             });
 
-            const monthsData = [];
-            const monthsLabels = [];
-            for (let i = 1; i <= 12; i++) {
-                monthsLabels.push(NAMA_BULAN[i]);
-                monthsData.push(monthlyStock[i]);
-            }
+            const monthCategories = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
 
             const optTren = {
                 chart: {
-                    type: 'area',
-                    height: 280,
+                    type: 'line',
+                    height: 320,
                     toolbar: { show: false },
                     fontFamily: 'Plus Jakarta Sans',
                     animations: { enabled: true }
                 },
-                series: [{ name: 'Volume Stok (Kg)', data: monthsData }],
-                colors: ['#2e8a57'], // Warna 5 (#2e8a57)
-                fill: {
-                    type: 'gradient',
-                    gradient: {
-                        shadeIntensity: 1,
-                        opacityFrom: 0.65,
-                        opacityTo: 0.08,
-                        stops: [0, 95, 100]
+                series: [{
+                    name: 'Stok Cadangan',
+                    data: monthlyValues
+                }],
+                colors: ['#117a8b'], // Warna 3 (#117a8b)
+                stroke: {
+                    curve: 'straight',
+                    width: 3
+                },
+                markers: {
+                    size: 5,
+                    colors: ['#117a8b'],
+                    strokeColors: '#ffffff',
+                    strokeWidth: 2,
+                    hover: { size: 7 }
+                },
+                dataLabels: {
+                    enabled: true,
+                    offsetY: -8,
+                    formatter: (val) => {
+                        if (!val) return '0';
+                        return Math.round(val).toLocaleString('id-ID');
+                    },
+                    style: {
+                        fontSize: '11px',
+                        fontWeight: '700',
+                        colors: [isDark ? '#cbd5e1' : '#1e293b']
                     }
                 },
-                stroke: { curve: 'smooth', width: 2.5 },
-                dataLabels: { enabled: false },
                 xaxis: {
-                    categories: monthsLabels,
-                    labels: { style: { colors: textColor, fontSize: '11px', fontWeight: '600' } },
+                    categories: monthCategories,
+                    title: {
+                        text: 'Bulan',
+                        style: { color: textColor, fontSize: '11px', fontWeight: '600' }
+                    },
+                    labels: {
+                        style: { colors: textColor, fontSize: '11px', fontWeight: '600' }
+                    },
                     axisBorder: { color: gridBorderColor }
                 },
                 yaxis: {
+                    title: {
+                        text: 'Stok (Kg)',
+                        style: { color: textColor, fontSize: '11px', fontWeight: '600' }
+                    },
                     labels: {
                         style: { colors: textColor },
-                        formatter: (val) => val >= 1000 ? `${(val / 1000).toFixed(0)} Ton` : `${val} Kg`
+                        formatter: (val) => Math.round(val).toLocaleString('id-ID')
                     }
                 },
                 grid: { borderColor: gridBorderColor },
                 tooltip: {
                     theme: isDark ? 'dark' : 'light',
-                    y: { formatter: (val) => `${val.toLocaleString('id-ID')} Kg` }
+                    x: {
+                        formatter: (val, { dataPointIndex }) => {
+                            const b = dataPointIndex + 1;
+                            return `Bulan ${b} (${NAMA_BULAN[b] || ''})`;
+                        }
+                    },
+                    y: {
+                        formatter: (val) => `${val.toLocaleString('id-ID', { minimumFractionDigits: 1, maximumFractionDigits: 2 })} Kg`
+                    }
                 }
             };
 
@@ -1304,34 +1513,93 @@
                 state.charts.tren = new ApexCharts(chartTrenEl, optTren);
                 state.charts.tren.render();
             }
+        }
 
-            // 2. Chart Rasio Status Ketersediaan (Donut: Tersedia vs Kosong)
+        // Chart 2: Grafik Status Ketahanan Lumbung (Image 3: Donut chart, hijau #2e8a57 = Tersedia, merah #dc3545 = Kosong)
+        function renderChartStatus() {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            const textColor = isDark ? '#cbd5e1' : '#475569';
+
+            // Hitung lumbung dengan stok tersedia vs kosong berdasarkan filter transaksi aktif
+            const lpmStockMap = {};
+            state.filteredTransaksi.forEach(item => {
+                const d = item.detail || {};
+                const name = (d.nama_lumbung || '').trim();
+                const stock = parseFloat(d.stock) || 0;
+                lpmStockMap[name] = (lpmStockMap[name] || 0) + stock;
+            });
+
             let countTersedia = 0;
             let countKosong = 0;
-            state.filteredLpm.forEach(item => {
-                const name = item.detail?.nama_lumbung;
-                const stock = getLpmTotalStock(name);
+
+            state.rawLpm.forEach(item => {
+                const name = (item.detail?.nama_lumbung || '').trim();
+                const stock = lpmStockMap[name] || 0;
                 if (stock > 0) countTersedia++;
                 else countKosong++;
             });
+
+            const total = countTersedia + countKosong || 1;
+            const pctTersedia = Math.round((countTersedia / total) * 100);
+
+            // Update badge bulan aktif
+            const badgeBulan = document.getElementById('badge-status-bulan');
+            if (badgeBulan) {
+                const b = state.filters.bulan;
+                badgeBulan.innerText = b !== 'all' ? `Bulan: ${NAMA_BULAN[parseInt(b)] || b}` : 'Semua Bulan';
+            }
 
             const optStatus = {
                 chart: {
                     type: 'donut',
                     height: 270,
-                    fontFamily: 'Plus Jakarta Sans'
+                    fontFamily: 'Plus Jakarta Sans',
+                    animations: { enabled: true }
                 },
                 series: [countTersedia, countKosong],
-                labels: ['Tersedia Stok', 'Stok Kosong'],
-                colors: ['#2e8a57', '#dc3545'], // Warna 5 (Tersedia) & Warna 6 (Kosong)
-                legend: { position: 'bottom', labels: { colors: textColor } },
+                labels: ['Stok Tersedia', 'Stok Kosong'],
+                colors: ['#2e8a57', '#dc3545'], // Hijau warna 5 = Stok Tersedia, Merah warna 6 = Stok Kosong
+                plotOptions: {
+                    pie: {
+                        donut: {
+                            size: '72%',
+                            labels: {
+                                show: true,
+                                name: {
+                                    show: true,
+                                    fontSize: '11px',
+                                    fontWeight: '600',
+                                    color: textColor
+                                },
+                                value: {
+                                    show: true,
+                                    fontSize: '24px',
+                                    fontWeight: '800',
+                                    color: isDark ? '#ffffff' : '#0f172a',
+                                    formatter: (val) => `${val}`
+                                },
+                                total: {
+                                    show: true,
+                                    label: 'Tersedia',
+                                    color: textColor,
+                                    fontSize: '11px',
+                                    formatter: () => `${pctTersedia}%`
+                                }
+                            }
+                        }
+                    }
+                },
+                legend: {
+                    position: 'bottom',
+                    labels: { colors: textColor }
+                },
                 dataLabels: {
                     enabled: true,
                     formatter: (val) => val.toFixed(0) + '%'
                 },
                 tooltip: {
                     theme: isDark ? 'dark' : 'light',
-                    y: { formatter: (val) => `${val} Unit Lumbung` }
+                    y: { formatter: (val) => `${val} Lumbung` }
                 }
             };
 
@@ -1343,7 +1611,34 @@
                 state.charts.status.render();
             }
 
-            // 3. Chart Sebaran Stok per Kecamatan
+            // Summary List di bawah donat (format persis seperti referensi Image 3)
+            const listEl = document.getElementById('status-ketahanan-summary-list');
+            if (listEl) {
+                listEl.innerHTML = `
+                    <div class="flex items-center justify-between py-1.5 border-b border-slate-100 dark:border-slate-800">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-[#2e8a57] inline-block shadow-2xs"></span>
+                            <span class="text-slate-700 dark:text-slate-300 font-medium">Stok Tersedia</span>
+                        </div>
+                        <span class="font-bold text-slate-800 dark:text-slate-100">${countTersedia.toLocaleString('id-ID')} Lumbung (${((countTersedia / total) * 100).toFixed(1)}%)</span>
+                    </div>
+                    <div class="flex items-center justify-between py-1.5 border-b border-slate-100 dark:border-slate-800">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-[#dc3545] inline-block shadow-2xs"></span>
+                            <span class="text-slate-700 dark:text-slate-300 font-medium">Stok Kosong</span>
+                        </div>
+                        <span class="font-bold text-slate-800 dark:text-slate-100">${countKosong.toLocaleString('id-ID')} Lumbung (${((countKosong / total) * 100).toFixed(1)}%)</span>
+                    </div>
+                `;
+            }
+        }
+
+        // Chart 3: Grafik Distribusi Stok per Kecamatan (Image 4: Column chart, Warna 4 #4dbdaf, Largest to Smallest)
+        function renderChartKecamatan() {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            const textColor = isDark ? '#cbd5e1' : '#475569';
+            const gridBorderColor = isDark ? '#1e293b' : '#f1f5f9';
+
             const kecStockMap = {};
             state.filteredTransaksi.forEach(item => {
                 const d = item.detail || {};
@@ -1352,45 +1647,65 @@
                 kecStockMap[k] = (kecStockMap[k] || 0) + s;
             });
 
+            // Urutkan largest to smallest (descending) sesuai instruksi Image 4
             const sortedKec = Object.entries(kecStockMap).sort((a, b) => b[1] - a[1]);
             const kecLabels = sortedKec.map(x => x[0]);
             const kecValues = sortedKec.map(x => Math.round(x[1]));
 
+            const totalInfoEl = document.getElementById('kec-chart-total-info');
+            if (totalInfoEl) totalInfoEl.innerText = `${kecLabels.length} Kecamatan Terdata`;
+
             const optKec = {
                 chart: {
                     type: 'bar',
-                    height: 300,
+                    height: 290,
                     toolbar: { show: false },
-                    fontFamily: 'Plus Jakarta Sans'
+                    fontFamily: 'Plus Jakarta Sans',
+                    animations: { enabled: true }
                 },
-                series: [{ name: 'Total Stok (Kg)', data: kecValues }],
-                colors: ['#117a8b'], // Warna 3
+                series: [{
+                    name: 'Total Stok (Kg)',
+                    data: kecValues
+                }],
+                colors: ['#4dbdaf'], // Warna 4 (#4dbdaf)
                 plotOptions: {
                     bar: {
                         borderRadius: 6,
-                        columnWidth: '50%',
+                        borderRadiusApplication: 'top',
+                        columnWidth: '45%',
                         dataLabels: { position: 'top' }
                     }
                 },
                 dataLabels: { enabled: false },
                 xaxis: {
                     categories: kecLabels.length > 0 ? kecLabels : ['-'],
+                    title: {
+                        text: 'Kecamatan',
+                        style: { color: textColor, fontSize: '11px', fontWeight: '600' }
+                    },
                     labels: {
                         rotate: -45,
                         rotateAlways: true,
                         style: { colors: textColor, fontSize: '10.5px', fontWeight: '600' }
-                    }
+                    },
+                    axisBorder: { color: gridBorderColor }
                 },
                 yaxis: {
+                    title: {
+                        text: 'Stok (Kg)',
+                        style: { color: textColor, fontSize: '11px', fontWeight: '600' }
+                    },
                     labels: {
                         style: { colors: textColor },
-                        formatter: (val) => val >= 1000 ? `${Math.round(val / 1000)} Ton` : `${val} Kg`
+                        formatter: (val) => val.toLocaleString('id-ID')
                     }
                 },
                 grid: { borderColor: gridBorderColor },
                 tooltip: {
                     theme: isDark ? 'dark' : 'light',
-                    y: { formatter: (val) => `${val.toLocaleString('id-ID')} Kg` }
+                    y: {
+                        formatter: (val) => `${val.toLocaleString('id-ID')} Kg`
+                    }
                 }
             };
 
@@ -1400,70 +1715,6 @@
                 chartKecEl.innerHTML = '';
                 state.charts.kec = new ApexCharts(chartKecEl, optKec);
                 state.charts.kec.render();
-            }
-
-            // 4. Chart 10 Lumbung Terbesar (Top 10)
-            const lumbungStockMap = {};
-            state.filteredTransaksi.forEach(item => {
-                const d = item.detail || {};
-                const name = d.nama_lumbung ? d.nama_lumbung.trim() : 'Lainnya';
-                const s = parseFloat(d.stock) || 0;
-                lumbungStockMap[name] = (lumbungStockMap[name] || 0) + s;
-            });
-
-            const sortedLumbung = Object.entries(lumbungStockMap)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 10);
-
-            const topLabels = sortedLumbung.map(x => x[0]);
-            const topValues = sortedLumbung.map(x => Math.round(x[1]));
-
-            const optTop = {
-                chart: {
-                    type: 'bar',
-                    height: 300,
-                    toolbar: { show: false },
-                    fontFamily: 'Plus Jakarta Sans'
-                },
-                plotOptions: {
-                    bar: {
-                        horizontal: true,
-                        borderRadius: 5,
-                        barHeight: '55%',
-                        distributed: true
-                    }
-                },
-                series: [{ name: 'Total Cadangan (Kg)', data: topValues }],
-                colors: ['#2e8a57', '#117a8b', '#4dbdaf', '#0a4b57', '#f4a261', '#e07a5f', '#1d2d35', '#e9c46a', '#94a3a8', '#64748b'],
-                dataLabels: {
-                    enabled: true,
-                    formatter: (val) => `${(val / 1000).toFixed(1)} Ton`,
-                    style: { fontSize: '9px', fontWeight: '700' }
-                },
-                xaxis: {
-                    categories: topLabels.length > 0 ? topLabels : ['-'],
-                    labels: {
-                        style: { colors: textColor, fontSize: '10px' },
-                        formatter: (val) => val >= 1000 ? `${Math.round(val / 1000)} Ton` : val
-                    }
-                },
-                yaxis: {
-                    labels: { style: { colors: textColor, fontSize: '10.5px', fontWeight: '600' } }
-                },
-                legend: { show: false },
-                grid: { borderColor: gridBorderColor },
-                tooltip: {
-                    theme: isDark ? 'dark' : 'light',
-                    y: { formatter: (val) => `${val.toLocaleString('id-ID')} Kg` }
-                }
-            };
-
-            const chartTopEl = document.getElementById('chart-top-lumbung');
-            if (chartTopEl) {
-                if (state.charts.top) state.charts.top.destroy();
-                chartTopEl.innerHTML = '';
-                state.charts.top = new ApexCharts(chartTopEl, optTop);
-                state.charts.top.render();
             }
         }
 
@@ -1669,28 +1920,29 @@
                 });
 
                 const popupHtml = `
-                    <div class="p-3.5 font-sans min-w-[230px]">
-                        <div class="bg-[#117a8b] text-white p-2.5 -m-3.5 mb-2.5 rounded-t-xl flex items-center justify-between">
+                    <div class="p-3.5 font-sans min-w-[240px]">
+                        <div class="bg-[#117a8b] text-white p-2.5 -m-3.5 mb-3 rounded-t-xl flex items-center justify-between">
                             <div>
                                 <h4 class="font-extrabold text-xs uppercase tracking-wider">${escapeHtml(name)}</h4>
                                 <p class="text-[10px] text-teal-100">Lumbung Pangan Masyarakat</p>
                             </div>
-                            <span class="px-2 py-0.5 rounded-full text-[9.5px] font-bold ${isTersedia ? 'bg-emerald-500 text-white' : 'bg-red-500 text-white'}">
-                                ${isTersedia ? 'Tersedia Stok' : 'Stok Kosong'}
+                            <span class="px-2 py-0.5 rounded-full text-[9.5px] font-bold ${isTersedia ? 'bg-[#2e8a57] text-white' : 'bg-[#dc3545] text-white'}">
+                                ${isTersedia ? 'Stok Tersedia' : 'Stok Kosong'}
                             </span>
                         </div>
-                        <div class="space-y-1 text-xs text-slate-700 dark:text-slate-300 mt-3">
-                            <p><b>Wilayah:</b> Kec. ${escapeHtml(d.kecamatan || '-')}, Ds. ${escapeHtml(d.desa || '-')}</p>
-                            <p><b>Alamat:</b> ${escapeHtml(d.alamat || '-')}</p>
-                            <p><b>Ketua:</b> ${escapeHtml(d.ketua || '-')} (${escapeHtml(d.kontak || '-')})</p>
-                            <div class="p-2 rounded-lg bg-slate-50 dark:bg-slate-800 text-center my-2 border border-slate-100 dark:border-slate-700">
-                                <span class="text-[10px] text-slate-400 block font-semibold">Total Stok Tercatat</span>
-                                <span class="font-black text-sm ${isTersedia ? 'text-[#2e8a57]' : 'text-slate-500'} font-mono">${stock.toLocaleString('id-ID')} Kg</span>
+                        <div class="space-y-1.5 text-xs text-slate-700 dark:text-slate-300">
+                            <p><span class="text-slate-400 font-medium">Ketua:</span> <span class="font-bold text-slate-900 dark:text-white">${escapeHtml(d.ketua || '-')}</span></p>
+                            <p><span class="text-slate-400 font-medium">Nomor Kontak:</span> <span class="font-bold text-slate-900 dark:text-white font-mono">${escapeHtml(d.kontak || '-')}</span></p>
+                            <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-center my-2 border border-slate-200/80 dark:border-slate-700">
+                                <span class="text-[10px] text-slate-400 block font-semibold">Jumlah Stok Terkini</span>
+                                <span class="font-black text-sm ${isTersedia ? 'text-[#2e8a57]' : 'text-[#dc3545]'} font-mono">${stock.toLocaleString('id-ID')} Kg</span>
                             </div>
+                            <p class="text-[11px] text-slate-500"><span class="text-slate-400">Wilayah:</span> Kec. ${escapeHtml(d.kecamatan || '-')}, Ds. ${escapeHtml(d.desa || '-')}</p>
+                            <p class="text-[11px] text-slate-500"><span class="text-slate-400">Alamat:</span> ${escapeHtml(d.alamat || '-')}</p>
                         </div>
                         ${d.lokasi && d.lokasi !== '-' ? `
                             <a href="${escapeHtml(d.lokasi)}" target="_blank" rel="noopener noreferrer"
-                                class="mt-2 block w-full py-1.5 px-2 bg-[#117a8b] hover:bg-[#0a4b57] text-white text-[11px] font-bold rounded-lg transition text-center shadow-xs">
+                                class="mt-2.5 block w-full py-1.5 px-2 bg-[#117a8b] hover:bg-[#0a4b57] text-white text-[11px] font-bold rounded-lg transition text-center shadow-xs">
                                 Buka Rute Google Maps 📍
                             </a>
                         ` : ''}
