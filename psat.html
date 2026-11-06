@@ -124,56 +124,71 @@
             }
         }
 
-        /* Map styling */
+        /* Map styling (Mode Terang ArcGIS World Street Map Persis FSVA) */
         #psat-map {
-            background-color: #1a1d20;
+            background-color: #f8fafc;
         }
 
         .leaflet-container {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #1a1d20 !important;
+            background-color: #f8fafc !important;
         }
 
-        /* Custom Pin Marker (Orange circle with white border and monitor icon) */
+        /* Custom Pin Marker (Pin map icon seperti cakupan lokasi) */
         .psat-pin-marker {
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: transform 0.2s ease;
+            cursor: pointer;
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .psat-pin-marker:hover {
-            transform: scale(1.2);
+            transform: scale(1.3);
             z-index: 9999 !important;
         }
 
         .psat-pin-circle {
-            width: 24px;
-            height: 24px;
+            width: 26px;
+            height: 26px;
             border-radius: 9999px;
-            background: #ea580c;
-            border: 2px solid #ffffff;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #ffffff;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.22);
+            border: 2px solid #ffffff;
+            transition: all 0.2s ease;
         }
 
-        /* Kecamatan Label Pill */
-        .kecamatan-label-pill {
-            background: #ffffff;
-            border: 1px solid #94a3b8;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-            border-radius: 4px;
-            padding: 1px 4.5px;
-            font-size: 8px;
+        .psat-pin-circle.is-aman {
+            background: #ffedd5;
+            color: #ea580c;
+            border-color: #ffffff;
+        }
+
+        .psat-pin-circle.has-kritis {
+            background: #fee2e2;
+            color: #dc3545;
+            border-color: #ffffff;
+            box-shadow: 0 0 0 2px #dc3545, 0 3px 8px rgba(220, 53, 69, 0.35);
+        }
+
+        /* Kecamatan Map Label (Nama Kecamatan di Peta) */
+        .kecamatan-map-label {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 9.5px;
             font-weight: 800;
-            color: #0f172a;
-            text-transform: uppercase;
-            letter-spacing: 0.03em;
-            pointer-events: none;
+            color: #1e293b;
+            text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff, 0 0 6px #fff;
             white-space: nowrap;
+            pointer-events: none;
+            text-align: center;
+            letter-spacing: 0.4px;
+        }
+
+        .kec-label-wrapper {
+            background: transparent !important;
+            border: none !important;
         }
 
         .leaflet-popup-content-wrapper {
@@ -221,7 +236,7 @@
     <!-- Navbar -->
     <nav class="fixed top-0 w-full z-50 glass-nav transition-all duration-300">
         <div class="container mx-auto px-4 lg:px-8">
-            <div class="flex flex-col lg:flex-row lg:h-20 lg:items-center justify-between gap-4 py-3 lg:py-0">
+            <div class="flex h-20 items-center justify-between gap-4 py-3 lg:py-0">
                 <!-- Logo & Title -->
                 <div class="flex items-center justify-between w-full lg:w-auto">
                     <div class="flex items-center gap-3">
@@ -241,7 +256,7 @@
                             class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-50 text-slate-700 hover:text-[#117a8b] hover:bg-[#117a8b]/10 border border-slate-200 text-[11px] font-bold transition shadow-2xs"
                             title="Kembali ke Portal DISPAKAN">
                             <i data-lucide="layout-dashboard" class="w-3.5 h-3.5 text-[#117a8b]"></i>
-                            <span>Kembali ke Portal DISPAKAN</span>
+                            <span>Portal</span>
                         </a>
                         <span class="relative flex h-2 w-2">
                             <span
@@ -251,63 +266,6 @@
                         <button onclick="window.location.reload()" class="p-2 rounded-lg bg-slate-50 text-slate-600">
                             <i data-lucide="refresh-cw" class="w-4 h-4"></i>
                         </button>
-                    </div>
-                </div>
-
-                <!-- Desktop Filters (Center) -->
-                <div class="hidden lg:flex flex-1 mx-2 xl:mx-4 gap-2 items-center justify-center">
-                    <!-- Filter Bulan -->
-                    <div class="relative group min-w-[145px] shrink-0">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <i data-lucide="calendar" class="w-4 h-4 text-slate-500"></i>
-                        </div>
-                        <select id="nav-filter-bulan" onchange="syncNavFilter('bulan', this.value)"
-                            class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-xs sm:text-sm rounded-xl focus:ring-[#117a8b] focus:border-[#117a8b] block pl-9 pr-7 py-2.5 cursor-pointer font-medium appearance-none hover:bg-white transition-colors">
-                            <option value="all">Semua Bulan</option>
-                            <option value="1">Januari</option>
-                            <option value="2">Februari</option>
-                            <option value="3">Maret</option>
-                            <option value="4">April</option>
-                            <option value="5">Mei</option>
-                            <option value="6">Juni</option>
-                            <option value="7">Juli</option>
-                            <option value="8">Agustus</option>
-                            <option value="9">September</option>
-                            <option value="10">Oktober</option>
-                            <option value="11">November</option>
-                            <option value="12">Desember</option>
-                        </select>
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none">
-                            <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
-                        </div>
-                    </div>
-
-                    <!-- Filter Tahun -->
-                    <div class="relative group min-w-[135px] shrink-0">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <i data-lucide="calendar" class="w-4 h-4 text-slate-500"></i>
-                        </div>
-                        <select id="nav-filter-tahun" onchange="syncNavFilter('tahun', this.value)"
-                            class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-xs sm:text-sm rounded-xl focus:ring-[#117a8b] focus:border-[#117a8b] block pl-9 pr-7 py-2.5 cursor-pointer font-medium appearance-none hover:bg-white transition-colors">
-                            <option value="all">Semua Tahun</option>
-                        </select>
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none">
-                            <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
-                        </div>
-                    </div>
-
-                    <!-- Filter Asal Sampel -->
-                    <div class="relative group min-w-[170px] max-w-[260px] flex-1">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <i data-lucide="map-pin" class="w-4 h-4 text-slate-500"></i>
-                        </div>
-                        <select id="nav-filter-asal-sampel" onchange="syncNavFilter('asal', this.value)"
-                            class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-xs sm:text-sm rounded-xl focus:ring-[#117a8b] focus:border-[#117a8b] block pl-9 pr-7 py-2.5 cursor-pointer font-medium appearance-none hover:bg-white transition-colors truncate">
-                            <option value="all">Semua Asal Sampel</option>
-                        </select>
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none">
-                            <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
-                        </div>
                     </div>
                 </div>
 
@@ -337,56 +295,11 @@
                     </button>
                 </div>
             </div>
-
-            <!-- Mobile Filter Section -->
-            <div class="lg:hidden flex flex-col gap-2 pb-3">
-                <div class="grid grid-cols-2 gap-2">
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <i data-lucide="calendar" class="w-4 h-4 text-slate-500"></i>
-                        </div>
-                        <select id="mobile-filter-bulan" onchange="syncNavFilter('bulan', this.value)"
-                            class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg pl-10 p-2.5 font-medium appearance-none">
-                            <option value="all">Semua Bulan</option>
-                            <option value="1">Januari</option>
-                            <option value="2">Februari</option>
-                            <option value="3">Maret</option>
-                            <option value="4">April</option>
-                            <option value="5">Mei</option>
-                            <option value="6">Juni</option>
-                            <option value="7">Juli</option>
-                            <option value="8">Agustus</option>
-                            <option value="9">September</option>
-                            <option value="10">Oktober</option>
-                            <option value="11">November</option>
-                            <option value="12">Desember</option>
-                        </select>
-                    </div>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <i data-lucide="calendar" class="w-4 h-4 text-slate-500"></i>
-                        </div>
-                        <select id="mobile-filter-tahun" onchange="syncNavFilter('tahun', this.value)"
-                            class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg pl-10 p-2.5 font-medium appearance-none">
-                            <option value="all">Semua Tahun</option>
-                        </select>
-                    </div>
-                    <div class="relative col-span-2">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <i data-lucide="map-pin" class="w-4 h-4 text-slate-500"></i>
-                        </div>
-                        <select id="mobile-filter-asal-sampel" onchange="syncNavFilter('asal', this.value)"
-                            class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg pl-10 p-2.5 font-medium appearance-none">
-                            <option value="all">Semua Asal Sampel</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-4 lg:px-8 py-8 mt-44 sm:mt-40 lg:mt-20 mb-12">
+    <main class="container mx-auto px-4 lg:px-8 py-8 mt-24 lg:mt-20 mb-12">
 
         <!-- Header Section -->
         <header class="mb-8 relative">
@@ -499,7 +412,7 @@
 
         <!-- PETA SEBARAN PSAT (Layout 3 Cols Map + 1 Col Sidebar Persis Seperti Peta FSVA) -->
         <section class="mb-6 bg-white rounded-2xl shadow-soft border border-slate-100 overflow-hidden">
-            <!-- Filter Bar Peta -->
+            <!-- Filter Bar Peta (Urutan: Tahun - Bulan - Asal Sampel - Reset sesuai Poin a) -->
             <div
                 class="p-3.5 sm:p-4 border-b border-slate-100 bg-slate-50/70 flex flex-col md:flex-row md:items-center justify-between gap-3">
                 <div class="flex items-center gap-2.5">
@@ -515,12 +428,24 @@
                     </div>
                 </div>
 
-                <!-- Controls: Filter Bulan, Tahun, Asal Sampel, dan Tombol Reset -->
+                <!-- Controls: Filter Tahun, Bulan, Asal Sampel, dan Tombol Reset (Sesuai Urutan Permintaan) -->
                 <div class="flex flex-wrap items-center gap-2">
-                    <!-- Filter Bulan -->
-                    <div class="relative min-w-[130px]">
+                    <!-- Filter Tahun (Pertama) -->
+                    <div class="relative min-w-[120px]">
+                        <select id="filter-tahun" onchange="applyFilters()"
+                            class="w-full bg-white border border-slate-200 text-slate-700 text-xs font-semibold rounded-xl pl-3 pr-8 py-2 focus:ring-2 focus:ring-[#117a8b] focus:border-[#117a8b] appearance-none cursor-pointer shadow-2xs hover:bg-slate-50 transition">
+                            <option value="all">Semua Tahun</option>
+                        </select>
+                        <div
+                            class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
+                            <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+                        </div>
+                    </div>
+
+                    <!-- Filter Bulan (Kedua) -->
+                    <div class="relative min-w-[135px]">
                         <select id="filter-bulan" onchange="applyFilters()"
-                            class="w-full bg-white border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg pl-3 pr-7 py-2 focus:ring-2 focus:ring-[#117a8b] focus:border-[#117a8b] appearance-none cursor-pointer shadow-2xs hover:bg-slate-50 transition">
+                            class="w-full bg-white border border-slate-200 text-slate-700 text-xs font-semibold rounded-xl pl-3 pr-8 py-2 focus:ring-2 focus:ring-[#117a8b] focus:border-[#117a8b] appearance-none cursor-pointer shadow-2xs hover:bg-slate-50 transition">
                             <option value="all">Semua Bulan</option>
                             <option value="1">Januari</option>
                             <option value="2">Februari</option>
@@ -536,39 +461,27 @@
                             <option value="12">Desember</option>
                         </select>
                         <div
-                            class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none text-slate-400">
-                            <i data-lucide="chevron-down" class="w-3 h-3"></i>
+                            class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
+                            <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
                         </div>
                     </div>
 
-                    <!-- Filter Tahun -->
-                    <div class="relative min-w-[110px]">
-                        <select id="filter-tahun" onchange="applyFilters()"
-                            class="w-full bg-white border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg pl-3 pr-7 py-2 focus:ring-2 focus:ring-[#117a8b] focus:border-[#117a8b] appearance-none cursor-pointer shadow-2xs hover:bg-slate-50 transition">
-                            <option value="all">Semua Tahun</option>
-                        </select>
-                        <div
-                            class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none text-slate-400">
-                            <i data-lucide="chevron-down" class="w-3 h-3"></i>
-                        </div>
-                    </div>
-
-                    <!-- Filter Asal Sampel -->
-                    <div class="relative min-w-[160px]">
+                    <!-- Filter Asal Sampel (Ketiga) -->
+                    <div class="relative min-w-[160px] max-w-[220px]">
                         <select id="filter-asal-sampel" onchange="applyFilters()"
-                            class="w-full bg-white border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg pl-3 pr-7 py-2 focus:ring-2 focus:ring-[#117a8b] focus:border-[#117a8b] appearance-none cursor-pointer shadow-2xs hover:bg-slate-50 transition">
+                            class="w-full bg-white border border-slate-200 text-slate-700 text-xs font-semibold rounded-xl pl-3 pr-8 py-2 focus:ring-2 focus:ring-[#117a8b] focus:border-[#117a8b] appearance-none cursor-pointer shadow-2xs hover:bg-slate-50 transition truncate">
                             <option value="all">Semua Asal Sampel</option>
                         </select>
                         <div
-                            class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none text-slate-400">
-                            <i data-lucide="chevron-down" class="w-3 h-3"></i>
+                            class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
+                            <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
                         </div>
                     </div>
 
                     <!-- Reset Button -->
                     <button onclick="resetFilters()"
-                        class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition flex items-center gap-1.5 active:scale-95 shadow-2xs">
-                        <i data-lucide="rotate-ccw" class="w-3 h-3"></i>
+                        class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition flex items-center gap-1.5 active:scale-95 shadow-2xs">
+                        <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
                         <span>Reset</span>
                     </button>
                 </div>
@@ -580,42 +493,36 @@
                 <div class="lg:col-span-3 p-3 sm:p-4 border-b lg:border-b-0 lg:border-r border-slate-100 relative">
                     <div class="flex items-center justify-between mb-2 px-1">
                         <span
-                            class="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
+                            class="text-[10px] font-bold text-slate-700 uppercase tracking-widest flex items-center gap-1.5">
                             <span class="w-2 h-2 rounded-full bg-[#117a8b] inline-block"></span>
                             Peta Sebaran Sampling PSAT Kabupaten Bandung
                         </span>
-                        <span class="text-[10px] font-semibold text-slate-400">Zoom Out Otomatis</span>
+                        <span class="text-[10px] font-semibold text-slate-400">PETA SEBARAN PSAT KABUPATEN BANDUNG</span>
                     </div>
 
                     <div
-                        class="relative w-full h-[440px] rounded-xl overflow-hidden bg-[#1a1d20] border border-slate-200/40">
-                        <div id="psat-map" class="w-full h-full z-10 bg-[#1a1d20]"></div>
+                        class="relative w-full h-[460px] rounded-xl overflow-hidden bg-slate-50 border border-slate-200/60 shadow-xs">
+                        <div id="psat-map" class="w-full h-full z-10 bg-slate-50"></div>
 
-                        <!-- Floating Mini Legend (Kiri Bawah Peta) -->
+                        <!-- Floating Mini Legend (Kiri Bawah Peta - Persis Format FSVA) -->
                         <div
-                            class="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md p-2.5 rounded-lg shadow-md border border-slate-200 z-[400] text-[10px] font-medium hidden sm:flex items-center gap-3">
-                            <div class="flex items-center gap-1.5">
-                                <span
-                                    class="w-3 h-3 rounded-full bg-[#ea580c] border border-white inline-block shadow-2xs"></span>
-                                <span class="text-slate-700">Titik Sampling PSAT</span>
+                            class="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md p-3 rounded-xl shadow-md border border-slate-200 z-[400] text-[10px] font-semibold hidden sm:flex flex-col gap-1.5">
+                            <div class="text-[9.5px] font-black text-slate-700 uppercase tracking-wider mb-0.5">HASIL PENGUJIAN SAMPEL</div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-[#2e8a57] border border-white inline-block shadow-2xs"></span>
+                                <span class="text-slate-700">Sampel Aman (Memenuhi Syarat)</span>
                             </div>
-                            <div class="flex items-center gap-1.5">
-                                <span
-                                    class="w-3 h-2.5 rounded bg-[#00b493] border border-slate-700 inline-block shadow-2xs"></span>
-                                <span class="text-slate-700">Kecamatan Terpantau</span>
-                            </div>
-                            <div class="flex items-center gap-1.5">
-                                <span
-                                    class="w-3 h-2.5 rounded bg-[#c5ded7] border border-slate-700 inline-block shadow-2xs"></span>
-                                <span class="text-slate-700">Wilayah Sekitar</span>
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-[#dc3545] border border-white inline-block shadow-2xs"></span>
+                                <span class="text-slate-700">Temuan Kritis (Residu Pestisida)</span>
                             </div>
                         </div>
 
                         <!-- Map Loading Spinner -->
                         <div id="map-loading"
-                            class="absolute inset-0 z-30 bg-[#1a1d20]/80 flex flex-col items-center justify-center text-white transition-opacity duration-300">
+                            class="absolute inset-0 z-30 bg-white/80 backdrop-blur-xs flex flex-col items-center justify-center text-slate-700 transition-opacity duration-300">
                             <div class="loader mb-2"></div>
-                            <p class="text-[11px] font-semibold text-slate-200">Memuat batas wilayah & pin lokasi...</p>
+                            <p class="text-[11px] font-semibold text-slate-600">Memuat batas wilayah & pin lokasi...</p>
                         </div>
                     </div>
                 </div>
@@ -623,9 +530,10 @@
                 <!-- Sidebar Kanan (Logo Kab Bandung & Ringkasan Keterangan PSAT - Sesuai FSVA) -->
                 <div class="lg:col-span-1 p-4 sm:p-5 flex flex-col justify-between bg-slate-50/50">
                     <div>
-                        <!-- Logo Kabupaten Bandung -->
+                        <!-- Logo Kabupaten Bandung Resmi -->
                         <div class="flex justify-center mb-3">
-                            <img src="https://bandungkab.go.id/uploads/images/logo_bandungkab.png"
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/ee/Lambang_Kabupaten_Bandung.png"
+                                onerror="this.src='https://bandungkab.go.id/uploads/images/logo_bandungkab.png'"
                                 alt="Logo Kabupaten Bandung"
                                 class="h-20 object-contain drop-shadow-xs hover:scale-105 transition-transform">
                         </div>
@@ -640,7 +548,7 @@
                             </p>
                         </div>
 
-                        <!-- Legend Items with Counts -->
+                        <!-- Legend Items with Counts (Poin d: Kec. Terpantau Dihapus) -->
                         <ul class="space-y-2 text-xs">
                             <li
                                 class="flex items-center justify-between p-2 rounded-lg bg-white border border-slate-200/90 shadow-2xs">
@@ -675,17 +583,6 @@
                                         id="side-stat-tidak-aman">0</span> <span
                                         class="text-[9.5px] font-normal text-slate-500">Sampel</span></span>
                             </li>
-                            <li
-                                class="flex items-center justify-between p-2 rounded-lg bg-white border border-slate-200/90 shadow-2xs">
-                                <div class="flex items-center gap-2">
-                                    <span
-                                        class="w-3.5 h-3.5 rounded-xs bg-[#00b493] shrink-0 border border-[#007f68]"></span>
-                                    <span class="font-bold text-slate-700 text-[10.5px]">Kec. Terpantau</span>
-                                </div>
-                                <span class="font-black text-slate-800 font-mono text-xs"><span
-                                        id="side-stat-kecamatan">0</span> <span
-                                        class="text-[9.5px] font-normal text-slate-500">Kec</span></span>
-                            </li>
                         </ul>
                     </div>
 
@@ -699,9 +596,9 @@
             </div>
         </section>
 
-        <!-- Charts Grid 1: 2 Kolom Persis Seperti FSVA (Compact Heights & Sizing) -->
+        <!-- Charts Grid 1: 2 Kolom Persis Seperti FSVA -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-            <!-- Chart 1: Rasio Keamanan Sampel (Gambar 2: Donut Chart Warna 5 & 6) -->
+            <!-- Chart 1: Rasio Keamanan Sampel (Poin i) -->
             <div class="bg-white p-4.5 rounded-xl shadow-xs border border-slate-100">
                 <div class="flex items-center justify-between mb-3">
                     <div class="flex items-center gap-2">
@@ -711,17 +608,16 @@
                         </div>
                         <div>
                             <h3 class="font-bold text-slate-800 text-sm leading-tight">Rasio Keamanan Sampel</h3>
-                            <p class="text-[10.5px] text-slate-500 font-medium">Aman (Warna 5 #2e8a57) vs Tidak Aman
-                                (Warna 6 #dc3545)</p>
+                            <p class="text-[10.5px] text-slate-500 font-medium">Presentasi sampel yang dinyatakan aman dan tidak aman</p>
                         </div>
                     </div>
                 </div>
-                <div id="chart-keamanan" class="h-60 flex items-center justify-center">
+                <div id="chart-keamanan" class="h-[280px] flex items-center justify-center">
                     <div class="loader opacity-50"></div>
                 </div>
             </div>
 
-            <!-- Chart 2: Rasio Keamanan per Kategori (Gambar 3 - Urutan: Pasar, Pelaku Usaha, SPPG) -->
+            <!-- Chart 2: Status Keamanan Sampel per Kategori Pengawasan (Poin j) -->
             <div class="bg-white p-4.5 rounded-xl shadow-xs border border-slate-100">
                 <div class="flex items-center justify-between mb-3">
                     <div class="flex items-center gap-2">
@@ -730,22 +626,20 @@
                             <i data-lucide="bar-chart-2" class="w-4 h-4"></i>
                         </div>
                         <div>
-                            <h3 class="font-bold text-slate-800 text-sm leading-tight">Rasio Keamanan per Kategori
-                                Pengawasan</h3>
-                            <p class="text-[10.5px] text-slate-500 font-medium">Urutan Kategori: Pasar, Pelaku Usaha,
-                                SPPG</p>
+                            <h3 class="font-bold text-slate-800 text-sm leading-tight">Status Keamanan Sampel per Kategori Pengawasan</h3>
+                            <p class="text-[10.5px] text-slate-500 font-medium">Perbandingan sampel aman dan tidak aman di Pasar, Pelaku Usaha, dan SPPG</p>
                         </div>
                     </div>
                 </div>
-                <div id="chart-kategori-rasio" class="h-60 flex items-center justify-center">
+                <div id="chart-kategori-rasio" class="h-[280px] flex items-center justify-center">
                     <div class="loader opacity-50"></div>
                 </div>
             </div>
         </div>
 
-        <!-- Charts Grid 2: 2 Kolom Persis Seperti FSVA (Compact Heights & Sizing) -->
+        <!-- Charts Grid 2: 2 Kolom Persis Seperti FSVA (Poin f: Diperbesar / Ditarik ke bawah) -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-            <!-- Chart 3: 10 Komoditi Paling Banyak Diuji (Gambar 3) -->
+            <!-- Chart 3: Top 10 Komoditi Teruji (Poin k & f) -->
             <div class="bg-white p-4.5 rounded-xl shadow-xs border border-slate-100">
                 <div class="flex items-center justify-between mb-3">
                     <div class="flex items-center gap-2">
@@ -754,19 +648,17 @@
                             <i data-lucide="shopping-basket" class="w-4 h-4"></i>
                         </div>
                         <div>
-                            <h3 class="font-bold text-slate-800 text-sm leading-tight">10 Komoditi Paling Banyak Diuji
-                            </h3>
-                            <p class="text-[10.5px] text-slate-500 font-medium">Frekuensi pengujian cepat residu
-                                pestisida per komoditi</p>
+                            <h3 class="font-bold text-slate-800 text-sm leading-tight">Top 10 Komoditi Teruji</h3>
+                            <p class="text-[10.5px] text-slate-500 font-medium">Frekuensi pengujian rapid test residu pestisida per komoditi</p>
                         </div>
                     </div>
                 </div>
-                <div id="chart-komoditi" class="h-60 flex items-center justify-center">
+                <div id="chart-komoditi" class="h-[340px] flex items-center justify-center">
                     <div class="loader opacity-50"></div>
                 </div>
             </div>
 
-            <!-- Chart 4: Tren Pengujian Sampel Bulanan -->
+            <!-- Chart 4: Tren Hasil Pengujian Bulanan (Poin l & f) -->
             <div class="bg-white p-4.5 rounded-xl shadow-xs border border-slate-100">
                 <div class="flex items-center justify-between mb-3">
                     <div class="flex items-center gap-2">
@@ -775,20 +667,18 @@
                             <i data-lucide="calendar" class="w-4 h-4"></i>
                         </div>
                         <div>
-                            <h3 class="font-bold text-slate-800 text-sm leading-tight">Tren Pengujian Sampel Bulanan
-                            </h3>
-                            <p class="text-[10.5px] text-slate-500 font-medium">Distribusi sampel diuji per bulan (Aman
-                                vs Tidak Aman)</p>
+                            <h3 class="font-bold text-slate-800 text-sm leading-tight">Tren Hasil Pengujian Bulanan</h3>
+                            <p class="text-[10.5px] text-slate-500 font-medium">Distribusi sampel teruji dan status keamanan per bulan</p>
                         </div>
                     </div>
                 </div>
-                <div id="chart-tren-bulanan" class="h-60 flex items-center justify-center">
+                <div id="chart-tren-bulanan" class="h-[340px] flex items-center justify-center">
                     <div class="loader opacity-50"></div>
                 </div>
             </div>
         </div>
 
-        <!-- Tabel Temuan Komoditi Tidak Aman (Sesuai Gambar 4: Header Merah Warna 6 #dc3545) -->
+        <!-- Tabel Temuan Komoditi Tidak Aman (Poin m: Header Merah Warna 6 #dc3545) -->
         <section class="bg-white rounded-xl shadow-xs border border-slate-100 overflow-hidden mb-6"
             id="section-tabel-tidak-aman">
             <div
@@ -799,14 +689,13 @@
                     </div>
                     <div>
                         <div class="flex items-center gap-2">
-                            <h3 class="font-bold text-slate-800 text-sm">Tabel Temuan Komoditi Tidak Aman</h3>
+                            <h3 class="font-bold text-slate-800 text-sm">Daftar Temuan Sampel Tidak Aman</h3>
                             <span id="badge-count-tidak-aman"
                                 class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-red-100 text-[#dc3545] border border-red-200">
                                 0 Data
                             </span>
                         </div>
-                        <p class="text-[10.5px] text-slate-500">Daftar komoditi terindikasi residu pestisida melebihi
-                            batas aman</p>
+                        <p class="text-[10.5px] text-slate-500">Rekapitulasi komoditi yang melebihi batas residu pestisida untuk tindak lanjut</p>
                     </div>
                 </div>
                 <div class="text-[11px] font-semibold text-[#dc3545] flex items-center gap-1.5">
@@ -1081,8 +970,8 @@
                 attributionControl: false
             });
 
-            // Clean dark basemap (Zero watermark, high performance)
-            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+            // Mode Terang ArcGIS World Street Map (Persis Format FSVA)
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
                 maxZoom: 18
             }).addTo(mapInstance);
 
@@ -1182,33 +1071,26 @@
             }
             kecamatanLabelGroup.clearLayers();
 
-            const activeSet = getActiveKecamatanSet();
-
             kecamatanLayer = L.geoJSON(cachedKecGeoData, {
-                style: function (feature) {
-                    const props = feature.properties || {};
-                    const k = (props.KECAMATAN || props.kecamatan || '').toLowerCase();
-                    const isActive = activeSet.has(k);
-
-                    return {
-                        fillColor: isActive ? '#00b493' : '#c5ded7',
-                        fillOpacity: 0.92,
-                        color: '#1e293b',
-                        weight: 1.2,
-                        opacity: 0.85
-                    };
+                style: {
+                    fillColor: 'transparent',
+                    fillOpacity: 0,
+                    color: '#0f172a',      // Garis batas tegas slate-900 seperti di FSVA
+                    weight: 2,             // Ketebalan garis pemisah kecamatan
+                    opacity: 0.9,
+                    dashArray: '5, 4'      // Garis putus-putus khas batas administrasi kecamatan
                 },
                 onEachFeature: function (feature, layer) {
                     const props = feature.properties || {};
-                    const rawKecName = (props.KECAMATAN || props.kecamatan || '').toUpperCase();
+                    const rawKecName = (props.KECAMATAN || props.kecamatan || props.NAME_3 || '').toUpperCase();
 
-                    if (PROMINENT_KEC_LABELS.includes(rawKecName)) {
+                    if (rawKecName) {
                         const center = layer.getBounds().getCenter();
                         const labelIcon = L.divIcon({
                             className: 'kec-label-wrapper',
-                            html: `<div class="kecamatan-label-pill">${escapeHtml(rawKecName)}</div>`,
-                            iconSize: [75, 18],
-                            iconAnchor: [37, 9]
+                            html: `<div class="kecamatan-map-label">${escapeHtml(rawKecName)}</div>`,
+                            iconSize: [80, 20],
+                            iconAnchor: [40, 10]
                         });
                         L.marker(center, { icon: labelIcon, interactive: false }).addTo(kecamatanLabelGroup);
                     }
@@ -1216,9 +1098,9 @@
                     layer.on({
                         mouseover: function (e) {
                             e.target.setStyle({
-                                weight: 2.2,
-                                color: '#ffffff',
-                                fillOpacity: 1
+                                weight: 3,
+                                color: '#117a8b',
+                                dashArray: ''
                             });
                         },
                         mouseout: function (e) {
@@ -1228,8 +1110,8 @@
                 }
             }).addTo(mapInstance);
 
-            // Zoomed out fitBounds so it doesn't zoom in too close
-            mapInstance.fitBounds(kecamatanLayer.getBounds(), { padding: [35, 35], maxZoom: 10 });
+            // Fit bounds Kabupaten Bandung
+            mapInstance.fitBounds(kecamatanLayer.getBounds(), { padding: [25, 25], maxZoom: 11 });
         }
 
         function buildLocationCoordinatesMap() {
@@ -1295,22 +1177,6 @@
 
             markersLayerGroup.clearLayers();
 
-            if (kecamatanLayer) {
-                const activeSet = getActiveKecamatanSet();
-                kecamatanLayer.setStyle(function (feature) {
-                    const props = feature.properties || {};
-                    const k = (props.KECAMATAN || props.kecamatan || '').toLowerCase();
-                    const isActive = activeSet.has(k);
-                    return {
-                        fillColor: isActive ? '#00b493' : '#c5ded7',
-                        fillOpacity: 0.92,
-                        color: '#1e293b',
-                        weight: 1.2,
-                        opacity: 0.85
-                    };
-                });
-            }
-
             const locationStats = {};
             filteredData.forEach(item => {
                 const d = item.detail || {};
@@ -1341,7 +1207,6 @@
             const sideStatTitikList = document.getElementById('side-stat-titik-list');
             const sideStatAman = document.getElementById('side-stat-aman');
             const sideStatTidakAman = document.getElementById('side-stat-tidak-aman');
-            const sideStatKecamatan = document.getElementById('side-stat-kecamatan');
 
             let totalAman = 0;
             let totalTidakAman = 0;
@@ -1354,25 +1219,27 @@
             if (sideStatTitikList) sideStatTitikList.innerText = uniqueLocations.length;
             if (sideStatAman) sideStatAman.innerText = totalAman;
             if (sideStatTidakAman) sideStatTidakAman.innerText = totalTidakAman;
-            if (sideStatKecamatan) sideStatKecamatan.innerText = getActiveKecamatanSet().size;
 
             uniqueLocations.forEach(loc => {
                 const coord = locationCoordsMap[loc.asal] || PRECOMPUTED_LOCATIONS[loc.asal] || BANDUNG_CENTER;
                 const hasKritis = loc.tidakAman > 0;
 
+                // Tanda Pin Peta (Point c: ganti dari icon komputer menjadi tanda pin peta)
                 const pinHtml = `
-                    <div class="psat-pin-circle" title="${escapeHtml(loc.asal)}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/>
-                        </svg>
+                    <div class="psat-pin-marker" title="${escapeHtml(loc.asal)}">
+                        <div class="psat-pin-circle ${hasKritis ? 'has-kritis' : 'is-aman'}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                            </svg>
+                        </div>
                     </div>
                 `;
 
                 const customIcon = L.divIcon({
-                    className: 'psat-pin-marker',
+                    className: 'psat-pin-div-icon',
                     html: pinHtml,
-                    iconSize: [24, 24],
-                    iconAnchor: [12, 12]
+                    iconSize: [26, 26],
+                    iconAnchor: [13, 13]
                 });
 
                 const komoditiArray = Array.from(loc.komoditiList).slice(0, 5);
@@ -1487,20 +1354,14 @@
 
         function syncNavFilter(type, val) {
             if (type === 'bulan') {
-                ['nav-filter-bulan', 'mobile-filter-bulan', 'filter-bulan'].forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el) el.value = val;
-                });
+                const el = document.getElementById('filter-bulan');
+                if (el) el.value = val;
             } else if (type === 'tahun') {
-                ['nav-filter-tahun', 'mobile-filter-tahun', 'filter-tahun'].forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el) el.value = val;
-                });
+                const el = document.getElementById('filter-tahun');
+                if (el) el.value = val;
             } else if (type === 'asal') {
-                ['nav-filter-asal-sampel', 'mobile-filter-asal-sampel', 'filter-asal-sampel'].forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el) el.value = val;
-                });
+                const el = document.getElementById('filter-asal-sampel');
+                if (el) el.value = val;
             }
             applyFilters();
         }
@@ -1525,42 +1386,40 @@
             const sortedTahun = Array.from(tahunSet).sort((a, b) => b - a);
             const sortedAsal = Array.from(asalSet).sort();
 
-            ['nav-filter-tahun', 'mobile-filter-tahun', 'filter-tahun'].forEach(id => {
-                const el = document.getElementById(id);
-                if (!el) return;
-                el.innerHTML = '<option value="all">Semua Tahun</option>';
-                sortedTahun.forEach(t => {
+            const elTahun = document.getElementById('filter-tahun');
+            if (elTahun) {
+                elTahun.innerHTML = '<option value="all">Semua Tahun</option>';
+                sortedTahun.forEach(th => {
                     const opt = document.createElement('option');
-                    opt.value = t;
-                    opt.innerText = t;
-                    el.appendChild(opt);
+                    opt.value = th;
+                    opt.innerText = th;
+                    elTahun.appendChild(opt);
                 });
-            });
+            }
 
-            ['nav-filter-asal-sampel', 'mobile-filter-asal-sampel', 'filter-asal-sampel'].forEach(id => {
-                const el = document.getElementById(id);
-                if (!el) return;
-                el.innerHTML = '<option value="all">Semua Asal Sampel</option>';
+            const elAsal = document.getElementById('filter-asal-sampel');
+            if (elAsal) {
+                elAsal.innerHTML = '<option value="all">Semua Asal Sampel</option>';
                 sortedAsal.forEach(asal => {
                     const opt = document.createElement('option');
                     opt.value = asal;
                     opt.innerText = asal;
-                    el.appendChild(opt);
+                    elAsal.appendChild(opt);
                 });
-            });
+            }
         }
 
         function applyFilters() {
-            const filterBulan = (document.getElementById('nav-filter-bulan') || document.getElementById('filter-bulan'))?.value || 'all';
-            const filterTahun = (document.getElementById('nav-filter-tahun') || document.getElementById('filter-tahun'))?.value || 'all';
-            const filterAsal = (document.getElementById('nav-filter-asal-sampel') || document.getElementById('filter-asal-sampel'))?.value || 'all';
+            const filterTahun = document.getElementById('filter-tahun')?.value || 'all';
+            const filterBulan = document.getElementById('filter-bulan')?.value || 'all';
+            const filterAsal = document.getElementById('filter-asal-sampel')?.value || 'all';
             const searchQuery = document.getElementById('filter-search')?.value.toLowerCase().trim() || '';
 
             filteredData = rawData.filter(item => {
                 const d = item.detail || {};
 
-                if (filterBulan !== 'all' && String(d.bulan) !== String(filterBulan)) return false;
                 if (filterTahun !== 'all' && String(d.tahun) !== String(filterTahun)) return false;
+                if (filterBulan !== 'all' && String(d.bulan) !== String(filterBulan)) return false;
                 if (filterAsal !== 'all' && (d.asal_sampel || '').trim() !== filterAsal) return false;
 
                 if (searchQuery) {
@@ -1574,8 +1433,8 @@
             });
 
             let filterLabelParts = [];
-            if (filterBulan !== 'all') filterLabelParts.push(`Bulan: ${NAMA_BULAN[parseInt(filterBulan)]}`);
             if (filterTahun !== 'all') filterLabelParts.push(`Tahun: ${filterTahun}`);
+            if (filterBulan !== 'all') filterLabelParts.push(`Bulan: ${NAMA_BULAN[parseInt(filterBulan)]}`);
             if (filterAsal !== 'all') filterLabelParts.push(`Asal: ${filterAsal}`);
             if (searchQuery) filterLabelParts.push(`Pencarian: "${searchQuery}"`);
 
@@ -1594,10 +1453,14 @@
         }
 
         function resetFilters() {
-            syncNavFilter('bulan', 'all');
-            syncNavFilter('tahun', 'all');
-            syncNavFilter('asal', 'all');
+            const elTahun = document.getElementById('filter-tahun');
+            const elBulan = document.getElementById('filter-bulan');
+            const elAsal = document.getElementById('filter-asal-sampel');
             const searchInput = document.getElementById('filter-search');
+
+            if (elTahun) elTahun.value = 'all';
+            if (elBulan) elBulan.value = 'all';
+            if (elAsal) elAsal.value = 'all';
             if (searchInput) searchInput.value = '';
 
             applyFilters();
@@ -1645,7 +1508,7 @@
                 labels: ['Aman', 'Tidak Aman'],
                 chart: {
                     type: 'donut',
-                    height: 240,
+                    height: 280,
                     fontFamily: 'Plus Jakarta Sans, sans-serif'
                 },
                 colors: ['#2e8a57', '#dc3545'], // Warna 5 & 6
@@ -1726,7 +1589,7 @@
                 ],
                 chart: {
                     type: 'bar',
-                    height: 240,
+                    height: 280,
                     toolbar: { show: false },
                     fontFamily: 'Plus Jakarta Sans, sans-serif'
                 },
@@ -1782,7 +1645,7 @@
                 series: [{ name: 'Total Sampel', data: komoditiValues }],
                 chart: {
                     type: 'bar',
-                    height: 240,
+                    height: 340,
                     toolbar: { show: false },
                     fontFamily: 'Plus Jakarta Sans, sans-serif'
                 },
@@ -1790,7 +1653,7 @@
                     bar: {
                         horizontal: true,
                         borderRadius: 4,
-                        barHeight: '46%',
+                        barHeight: '62%',
                         distributed: true
                     }
                 },
@@ -1851,7 +1714,7 @@
                 ],
                 chart: {
                     type: 'bar',
-                    height: 240,
+                    height: 340,
                     stacked: true,
                     toolbar: { show: false },
                     fontFamily: 'Plus Jakarta Sans, sans-serif'
@@ -1860,7 +1723,7 @@
                 plotOptions: {
                     bar: {
                         horizontal: false,
-                        columnWidth: '38%',
+                        columnWidth: '45%',
                         borderRadius: 4
                     }
                 },
