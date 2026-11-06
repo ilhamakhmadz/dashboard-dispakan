@@ -278,128 +278,181 @@
             </div>
         </section>
 
-        <!-- b. FILTER DATA & PETA SECTION -->
-        <section class="mb-10">
-            <!-- Filter Bar -->
-            <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm mb-4">
-                <div class="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3">
-                    <!-- Dropdown 1: Indikator -->
-                    <div class="relative flex-1 min-w-[240px]">
+        <!-- b. FILTER DATA & PETA SECTION (LAYOUT & STYLE SESUAI FSVA) -->
+        <section class="mb-8 bg-white rounded-3xl shadow-soft border border-slate-100 overflow-hidden">
+            <!-- Filter Bar Peta (Atas) -->
+            <div
+                class="p-4 sm:p-5 border-b border-slate-100 bg-slate-50/70 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <!-- Sisi Kiri: Icon + Judul Peta + Deskripsi -->
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-[#117a8b]/10 text-[#117a8b] flex items-center justify-center border border-[#117a8b]/20 shrink-0">
+                        <i data-lucide="map" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 id="map-header-title" class="font-bold text-slate-800 text-base leading-tight">Peta Kerawanan Pangan</h3>
+                        <p id="map-header-desc" class="text-xs text-slate-500">Peta tematik visualisasi geografis status kewaspadaan pangan per kecamatan</p>
+                    </div>
+                </div>
+
+                <!-- Sisi Kanan: Kontrol Filter SKPG (Styling rounded-2xl persis FSVA) -->
+                <div class="flex flex-wrap items-center gap-2.5">
+                    <!-- Dropdown 1: Indikator Peta -->
+                    <div class="relative min-w-[200px] sm:min-w-[220px]">
                         <select id="map-filter-indikator"
-                            class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm font-semibold rounded-xl pl-3.5 pr-8 py-2.5 cursor-pointer appearance-none hover:bg-white focus:ring-2 focus:ring-[#117a8b]/20 focus:border-[#117a8b] transition-colors">
-                            <option value="" disabled>Pilih Maps</option>
+                            class="w-full bg-white border border-slate-200 hover:border-slate-300 text-slate-700 text-sm font-medium rounded-2xl px-4 py-2.5 shadow-2xs appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#117a8b]/20 transition pr-9">
                             <option value="komposit" selected>Peta Kerawanan Pangan</option>
                             <option value="ik">Peta Aspek Ketersediaan</option>
                             <option value="ia">Peta Aspek Keterjangkauan</option>
                             <option value="ip">Peta Aspek Pemanfaatan</option>
                         </select>
-                        <div
-                            class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
                             <i data-lucide="chevron-down" class="w-4 h-4"></i>
                         </div>
                     </div>
 
                     <!-- Dropdown 2: Bulan -->
-                    <div class="relative w-full sm:w-48">
+                    <div class="relative min-w-[140px] sm:min-w-[150px]">
                         <select id="map-filter-bulan"
-                            class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm font-semibold rounded-xl pl-3.5 pr-8 py-2.5 cursor-pointer appearance-none hover:bg-white focus:ring-2 focus:ring-[#117a8b]/20 focus:border-[#117a8b] transition-colors">
+                            class="w-full bg-white border border-slate-200 hover:border-slate-300 text-slate-700 text-sm font-medium rounded-2xl px-4 py-2.5 shadow-2xs appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#117a8b]/20 transition pr-9">
                             <!-- Populated dynamically -->
                         </select>
-                        <div
-                            class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
                             <i data-lucide="chevron-down" class="w-4 h-4"></i>
                         </div>
                     </div>
 
                     <!-- Dropdown 3: Tahun -->
-                    <div class="relative w-full sm:w-36">
+                    <div class="relative min-w-[120px] sm:min-w-[130px]">
                         <select id="map-filter-tahun"
-                            class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm font-semibold rounded-xl pl-3.5 pr-8 py-2.5 cursor-pointer appearance-none hover:bg-white focus:ring-2 focus:ring-[#117a8b]/20 focus:border-[#117a8b] transition-colors">
+                            class="w-full bg-white border border-slate-200 hover:border-slate-300 text-slate-700 text-sm font-medium rounded-2xl px-4 py-2.5 shadow-2xs appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#117a8b]/20 transition pr-9">
                             <!-- Populated dynamically -->
                         </select>
-                        <div
-                            class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
                             <i data-lucide="chevron-down" class="w-4 h-4"></i>
                         </div>
                     </div>
 
-                    <!-- Filter Button (Red #dc3545) -->
+                    <!-- Tombol Filter & Reset -->
                     <button id="map-btn-filter"
-                        class="px-6 py-2.5 bg-[#dc3545] hover:bg-[#c82333] text-white text-sm font-bold rounded-xl transition shadow-md active:scale-95 flex items-center justify-center gap-2">
+                        class="px-4 py-2.5 bg-[#dc3545] hover:bg-[#c82333] text-white text-xs font-bold rounded-2xl transition shadow-xs flex items-center gap-1.5 active:scale-95"
+                        title="Terapkan filter peta">
+                        <i data-lucide="filter" class="w-3.5 h-3.5"></i>
                         <span>Filter</span>
+                    </button>
+
+                    <button id="map-btn-reset"
+                        class="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-bold rounded-2xl transition flex items-center gap-1.5 active:scale-95"
+                        title="Reset tampilan zoom peta ke default">
+                        <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                        <span>Reset</span>
                     </button>
                 </div>
             </div>
 
-            <!-- Map Card & Legend -->
-            <div class="bg-white rounded-2xl border border-slate-200/80 shadow-soft overflow-hidden">
-                <div class="py-4 px-6 border-b border-slate-100 text-center bg-slate-50/70">
-                    <h2 class="font-extrabold text-slate-800 text-sm md:text-base tracking-wide uppercase">
-                        PETA SISTEM PERINGATAN DINI KERAWANAN PANGAN DAN GIZI KABUPATEN BANDUNG
-                    </h2>
-                </div>
+            <!-- Map Layout Grid (Map 3 Cols, Sidebar 1 Col) Persis FSVA -->
+            <div class="grid grid-cols-1 lg:grid-cols-4">
+                <!-- Map Area (Col 3) -->
+                <div class="lg:col-span-3 p-4 sm:p-6 border-b lg:border-b-0 lg:border-r border-slate-100 relative">
+                    <!-- Title Bar di atas Peta -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3 px-1">
+                        <h4 class="font-extrabold text-slate-800 text-sm sm:text-base tracking-tight flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-[#117a8b] inline-block"></span>
+                            Peta Sistem Peringatan Dini Kerawanan Pangan dan Gizi (SKPG) Kabupaten Bandung
+                        </h4>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                            PETA SKPG STATUS KERAWANAN PANGAN KABUPATEN BANDUNG
+                        </span>
+                    </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-12 min-h-[520px]">
-                    <!-- Left: Leaflet Map (col-span-9) -->
-                    <div class="lg:col-span-9 relative border-b lg:border-b-0 lg:border-r border-slate-100">
-                        <div id="skpg-map" class="w-full h-[450px] lg:h-[540px] z-10"></div>
+                    <!-- Map Canvas dengan border rounded-2xl -->
+                    <div id="skpg-map"
+                        class="w-full h-[520px] rounded-2xl z-0 bg-slate-50 border border-slate-200 relative overflow-hidden">
                         <div id="map-loader"
-                            class="absolute inset-0 bg-white/70 backdrop-blur-[2px] z-20 flex items-center justify-center hidden">
-                            <div class="loader"></div>
+                            class="absolute inset-0 bg-white/80 backdrop-blur-xs flex flex-col items-center justify-center z-[500] transition-opacity hidden">
+                            <div class="loader mb-2"></div>
+                            <span class="text-xs font-semibold text-[#117a8b]">Memuat peta SKPG Kabupaten Bandung...</span>
                         </div>
                     </div>
 
-                    <!-- Right: Legend Sidebar (col-span-3) -->
-                    <div class="lg:col-span-3 p-6 flex flex-col justify-start items-center bg-white">
-                        <div class="w-24 h-24 mb-4 flex items-center justify-center">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Lambang_Kabupaten_Bandung.png/240px-Lambang_Kabupaten_Bandung.png"
-                                onerror="this.onerror=null; this.src='https://nos.wjv-1.neo.id/skpd/logo/20/1747972457Logo%20Dispakan%20trans.png'"
-                                alt="Lambang Kabupaten Bandung"
-                                class="w-20 h-auto object-contain filter drop-shadow-sm">
+                    <!-- Floating Mini Legend (Kiri Bawah Peta - Persis FSVA) -->
+                    <div
+                        class="absolute bottom-8 left-8 bg-white/95 backdrop-blur-md p-3.5 rounded-xl shadow-lg border border-slate-200/90 z-[400] text-[11px] font-medium hidden sm:block">
+                        <div
+                            class="font-extrabold text-slate-800 mb-2 pb-1 border-b border-slate-100 text-[10px] uppercase tracking-wider">
+                            Peringkat / Tingkat Kerawanan
                         </div>
-
-                        <h4 class="font-bold text-slate-800 text-xs tracking-wider mb-2">KETERANGAN :</h4>
-                        <div class="w-full h-px bg-slate-200 mb-4"></div>
-
-                        <div class="w-full text-xs font-semibold text-slate-700 mb-4 text-left">
-                            Total Kecamatan : <span id="legend-total-kecamatan"
-                                class="font-bold text-slate-900">31</span>
-                        </div>
-
-                        <div class="w-full space-y-4">
-                            <!-- RENTAN -->
-                            <div class="flex items-start gap-3">
-                                <span class="w-4 h-4 rounded-xs shrink-0 mt-0.5"
-                                    style="background-color: #cc091d;"></span>
-                                <div class="text-xs">
-                                    <div class="font-extrabold text-slate-800">RENTAN</div>
-                                    <div class="text-slate-500 font-medium"><span id="legend-count-rentan">0</span>
-                                        Kecamatan</div>
-                                </div>
+                        <div class="space-y-1.5">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3.5 h-3.5 rounded-xs inline-block" style="background-color: #cc091d; border: 1px solid #991b1b;"></span>
+                                <span class="text-slate-700 font-semibold">Rentan</span>
                             </div>
-
-                            <!-- WASPADA -->
-                            <div class="flex items-start gap-3">
-                                <span class="w-4 h-4 rounded-xs shrink-0 mt-0.5"
-                                    style="background-color: #dacc32;"></span>
-                                <div class="text-xs">
-                                    <div class="font-extrabold text-slate-800">WASPADA</div>
-                                    <div class="text-slate-500 font-medium"><span id="legend-count-waspada">18</span>
-                                        Kecamatan</div>
-                                </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-3.5 h-3.5 rounded-xs inline-block" style="background-color: #dacc32; border: 1px solid #b5a828;"></span>
+                                <span class="text-slate-700 font-semibold">Waspada</span>
                             </div>
-
-                            <!-- AMAN -->
-                            <div class="flex items-start gap-3">
-                                <span class="w-4 h-4 rounded-xs shrink-0 mt-0.5"
-                                    style="background-color: #2cb45c;"></span>
-                                <div class="text-xs">
-                                    <div class="font-extrabold text-slate-800">AMAN</div>
-                                    <div class="text-slate-500 font-medium"><span id="legend-count-aman">13</span>
-                                        Kecamatan</div>
-                                </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-3.5 h-3.5 rounded-xs inline-block" style="background-color: #2cb45c; border: 1px solid #1e8242;"></span>
+                                <span class="text-slate-700 font-semibold">Aman</span>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar Kanan (Col 1) Persis FSVA -->
+                <div class="lg:col-span-1 p-6 flex flex-col justify-between bg-slate-50/50">
+                    <div>
+                        <!-- Logo Kabupaten Bandung -->
+                        <div class="flex justify-center mb-5">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2e/Lambang_Kabupaten_Bandung.png"
+                                alt="Logo Kabupaten Bandung"
+                                class="h-24 object-contain drop-shadow-sm hover:scale-105 transition-transform">
+                        </div>
+
+                        <div class="text-center mb-5">
+                            <h4 id="map-sidebar-legend-title"
+                                class="text-xs font-black text-slate-800 tracking-wider uppercase leading-tight">
+                                KETERANGAN<br>KERAWANAN PANGAN :
+                            </h4>
+                            <p class="text-[11px] font-bold text-[#117a8b] mt-2">
+                                Total Kecamatan: <span id="legend-total-kecamatan"
+                                    class="font-mono font-black text-slate-800">31</span>
+                            </p>
+                        </div>
+
+                        <!-- Legend Items with Counts (Cards kotak putih rounded-xl persis FSVA) -->
+                        <ul class="space-y-3 text-xs">
+                            <li
+                                class="flex items-center justify-between p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-4 h-4 rounded-xs shrink-0" style="background-color: #cc091d; border: 1px solid #991b1b;"></span>
+                                    <span class="font-bold text-slate-700 text-[11px]">RENTAN</span>
+                                </div>
+                                <span class="font-black text-slate-800 font-mono text-xs"><span id="legend-count-rentan">0</span> <span class="text-[10px] text-slate-400 font-sans font-medium">Kecamatan</span></span>
+                            </li>
+                            <li
+                                class="flex items-center justify-between p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-4 h-4 rounded-xs shrink-0" style="background-color: #dacc32; border: 1px solid #b5a828;"></span>
+                                    <span class="font-bold text-slate-700 text-[11px]">WASPADA</span>
+                                </div>
+                                <span class="font-black text-slate-800 font-mono text-xs"><span id="legend-count-waspada">0</span> <span class="text-[10px] text-slate-400 font-sans font-medium">Kecamatan</span></span>
+                            </li>
+                            <li
+                                class="flex items-center justify-between p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-4 h-4 rounded-xs shrink-0" style="background-color: #2cb45c; border: 1px solid #1e8242;"></span>
+                                    <span class="font-bold text-slate-700 text-[11px]">AMAN</span>
+                                </div>
+                                <span class="font-black text-slate-800 font-mono text-xs"><span id="legend-count-aman">0</span> <span class="text-[10px] text-slate-400 font-sans font-medium">Kecamatan</span></span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Footer Info Kanan Bawah -->
+                    <div class="mt-8 pt-4 border-t border-slate-200/60 text-center">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Pemerintah Kabupaten Bandung</p>
+                        <p class="text-[9px] text-slate-400 font-medium mt-0.5">Dinas Ketahanan Pangan dan Perikanan</p>
                     </div>
                 </div>
             </div>
@@ -814,7 +867,24 @@
                 'ia': 'Peta Aspek Keterjangkauan',
                 'ip': 'Peta Aspek Pemanfaatan'
             };
-            els.activeFilterLabel.textContent = `${indLabels[selIndikator] || 'Peta Kerawanan Pangan'} - ${getMonthName(selBulan)} ${selTahun}`;
+            const currentMapName = indLabels[selIndikator] || 'Peta Kerawanan Pangan';
+            els.activeFilterLabel.textContent = `${currentMapName} - ${getMonthName(selBulan)} ${selTahun}`;
+
+            // Update Map Header & Sidebar Title sesuai indikator terpilih
+            const headerTitle = document.getElementById('map-header-title');
+            const headerDesc = document.getElementById('map-header-desc');
+            const sidebarTitle = document.getElementById('map-sidebar-legend-title');
+
+            const descMap = {
+                'komposit': 'Peta tematik visualisasi geografis status kewaspadaan pangan komposit per kecamatan',
+                'ik': 'Peta tematik visualisasi geografis indikator aspek ketersediaan pangan per kecamatan',
+                'ia': 'Peta tematik visualisasi geografis indikator aspek keterjangkauan pangan per kecamatan',
+                'ip': 'Peta tematik visualisasi geografis indikator aspek pemanfaatan pangan per kecamatan'
+            };
+
+            if (headerTitle) headerTitle.textContent = currentMapName;
+            if (headerDesc) headerDesc.textContent = descMap[selIndikator] || descMap['komposit'];
+            if (sidebarTitle) sidebarTitle.innerHTML = `KETERANGAN<br>${selIndikator === 'komposit' ? 'KERAWANAN PANGAN' : currentMapName.toUpperCase()} :`;
 
             // Render components
             renderStats(selIndikator);
@@ -934,7 +1004,7 @@
                     `;
                     return div;
                 };
-                mapLegendControl.addTo(leafletMap);
+                // Floating mini legend sudah ada di DOM HTML peta persis FSVA
             }
 
             if (cachedGeoData) {
@@ -989,10 +1059,10 @@
 
                     return {
                         fillColor: evaluated.color,
-                        weight: 1.5,
+                        weight: 2,               // Garis pemisah kecamatan tegas persis FSVA
                         opacity: 1,
-                        color: '#ffffff',
-                        dashArray: '',
+                        color: '#0f172a',        // Garis batas gelap kontras tegas
+                        dashArray: '5, 5',       // Garis putus-putus batas administratif
                         fillOpacity: 0.88
                     };
                 },
@@ -1127,6 +1197,19 @@
                 currentPage = 1;
                 applyFilter();
             });
+
+            const btnResetMap = document.getElementById('map-btn-reset');
+            if (btnResetMap) {
+                btnResetMap.addEventListener('click', () => {
+                    if (geoJsonLayer && leafletMap) {
+                        try {
+                            leafletMap.fitBounds(geoJsonLayer.getBounds(), { padding: [15, 15] });
+                        } catch (e) {
+                            leafletMap.setView([-7.025253, 107.528343], 10);
+                        }
+                    }
+                });
+            }
 
             // Also auto-update on dropdown changes
             els.mapFilterIndikator.addEventListener('change', () => applyFilter());
