@@ -199,23 +199,6 @@
                     </div>
                 </div>
 
-                <!-- Desktop Filters (Center) -->
-                <div class="hidden lg:flex flex-1 mx-4 gap-2 items-center justify-center max-w-xs">
-                    <!-- Filter Tahun -->
-                    <div class="relative group w-full">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <i data-lucide="calendar" class="w-4 h-4 text-slate-500"></i>
-                        </div>
-                        <select id="nav-filter-tahun"
-                            class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-xl focus:ring-[#117a8b] focus:border-[#117a8b] block pl-10 p-2.5 cursor-pointer font-medium appearance-none hover:bg-white transition-colors">
-                            <option value="all">Semua Tahun</option>
-                        </select>
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                            <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Right Actions (Date & Live) -->
                 <div class="hidden lg:flex items-center gap-4">
                     <a href="https://aplikasi.bandungkab.go.id/publik/dispakan-portal-dashboard"
@@ -243,26 +226,12 @@
                 </div>
             </div>
 
-            <!-- Mobile Filter Section -->
-            <div class="lg:hidden flex flex-col gap-2 pb-3">
-                <div class="relative w-full">
-                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                        <i data-lucide="calendar" class="w-4 h-4 text-slate-500"></i>
-                    </div>
-                    <select id="mobile-filter-tahun"
-                        class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg pl-10 p-2.5 font-medium appearance-none">
-                        <option value="all">Semua Tahun</option>
-                    </select>
-                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                        <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
-                    </div>
-                </div>
             </div>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-4 lg:px-8 py-8 mt-44 sm:mt-40 lg:mt-20 mb-12">
+    <main class="container mx-auto px-4 lg:px-8 py-8 mt-24 lg:mt-20 mb-12">
 
         <!-- Header Section -->
         <header class="mb-8 relative">
@@ -937,6 +906,7 @@
         let rawData = [];
         let filteredData = [];
         let currentMapAspect = 'prio_komp';
+        let currentYear = 'all';
 
         const MAP_ASPECTS = {
             'prio_komp': {
@@ -992,8 +962,6 @@
             tableBody: document.getElementById('table-body'),
 
             // Filters
-            filterTahun: document.getElementById('nav-filter-tahun'),
-            filterTahunMobile: document.getElementById('mobile-filter-tahun'),
 
             activeFilterLabel: document.getElementById('active-filter-label'),
             search: document.getElementById('search-input'),
@@ -1169,17 +1137,8 @@
                 }
 
                 // Add Kecamatan outline boundary for clarity
-                if (cachedKecamatanGeoData && !kecamatanGeoJsonLayer) {
-                    kecamatanGeoJsonLayer = L.geoJSON(cachedKecamatanGeoData, {
-                        style: {
-                            color: '#0a4b57',
-                            weight: 2,
-                            opacity: 0.85,
-                            fillColor: 'transparent',
-                            fillOpacity: 0
-                        },
-                        interactive: false
-                    }).addTo(leafletMap);
+                if (cachedKecamatanGeoData) {
+                    renderKecamatanBoundaries();
                 }
 
             } catch (err) {
@@ -1311,6 +1270,38 @@
                         `);
                     }
                 }
+            }).addTo(leafletMap);
+
+            // Selalu gambar garis pemisah kecamatan di layer teratas
+            renderKecamatanBoundaries();
+        }
+
+        // --- RENDER GARIS PEMISAH KECAMATAN PADA PETA ---
+        function renderKecamatanBoundaries() {
+            if (!leafletMap || !cachedKecamatanGeoData) return;
+
+            // Buat pane khusus untuk batas kecamatan dengan z-index lebih tinggi (450) agar selalu di atas poligon desa
+            if (!leafletMap.getPane('kecamatanBoundaryPane')) {
+                const pane = leafletMap.createPane('kecamatanBoundaryPane');
+                pane.style.zIndex = 450;
+                pane.style.pointerEvents = 'none'; // interaksi klik & hover tetap tembus ke poligon desa
+            }
+
+            if (kecamatanGeoJsonLayer) {
+                leafletMap.removeLayer(kecamatanGeoJsonLayer);
+            }
+
+            kecamatanGeoJsonLayer = L.geoJSON(cachedKecamatanGeoData, {
+                pane: 'kecamatanBoundaryPane',
+                style: {
+                    color: '#0f172a',      // Garis gelap tegas (slate-900)
+                    weight: 2.5,           // Ketebalan garis pemisah kecamatan
+                    opacity: 0.95,         // Kejelasan garis
+                    dashArray: '6, 4',     // Garis putus-putus khas batas administrasi kecamatan
+                    fillColor: 'transparent',
+                    fillOpacity: 0
+                },
+                interactive: false
             }).addTo(leafletMap);
         }
 
@@ -1797,19 +1788,7 @@
                 if (t) tahunSet.add(t);
             });
 
-            const appendOptions = (elDesktop, elMobile, dataArray) => {
-                if (!elDesktop && !elMobile) return;
-                let optionsHtml = '<option value="all">Semua Tahun</option>';
-                dataArray.sort((a, b) => b - a).forEach(val => {
-                    optionsHtml += `<option value="${val}">${val}</option>`;
-                });
-
-                if (elDesktop) elDesktop.innerHTML = optionsHtml;
-                if (elMobile) elMobile.innerHTML = optionsHtml;
-            };
-
             const sortedYears = Array.from(tahunSet).sort((a, b) => b - a);
-            appendOptions(els.filterTahun, els.filterTahunMobile, sortedYears);
 
             // Populate Map Year Options
             populateMapYearOptions(sortedYears);
@@ -1837,20 +1816,7 @@
 
         // --- FILTER DATA LOGIC ---
         function filterData(source) {
-            let valTahun = 'all';
-
-            if (source === 'nav') {
-                valTahun = els.filterTahun ? els.filterTahun.value : 'all';
-                if (els.filterTahunMobile) els.filterTahunMobile.value = valTahun;
-            } else if (source === 'mobile') {
-                valTahun = els.filterTahunMobile ? els.filterTahunMobile.value : 'all';
-                if (els.filterTahun) els.filterTahun.value = valTahun;
-            } else if (source === 'map-year') {
-                valTahun = els.filterTahun ? els.filterTahun.value : 'all';
-                if (els.filterTahunMobile) els.filterTahunMobile.value = valTahun;
-            } else {
-                valTahun = els.filterTahun ? els.filterTahun.value : (els.filterTahunMobile ? els.filterTahunMobile.value : 'all');
-            }
+            let valTahun = currentYear;
 
             // Sync Map Year Dropdown Button Label
             const mapYearLabel = document.getElementById('map-year-selected-label');
@@ -2056,8 +2022,7 @@
                     if (legendTitle) legendTitle.innerHTML = aspectInfo.legendTitle;
 
                     // Reset Year filter
-                    if (els.filterTahun) els.filterTahun.value = 'all';
-                    if (els.filterTahunMobile) els.filterTahunMobile.value = 'all';
+                    currentYear = 'all';
                     const mapYearLabel = document.getElementById('map-year-selected-label');
                     if (mapYearLabel) mapYearLabel.textContent = 'Pilih Tahun';
 
@@ -2116,6 +2081,7 @@
                 yearOptions.forEach(opt => {
                     opt.onclick = () => {
                         const val = opt.getAttribute('data-value');
+                        currentYear = val;
                         const labelText = val === 'all' ? 'Pilih Tahun' : val;
 
                         if (yearSelectedLabel) yearSelectedLabel.textContent = labelText;
@@ -2128,10 +2094,6 @@
                         yearMenu.classList.add('hidden');
                         if (yearChevron) yearChevron.classList.remove('rotate-180');
 
-                        // Sync with navbar filter
-                        if (els.filterTahun) els.filterTahun.value = val;
-                        if (els.filterTahunMobile) els.filterTahunMobile.value = val;
-
                         filterData('map-year');
                     };
                 });
@@ -2140,8 +2102,6 @@
 
         // --- EVENT LISTENERS ---
         function setupEvents() {
-            if (els.filterTahun) els.filterTahun.addEventListener('change', () => filterData('nav'));
-            if (els.filterTahunMobile) els.filterTahunMobile.addEventListener('change', () => filterData('mobile'));
 
             if (els.search) els.search.addEventListener('input', () => filterData('search'));
 
