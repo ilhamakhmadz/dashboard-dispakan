@@ -1382,8 +1382,8 @@
             if (state.map && state.mapLayers.kecamatan && kecamatan !== 'all') {
                 state.mapLayers.kecamatan.eachLayer(function (layer) {
                     const props = layer.feature?.properties || {};
-                    const rawKecName = (props.KECAMATAN || props.kecamatan || props.NAME_3 || '').toUpperCase();
-                    if (rawKecName === kecamatan.toUpperCase()) {
+                    const rawKecName = props.KECAMATAN || props.kecamatan || props.NAME_3 || '';
+                    if (normalizeKecName(rawKecName) === normalizeKecName(kecamatan)) {
                         state.map.fitBounds(layer.getBounds(), { padding: [40, 40], maxZoom: 12 });
                     }
                 });
@@ -1971,12 +1971,13 @@
 
             state.rawLpm.forEach(item => {
                 const d = item.detail || {};
-                const kName = formatKecamatan(d.kecamatan).toUpperCase();
-                if (!kName) return;
+                const kKey = normalizeKecName(d.kecamatan);
+                const kDisplayName = formatKecamatan(d.kecamatan);
+                if (!kKey) return;
 
-                if (!stats[kName]) {
-                    stats[kName] = {
-                        namaKecamatan: kName,
+                if (!stats[kKey]) {
+                    stats[kKey] = {
+                        namaKecamatan: kDisplayName,
                         hasLpm: true,
                         totalStock: 0,
                         lpmCount: 0,
@@ -1990,12 +1991,12 @@
                 const stock = getLpmStockForPeriod(lpmName, tahun, bulan);
                 const isTersedia = stock > 0;
 
-                stats[kName].totalStock += stock;
-                stats[kName].lpmCount++;
-                if (isTersedia) stats[kName].lpmAktifCount++;
-                else stats[kName].lpmKosongCount++;
+                stats[kKey].totalStock += stock;
+                stats[kKey].lpmCount++;
+                if (isTersedia) stats[kKey].lpmAktifCount++;
+                else stats[kKey].lpmKosongCount++;
 
-                stats[kName].lpms.push({
+                stats[kKey].lpms.push({
                     nama: lpmName,
                     desa: d.desa || '-',
                     ketua: d.ketua || '-',
@@ -2009,20 +2010,22 @@
             return stats;
         }
 
-        // Helper: Mendapatkan style warna blok poligon kecamatan sesuai indikator (Teal #117a8b untuk Kecamatan Memiliki LPM)
+        // Helper: Mendapatkan style warna blok poligon kecamatan sesuai indikator (Teal #117a8b untuk Kecamatan Memiliki LPM & soft slate untuk wilayah sekitar)
         function getLpmKecamatanStyle(feature, kecStats) {
             const props = feature.properties || {};
-            const rawKecName = (props.KECAMATAN || props.kecamatan || props.NAME_3 || '').toUpperCase();
-            const st = kecStats[rawKecName];
+            const rawKecName = props.KECAMATAN || props.kecamatan || props.NAME_3 || '';
+            const kKey = normalizeKecName(rawKecName);
+            const st = kecStats[kKey] || kecStats[rawKecName.toUpperCase()];
             const { status, kecamatan } = state.filters;
 
-            let fillColor = '#cbd5e1'; // Wilayah sekitar / belum ada lumbung (Netral)
-            let fillOpacity = 0.22;
-            let borderColor = '#334155';
+            // Wilayah sekitar / belum ada lumbung diberi warna lembut yang jelas terlihat (tidak bolong/putih polos)
+            let fillColor = '#cbd5e1';
+            let fillOpacity = 0.50;
+            let borderColor = '#64748b';
             let borderWidth = 1.2;
 
             if (st && st.hasLpm) {
-                // Sesuai Indikator: "Kecamatan Memiliki LPM" diwarnai TEAL (#117a8b)
+                // Seluruh 19 Kecamatan yang memiliki unit LPM (termasuk Solokan Jeruk) langsung terblok warna TEAL (#117a8b) sejak awal
                 const isTersedia = st.totalStock > 0 || st.lpmAktifCount > 0;
 
                 if (status === 'tersedia') {
@@ -2031,8 +2034,9 @@
                         fillOpacity = 0.78;
                         borderColor = '#0f172a';
                     } else {
-                        fillColor = '#e2e8f0';
-                        fillOpacity = 0.2;
+                        fillColor = '#cbd5e1';
+                        fillOpacity = 0.35;
+                        borderColor = '#94a3b8';
                     }
                 } else if (status === 'kosong') {
                     if (!isTersedia) {
@@ -2040,21 +2044,22 @@
                         fillOpacity = 0.78;
                         borderColor = '#0f172a';
                     } else {
-                        fillColor = '#e2e8f0';
-                        fillOpacity = 0.2;
+                        fillColor = '#cbd5e1';
+                        fillOpacity = 0.35;
+                        borderColor = '#94a3b8';
                     }
                 } else {
-                    // status === 'all'
+                    // status === 'all': Warna blok Teal solid
                     fillColor = '#117a8b';
                     fillOpacity = 0.78;
                     borderColor = '#0f172a';
                 }
             }
 
-            if (kecamatan !== 'all' && rawKecName === kecamatan.toUpperCase()) {
+            if (kecamatan !== 'all' && normalizeKecName(rawKecName) === normalizeKecName(kecamatan)) {
                 borderColor = '#0f172a';
                 borderWidth = 3;
-                fillOpacity = 0.92;
+                fillOpacity = 0.95;
             }
 
             return {
@@ -2062,7 +2067,7 @@
                 fillOpacity: fillOpacity,
                 color: borderColor,
                 weight: borderWidth,
-                opacity: 0.85,
+                opacity: 0.9,
                 dashArray: '3, 3'
             };
         }
@@ -2084,7 +2089,8 @@
                     layer.on({
                         click: function (e) {
                             const curStats = getKecamatanLpmStats();
-                            const st = curStats[rawKecName];
+                            const kKey = normalizeKecName(rawKecName);
+                            const st = curStats[kKey] || curStats[rawKecName];
                             const isTersedia = st && (st.totalStock > 0 || st.lpmAktifCount > 0);
                             const totalKg = st ? st.totalStock : 0;
                             const lpms = st ? st.lpms : [];
@@ -2622,9 +2628,16 @@
         }
 
         // --- UTILS ---
+        function normalizeKecName(str) {
+            if (!str) return '';
+            return String(str).trim().toUpperCase().replace(/[\s\-_]/g, '');
+        }
+
         function formatKecamatan(name) {
             if (!name) return 'Lainnya';
-            return name.trim().toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
+            const clean = name.trim();
+            if (normalizeKecName(clean) === 'SOLOKANJERUK') return 'Solokan Jeruk';
+            return clean.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
         }
 
         function escapeHtml(str) {
