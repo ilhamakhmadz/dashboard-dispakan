@@ -501,72 +501,135 @@
         </section>
 
         <!-- ========================================== -->
-        <!-- SECTION: PETA SKOR PPH KECAMATAN           -->
+        <!-- SECTION: PETA SKOR PPH KECAMATAN (LAYOUT FSVA) -->
         <!-- ========================================== -->
-        <div class="glass-panel mb-8" style="padding: 1.5rem;">
-            <!-- Header Card (Sesuai Referensi UI Screenshot) -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 pb-3 border-b border-slate-100">
-                <div>
-                    <div class="flex items-center gap-2 mb-1">
-                        <span class="px-2.5 py-0.5 rounded-md text-[10px] font-extrabold uppercase tracking-wider bg-[#117a8b]/10 text-[#117a8b]">
-                            Survey
-                        </span>
-                        <span class="text-xs text-slate-300">•</span>
-                        <span class="text-xs font-semibold text-slate-500">Pola Pangan Harapan</span>
+        <section class="mb-8 bg-white rounded-3xl shadow-soft border border-slate-100 overflow-hidden">
+            <!-- Filter Bar Peta Sesuai Format FSVA -->
+            <div class="p-4 sm:p-5 border-b border-slate-100 bg-slate-50/70 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-[#117a8b]/10 text-[#117a8b] flex items-center justify-center border border-[#117a8b]/20 shrink-0">
+                        <i data-lucide="map" class="w-5 h-5"></i>
                     </div>
-                    <h3 class="font-extrabold text-slate-800 text-lg sm:text-xl flex items-center gap-2">
-                        <span class="bg-[#117a8b]/10 p-1.5 rounded-lg text-[#117a8b]">
-                            <i data-lucide="map" class="w-5 h-5"></i>
-                        </span>
-                        Skor PPH Kecamatan
-                    </h3>
-                    <p class="text-xs text-slate-500 mt-1">
-                        Peta sebaran capaian Skor Pola Pangan Harapan (PPH) Konsumsi per Kecamatan di Kabupaten Bandung berdasarkan hasil Survei.
-                    </p>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-base leading-tight">Peta Skor PPH Kecamatan</h3>
+                        <p class="text-xs text-slate-500">Peta tematik visualisasi geografis capaian Skor Pola Pangan Harapan per kecamatan</p>
+                    </div>
                 </div>
 
-                <!-- Tombol Aksi di Sisi Kanan (Filter Tahun Dihapus Mengikuti Filter Utama di Atas) -->
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-3">
                     <button type="button" onclick="resetMapPphView()"
-                        class="p-2 bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-[#117a8b] rounded-xl transition shadow-xs flex items-center gap-1.5 text-xs font-semibold"
+                        class="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-bold rounded-2xl transition flex items-center gap-1.5 active:scale-95 shadow-2xs"
                         title="Pusatkan Kembali Tampilan Peta">
-                        <i data-lucide="maximize-2" class="w-4 h-4"></i>
-                        <span class="hidden sm:inline">Reset Posisi</span>
+                        <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                        <span>Reset</span>
                     </button>
                 </div>
             </div>
 
-            <!-- Kontainer Peta & Floating Legend -->
-            <div class="relative w-full rounded-2xl overflow-hidden border border-slate-200 shadow-inner bg-white">
-                <!-- Map Leaflet Canvas -->
-                <div id="map-pph-kecamatan" class="w-full h-[520px] sm:h-[600px] lg:h-[640px] z-10 bg-white">
-                    <div class="w-full h-full flex flex-col items-center justify-center bg-slate-50 text-slate-400">
-                        <div class="loader mb-2"></div>
-                        <span class="text-xs font-semibold">Memuat batas peta & data survei PPH...</span>
+            <!-- Map Layout Grid (Map 3 Cols, Sidebar 1 Col - Format Persis FSVA) -->
+            <div class="grid grid-cols-1 lg:grid-cols-4">
+                <!-- Map Area (3 cols) -->
+                <div class="lg:col-span-3 p-4 sm:p-6 border-b lg:border-b-0 lg:border-r border-slate-100 relative">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3 px-1">
+                        <h4 class="font-extrabold text-slate-800 text-sm sm:text-base tracking-tight flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-[#117a8b] inline-block"></span>
+                            Peta Sebaran Skor Pola Pangan Harapan (PPH) Kabupaten Bandung
+                        </h4>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                            PETA SEBARAN PPH KABUPATEN BANDUNG
+                        </span>
+                    </div>
+
+                    <!-- Map Container -->
+                    <div class="relative w-full h-[520px] rounded-2xl overflow-hidden bg-slate-50 border border-slate-200/80 shadow-xs">
+                        <div id="map-pph-kecamatan" class="w-full h-full z-10 bg-slate-50"></div>
+
+                        <!-- Map Loading Overlay -->
+                        <div id="map-loading"
+                            class="absolute inset-0 z-30 bg-white/80 backdrop-blur-xs flex flex-col items-center justify-center text-slate-700 transition-opacity duration-300">
+                            <div class="loader mb-2"></div>
+                            <p class="text-xs font-semibold text-slate-600">Memuat batas wilayah kecamatan & skor PPH...</p>
+                        </div>
+
+                        <!-- Floating Mini Legend (Kiri Bawah Peta - Sesuai FSVA Screenshot) -->
+                        <div id="map-pph-legend"
+                            class="absolute bottom-6 left-6 bg-white/95 backdrop-blur-md p-3.5 rounded-2xl shadow-lg border border-slate-200/90 z-[400] text-[11px] font-medium hidden sm:block">
+                            <div class="font-extrabold text-slate-800 mb-2 pb-1 border-b border-slate-100 text-[10px] uppercase tracking-wider flex items-center justify-between gap-3">
+                                <span>Peringkat / Tingkat Mutu PPH</span>
+                                <span id="legend-year-badge" class="font-bold text-[#117a8b] text-[10px]">2025</span>
+                            </div>
+                            <div class="space-y-1.5 font-semibold text-xs">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-3.5 h-3.5 rounded-xs inline-block bg-[#2e8a57] border border-[#1e5d3a] shadow-2xs shrink-0"></span>
+                                    <span class="text-slate-700">Baik (&gt;90)</span>
+                                </div>
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-3.5 h-3.5 rounded-xs inline-block bg-[#e9c46a] border border-[#bfa04a] shadow-2xs shrink-0"></span>
+                                    <span class="text-slate-700">Sedang (80-90)</span>
+                                </div>
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-3.5 h-3.5 rounded-xs inline-block bg-[#e07a5f] border border-[#b85c43] shadow-2xs shrink-0"></span>
+                                    <span class="text-slate-700">Kurang (&lt;80)</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Custom Floating Legend (3 Kategori Mutu: Baik, Sedang, Kurang) -->
-                <div id="map-pph-legend"
-                    class="absolute bottom-5 left-5 z-[500] bg-white/95 backdrop-blur-md p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-xl text-slate-700 text-xs font-medium space-y-2 pointer-events-auto min-w-[170px]">
-                    <div class="text-[11px] font-extrabold uppercase tracking-wider text-slate-500 mb-2 border-b border-slate-100 pb-1.5 flex items-center justify-between gap-3">
-                        <span>Legenda Mutu PPH</span>
-                        <span id="legend-year-badge" class="font-bold text-[#117a8b] bg-[#117a8b]/10 px-2 py-0.5 rounded-md text-[11px]">2025</span>
+                <!-- Sidebar Kanan (Sesuai FSVA: Logo Kab Bandung & List Keterangan) -->
+                <div class="lg:col-span-1 p-6 flex flex-col justify-between bg-slate-50/50">
+                    <div>
+                        <!-- Logo Kabupaten Bandung Resmi -->
+                        <div class="flex justify-center mb-5">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2e/Lambang_Kabupaten_Bandung.png"
+                                onerror="this.onerror=null; this.src='https://nos.wjv-1.neo.id/skpd/logo/20/1747972457Logo%20Dispakan%20trans.png'"
+                                alt="Logo Kabupaten Bandung"
+                                class="h-24 object-contain drop-shadow-sm hover:scale-105 transition-transform">
+                        </div>
+
+                        <div class="text-center mb-5">
+                            <h4 class="text-xs font-black text-slate-800 tracking-wider uppercase leading-tight">
+                                KETERANGAN<br>SKOR PPH :
+                            </h4>
+                            <p class="text-[11px] font-bold text-[#117a8b] mt-2">
+                                Total Kecamatan: <span id="map-total-kec" class="font-mono font-black text-slate-800">31</span>
+                            </p>
+                        </div>
+
+                        <!-- Legend Items with Counts (Persis Card Style di Gambar FSVA) -->
+                        <ul class="space-y-3 text-xs">
+                            <li class="flex items-center justify-between p-3 rounded-2xl bg-white border border-slate-200/90 shadow-2xs">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-4 h-4 rounded-xs bg-[#2e8a57] shrink-0 border border-[#1e5d3a]"></span>
+                                    <span class="font-bold text-slate-700 text-xs">BAIK (&gt;90)</span>
+                                </div>
+                                <span class="font-black text-slate-800 font-mono text-xs"><span id="map-count-baik">0</span> <span class="text-[10px] font-normal text-slate-400">Kecamatan</span></span>
+                            </li>
+                            <li class="flex items-center justify-between p-3 rounded-2xl bg-white border border-slate-200/90 shadow-2xs">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-4 h-4 rounded-xs bg-[#e9c46a] shrink-0 border border-[#bfa04a]"></span>
+                                    <span class="font-bold text-slate-700 text-xs">SEDANG (80-90)</span>
+                                </div>
+                                <span class="font-black text-slate-800 font-mono text-xs"><span id="map-count-sedang">0</span> <span class="text-[10px] font-normal text-slate-400">Kecamatan</span></span>
+                            </li>
+                            <li class="flex items-center justify-between p-3 rounded-2xl bg-white border border-slate-200/90 shadow-2xs">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-4 h-4 rounded-xs bg-[#e07a5f] shrink-0 border border-[#b85c43]"></span>
+                                    <span class="font-bold text-slate-700 text-xs">KURANG (&lt;80)</span>
+                                </div>
+                                <span class="font-black text-slate-800 font-mono text-xs"><span id="map-count-kurang">0</span> <span class="text-[10px] font-normal text-slate-400">Kecamatan</span></span>
+                            </li>
+                        </ul>
                     </div>
-                    <div id="legend-items-container" class="space-y-1.5 font-semibold text-xs text-slate-700">
-                        <div class="inline-flex items-center gap-2 text-xs font-semibold text-[#2e8a57] bg-[#2e8a57]/10 border border-[#2e8a57]/30 px-3 py-1.5 rounded-lg w-full">
-                            <span class="w-2.5 h-2.5 rounded-full bg-[#2e8a57] shrink-0"></span> Baik (&gt;90)
-                        </div>
-                        <div class="inline-flex items-center gap-2 text-xs font-semibold text-[#9a7312] bg-[#e9c46a]/20 border border-[#e9c46a]/50 px-3 py-1.5 rounded-lg w-full">
-                            <span class="w-2.5 h-2.5 rounded-full bg-[#e9c46a] shrink-0"></span> Sedang (80-90)
-                        </div>
-                        <div class="inline-flex items-center gap-2 text-xs font-semibold text-[#c25638] bg-[#e07a5f]/20 border border-[#e07a5f]/50 px-3 py-1.5 rounded-lg w-full">
-                            <span class="w-2.5 h-2.5 rounded-full bg-[#e07a5f] shrink-0"></span> Kurang (&lt;80)
-                        </div>
+
+                    <!-- Footer Identitas Instansi (Persis FSVA) -->
+                    <div class="mt-8 pt-4 border-t border-slate-200/60 text-center">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Pemerintah Kabupaten Bandung</p>
+                        <p class="text-[11px] font-semibold text-slate-600">Dinas Ketahanan Pangan dan Perikanan</p>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
 
         <!-- Section: Tren Perkembangan Skor PPH Konsumsi -->
         <div class="glass-panel mb-8" style="padding: 1.5rem;">
@@ -1848,14 +1911,18 @@
                 attributionControl: false
             });
 
-            // Clean light canvas tile layer
-            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+            // Basemap Topografi Shaded Relief persis FSVA
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
                 maxZoom: 18,
-                opacity: 0.55,
+                opacity: 0.9,
                 attribution: '&copy; Esri'
             }).addTo(pphMap);
 
             updatePphMap();
+
+            setTimeout(() => {
+                if (pphMap) pphMap.invalidateSize();
+            }, 300);
         }
 
         function getActiveMapYear() {
@@ -1877,24 +1944,39 @@
             // 1. Tentukan tahun terpilih untuk peta dari filter utama di atas
             const activeYear = getActiveMapYear();
 
-            // 2. Ambil data skor kecamatan untuk tahun ini
+            // 2. Ambil data skor kecamatan untuk tahun ini & hitung sebaran indikator
             const yearItems = rawData.filter(d => {
                 const yr = d.detail?.tahun;
                 return yr == activeYear;
             });
 
             const dataMap = {};
+            let countBaik = 0;
+            let countSedang = 0;
+            let countKurang = 0;
+
             yearItems.forEach(item => {
                 const d = item.detail || {};
                 const normName = normalizeKecName(d.nama_kecamatan);
                 const val = parseFloat(d.total);
                 if (!isNaN(val)) {
                     dataMap[normName] = { item: item, skor: val, rawName: d.nama_kecamatan };
+                    if (val > 90) countBaik++;
+                    else if (val >= 80) countSedang++;
+                    else if (val > 0) countKurang++;
                 }
             });
 
-            // 3. Tampilkan tahun pada badge legenda
+            // 3. Tampilkan tahun pada badge legenda & perbarui angka statistik sidebar
             renderMapLegend(activeYear);
+            const elBaik = document.getElementById('map-count-baik');
+            const elSedang = document.getElementById('map-count-sedang');
+            const elKurang = document.getElementById('map-count-kurang');
+            const elTotalKec = document.getElementById('map-total-kec');
+            if (elBaik) elBaik.innerText = countBaik;
+            if (elSedang) elSedang.innerText = countSedang;
+            if (elKurang) elKurang.innerText = countKurang;
+            if (elTotalKec) elTotalKec.innerText = Object.keys(dataMap).length || 31;
 
             // 4. Bersihkan layer poligon sebelumnya
             if (pphDesaLayer) {
@@ -1906,13 +1988,13 @@
                 pphGeoJsonLayer = null;
             }
 
-            // 5. Tambahkan garis batas desa (subtle white interior borders)
+            // 5. Tambahkan garis batas desa (subtle interior borders)
             if (cachedBatasDesa) {
                 pphDesaLayer = L.geoJSON(cachedBatasDesa, {
                     style: {
-                        color: '#ffffff',
-                        weight: 0.75,
-                        opacity: 0.45,
+                        color: '#0f172a',
+                        weight: 0.6,
+                        opacity: 0.28,
                         fillColor: 'transparent',
                         fillOpacity: 0
                     },
@@ -1931,11 +2013,11 @@
 
                     return {
                         fillColor: color,
-                        weight: 1.5,
+                        weight: 1.8,
                         opacity: 1,
-                        color: '#ffffff',
-                        dashArray: '',
-                        fillOpacity: 0.92
+                        color: '#1e293b',
+                        dashArray: '3, 3',
+                        fillOpacity: 0.86
                     };
                 },
                 onEachFeature: function (feature, layer) {
@@ -1951,7 +2033,7 @@
                             l.setStyle({
                                 weight: 2.8,
                                 color: '#117a8b',
-                                fillOpacity: 1
+                                fillOpacity: 0.98
                             });
                             if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
                                 l.bringToFront();
@@ -1996,6 +2078,13 @@
                 }
             }).addTo(pphMap);
 
+            // Sembunyikan loading overlay peta
+            const mapLoading = document.getElementById('map-loading');
+            if (mapLoading) {
+                mapLoading.classList.add('opacity-0');
+                setTimeout(() => mapLoading.classList.add('hidden'), 300);
+            }
+
             // Fit map to layer bounds
             try {
                 pphMap.fitBounds(pphGeoJsonLayer.getBounds(), { padding: [15, 15] });
@@ -2005,8 +2094,13 @@
         }
 
         function resetMapPphView() {
-            if (pphMap && pphGeoJsonLayer) {
-                pphMap.fitBounds(pphGeoJsonLayer.getBounds(), { padding: [15, 15] });
+            if (pphMap) {
+                pphMap.invalidateSize();
+                if (pphGeoJsonLayer) {
+                    pphMap.fitBounds(pphGeoJsonLayer.getBounds(), { padding: [15, 15] });
+                } else {
+                    pphMap.setView([-7.025, 107.55], 10);
+                }
             }
         }
 </script>
