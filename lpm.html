@@ -2010,7 +2010,9 @@
             return stats;
         }
 
-        // Helper: Mendapatkan style warna blok poligon kecamatan sesuai indikator (Teal #117a8b untuk Kecamatan Memiliki LPM & soft slate untuk wilayah sekitar)
+        // Helper: Mendapatkan style warna blok poligon kecamatan sesuai indikator
+        // Kecamatan belum ada LPM: #94a3a8 tanpa opacity (fillOpacity 1.0)
+        // Kecamatan sudah ada LPM: #117a8b tanpa opacity (fillOpacity 1.0)
         function getLpmKecamatanStyle(feature, kecStats) {
             const props = feature.properties || {};
             const rawKecName = props.KECAMATAN || props.kecamatan || props.NAME_3 || '';
@@ -2018,48 +2020,48 @@
             const st = kecStats[kKey] || kecStats[rawKecName.toUpperCase()];
             const { status, kecamatan } = state.filters;
 
-            // Wilayah sekitar / belum ada lumbung diberi warna lembut yang jelas terlihat (tidak bolong/putih polos)
-            let fillColor = '#cbd5e1';
-            let fillOpacity = 0.50;
-            let borderColor = '#64748b';
-            let borderWidth = 1.2;
+            // Kecamatan yang belum ada LPM: warna #94a3a8 solid tanpa opacity (1.0) agar warna jelas
+            let fillColor = '#94a3a8';
+            let fillOpacity = 1.0;
+            let borderColor = '#0f172a';
+            let borderWidth = 1.3;
 
             if (st && st.hasLpm) {
-                // Seluruh 19 Kecamatan yang memiliki unit LPM (termasuk Solokan Jeruk) langsung terblok warna TEAL (#117a8b) sejak awal
+                // Kecamatan yang sudah ada LPM: warna #117a8b solid tanpa opacity (1.0) agar warna jelas
                 const isTersedia = st.totalStock > 0 || st.lpmAktifCount > 0;
 
                 if (status === 'tersedia') {
                     if (isTersedia) {
                         fillColor = '#117a8b';
-                        fillOpacity = 0.78;
+                        fillOpacity = 1.0;
                         borderColor = '#0f172a';
                     } else {
-                        fillColor = '#cbd5e1';
-                        fillOpacity = 0.35;
-                        borderColor = '#94a3b8';
+                        fillColor = '#94a3a8';
+                        fillOpacity = 1.0;
+                        borderColor = '#334155';
                     }
                 } else if (status === 'kosong') {
                     if (!isTersedia) {
                         fillColor = '#117a8b';
-                        fillOpacity = 0.78;
+                        fillOpacity = 1.0;
                         borderColor = '#0f172a';
                     } else {
-                        fillColor = '#cbd5e1';
-                        fillOpacity = 0.35;
-                        borderColor = '#94a3b8';
+                        fillColor = '#94a3a8';
+                        fillOpacity = 1.0;
+                        borderColor = '#334155';
                     }
                 } else {
-                    // status === 'all': Warna blok Teal solid
+                    // status === 'all': Warna blok Teal #117a8b solid
                     fillColor = '#117a8b';
-                    fillOpacity = 0.78;
+                    fillOpacity = 1.0;
                     borderColor = '#0f172a';
                 }
             }
 
             if (kecamatan !== 'all' && normalizeKecName(rawKecName) === normalizeKecName(kecamatan)) {
-                borderColor = '#0f172a';
-                borderWidth = 3;
-                fillOpacity = 0.95;
+                borderColor = '#ffffff';
+                borderWidth = 3.5;
+                fillOpacity = 1.0;
             }
 
             return {
@@ -2067,7 +2069,7 @@
                 fillOpacity: fillOpacity,
                 color: borderColor,
                 weight: borderWidth,
-                opacity: 0.9,
+                opacity: 1.0,
                 dashArray: '3, 3'
             };
         }
@@ -2153,7 +2155,7 @@
                             layer.bindPopup(popupHtml).openPopup(e.latlng);
                         },
                         mouseover: function (e) {
-                            e.target.setStyle({ weight: 2.5, color: '#ffffff', fillOpacity: 0.92 });
+                            e.target.setStyle({ weight: 3.0, color: '#ffffff', fillOpacity: 1.0 });
                         },
                         mouseout: function (e) {
                             const curStats = getKecamatanLpmStats();
