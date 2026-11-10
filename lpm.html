@@ -202,6 +202,15 @@
             background: transparent !important;
             border: none !important;
         }
+    
+        #lpm-map {
+            background-color: #f8fafc;
+        }
+
+        .leaflet-container {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc !important;
+        }
     </style>
 
     <script>
@@ -254,9 +263,8 @@
     <!-- ========================================== -->
     <nav class="fixed top-0 w-full z-50 glass-nav transition-all duration-300 shadow-sm border-b border-slate-200/80 dark:border-slate-800/80">
         <div class="container mx-auto px-4 lg:px-8">
-
-            <!-- Baris 1: Brand & Aksi Navigasi Utama -->
-            <div class="flex h-16 sm:h-20 items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800/60">
+            <!-- Brand & Aksi Navigasi Utama -->
+            <div class="flex h-16 sm:h-20 items-center justify-between gap-4">
                 <!-- Brand / Logo -->
                 <div class="flex items-center gap-3 shrink-0">
                     <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-white dark:bg-slate-800 shadow-sm border border-slate-200/80 dark:border-slate-700 flex items-center justify-center shrink-0">
@@ -311,115 +319,13 @@
                     </button>
                 </div>
             </div>
-
-            <!-- Baris 2: Dedicated Filter Toolbar (Teks Luas, Terbaca Jelas, Sesuai Estetika FSVA) -->
-            <div class="py-2.5 sm:py-3 flex flex-col md:flex-row md:items-center justify-between gap-2.5">
-                <!-- Label Filter Bar -->
-                <div class="hidden lg:flex items-center gap-2 text-xs font-bold text-slate-700 dark:text-slate-300 shrink-0">
-                    <div class="w-6 h-6 rounded-lg bg-[#117a8b]/10 dark:bg-[#117a8b]/20 flex items-center justify-center text-[#117a8b] dark:text-[#4dbdaf]">
-                        <i data-lucide="filter" class="w-3.5 h-3.5"></i>
-                    </div>
-                    <span>Filter Data:</span>
-                </div>
-
-                <!-- Filter Controls Grid -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 flex-1 max-w-5xl">
-                    <!-- Filter 1: Tahun -->
-                    <div class="relative group">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
-                            <i data-lucide="calendar" class="w-4 h-4 text-[#117a8b] dark:text-[#4dbdaf]"></i>
-                        </div>
-                        <select id="nav-filter-tahun" onchange="syncFilter('tahun', this.value)"
-                            class="w-full bg-slate-50/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs sm:text-sm font-semibold rounded-xl pl-9 pr-8 py-2 sm:py-2.5 focus:ring-2 focus:ring-[#117a8b] focus:border-[#117a8b] block cursor-pointer appearance-none hover:bg-white dark:hover:bg-slate-800 transition shadow-2xs">
-                            <option value="all">Semua Tahun</option>
-                            <option value="2025" selected>Tahun 2025</option>
-                        </select>
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
-                            <i data-lucide="chevron-down" class="w-4 h-4"></i>
-                        </div>
-                    </div>
-
-                    <!-- Filter 2: Bulan -->
-                    <div class="relative group">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
-                            <i data-lucide="clock" class="w-4 h-4 text-[#117a8b] dark:text-[#4dbdaf]"></i>
-                        </div>
-                        <select id="nav-filter-bulan" onchange="syncFilter('bulan', this.value)"
-                            class="w-full bg-slate-50/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs sm:text-sm font-semibold rounded-xl pl-9 pr-8 py-2 sm:py-2.5 focus:ring-2 focus:ring-[#117a8b] focus:border-[#117a8b] block cursor-pointer appearance-none hover:bg-white dark:hover:bg-slate-800 transition shadow-2xs">
-                            <option value="all">Semua Bulan</option>
-                            <option value="1" selected>Januari</option>
-                            <option value="2">Februari</option>
-                            <option value="3">Maret</option>
-                            <option value="4">April</option>
-                            <option value="5">Mei</option>
-                            <option value="6">Juni</option>
-                            <option value="7">Juli</option>
-                            <option value="8">Agustus</option>
-                            <option value="9">September</option>
-                            <option value="10">Oktober</option>
-                            <option value="11">November</option>
-                            <option value="12">Desember</option>
-                        </select>
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
-                            <i data-lucide="chevron-down" class="w-4 h-4"></i>
-                        </div>
-                    </div>
-
-                    <!-- Filter 3: Kecamatan -->
-                    <div class="relative group">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
-                            <i data-lucide="map-pin" class="w-4 h-4 text-[#117a8b] dark:text-[#4dbdaf]"></i>
-                        </div>
-                        <select id="nav-filter-kecamatan" onchange="syncFilter('kecamatan', this.value)"
-                            class="w-full bg-slate-50/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs sm:text-sm font-semibold rounded-xl pl-9 pr-8 py-2 sm:py-2.5 focus:ring-2 focus:ring-[#117a8b] focus:border-[#117a8b] block cursor-pointer appearance-none hover:bg-white dark:hover:bg-slate-800 transition shadow-2xs">
-                            <option value="all">Semua Kecamatan</option>
-                        </select>
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
-                            <i data-lucide="chevron-down" class="w-4 h-4"></i>
-                        </div>
-                    </div>
-
-                    <!-- Filter 4: Status -->
-                    <div class="relative group">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
-                            <i data-lucide="package-check" class="w-4 h-4 text-[#117a8b] dark:text-[#4dbdaf]"></i>
-                        </div>
-                        <select id="nav-filter-status" onchange="syncFilter('status', this.value)"
-                            class="w-full bg-slate-50/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs sm:text-sm font-semibold rounded-xl pl-9 pr-8 py-2 sm:py-2.5 focus:ring-2 focus:ring-[#117a8b] focus:border-[#117a8b] block cursor-pointer appearance-none hover:bg-white dark:hover:bg-slate-800 transition shadow-2xs">
-                            <option value="all">Semua Status</option>
-                            <option value="tersedia">Tersedia Stok</option>
-                            <option value="kosong">Stok Kosong</option>
-                        </select>
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
-                            <i data-lucide="chevron-down" class="w-4 h-4"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tombol Reset Filter -->
-                <button type="button" onclick="resetFilters()"
-                    class="px-3.5 py-2 sm:py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold rounded-xl transition flex items-center justify-center gap-1.5 shrink-0 shadow-2xs active:scale-95"
-                    title="Reset semua filter ke default">
-                    <i data-lucide="rotate-ccw" class="w-3.5 h-3.5 text-slate-500"></i>
-                    <span>Reset Filter</span>
-                </button>
-            </div>
-
-            <!-- Hidden compatibility inputs for mobile-filter-* IDs -->
-            <div class="hidden" aria-hidden="true">
-                <select id="mobile-filter-tahun"></select>
-                <select id="mobile-filter-bulan"></select>
-                <select id="mobile-filter-kecamatan"></select>
-                <select id="mobile-filter-status"></select>
-            </div>
-
         </div>
     </nav>
 
     <!-- ========================================== -->
     <!-- MAIN CONTENT CONTAINER (Sesuai FSVA)       -->
     <!-- ========================================== -->
-    <main class="container mx-auto px-4 lg:px-8 py-6 sm:py-8 mt-48 sm:mt-44 lg:mt-36 mb-12 space-y-8">
+    <main class="container mx-auto px-4 lg:px-8 py-6 sm:py-8 mt-24 lg:mt-20 mb-12 space-y-8">
 
         <!-- ========================================== -->
         <!-- HEADER SECTION & INFO BANNER (Sesuai FSVA) -->
@@ -531,9 +437,7 @@
                     <p class="text-[10px] sm:text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Cakupan Wilayah</p>
                     <h3 id="stat-cakupan-wilayah"
                         class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white font-mono tracking-tight">-</h3>
-                    <p id="stat-sub-wilayah"
-                        class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 mt-1">Kawasan Rentan &
-                        Rawan Pangan</p>
+
                 </div>
                 <div
                     class="w-12 h-12 rounded-xl bg-[#4dbdaf]/15 text-[#0a4b57] dark:text-[#4dbdaf] flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform shadow-inner">
@@ -547,7 +451,7 @@
         <!-- ========================================== -->
         <section
             class="bg-white dark:bg-slate-900 rounded-3xl shadow-soft border border-slate-100 dark:border-slate-800 overflow-hidden">
-            <!-- Filter Bar Peta (Sesuai FSVA) -->
+            <!-- Filter Bar Peta (Poin c: Filter dipindahkan ke peta, tahun hanya angka) -->
             <div
                 class="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div class="flex items-center gap-3">
@@ -560,29 +464,83 @@
                             Peta Sebaran Lumbung & Status Stok
                         </h3>
                         <p class="text-xs text-slate-500 dark:text-slate-400">
-                            Distribusi lokasi 31 LPM pada kawasan rawan pangan Kabupaten Bandung dengan indikator
-                            ketersediaan stok
+                            Distribusi lokasi 31 LPM pada kawasan rawan pangan Kabupaten Bandung dengan indikator ketersediaan stok
                         </p>
                     </div>
                 </div>
 
-                <div class="flex flex-wrap items-center gap-2.5">
-                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">Indikator Pin:</span>
-                    <div class="flex items-center gap-1.5 text-[10px] font-bold">
-                        <span class="px-2.5 py-1 rounded-lg bg-[#2e8a57] text-white shadow-2xs">Hijau: Stok
-                            Tersedia</span>
-                        <span class="px-2.5 py-1 rounded-lg bg-[#dc3545] text-white shadow-2xs">Merah: Stok Kosong</span>
+                <!-- Controls: Filter Tahun, Bulan, Kecamatan, Status, Reset -->
+                <div class="flex flex-wrap items-center gap-2">
+                    <!-- Filter 1: Tahun (Hanya angka sesuai Poin c, misal 2025 / 2026) -->
+                    <div class="relative min-w-[110px]">
+                        <select id="filter-tahun" onchange="syncFilter('tahun', this.value)"
+                            class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs font-semibold rounded-xl pl-3 pr-8 py-2 focus:ring-2 focus:ring-[#117a8b] focus:border-[#117a8b] appearance-none cursor-pointer shadow-2xs hover:bg-slate-50 transition">
+                            <option value="all">Semua Tahun</option>
+                            <option value="2025" selected>2025</option>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
+                            <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+                        </div>
                     </div>
-                    <button onclick="resetMapView()"
-                        class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-xl transition flex items-center gap-1.5 active:scale-95 shadow-2xs"
-                        title="Reset tampilan peta ke seluruh wilayah">
-                        <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
-                        <span>Reset Posisi</span>
+
+                    <!-- Filter 2: Bulan -->
+                    <div class="relative min-w-[125px]">
+                        <select id="filter-bulan" onchange="syncFilter('bulan', this.value)"
+                            class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs font-semibold rounded-xl pl-3 pr-8 py-2 focus:ring-2 focus:ring-[#117a8b] focus:border-[#117a8b] appearance-none cursor-pointer shadow-2xs hover:bg-slate-50 transition">
+                            <option value="all">Semua Bulan</option>
+                            <option value="1" selected>Januari</option>
+                            <option value="2">Februari</option>
+                            <option value="3">Maret</option>
+                            <option value="4">April</option>
+                            <option value="5">Mei</option>
+                            <option value="6">Juni</option>
+                            <option value="7">Juli</option>
+                            <option value="8">Agustus</option>
+                            <option value="9">September</option>
+                            <option value="10">Oktober</option>
+                            <option value="11">November</option>
+                            <option value="12">Desember</option>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
+                            <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+                        </div>
+                    </div>
+
+                    <!-- Filter 3: Kecamatan -->
+                    <div class="relative min-w-[150px] max-w-[200px]">
+                        <select id="filter-kecamatan" onchange="syncFilter('kecamatan', this.value)"
+                            class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs font-semibold rounded-xl pl-3 pr-8 py-2 focus:ring-2 focus:ring-[#117a8b] focus:border-[#117a8b] appearance-none cursor-pointer shadow-2xs hover:bg-slate-50 transition truncate">
+                            <option value="all">Semua Kecamatan</option>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
+                            <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+                        </div>
+                    </div>
+
+                    <!-- Filter 4: Status -->
+                    <div class="relative min-w-[130px]">
+                        <select id="filter-status" onchange="syncFilter('status', this.value)"
+                            class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs font-semibold rounded-xl pl-3 pr-8 py-2 focus:ring-2 focus:ring-[#117a8b] focus:border-[#117a8b] appearance-none cursor-pointer shadow-2xs hover:bg-slate-50 transition">
+                            <option value="all">Semua Status</option>
+                            <option value="tersedia">Tersedia Stok</option>
+                            <option value="kosong">Stok Kosong</option>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
+                            <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+                        </div>
+                    </div>
+
+                    <!-- Reset Button -->
+                    <button type="button" onclick="resetFilters()"
+                        class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl transition flex items-center gap-1.5 active:scale-95 shadow-2xs"
+                        title="Reset semua filter">
+                        <i data-lucide="rotate-ccw" class="w-3.5 h-3.5 text-slate-500"></i>
+                        <span>Reset</span>
                     </button>
                 </div>
             </div>
 
-            <!-- Map Layout Grid (Map 3 Cols, Sidebar 1 Col) -->
+            <!-- Map Layout Grid (Map 3 Cols, Sidebar 1 Col - Format Persis FSVA) -->
             <div class="grid grid-cols-1 lg:grid-cols-4">
                 <!-- Leaflet Canvas (3 cols) -->
                 <div
@@ -594,44 +552,48 @@
                             Peta Persebaran Lumbung Pangan Masyarakat (LPM)
                         </h4>
                         <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                            KABUPATEN BANDUNG
+                            PETA SEBARAN LPM KABUPATEN BANDUNG
                         </span>
                     </div>
 
                     <div
-                        class="relative w-full h-[520px] rounded-2xl overflow-hidden bg-[#1a1d20] border border-slate-200 dark:border-slate-800 shadow-inner">
-                        <div id="lpm-map" class="w-full h-full z-10 bg-[#1a1d20]"></div>
+                        class="relative w-full h-[480px] rounded-2xl overflow-hidden bg-slate-50 border border-slate-200/60 dark:border-slate-800 shadow-xs">
+                        <div id="lpm-map" class="w-full h-full z-10 bg-slate-50"></div>
 
                         <!-- Map Loading Overlay -->
                         <div id="map-loading"
-                            class="absolute inset-0 z-30 bg-[#1a1d20]/80 backdrop-blur-xs flex flex-col items-center justify-center text-white transition-opacity duration-300">
+                            class="absolute inset-0 z-30 bg-white/80 backdrop-blur-xs flex flex-col items-center justify-center text-slate-700 transition-opacity duration-300">
                             <div class="loader mb-2"></div>
-                            <p class="text-xs font-semibold text-slate-200">Memuat batas wilayah kecamatan & pin
-                                lumbung...</p>
+                            <p class="text-xs font-semibold text-slate-600">Memuat batas wilayah kecamatan & pin lumbung...</p>
                         </div>
 
                         <!-- Floating Mini Legend (Kiri Bawah Peta - Sesuai FSVA) -->
                         <div
-                            class="absolute bottom-6 left-6 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-3.5 rounded-xl shadow-lg border border-slate-200/90 dark:border-slate-800 z-[400] text-[11px] font-medium hidden sm:block">
+                            class="absolute bottom-6 left-6 bg-white/95 backdrop-blur-md p-3.5 rounded-xl shadow-md border border-slate-200/90 z-[400] text-[11px] font-semibold hidden sm:block">
                             <div
-                                class="font-extrabold text-slate-800 dark:text-slate-100 mb-2 pb-1 border-b border-slate-100 dark:border-slate-800 text-[10px] uppercase tracking-wider">
-                                Keterangan Pin & Wilayah
+                                class="font-black text-slate-700 mb-2 pb-1 border-b border-slate-100 text-[9.5px] uppercase tracking-wider">
+                                KETERANGAN PIN & WILAYAH :
                             </div>
                             <div class="space-y-1.5">
                                 <div class="flex items-center gap-2">
                                     <span
                                         class="w-3.5 h-3.5 rounded-full bg-[#2e8a57] border border-white inline-block shadow-2xs"></span>
-                                    <span class="text-slate-700 dark:text-slate-300 font-medium">LPM Cadangan Tersedia</span>
+                                    <span class="text-slate-700 font-medium">LPM Cadangan Tersedia</span>
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <span
                                         class="w-3.5 h-3.5 rounded-full bg-[#dc3545] border border-white inline-block shadow-2xs"></span>
-                                    <span class="text-slate-700 dark:text-slate-300 font-medium">LPM Stok Kosong</span>
+                                    <span class="text-slate-700 font-medium">LPM Stok Kosong</span>
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <span
-                                        class="w-3.5 h-2.5 rounded-xs bg-[#117a8b] border border-slate-600 inline-block shadow-2xs"></span>
-                                    <span class="text-slate-700 dark:text-slate-300 font-medium">Kecamatan Memiliki LPM</span>
+                                        class="w-3.5 h-2.5 rounded-xs bg-[#117a8b] border border-slate-700 inline-block shadow-2xs"></span>
+                                    <span class="text-slate-700 font-medium">Kecamatan Memiliki LPM</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span
+                                        class="w-3.5 h-2.5 rounded-xs bg-[#cbd5e1] border border-slate-400 inline-block shadow-2xs"></span>
+                                    <span class="text-slate-500 font-medium">Wilayah Sekitar</span>
                                 </div>
                             </div>
                         </div>
@@ -641,13 +603,12 @@
                 <!-- Map Sidebar Summary (1 col - Sesuai FSVA) -->
                 <div class="lg:col-span-1 p-6 flex flex-col justify-between bg-slate-50/50 dark:bg-slate-900/40">
                     <div>
-                        <!-- Logo Kabupaten Bandung -->
+                        <!-- Logo Kabupaten Bandung Resmi -->
                         <div class="flex justify-center mb-5">
-                            <img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0f/Lambang_Kabupaten_Bandung%2C_Jawa_Barat%2C_Indonesia.svg/960px-Lambang_Kabupaten_Bandung%2C_Jawa_Barat%2C_Indonesia.svg.png?utm_source=id.wikipedia.org&utm_campaign=index&utm_content=thumbnail"
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2e/Lambang_Kabupaten_Bandung.png"
+                                onerror="this.onerror=null; this.src='https://nos.wjv-1.neo.id/skpd/logo/20/1747972457Logo%20Dispakan%20trans.png'"
                                 alt="Logo Kabupaten Bandung"
-                                class="h-24 object-contain drop-shadow-sm hover:scale-105 transition-transform"
-                                referrerpolicy="no-referrer"
-                                onerror="this.onerror=null; this.src='https://nos.wjv-1.neo.id/skpd/logo/20/1747972457Logo%20Dispakan%20trans.png'">
+                                class="h-24 object-contain drop-shadow-sm hover:scale-105 transition-transform">
                         </div>
 
                         <div class="text-center mb-5">
@@ -680,11 +641,11 @@
                                 <div class="flex items-center gap-2.5">
                                     <span
                                         class="w-3.5 h-3.5 rounded-full bg-[#2e8a57] border border-white shrink-0 shadow-2xs"></span>
-                                    <span class="font-bold text-slate-700 dark:text-slate-200 text-[11px]">Stok
+                                    <span class="font-bold text-slate-700 dark:text-slate-200 text-[11px]">Cadangan
                                         Tersedia</span>
                                 </div>
-                                <span class="font-black text-[#2e8a57] dark:text-emerald-400 font-mono text-xs"><span
-                                        id="map-side-stok-ada">0</span> <span
+                                <span class="font-black text-[#2e8a57] font-mono text-xs"><span
+                                        id="map-side-lpm-aktif">0</span> <span
                                         class="text-[10px] font-normal text-slate-400">LPM</span></span>
                             </li>
                             <li
@@ -696,30 +657,28 @@
                                         Kosong</span>
                                 </div>
                                 <span class="font-black text-[#dc3545] font-mono text-xs"><span
-                                        id="map-side-stok-kosong">0</span> <span
+                                        id="map-side-lpm-rawan">0</span> <span
                                         class="text-[10px] font-normal text-slate-400">LPM</span></span>
                             </li>
                             <li
                                 class="flex items-center justify-between p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/90 dark:border-slate-700 shadow-2xs">
                                 <div class="flex items-center gap-2.5">
                                     <span
-                                        class="w-3.5 h-3.5 rounded-xs bg-[#4dbdaf] border border-slate-600 shrink-0 shadow-2xs"></span>
-                                    <span
-                                        class="font-bold text-slate-700 dark:text-slate-200 text-[11px]">Kecamatan</span>
+                                        class="w-3.5 h-3.5 rounded-xs bg-[#4dbdaf] border border-teal-600 shrink-0 shadow-2xs"></span>
+                                    <span class="font-bold text-slate-700 dark:text-slate-200 text-[11px]">Kec.
+                                        Terpantau</span>
                                 </div>
                                 <span class="font-black text-slate-800 dark:text-slate-100 font-mono text-xs"><span
-                                        id="map-side-kec-count">0</span> <span
+                                        id="map-side-kec-terpantau">0</span> <span
                                         class="text-[10px] font-normal text-slate-400">Kec</span></span>
                             </li>
                         </ul>
                     </div>
 
-                    <!-- Footer Note -->
-                    <div
-                        class="mt-8 pt-4 border-t border-slate-200/70 dark:border-slate-800 text-[10px] text-slate-400 text-center leading-relaxed">
-                        Pemerintah Kabupaten Bandung<br>
-                        <span class="font-semibold text-slate-600 dark:text-slate-300">Dinas Ketahanan Pangan dan
-                            Perikanan</span>
+                    <!-- Footer Info Kanan Bawah -->
+                    <div class="mt-8 pt-4 border-t border-slate-200/60 text-center">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Pemerintah Kabupaten Bandung</p>
+                        <span class="font-semibold text-slate-600 dark:text-slate-300 text-xs">Dinas Ketahanan Pangan dan Perikanan</span>
                     </div>
                 </div>
             </div>
@@ -748,20 +707,37 @@
                         </div>
                     </div>
 
-                    <!-- Filter Per Lumbung & Tahun -->
+                    <!-- Filter Per Lumbung & Tahun (Poin f: Urutan Tahun - Kecamatan - LPM) -->
                     <div class="flex flex-wrap items-center gap-2">
-                        <div class="relative min-w-[240px]">
-                            <select id="select-lpm-tren" onchange="changeLpmTren(this.value)"
-                                class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold rounded-xl pl-3 pr-8 py-2.5 focus:ring-2 focus:ring-[#117a8b] outline-none appearance-none cursor-pointer">
+                        <!-- 1. Tahun -->
+                        <div class="relative min-w-[95px]">
+                            <select id="select-tren-tahun" onchange="changeTrenTahun(this.value)"
+                                class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold rounded-xl pl-3 pr-7 py-2 focus:ring-2 focus:ring-[#117a8b] outline-none appearance-none cursor-pointer">
                                 <!-- Populated dynamically -->
                             </select>
                             <i data-lucide="chevron-down"
                                 class="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
                         </div>
-                        <span id="chart-tren-year-badge"
-                            class="inline-flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-semibold bg-[#117a8b]/10 text-[#117a8b] border border-[#117a8b]/20">
-                            Tahun 2025
-                        </span>
+
+                        <!-- 2. Kecamatan -->
+                        <div class="relative min-w-[145px]">
+                            <select id="select-tren-kecamatan" onchange="changeTrenKecamatan(this.value)"
+                                class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold rounded-xl pl-3 pr-7 py-2 focus:ring-2 focus:ring-[#117a8b] outline-none appearance-none cursor-pointer">
+                                <option value="all">Semua Kecamatan</option>
+                            </select>
+                            <i data-lucide="chevron-down"
+                                class="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                        </div>
+
+                        <!-- 3. LPM -->
+                        <div class="relative min-w-[220px] max-w-[280px]">
+                            <select id="select-lpm-tren" onchange="changeLpmTren(this.value)"
+                                class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold rounded-xl pl-3 pr-7 py-2 focus:ring-2 focus:ring-[#117a8b] outline-none appearance-none cursor-pointer truncate">
+                                <!-- Populated dynamically based on kecamatan -->
+                            </select>
+                            <i data-lucide="chevron-down"
+                                class="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                        </div>
                     </div>
                 </div>
 
@@ -812,7 +788,7 @@
                         </div>
 
                         <!-- Donut Chart -->
-                        <div id="chart-status-rasio" class="h-80 flex items-center justify-center">
+                        <div id="chart-status-rasio" class="h-[380px] flex items-center justify-center">
                             <div class="loader opacity-50"></div>
                         </div>
                     </div>
@@ -850,7 +826,7 @@
                         </div>
 
                         <!-- Column Bar Chart -->
-                        <div id="chart-kecamatan-stok" class="h-80 flex items-center justify-center">
+                        <div id="chart-kecamatan-stok" class="h-[380px] flex items-center justify-center">
                             <div class="loader opacity-50"></div>
                         </div>
                     </div>
@@ -1069,6 +1045,8 @@
             filteredLpm: [],
             filteredTransaksi: [],
             selectedLpmTren: 'Badan Usaha Milik Desa (BUMDes) Bina Karya Sejahtera',
+            selectedTrenTahun: '2025',
+            selectedTrenKecamatan: 'all',
             lpmCoordsMap: {},
             filters: {
                 tahun: '2025',
@@ -1216,25 +1194,38 @@
                 if (d.kecamatan) kecSet.add(formatKecamatan(d.kecamatan));
             });
 
-            // Populate Tahun
+            // Populate Tahun (Poin c: Hanya angka tahun, bukan 'Tahun XXXX')
             const sortedTahun = Array.from(tahunSet).sort((a, b) => b - a);
-            ['nav-filter-tahun', 'mobile-filter-tahun'].forEach(id => {
+            ['filter-tahun', 'nav-filter-tahun', 'mobile-filter-tahun'].forEach(id => {
                 const sel = document.getElementById(id);
                 if (sel) {
                     sel.innerHTML = '<option value="all">Semua Tahun</option>';
                     sortedTahun.forEach(t => {
                         const opt = document.createElement('option');
                         opt.value = t;
-                        opt.innerText = `Tahun ${t}`;
+                        opt.innerText = `${t}`;
                         if (t === 2025) opt.selected = true;
                         sel.appendChild(opt);
                     });
                 }
             });
 
+            // Populate Filter Tahun Chart Tren
+            const selTrenThn = document.getElementById('select-tren-tahun');
+            if (selTrenThn) {
+                selTrenThn.innerHTML = '';
+                sortedTahun.forEach(t => {
+                    const opt = document.createElement('option');
+                    opt.value = t;
+                    opt.innerText = `${t}`;
+                    if (t === 2025) opt.selected = true;
+                    selTrenThn.appendChild(opt);
+                });
+            }
+
             // Populate Kecamatan
             const sortedKec = Array.from(kecSet).sort();
-            ['nav-filter-kecamatan', 'mobile-filter-kecamatan'].forEach(id => {
+            ['filter-kecamatan', 'nav-filter-kecamatan', 'mobile-filter-kecamatan', 'select-tren-kecamatan'].forEach(id => {
                 const sel = document.getElementById(id);
                 if (sel) {
                     sel.innerHTML = '<option value="all">Semua Kecamatan</option>';
@@ -1247,29 +1238,52 @@
                 }
             });
 
-            // Populate Dropdown Lumbung untuk Grafik Tren Penyaluran & Pemanfaatan Stok (Image 5)
-            const selLpmTren = document.getElementById('select-lpm-tren');
-            if (selLpmTren) {
-                selLpmTren.innerHTML = '';
-                const lpmNames = state.rawLpm
-                    .map(item => item.detail?.nama_lumbung)
-                    .filter(Boolean)
-                    .sort();
+            // Populate Dropdown LPM untuk Grafik Tren (Poin f: Terhubung ke Kecamatan)
+            populateLpmTrenDropdown('all');
+        }
 
-                lpmNames.forEach(name => {
-                    const opt = document.createElement('option');
-                    opt.value = name;
-                    opt.innerText = name;
-                    if (name === state.selectedLpmTren || (name.toLowerCase().includes('bina karya sejahtera'))) {
-                        opt.selected = true;
-                        state.selectedLpmTren = name;
-                    }
-                    selLpmTren.appendChild(opt);
-                });
-                if (!state.selectedLpmTren && lpmNames.length > 0) {
+        function populateLpmTrenDropdown(selectedKec = 'all') {
+            const selLpmTren = document.getElementById('select-lpm-tren');
+            if (!selLpmTren) return;
+
+            let lpms = state.rawLpm;
+            if (selectedKec !== 'all') {
+                lpms = lpms.filter(item => formatKecamatan(item.detail?.kecamatan).toUpperCase() === selectedKec.toUpperCase());
+            }
+
+            const lpmNames = lpms
+                .map(item => item.detail?.nama_lumbung)
+                .filter(Boolean)
+                .sort();
+
+            selLpmTren.innerHTML = '';
+            lpmNames.forEach(name => {
+                const opt = document.createElement('option');
+                opt.value = name;
+                opt.innerText = name;
+                selLpmTren.appendChild(opt);
+            });
+
+            if (lpmNames.length > 0) {
+                if (!lpmNames.includes(state.selectedLpmTren)) {
                     state.selectedLpmTren = lpmNames[0];
                 }
+                selLpmTren.value = state.selectedLpmTren;
+            } else {
+                state.selectedLpmTren = '';
+                selLpmTren.innerHTML = '<option value="">Tidak ada lumbung di kecamatan ini</option>';
             }
+        }
+
+        function changeTrenTahun(val) {
+            state.selectedTrenTahun = val;
+            renderChartTren();
+        }
+
+        function changeTrenKecamatan(val) {
+            state.selectedTrenKecamatan = val;
+            populateLpmTrenDropdown(val);
+            renderChartTren();
         }
 
         function changeLpmTren(val) {
@@ -1279,10 +1293,10 @@
 
         function syncFilter(type, val) {
             state.filters[type] = val;
-            const navEl = document.getElementById('nav-filter-' + type);
-            const mobEl = document.getElementById('mobile-filter-' + type);
-            if (navEl && navEl.value !== val) navEl.value = val;
-            if (mobEl && mobEl.value !== val) mobEl.value = val;
+            ['filter-' + type, 'nav-filter-' + type, 'mobile-filter-' + type].forEach(id => {
+                const el = document.getElementById(id);
+                if (el && el.value !== val) el.value = val;
+            });
             applyFilters();
         }
 
@@ -1291,10 +1305,45 @@
             applyFilters();
         }
 
+        // Helper: Hitung stok LPM pada periode tertentu dari data transaksi mentah
+        function getLpmStockForPeriod(lpmName, targetTahun, targetBulan) {
+            if (!lpmName) return 0;
+            const norm = lpmName.trim().toLowerCase();
+            let sum = 0;
+            state.rawTransaksi.forEach(item => {
+                const d = item.detail || {};
+                if ((d.nama_lumbung || '').trim().toLowerCase() === norm) {
+                    if (targetTahun !== 'all' && String(d.tahun) !== String(targetTahun)) return;
+                    if (targetBulan !== 'all' && String(d.bulan) !== String(targetBulan)) return;
+                    sum += parseFloat(d.stock) || 0;
+                }
+            });
+            return sum;
+        }
+
         function applyFilters() {
             const { tahun, bulan, kecamatan, status, search } = state.filters;
 
-            // 1. Filter Transaksi
+            // 1. Filter LPM Directory (Poin d: Akurat menghitung stok per periode aktif sehingga tidak semua 31 dianggap kosong)
+            state.filteredLpm = state.rawLpm.filter(item => {
+                const d = item.detail || {};
+                const kecName = formatKecamatan(d.kecamatan);
+
+                if (kecamatan !== 'all' && kecName.toUpperCase() !== kecamatan.toUpperCase()) return false;
+
+                const lpmStock = getLpmStockForPeriod(d.nama_lumbung, tahun, bulan);
+                if (status === 'tersedia' && lpmStock <= 0) return false;
+                if (status === 'kosong' && lpmStock > 0) return false;
+
+                if (search) {
+                    const text = [d.nama_lumbung, d.kecamatan, d.desa, d.alamat, d.ketua].join(' ').toLowerCase();
+                    if (!text.includes(search)) return false;
+                }
+
+                return true;
+            });
+
+            // 2. Filter Transaksi Bulanan
             state.filteredTransaksi = state.rawTransaksi.filter(item => {
                 const d = item.detail || {};
                 const kecName = formatKecamatan(d.kecamatan);
@@ -1309,26 +1358,6 @@
 
                 if (search) {
                     const text = [d.nama_lumbung, d.kecamatan, d.desa, d.keterangan].join(' ').toLowerCase();
-                    if (!text.includes(search)) return false;
-                }
-
-                return true;
-            });
-
-            // 2. Filter LPM Directory
-            state.filteredLpm = state.rawLpm.filter(item => {
-                const d = item.detail || {};
-                const kecName = formatKecamatan(d.kecamatan);
-
-                if (kecamatan !== 'all' && kecName.toUpperCase() !== kecamatan.toUpperCase()) return false;
-
-                // Match status based on latest transaction stock
-                const lpmStock = getLpmTotalStock(d.nama_lumbung);
-                if (status === 'tersedia' && lpmStock <= 0) return false;
-                if (status === 'kosong' && lpmStock > 0) return false;
-
-                if (search) {
-                    const text = [d.nama_lumbung, d.kecamatan, d.desa, d.alamat, d.ketua].join(' ').toLowerCase();
                     if (!text.includes(search)) return false;
                 }
 
@@ -1366,16 +1395,15 @@
                 search: ''
             };
 
-            const selT = document.getElementById('nav-filter-tahun');
-            const selB = document.getElementById('nav-filter-bulan');
-            const selK = document.getElementById('nav-filter-kecamatan');
-            const selS = document.getElementById('nav-filter-status');
-            const searchIn = document.getElementById('table-search-input');
+            ['tahun', 'bulan', 'kecamatan', 'status'].forEach(type => {
+                const val = state.filters[type];
+                ['filter-' + type, 'nav-filter-' + type, 'mobile-filter-' + type].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = val;
+                });
+            });
 
-            if (selT) selT.value = '2025';
-            if (selB) selB.value = '1';
-            if (selK) selK.value = 'all';
-            if (selS) selS.value = 'all';
+            const searchIn = document.getElementById('table-search-input');
             if (searchIn) searchIn.value = '';
 
             applyFilters();
@@ -1396,37 +1424,45 @@
             return sum;
         }
 
-        // --- 1. UPDATE KPIS (a. Summary) ---
+        // --- 1. UPDATE KPIS (Poin d: Akurat menghitung aktif vs kosong & Poin a: sub-wilayah dihapus) ---
         function updateKPIs() {
+            const { tahun, bulan, kecamatan, status } = state.filters;
+
             let totalStock = 0;
-            const lpmSet = new Set();
+            state.filteredTransaksi.forEach(item => {
+                totalStock += parseFloat(item.detail?.stock) || 0;
+            });
+
+            // Evaluasi status lumbung per unit LPM yang cocok dengan filter kecamatan
+            let matchingLpms = state.rawLpm;
+            if (kecamatan !== 'all') {
+                matchingLpms = matchingLpms.filter(i => formatKecamatan(i.detail?.kecamatan).toUpperCase() === kecamatan.toUpperCase());
+            }
+
+            let lpmAktif = 0;
+            let lpmStokTipis = 0;
             const kecSet = new Set();
             const desaSet = new Set();
 
-            state.filteredTransaksi.forEach(item => {
+            matchingLpms.forEach(item => {
                 const d = item.detail || {};
-                totalStock += parseFloat(d.stock) || 0;
-                if (d.nama_lumbung) lpmSet.add(d.nama_lumbung.trim());
+                const stock = getLpmStockForPeriod(d.nama_lumbung, tahun, bulan);
+                if (stock > 0) {
+                    lpmAktif++;
+                } else {
+                    lpmStokTipis++;
+                }
                 if (d.kecamatan) kecSet.add(formatKecamatan(d.kecamatan));
                 if (d.desa) desaSet.add(d.desa.trim());
             });
 
-            // Hitung lumbung aktif (stok > 0) vs wilayah rawan / stok tipis (stok <= 0)
-            const lpmStockMap = {};
-            state.filteredTransaksi.forEach(item => {
-                const d = item.detail || {};
-                const name = (d.nama_lumbung || '').trim();
-                const stock = parseFloat(d.stock) || 0;
-                lpmStockMap[name] = (lpmStockMap[name] || 0) + stock;
-            });
-
-            let lpmAktif = 0;
-            Object.values(lpmStockMap).forEach(s => {
-                if (s > 0) lpmAktif++;
-            });
-
-            const totalLpmTerdata = state.rawLpm.length || 31;
-            const lpmStokTipis = Math.max(0, totalLpmTerdata - lpmAktif);
+            let displayAktif = lpmAktif;
+            let displayTipis = lpmStokTipis;
+            if (status === 'tersedia') {
+                displayTipis = 0;
+            } else if (status === 'kosong') {
+                displayAktif = 0;
+            }
 
             const totalKecCount = kecSet.size > 0 ? kecSet.size : new Set(state.rawLpm.map(i => formatKecamatan(i.detail?.kecamatan))).size;
             const totalDesaCount = desaSet.size > 0 ? desaSet.size : new Set(state.rawLpm.map(i => i.detail?.desa)).size;
@@ -1443,32 +1479,30 @@
             // Summary 2: Jumlah Lumbung Aktif: XXX Lumbung
             const statTotalLpmEl = document.getElementById('stat-total-lpm');
             const statSubLpmEl = document.getElementById('stat-sub-lpm');
-            if (statTotalLpmEl) statTotalLpmEl.innerText = `${lpmAktif} Lumbung`;
+            if (statTotalLpmEl) statTotalLpmEl.innerText = `${displayAktif} Lumbung`;
             if (statSubLpmEl) statSubLpmEl.innerText = 'Memiliki Cadangan Stok';
 
             // Summary 3: Wilayah Rawan: Lumbung dengan stok tipis XXX Lumbung
             const statSiagaEl = document.getElementById('stat-siaga-stok');
             const statSubSiagaEl = document.getElementById('stat-sub-siaga');
-            if (statSiagaEl) statSiagaEl.innerText = `${lpmStokTipis} Lumbung`;
+            if (statSiagaEl) statSiagaEl.innerText = `${displayTipis} Lumbung`;
             if (statSubSiagaEl) statSubSiagaEl.innerText = 'Lumbung dengan stok tipis / kosong';
 
-            // Summary 4: Cakupan Wilayah: XXX Kecamatan, XXX Desa
+            // Summary 4: Cakupan Wilayah: XXX Kecamatan, XXX Desa (Poin a: subtitle dihapus)
             const statCakupanEl = document.getElementById('stat-cakupan-wilayah');
-            const statSubWilayahEl = document.getElementById('stat-sub-wilayah');
             if (statCakupanEl) statCakupanEl.innerText = `${totalKecCount} Kecamatan, ${totalDesaCount} Desa`;
-            if (statSubWilayahEl) statSubWilayahEl.innerText = 'Kawasan Rentan & Rawan Pangan';
 
-            // Sidebar Map Counters
+            // Sidebar Map Counters (Sesuai FSVA)
             const sideStok = document.getElementById('map-side-total-stok');
             const sideLpm = document.getElementById('map-side-total-lpm');
-            const sideAda = document.getElementById('map-side-stok-ada');
-            const sideKosong = document.getElementById('map-side-stok-kosong');
-            const sideKec = document.getElementById('map-side-kec-count');
+            const sideAda = document.getElementById('map-side-lpm-aktif') || document.getElementById('map-side-stok-ada');
+            const sideKosong = document.getElementById('map-side-lpm-rawan') || document.getElementById('map-side-stok-kosong');
+            const sideKec = document.getElementById('map-side-kec-terpantau') || document.getElementById('map-side-kec-count');
 
-            if (sideStok) sideStok.innerText = `${(totalStock / 1000).toLocaleString('id-ID', { maximumFractionDigits: 1 })} Ton`;
-            if (sideLpm) sideLpm.innerText = totalLpmTerdata;
-            if (sideAda) sideAda.innerText = lpmAktif;
-            if (sideKosong) sideKosong.innerText = lpmStokTipis;
+            if (sideStok) sideStok.innerText = `${(totalStock / 1000).toLocaleString('id-ID', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} Ton`;
+            if (sideLpm) sideLpm.innerText = state.filteredLpm.length;
+            if (sideAda) sideAda.innerText = displayAktif;
+            if (sideKosong) sideKosong.innerText = displayTipis;
             if (sideKec) sideKec.innerText = totalKecCount;
         }
 
@@ -1486,11 +1520,7 @@
             const gridBorderColor = isDark ? '#1e293b' : '#f1f5f9';
 
             const selectedLpm = state.selectedLpmTren || (state.rawLpm[0]?.detail?.nama_lumbung || '');
-            const targetTahun = state.filters.tahun !== 'all' ? state.filters.tahun : '2025';
-
-            // Update badge tahun
-            const badgeTahun = document.getElementById('chart-tren-year-badge');
-            if (badgeTahun) badgeTahun.innerText = `Tahun ${targetTahun}`;
+            const targetTahun = state.selectedTrenTahun || (state.filters.tahun !== 'all' ? state.filters.tahun : '2025');
 
             // Ambil 12 data bulan untuk lumbung terpilih
             const monthlyValues = Array(12).fill(0);
@@ -1733,7 +1763,7 @@
             const optKec = {
                 chart: {
                     type: 'bar',
-                    height: 290,
+                    height: 380,
                     toolbar: { show: false },
                     fontFamily: 'Plus Jakarta Sans',
                     animations: { enabled: true }
@@ -1742,44 +1772,54 @@
                     name: 'Total Stok (Kg)',
                     data: kecValues
                 }],
-                colors: ['#4dbdaf'], // Warna 4 (#4dbdaf)
+                colors: ['#117a8b'], // Warna tema
                 plotOptions: {
                     bar: {
-                        borderRadius: 6,
-                        borderRadiusApplication: 'top',
-                        columnWidth: '45%',
+                        horizontal: true,
+                        borderRadius: 4,
+                        barHeight: '62%',
                         dataLabels: { position: 'top' }
                     }
                 },
-                dataLabels: { enabled: false },
+                dataLabels: {
+                    enabled: true,
+                    offsetX: 10,
+                    formatter: function (val) {
+                        return val > 0 ? val.toLocaleString('id-ID') + ' Kg' : '0 Kg';
+                    },
+                    style: {
+                        fontSize: '9.5px',
+                        fontWeight: '700',
+                        colors: [textColor]
+                    }
+                },
                 xaxis: {
-                    categories: kecLabels.length > 0 ? kecLabels : ['-'],
                     title: {
-                        text: 'Kecamatan',
+                        text: 'Total Stok Cadangan (Kg)',
                         style: { color: textColor, fontSize: '11px', fontWeight: '600' }
                     },
                     labels: {
-                        rotate: -45,
-                        rotateAlways: true,
-                        style: { colors: textColor, fontSize: '10.5px', fontWeight: '600' }
+                        formatter: function (val) {
+                            return val.toLocaleString('id-ID');
+                        },
+                        style: { colors: textColor, fontSize: '10px', fontWeight: '600' }
                     },
                     axisBorder: { color: gridBorderColor }
                 },
                 yaxis: {
-                    title: {
-                        text: 'Stok (Kg)',
-                        style: { color: textColor, fontSize: '11px', fontWeight: '600' }
-                    },
+                    categories: kecLabels.length > 0 ? kecLabels : ['-'],
                     labels: {
-                        style: { colors: textColor },
-                        formatter: (val) => val.toLocaleString('id-ID')
+                        style: { colors: textColor, fontSize: '11px', fontWeight: '600' }
                     }
                 },
-                grid: { borderColor: gridBorderColor },
+                grid: {
+                    borderColor: gridBorderColor,
+                    strokeDashArray: 3
+                },
                 tooltip: {
                     theme: isDark ? 'dark' : 'light',
                     y: {
-                        formatter: (val) => `${val.toLocaleString('id-ID')} Kg`
+                        formatter: val => `${val.toLocaleString('id-ID')} Kg`
                     }
                 }
             };
@@ -1821,8 +1861,8 @@
                 attributionControl: false
             });
 
-            // Clean dark base map (Zero watermark, high performance)
-            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+            // Mode Terang ArcGIS World Street Map (Persis Format FSVA)
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
                 maxZoom: 18
             }).addTo(state.map);
 
@@ -1939,16 +1979,7 @@
                     const props = feature.properties || {};
                     const rawKecName = (props.KECAMATAN || props.kecamatan || '').toUpperCase();
 
-                    if (PROMINENT_KEC_LABELS.includes(rawKecName)) {
-                        const center = layer.getBounds().getCenter();
-                        const labelIcon = L.divIcon({
-                            className: 'kec-label-wrapper',
-                            html: `<div class="kecamatan-label-pill">${escapeHtml(rawKecName)}</div>`,
-                            iconSize: [75, 18],
-                            iconAnchor: [37, 9]
-                        });
-                        L.marker(center, { icon: labelIcon, interactive: false }).addTo(state.mapLayers.labels);
-                    }
+                    // Poin e: Label nama kecamatan yang menumpuk dihapus agar peta bersih (info detail sudah ada di popup LPM)
 
                     layer.on({
                         mouseover: function (e) {
@@ -1974,7 +2005,8 @@
                 if (!name) return;
 
                 const coord = state.lpmCoordsMap[name] || BANDUNG_CENTER;
-                const stock = getLpmTotalStock(name);
+                const { tahun, bulan } = state.filters;
+                const stock = getLpmStockForPeriod(name, tahun, bulan);
                 const isTersedia = stock > 0;
                 const color = isTersedia ? '#2e8a57' : '#dc3545';
 
@@ -2028,6 +2060,34 @@
                 marker.bindPopup(popupHtml);
                 state.mapLayers.markers.addLayer(marker);
             });
+
+            // Update Map Sidebar Counters
+            const { tahun: curThn, bulan: curBln } = state.filters;
+            let totalFilteredStok = 0;
+            let totalAktif = 0;
+            let totalRawan = 0;
+            const kecTerpantauSet = new Set();
+
+            state.filteredLpm.forEach(item => {
+                const d = item.detail || {};
+                const s = getLpmStockForPeriod(d.nama_lumbung, curThn, curBln);
+                totalFilteredStok += s;
+                if (s > 0) totalAktif++;
+                else totalRawan++;
+                if (d.kecamatan) kecTerpantauSet.add(formatKecamatan(d.kecamatan));
+            });
+
+            const sideTotalStok = document.getElementById('map-side-total-stok');
+            const sideTotalLpm = document.getElementById('map-side-total-lpm');
+            const sideLpmAktif = document.getElementById('map-side-lpm-aktif');
+            const sideLpmRawan = document.getElementById('map-side-lpm-rawan');
+            const sideKecTerpantau = document.getElementById('map-side-kec-terpantau');
+
+            if (sideTotalStok) sideTotalStok.innerText = `${(totalFilteredStok / 1000).toLocaleString('id-ID', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} Ton`;
+            if (sideTotalLpm) sideTotalLpm.innerText = state.filteredLpm.length;
+            if (sideLpmAktif) sideLpmAktif.innerText = totalAktif;
+            if (sideLpmRawan) sideLpmRawan.innerText = totalRawan;
+            if (sideKecTerpantau) sideKecTerpantau.innerText = kecTerpantauSet.size;
         }
 
         function resetMapView() {
