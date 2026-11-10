@@ -497,24 +497,38 @@
                             <span class="w-2 h-2 rounded-full bg-[#117a8b] inline-block"></span>
                             Peta Sebaran Sampling PSAT Kabupaten Bandung
                         </span>
-                        <span class="text-[10px] font-semibold text-slate-400">PETA SEBARAN PSAT KABUPATEN BANDUNG</span>
+                        <span class="text-[10px] font-semibold text-slate-400">PETA SEBARAN PSAT KABUPATEN
+                            BANDUNG</span>
                     </div>
 
                     <div
                         class="relative w-full h-[460px] rounded-xl overflow-hidden bg-slate-50 border border-slate-200/60 shadow-xs">
                         <div id="psat-map" class="w-full h-full z-10 bg-slate-50"></div>
 
-                        <!-- Floating Mini Legend (Kiri Bawah Peta - Persis Format FSVA) -->
+                        <!-- Floating Mini Legend (Kiri Bawah Peta - Indikator Blok Warna & Pin) -->
                         <div
                             class="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md p-3 rounded-xl shadow-md border border-slate-200 z-[400] text-[10px] font-semibold hidden sm:flex flex-col gap-1.5">
-                            <div class="text-[9.5px] font-black text-slate-700 uppercase tracking-wider mb-0.5">HASIL PENGUJIAN SAMPEL</div>
+                            <div class="text-[9.5px] font-black text-slate-700 uppercase tracking-wider mb-0.5">
+                                INDIKATOR STATUS WILAYAH :</div>
                             <div class="flex items-center gap-2">
-                                <span class="w-3 h-3 rounded-full bg-[#2e8a57] border border-white inline-block shadow-2xs"></span>
-                                <span class="text-slate-700">Sampel Aman (Memenuhi Syarat)</span>
+                                <span
+                                    class="w-3.5 h-3 rounded-xs bg-[#2e8a57] border border-[#1b5e37] inline-block shadow-2xs"></span>
+                                <span class="text-slate-700">Kecamatan Aman (Semua Sampel Aman)</span>
                             </div>
                             <div class="flex items-center gap-2">
-                                <span class="w-3 h-3 rounded-full bg-[#dc3545] border border-white inline-block shadow-2xs"></span>
-                                <span class="text-slate-700">Temuan Kritis (Residu Pestisida)</span>
+                                <span
+                                    class="w-3.5 h-3 rounded-xs bg-[#dc3545] border border-[#991b1b] inline-block shadow-2xs"></span>
+                                <span class="text-slate-700">Kecamatan Ada Temuan Kritis (Tidak Aman)</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span
+                                    class="w-3.5 h-3 rounded-xs bg-[#cbd5e1] border border-slate-400 inline-block shadow-2xs"></span>
+                                <span class="text-slate-600">Belum Ada Titik Pengawasan</span>
+                            </div>
+                            <div class="flex items-center gap-2 pt-1 border-t border-slate-200/80 mt-0.5">
+                                <span
+                                    class="w-3 h-3 rounded-full bg-[#ea580c] border border-white inline-block shadow-2xs"></span>
+                                <span class="text-slate-700">Titik Sampling Pengujian</span>
                             </div>
                         </div>
 
@@ -531,11 +545,11 @@
                 <div class="lg:col-span-1 p-4 sm:p-5 flex flex-col justify-between bg-slate-50/50">
                     <div>
                         <!-- Logo Kabupaten Bandung Resmi -->
-                        <div class="flex justify-center mb-3">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/ee/Lambang_Kabupaten_Bandung.png"
-                                onerror="this.src='https://bandungkab.go.id/uploads/images/logo_bandungkab.png'"
+                        <div class="flex justify-center mb-4">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2e/Lambang_Kabupaten_Bandung.png"
+                                onerror="this.onerror=null; this.src='https://nos.wjv-1.neo.id/skpd/logo/20/1747972457Logo%20Dispakan%20trans.png'"
                                 alt="Logo Kabupaten Bandung"
-                                class="h-20 object-contain drop-shadow-xs hover:scale-105 transition-transform">
+                                class="h-24 object-contain drop-shadow-sm hover:scale-105 transition-transform">
                         </div>
 
                         <div class="text-center mb-4">
@@ -608,7 +622,8 @@
                         </div>
                         <div>
                             <h3 class="font-bold text-slate-800 text-sm leading-tight">Rasio Keamanan Sampel</h3>
-                            <p class="text-[10.5px] text-slate-500 font-medium">Presentasi sampel yang dinyatakan aman dan tidak aman</p>
+                            <p class="text-[10.5px] text-slate-500 font-medium">Presentasi sampel yang dinyatakan aman
+                                dan tidak aman</p>
                         </div>
                     </div>
                 </div>
@@ -626,8 +641,10 @@
                             <i data-lucide="bar-chart-2" class="w-4 h-4"></i>
                         </div>
                         <div>
-                            <h3 class="font-bold text-slate-800 text-sm leading-tight">Status Keamanan Sampel per Kategori Pengawasan</h3>
-                            <p class="text-[10.5px] text-slate-500 font-medium">Perbandingan sampel aman dan tidak aman di Pasar, Pelaku Usaha, dan SPPG</p>
+                            <h3 class="font-bold text-slate-800 text-sm leading-tight">Status Keamanan Sampel per
+                                Kategori Pengawasan</h3>
+                            <p class="text-[10.5px] text-slate-500 font-medium">Perbandingan sampel aman dan tidak aman
+                                di Pasar, Pelaku Usaha, dan SPPG</p>
                         </div>
                     </div>
                 </div>
@@ -649,7 +666,8 @@
                         </div>
                         <div>
                             <h3 class="font-bold text-slate-800 text-sm leading-tight">Top 10 Komoditi Teruji</h3>
-                            <p class="text-[10.5px] text-slate-500 font-medium">Frekuensi pengujian rapid test residu pestisida per komoditi</p>
+                            <p class="text-[10.5px] text-slate-500 font-medium">Frekuensi pengujian rapid test residu
+                                pestisida per komoditi</p>
                         </div>
                     </div>
                 </div>
@@ -668,7 +686,8 @@
                         </div>
                         <div>
                             <h3 class="font-bold text-slate-800 text-sm leading-tight">Tren Hasil Pengujian Bulanan</h3>
-                            <p class="text-[10.5px] text-slate-500 font-medium">Distribusi sampel teruji dan status keamanan per bulan</p>
+                            <p class="text-[10.5px] text-slate-500 font-medium">Distribusi sampel teruji dan status
+                                keamanan per bulan</p>
                         </div>
                     </div>
                 </div>
@@ -695,7 +714,8 @@
                                 0 Data
                             </span>
                         </div>
-                        <p class="text-[10.5px] text-slate-500">Rekapitulasi komoditi yang melebihi batas residu pestisida untuk tindak lanjut</p>
+                        <p class="text-[10.5px] text-slate-500">Rekapitulasi komoditi yang melebihi batas residu
+                            pestisida untuk tindak lanjut</p>
                     </div>
                 </div>
                 <div class="text-[11px] font-semibold text-[#dc3545] flex items-center gap-1.5">
@@ -1063,6 +1083,85 @@
             }
         }
 
+        const KECAMATAN_ALIAS_MAP = {
+            'pamengpeuk': 'pameungpeuk',
+            'ar fresh': 'rancabali',
+            'kopo': 'margahayu',
+            'padasuka': 'cimenyan'
+        };
+
+        function getKecamatanStats() {
+            const stats = {};
+            filteredData.forEach(item => {
+                const d = item.detail || {};
+                const asal = (d.asal_sampel || '').toLowerCase();
+                const hasil = (d.hasil || '').toLowerCase();
+                const isTidakAman = hasil.includes('tidak aman');
+
+                let matchedKec = null;
+
+                if (cachedKecGeoData && cachedKecGeoData.features) {
+                    for (const f of cachedKecGeoData.features) {
+                        const kName = (f.properties?.KECAMATAN || f.properties?.kecamatan || f.properties?.NAME_3 || '').toLowerCase();
+                        if (kName && asal.includes(kName)) {
+                            matchedKec = kName;
+                            break;
+                        }
+                    }
+                }
+
+                if (!matchedKec) {
+                    for (const [alias, realKec] of Object.entries(KECAMATAN_ALIAS_MAP)) {
+                        if (asal.includes(alias)) {
+                            matchedKec = realKec;
+                            break;
+                        }
+                    }
+                }
+
+                if (matchedKec) {
+                    if (!stats[matchedKec]) {
+                        stats[matchedKec] = { total: 0, aman: 0, tidakAman: 0 };
+                    }
+                    stats[matchedKec].total++;
+                    if (isTidakAman) {
+                        stats[matchedKec].tidakAman++;
+                    } else {
+                        stats[matchedKec].aman++;
+                    }
+                }
+            });
+            return stats;
+        }
+
+        function getKecamatanStyle(feature, kecStats) {
+            const props = feature.properties || {};
+            const kName = (props.KECAMATAN || props.kecamatan || props.NAME_3 || '').toLowerCase();
+            const st = kecStats[kName];
+
+            let fillColor = '#cbd5e1'; // Netral / belum ada data pengawasan
+            let fillOpacity = 0.38;
+
+            if (st && st.total > 0) {
+                if (st.tidakAman > 0) {
+                    fillColor = '#dc3545'; // Ada temuan kritis (Merah)
+                    fillOpacity = 0.75;
+                } else {
+                    fillColor = '#2e8a57'; // Semua sampel aman (Hijau)
+                    fillOpacity = 0.72;
+                }
+            }
+
+            return {
+                fillColor: fillColor,
+                fillOpacity: fillOpacity,
+                color: '#0f172a',
+                weight: 1.5,
+                opacity: 0.9,
+                dashArray: '4, 4'
+            };
+        }
+
         function renderKecamatanPolygons() {
             if (!cachedKecGeoData || !mapInstance) return;
 
@@ -1071,18 +1170,17 @@
             }
             kecamatanLabelGroup.clearLayers();
 
+            const currentStats = getKecamatanStats();
+
             kecamatanLayer = L.geoJSON(cachedKecGeoData, {
-                style: {
-                    fillColor: 'transparent',
-                    fillOpacity: 0,
-                    color: '#0f172a',      // Garis batas tegas slate-900 seperti di FSVA
-                    weight: 2,             // Ketebalan garis pemisah kecamatan
-                    opacity: 0.9,
-                    dashArray: '5, 4'      // Garis putus-putus khas batas administrasi kecamatan
+                style: function (feature) {
+                    return getKecamatanStyle(feature, currentStats);
                 },
                 onEachFeature: function (feature, layer) {
                     const props = feature.properties || {};
                     const rawKecName = (props.KECAMATAN || props.kecamatan || props.NAME_3 || '').toUpperCase();
+                    const kName = rawKecName.toLowerCase();
+                    const st = currentStats[kName];
 
                     if (rawKecName) {
                         const center = layer.getBounds().getCenter();
@@ -1095,16 +1193,53 @@
                         L.marker(center, { icon: labelIcon, interactive: false }).addTo(kecamatanLabelGroup);
                     }
 
+                    // Popup info kecamatan
+                    const total = st ? st.total : 0;
+                    const aman = st ? st.aman : 0;
+                    const tidakAman = st ? st.tidakAman : 0;
+                    const isKritis = tidakAman > 0;
+
+                    const popupHtml = `
+                        <div class="p-2.5 min-w-[170px] font-sans">
+                            <div class="flex items-center justify-between pb-1.5 mb-1.5 border-b border-slate-100">
+                                <span class="font-extrabold text-slate-900 text-xs uppercase">KEC. ${escapeHtml(rawKecName)}</span>
+                                <span class="text-[9px] px-1.5 py-0.5 rounded font-bold ${isKritis ? 'bg-red-100 text-[#dc3545]' : (total > 0 ? 'bg-emerald-100 text-[#2e8a57]' : 'bg-slate-100 text-slate-500')}">
+                                    ${isKritis ? 'Temuan Kritis' : (total > 0 ? 'Aman' : 'Belum Ada Data')}
+                                </span>
+                            </div>
+                            ${total > 0 ? `
+                            <div class="grid grid-cols-2 gap-1.5 text-center text-xs my-1 bg-slate-50 p-1.5 rounded-lg">
+                                <div>
+                                    <span class="text-[9.5px] text-slate-400 block">Sampel Aman</span>
+                                    <span class="font-extrabold text-[#2e8a57]">${aman}</span>
+                                </div>
+                                <div>
+                                    <span class="text-[9.5px] text-slate-400 block">Temuan Kritis</span>
+                                    <span class="font-extrabold text-[#dc3545]">${tidakAman}</span>
+                                </div>
+                            </div>
+                            <div class="text-[10px] text-slate-500 text-center mt-1">
+                                Total Sampel Diuji: <strong>${total}</strong>
+                            </div>
+                            ` : `
+                            <p class="text-[10.5px] text-slate-400 italic">Belum ada titik pengambilan sampel pada periode atau filter yang dipilih.</p>
+                            `}
+                        </div>
+                    `;
+
+                    layer.bindPopup(popupHtml);
+
                     layer.on({
                         mouseover: function (e) {
                             e.target.setStyle({
-                                weight: 3,
-                                color: '#117a8b',
-                                dashArray: ''
+                                weight: 2.5,
+                                color: '#ffffff',
+                                fillOpacity: 0.92
                             });
                         },
                         mouseout: function (e) {
-                            kecamatanLayer.resetStyle(e.target);
+                            const statsNow = getKecamatanStats();
+                            layer.setStyle(getKecamatanStyle(feature, statsNow));
                         }
                     });
                 }
@@ -1176,6 +1311,16 @@
             if (!mapInstance || !markersLayerGroup) return;
 
             markersLayerGroup.clearLayers();
+
+            // Perbarui warna blok kecamatan sesuai indikator pada data terfilter
+            if (kecamatanLayer) {
+                const currentStats = getKecamatanStats();
+                kecamatanLayer.eachLayer(function (layer) {
+                    if (layer.feature) {
+                        layer.setStyle(getKecamatanStyle(layer.feature, currentStats));
+                    }
+                });
+            }
 
             const locationStats = {};
             filteredData.forEach(item => {
