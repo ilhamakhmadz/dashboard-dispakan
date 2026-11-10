@@ -8,7 +8,8 @@
     <meta name="description"
         content="Dashboard Lumbung Pangan Masyarakat (LPM) Kabupaten Bandung - Monitoring Stok Cadangan Pangan, Unit LPM, dan Distribusi Geografis Kawasan Rawan Pangan.">
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0f/Lambang_Kabupaten_Bandung%2C_Jawa_Barat%2C_Indonesia.svg/960px-Lambang_Kabupaten_Bandung%2C_Jawa_Barat%2C_Indonesia.svg.png?utm_source=id.wikipedia.org&utm_campaign=index&utm_content=thumbnail">
+    <link rel="icon" type="image/png"
+        href="https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0f/Lambang_Kabupaten_Bandung%2C_Jawa_Barat%2C_Indonesia.svg/960px-Lambang_Kabupaten_Bandung%2C_Jawa_Barat%2C_Indonesia.svg.png?utm_source=id.wikipedia.org&utm_campaign=index&utm_content=thumbnail">
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -202,7 +203,7 @@
             background: transparent !important;
             border: none !important;
         }
-    
+
         #lpm-map {
             background-color: #f8fafc;
         }
@@ -242,10 +243,12 @@
             </div>
         </div>
 
-        <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-2 tracking-tight">Lumbung Pangan Masyarakat (LPM)</h2>
+        <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-2 tracking-tight">Lumbung Pangan Masyarakat
+            (LPM)</h2>
 
         <div class="h-6 mb-3 flex items-center justify-center">
-            <p id="loading-text" class="text-sm font-medium text-slate-500 dark:text-slate-400 font-mono transition-all duration-300">
+            <p id="loading-text"
+                class="text-sm font-medium text-slate-500 dark:text-slate-400 font-mono transition-all duration-300">
                 Menghubungkan ke API Lumbung Pangan Masyarakat...
             </p>
         </div>
@@ -261,20 +264,24 @@
     <!-- ========================================== -->
     <!-- TOP NAVIGATION BAR (Sesuai FSVA)           -->
     <!-- ========================================== -->
-    <nav class="fixed top-0 w-full z-50 glass-nav transition-all duration-300 shadow-sm border-b border-slate-200/80 dark:border-slate-800/80">
+    <nav
+        class="fixed top-0 w-full z-50 glass-nav transition-all duration-300 shadow-sm border-b border-slate-200/80 dark:border-slate-800/80">
         <div class="container mx-auto px-4 lg:px-8">
             <!-- Brand & Aksi Navigasi Utama -->
             <div class="flex h-16 sm:h-20 items-center justify-between gap-4">
                 <!-- Brand / Logo -->
                 <div class="flex items-center gap-3 shrink-0">
-                    <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-white dark:bg-slate-800 shadow-sm border border-slate-200/80 dark:border-slate-700 flex items-center justify-center shrink-0">
+                    <div
+                        class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-white dark:bg-slate-800 shadow-sm border border-slate-200/80 dark:border-slate-700 flex items-center justify-center shrink-0">
                         <i data-lucide="warehouse" class="w-5 h-5 sm:w-6 sm:h-6 text-[#f4a261]" stroke-width="2.2"></i>
                     </div>
                     <div class="block">
-                        <h1 class="text-sm sm:text-base md:text-lg font-extrabold text-slate-900 dark:text-white leading-tight tracking-tight">
+                        <h1
+                            class="text-sm sm:text-base md:text-lg font-extrabold text-slate-900 dark:text-white leading-tight tracking-tight">
                             LUMBUNG PANGAN MASYARAKAT (LPM)
                         </h1>
-                        <p class="text-[10px] sm:text-xs font-bold text-[#117a8b] dark:text-[#4dbdaf] uppercase tracking-widest mt-0.5">
+                        <p
+                            class="text-[10px] sm:text-xs font-bold text-[#117a8b] dark:text-[#4dbdaf] uppercase tracking-widest mt-0.5">
                             Kabupaten Bandung
                         </p>
                     </div>
@@ -293,10 +300,12 @@
 
                     <!-- Status Data & Date -->
                     <div class="hidden md:flex flex-col items-end pl-1">
-                        <span class="text-xs font-medium text-slate-500 dark:text-slate-400" id="current-date-nav">Loading...</span>
+                        <span class="text-xs font-medium text-slate-500 dark:text-slate-400"
+                            id="current-date-nav">Loading...</span>
                         <div class="flex items-center gap-1.5">
                             <span class="relative flex h-2 w-2">
-                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4dbdaf] opacity-75"></span>
+                                <span
+                                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4dbdaf] opacity-75"></span>
                                 <span class="relative inline-flex rounded-full h-2 w-2 bg-[#117a8b]"></span>
                             </span>
                             <span class="text-[11px] font-bold text-[#117a8b] dark:text-[#4dbdaf]">LIVE API DATA</span>
@@ -315,7 +324,8 @@
                     <button type="button" onclick="refreshData()"
                         class="p-2 sm:p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-[#117a8b]/10 hover:text-[#117a8b] hover:border-[#117a8b]/30 transition shadow-sm group"
                         title="Muat Ulang Data">
-                        <i data-lucide="refresh-cw" class="w-4 h-4 sm:w-4.5 sm:h-4.5 group-hover:rotate-180 transition-transform duration-500"></i>
+                        <i data-lucide="refresh-cw"
+                            class="w-4 h-4 sm:w-4.5 sm:h-4.5 group-hover:rotate-180 transition-transform duration-500"></i>
                     </button>
                 </div>
             </div>
@@ -337,13 +347,15 @@
                     class="w-11 h-11 rounded-xl bg-white dark:bg-slate-800 border border-[#117a8b]/20 dark:border-[#4dbdaf]/30 shadow-sm flex items-center justify-center text-[#117a8b] dark:text-[#4dbdaf] shrink-0 ring-1 ring-[#117a8b]/10">
                     <i data-lucide="wheat" class="w-5 h-5"></i>
                 </div>
-                <div class="text-xs font-bold text-[#117a8b] dark:text-[#4dbdaf] uppercase tracking-widest leading-tight">
+                <div
+                    class="text-xs font-bold text-[#117a8b] dark:text-[#4dbdaf] uppercase tracking-widest leading-tight">
                     Dinas Ketahanan Pangan dan Perikanan Kabupaten Bandung (DISPAKAN)
                 </div>
             </div>
 
             <!-- Headline -->
-            <h1 class="text-2xl md:text-3xl lg:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-2">
+            <h1
+                class="text-2xl md:text-3xl lg:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-2">
                 Lumbung Pangan Masyarakat (LPM)
             </h1>
 
@@ -357,7 +369,8 @@
                         wilayah rawan pangan serta kawasan rentan bencana alam, seperti banjir, tanah longsor, dan
                         kekeringan guna menjamin ketersediaan serta mempermudah aksesibilitas pangan bagi masyarakat.
                     </p>
-                    <div class="flex flex-wrap items-center gap-2 pt-2" style="border-top: 1px solid rgba(77, 189, 175, 0.3);">
+                    <div class="flex flex-wrap items-center gap-2 pt-2"
+                        style="border-top: 1px solid rgba(77, 189, 175, 0.3);">
                         <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/95 dark:bg-slate-800 border text-xs font-semibold text-[#0a4b57] dark:text-[#4dbdaf] shadow-2xs"
                             style="border-color: rgba(77, 189, 175, 0.5);">
                             <i data-lucide="server" class="w-3.5 h-3.5 text-[#117a8b] dark:text-[#4dbdaf]"></i>
@@ -366,7 +379,9 @@
                         <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/95 dark:bg-slate-800 border text-xs font-semibold text-[#0a4b57] dark:text-[#4dbdaf] shadow-2xs"
                             style="border-color: rgba(77, 189, 175, 0.5);">
                             <i data-lucide="filter" class="w-3.5 h-3.5 text-[#117a8b] dark:text-[#4dbdaf]"></i>
-                            <span>Filter Aktif: <span id="active-filter-badge" class="font-bold text-slate-900 dark:text-white">Semua Wilayah & Periode</span></span>
+                            <span>Filter Aktif: <span id="active-filter-badge"
+                                    class="font-bold text-slate-900 dark:text-white">Semua Wilayah &
+                                    Periode</span></span>
                         </div>
                         <button onclick="resetFilters()"
                             class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/95 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-[#117a8b] dark:hover:text-[#4dbdaf] transition shadow-2xs ml-auto">
@@ -386,9 +401,12 @@
             <div
                 class="bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-2xl shadow-soft border border-slate-100 dark:border-slate-800 flex items-center justify-between group hover:shadow-md transition">
                 <div>
-                    <p class="text-[10px] sm:text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Total Stok</p>
+                    <p
+                        class="text-[10px] sm:text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">
+                        Total Stok</p>
                     <h3 id="stat-total-stok"
-                        class="text-2xl sm:text-3xl font-black text-[#2e8a57] dark:text-emerald-400 font-mono tracking-tight">-</h3>
+                        class="text-2xl sm:text-3xl font-black text-[#2e8a57] dark:text-emerald-400 font-mono tracking-tight">
+                        -</h3>
                     <p id="stat-sub-stok" class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 mt-1">
                         Memuat data stok...</p>
                 </div>
@@ -402,10 +420,13 @@
             <div
                 class="bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-2xl shadow-soft border border-slate-100 dark:border-slate-800 flex items-center justify-between group hover:shadow-md transition">
                 <div>
-                    <p class="text-[10px] sm:text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Jumlah Lumbung Aktif
+                    <p
+                        class="text-[10px] sm:text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">
+                        Jumlah Lumbung Aktif
                     </p>
                     <h3 id="stat-total-lpm"
-                        class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white font-mono tracking-tight">-</h3>
+                        class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white font-mono tracking-tight">
+                        -</h3>
                     <p id="stat-sub-lpm" class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 mt-1">
                         Memiliki Cadangan Stok</p>
                 </div>
@@ -419,8 +440,11 @@
             <div
                 class="bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-2xl shadow-soft border border-slate-100 dark:border-slate-800 flex items-center justify-between group hover:shadow-md transition">
                 <div>
-                    <p class="text-[10px] sm:text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Wilayah Rawan</p>
-                    <h3 id="stat-siaga-stok" class="text-2xl sm:text-3xl font-black text-[#dc3545] font-mono tracking-tight">-</h3>
+                    <p
+                        class="text-[10px] sm:text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">
+                        Wilayah Rawan</p>
+                    <h3 id="stat-siaga-stok"
+                        class="text-2xl sm:text-3xl font-black text-[#dc3545] font-mono tracking-tight">-</h3>
                     <p id="stat-sub-siaga" class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 mt-1">
                         Lumbung dengan stok tipis</p>
                 </div>
@@ -434,9 +458,12 @@
             <div
                 class="bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-2xl shadow-soft border border-slate-100 dark:border-slate-800 flex items-center justify-between group hover:shadow-md transition">
                 <div>
-                    <p class="text-[10px] sm:text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Cakupan Wilayah</p>
+                    <p
+                        class="text-[10px] sm:text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">
+                        Cakupan Wilayah</p>
                     <h3 id="stat-cakupan-wilayah"
-                        class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white font-mono tracking-tight">-</h3>
+                        class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white font-mono tracking-tight">
+                        -</h3>
 
                 </div>
                 <div
@@ -464,7 +491,8 @@
                             Peta Sebaran Lumbung & Status Stok
                         </h3>
                         <p class="text-xs text-slate-500 dark:text-slate-400">
-                            Distribusi lokasi 31 LPM pada kawasan rawan pangan Kabupaten Bandung dengan indikator ketersediaan stok
+                            Distribusi lokasi 31 LPM pada kawasan rawan pangan Kabupaten Bandung dengan indikator
+                            ketersediaan stok
                         </p>
                     </div>
                 </div>
@@ -478,7 +506,8 @@
                             <option value="all">Semua Tahun</option>
                             <option value="2025" selected>2025</option>
                         </select>
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
+                        <div
+                            class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
                             <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
                         </div>
                     </div>
@@ -501,7 +530,8 @@
                             <option value="11">November</option>
                             <option value="12">Desember</option>
                         </select>
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
+                        <div
+                            class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
                             <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
                         </div>
                     </div>
@@ -512,7 +542,8 @@
                             class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs font-semibold rounded-xl pl-3 pr-8 py-2 focus:ring-2 focus:ring-[#117a8b] focus:border-[#117a8b] appearance-none cursor-pointer shadow-2xs hover:bg-slate-50 transition truncate">
                             <option value="all">Semua Kecamatan</option>
                         </select>
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
+                        <div
+                            class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
                             <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
                         </div>
                     </div>
@@ -525,7 +556,8 @@
                             <option value="tersedia">Tersedia Stok</option>
                             <option value="kosong">Stok Kosong</option>
                         </select>
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
+                        <div
+                            class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
                             <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
                         </div>
                     </div>
@@ -564,7 +596,8 @@
                         <div id="map-loading"
                             class="absolute inset-0 z-30 bg-white/80 backdrop-blur-xs flex flex-col items-center justify-center text-slate-700 transition-opacity duration-300">
                             <div class="loader mb-2"></div>
-                            <p class="text-xs font-semibold text-slate-600">Memuat batas wilayah kecamatan & pin lumbung...</p>
+                            <p class="text-xs font-semibold text-slate-600">Memuat batas wilayah kecamatan & pin
+                                lumbung...</p>
                         </div>
 
                         <!-- Floating Mini Legend (Kiri Bawah Peta - Sesuai Gambar 1) -->
@@ -578,17 +611,20 @@
                                 <div class="flex items-center gap-2.5">
                                     <span
                                         class="w-3.5 h-3.5 rounded-full bg-[#2e8a57] border border-white inline-block shadow-2xs shrink-0"></span>
-                                    <span class="text-slate-700 dark:text-slate-200 font-medium text-[11px]">LPM Cadangan Tersedia</span>
+                                    <span class="text-slate-700 dark:text-slate-200 font-medium text-[11px]">LPM
+                                        Cadangan Tersedia</span>
                                 </div>
                                 <div class="flex items-center gap-2.5">
                                     <span
                                         class="w-3.5 h-3.5 rounded-full bg-[#dc3545] border border-white inline-block shadow-2xs shrink-0"></span>
-                                    <span class="text-slate-700 dark:text-slate-200 font-medium text-[11px]">LPM Stok Kosong</span>
+                                    <span class="text-slate-700 dark:text-slate-200 font-medium text-[11px]">LPM Stok
+                                        Kosong</span>
                                 </div>
                                 <div class="flex items-center gap-2.5">
                                     <span
                                         class="w-4 h-3 rounded-xs bg-[#117a8b] border border-teal-800 inline-block shadow-2xs shrink-0"></span>
-                                    <span class="text-slate-700 dark:text-slate-200 font-medium text-[11px]">Kecamatan Memiliki LPM</span>
+                                    <span class="text-slate-700 dark:text-slate-200 font-medium text-[11px]">Kecamatan
+                                        Memiliki LPM</span>
                                 </div>
                             </div>
                         </div>
@@ -671,8 +707,10 @@
 
                     <!-- Footer Info Kanan Bawah -->
                     <div class="mt-8 pt-4 border-t border-slate-200/60 text-center">
-                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Pemerintah Kabupaten Bandung</p>
-                        <span class="font-semibold text-slate-600 dark:text-slate-300 text-xs">Dinas Ketahanan Pangan dan Perikanan</span>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Pemerintah Kabupaten
+                            Bandung</p>
+                        <span class="font-semibold text-slate-600 dark:text-slate-300 text-xs">Dinas Ketahanan Pangan
+                            dan Perikanan</span>
                     </div>
                 </div>
             </div>
@@ -684,7 +722,8 @@
         <section class="space-y-6">
 
             <!-- 1. Grafik Tren Penyaluran & Pemanfaatan Stok -->
-            <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-soft border border-slate-100 dark:border-slate-800">
+            <div
+                class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-soft border border-slate-100 dark:border-slate-800">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                     <div class="flex items-center gap-2.5">
                         <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white shrink-0 shadow-sm"
@@ -846,7 +885,8 @@
             <div
                 class="p-5 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 flex flex-col lg:flex-row justify-between gap-4">
                 <!-- Tab Buttons -->
-                <div class="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 p-1.5 rounded-xl border border-slate-200/80 dark:border-slate-700">
+                <div
+                    class="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 p-1.5 rounded-xl border border-slate-200/80 dark:border-slate-700">
                     <button type="button" onclick="switchTableTab('lpm')" id="tab-btn-lpm"
                         class="px-4 py-2 rounded-lg text-xs font-bold transition flex items-center gap-2 bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm border border-slate-200/60 dark:border-slate-600">
                         <i data-lucide="warehouse" class="w-3.5 h-3.5 text-[#117a8b] dark:text-[#4dbdaf]"></i>
@@ -866,7 +906,8 @@
                 <!-- Search and Export Controls -->
                 <div class="flex flex-col sm:flex-row gap-2.5">
                     <div class="relative w-full sm:w-72">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+                        <div
+                            class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
                             <i data-lucide="search" class="w-4 h-4"></i>
                         </div>
                         <input type="text" id="table-search-input" oninput="handleTableSearch(this.value)"
@@ -945,8 +986,7 @@
     <!-- ========================================== -->
     <footer
         class="mt-16 border-t border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 backdrop-blur-md py-8 text-xs text-slate-500 dark:text-slate-400">
-        <div
-            class="container mx-auto px-4 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="container mx-auto px-4 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-2">
                 <img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0f/Lambang_Kabupaten_Bandung%2C_Jawa_Barat%2C_Indonesia.svg/960px-Lambang_Kabupaten_Bandung%2C_Jawa_Barat%2C_Indonesia.svg.png?utm_source=id.wikipedia.org&utm_campaign=index&utm_content=thumbnail"
                     alt="Logo Kabupaten Bandung" class="h-6 w-auto object-contain" referrerpolicy="no-referrer"
@@ -967,8 +1007,10 @@
     <!-- ========================================== -->
     <!-- MODAL DETAIL LPM (Sesuai FSVA)             -->
     <!-- ========================================== -->
-    <div id="detail-modal" class="fixed inset-0 z-[100] hidden" aria-labelledby="modal-lpm-title" role="dialog" aria-modal="true">
-        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onclick="closeDetailModal()"></div>
+    <div id="detail-modal" class="fixed inset-0 z-[100] hidden" aria-labelledby="modal-lpm-title" role="dialog"
+        aria-modal="true">
+        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onclick="closeDetailModal()">
+        </div>
         <div class="fixed inset-0 z-10 overflow-y-auto">
             <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
                 <div
@@ -981,8 +1023,10 @@
                                 <i data-lucide="warehouse" class="w-6 h-6"></i>
                             </div>
                             <div>
-                                <h3 class="text-lg font-bold leading-tight" id="modal-lpm-title">Detail Lumbung Pangan</h3>
-                                <p class="text-xs font-medium text-emerald-100 flex items-center gap-1" id="modal-lpm-subtitle">
+                                <h3 class="text-lg font-bold leading-tight" id="modal-lpm-title">Detail Lumbung Pangan
+                                </h3>
+                                <p class="text-xs font-medium text-emerald-100 flex items-center gap-1"
+                                    id="modal-lpm-subtitle">
                                     Kecamatan & Desa
                                 </p>
                             </div>
@@ -994,7 +1038,8 @@
                     </div>
 
                     <!-- Modal Body -->
-                    <div id="modal-lpm-content" class="px-6 py-6 space-y-5 max-h-[75vh] overflow-y-auto text-xs text-slate-700 dark:text-slate-300">
+                    <div id="modal-lpm-content"
+                        class="px-6 py-6 space-y-5 max-h-[75vh] overflow-y-auto text-xs text-slate-700 dark:text-slate-300">
                         <!-- Populated by JS -->
                     </div>
 
@@ -1011,7 +1056,7 @@
         </div>
     </div>
 
-<script>
+    <script>
         // --- API ENDPOINTS (SESUAI REQUEST USER) ---
         const API_TRANSAKSI = 'https://api.bandungkab.go.id/api/bnba/data-transaksi-lumbung-pangan-masyarakat?per_page=2000';
         const API_LUMBUNG = 'https://api.bandungkab.go.id/api/bnba/data-lumbung-pangan-masyarakat?per_page=2000';
