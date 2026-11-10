@@ -530,6 +530,14 @@
                         </div>
                     </div>
 
+                    <!-- Toggle Pin Markers Button (Default: Blok Warna Saja) -->
+                    <button type="button" id="btn-toggle-pins" onclick="toggleMapPins()"
+                        class="px-3 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl transition flex items-center gap-1.5 active:scale-95 shadow-2xs"
+                        title="Tampilkan atau sembunyikan tanda pin lumbung di peta">
+                        <i data-lucide="layers" class="w-3.5 h-3.5 text-[#117a8b]"></i>
+                        <span id="label-toggle-pins">Pin Titik</span>
+                    </button>
+
                     <!-- Reset Button -->
                     <button type="button" onclick="resetFilters()"
                         class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl transition flex items-center gap-1.5 active:scale-95 shadow-2xs"
@@ -567,33 +575,28 @@
                             <p class="text-xs font-semibold text-slate-600">Memuat batas wilayah kecamatan & pin lumbung...</p>
                         </div>
 
-                        <!-- Floating Mini Legend (Kiri Bawah Peta - Sesuai FSVA) -->
+                        <!-- Floating Mini Legend (Kiri Bawah Peta - Indikator Blok Warna Sesuai FSVA) -->
                         <div
-                            class="absolute bottom-6 left-6 bg-white/95 backdrop-blur-md p-3.5 rounded-xl shadow-md border border-slate-200/90 z-[400] text-[11px] font-semibold hidden sm:block">
+                            class="absolute bottom-6 left-6 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-3.5 rounded-xl shadow-md border border-slate-200/90 dark:border-slate-800 z-[400] text-[11px] font-semibold hidden sm:block">
                             <div
-                                class="font-black text-slate-700 mb-2 pb-1 border-b border-slate-100 text-[9.5px] uppercase tracking-wider">
-                                KETERANGAN PIN & WILAYAH :
+                                class="font-black text-slate-700 dark:text-slate-200 mb-2 pb-1 border-b border-slate-100 dark:border-slate-800 text-[9.5px] uppercase tracking-wider">
+                                STATUS CADANGAN WILAYAH :
                             </div>
                             <div class="space-y-1.5">
                                 <div class="flex items-center gap-2">
                                     <span
-                                        class="w-3.5 h-3.5 rounded-full bg-[#2e8a57] border border-white inline-block shadow-2xs"></span>
-                                    <span class="text-slate-700 font-medium">LPM Cadangan Tersedia</span>
+                                        class="w-4 h-3 rounded-xs bg-[#2e8a57] border border-[#1b5e37] inline-block shadow-2xs"></span>
+                                    <span class="text-slate-700 dark:text-slate-200 font-medium">Cadangan Tersedia (Stok &gt; 0)</span>
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <span
-                                        class="w-3.5 h-3.5 rounded-full bg-[#dc3545] border border-white inline-block shadow-2xs"></span>
-                                    <span class="text-slate-700 font-medium">LPM Stok Kosong</span>
+                                        class="w-4 h-3 rounded-xs bg-[#dc3545] border border-[#991b1b] inline-block shadow-2xs"></span>
+                                    <span class="text-slate-700 dark:text-slate-200 font-medium">Stok Kosong / Rawan</span>
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <span
-                                        class="w-3.5 h-2.5 rounded-xs bg-[#117a8b] border border-slate-700 inline-block shadow-2xs"></span>
-                                    <span class="text-slate-700 font-medium">Kecamatan Memiliki LPM</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span
-                                        class="w-3.5 h-2.5 rounded-xs bg-[#cbd5e1] border border-slate-400 inline-block shadow-2xs"></span>
-                                    <span class="text-slate-500 font-medium">Wilayah Sekitar</span>
+                                        class="w-4 h-3 rounded-xs bg-[#cbd5e1] border border-slate-400 inline-block shadow-2xs"></span>
+                                    <span class="text-slate-500 dark:text-slate-400 font-medium">Wilayah Sekitar (Belum Ada LPM)</span>
                                 </div>
                             </div>
                         </div>
@@ -1047,6 +1050,7 @@
             selectedLpmTren: 'Badan Usaha Milik Desa (BUMDes) Bina Karya Sejahtera',
             selectedTrenTahun: '2025',
             selectedTrenKecamatan: 'all',
+            showPins: false,
             lpmCoordsMap: {},
             filters: {
                 tahun: '2025',
@@ -1383,6 +1387,18 @@
             renderCharts();
             renderTables();
             updateMapMarkers();
+
+            // Zoom to kecamatan jika kecamatan spesifik dipilih
+            if (state.map && state.mapLayers.kecamatan && kecamatan !== 'all') {
+                state.mapLayers.kecamatan.eachLayer(function (layer) {
+                    const props = layer.feature?.properties || {};
+                    const rawKecName = (props.KECAMATAN || props.kecamatan || props.NAME_3 || '').toUpperCase();
+                    if (rawKecName === kecamatan.toUpperCase()) {
+                        state.map.fitBounds(layer.getBounds(), { padding: [40, 40], maxZoom: 12 });
+                    }
+                });
+            }
+
             if (window.lucide) lucide.createIcons();
         }
 
@@ -1958,35 +1974,199 @@
             });
         }
 
+        // Helper: Hitung agregasi status & stok per kecamatan untuk pewarnaan blok peta
+        function getKecamatanLpmStats() {
+            const { tahun, bulan } = state.filters;
+            const stats = {};
+
+            state.rawLpm.forEach(item => {
+                const d = item.detail || {};
+                const kName = formatKecamatan(d.kecamatan).toUpperCase();
+                if (!kName) return;
+
+                if (!stats[kName]) {
+                    stats[kName] = {
+                        namaKecamatan: kName,
+                        hasLpm: true,
+                        totalStock: 0,
+                        lpmCount: 0,
+                        lpmAktifCount: 0,
+                        lpmKosongCount: 0,
+                        lpms: []
+                    };
+                }
+
+                const lpmName = d.nama_lumbung;
+                const stock = getLpmStockForPeriod(lpmName, tahun, bulan);
+                const isTersedia = stock > 0;
+
+                stats[kName].totalStock += stock;
+                stats[kName].lpmCount++;
+                if (isTersedia) stats[kName].lpmAktifCount++;
+                else stats[kName].lpmKosongCount++;
+
+                stats[kName].lpms.push({
+                    nama: lpmName,
+                    desa: d.desa || '-',
+                    ketua: d.ketua || '-',
+                    kontak: d.kontak || '-',
+                    stock: stock,
+                    isTersedia: isTersedia,
+                    lokasi: d.lokasi || ''
+                });
+            });
+
+            return stats;
+        }
+
+        // Helper: Mendapatkan style warna blok poligon kecamatan sesuai indikator
+        function getLpmKecamatanStyle(feature, kecStats) {
+            const props = feature.properties || {};
+            const rawKecName = (props.KECAMATAN || props.kecamatan || props.NAME_3 || '').toUpperCase();
+            const st = kecStats[rawKecName];
+            const { status, kecamatan } = state.filters;
+
+            let fillColor = '#cbd5e1'; // Wilayah sekitar / belum ada lumbung (Netral)
+            let fillOpacity = 0.38;
+            let borderColor = '#0f172a';
+            let borderWidth = 1.3;
+
+            if (st && st.hasLpm) {
+                const isTersedia = st.totalStock > 0 || st.lpmAktifCount > 0;
+
+                if (status === 'tersedia') {
+                    if (isTersedia) {
+                        fillColor = '#2e8a57'; // Hijau: Cadangan Tersedia
+                        fillOpacity = 0.75;
+                        borderColor = '#1b5e37';
+                    } else {
+                        fillColor = '#e2e8f0';
+                        fillOpacity = 0.25;
+                    }
+                } else if (status === 'kosong') {
+                    if (!isTersedia) {
+                        fillColor = '#dc3545'; // Merah: Stok Kosong / Rawan Pangan
+                        fillOpacity = 0.78;
+                        borderColor = '#991b1b';
+                    } else {
+                        fillColor = '#e2e8f0';
+                        fillOpacity = 0.25;
+                    }
+                } else {
+                    // status === 'all'
+                    if (isTersedia) {
+                        fillColor = '#2e8a57'; // Hijau: Cadangan Tersedia
+                        fillOpacity = 0.75;
+                        borderColor = '#1b5e37';
+                    } else {
+                        fillColor = '#dc3545'; // Merah: Stok Kosong / Rawan Pangan
+                        fillOpacity = 0.78;
+                        borderColor = '#991b1b';
+                    }
+                }
+            }
+
+            if (kecamatan !== 'all' && rawKecName === kecamatan.toUpperCase()) {
+                borderColor = '#0f172a';
+                borderWidth = 3;
+                fillOpacity = Math.min(0.92, fillOpacity + 0.15);
+            }
+
+            return {
+                fillColor: fillColor,
+                fillOpacity: fillOpacity,
+                color: borderColor,
+                weight: borderWidth,
+                opacity: 0.9,
+                dashArray: '4, 4'
+            };
+        }
+
         function renderKecamatanPolygons() {
             if (!state.map || !state.cachedKecGeoData || state.mapLayers.kecamatan) return;
 
+            const initialStats = getKecamatanLpmStats();
+
             state.mapLayers.kecamatan = L.geoJSON(state.cachedKecGeoData, {
                 style: function (feature) {
-                    const props = feature.properties || {};
-                    const rawKec = (props.KECAMATAN || props.kecamatan || '').toUpperCase();
-                    const hasLpm = state.rawLpm.some(i => formatKecamatan(i.detail?.kecamatan).toUpperCase() === rawKec);
-
-                    return {
-                        fillColor: hasLpm ? '#117a8b' : '#c5ded7',
-                        fillOpacity: hasLpm ? 0.75 : 0.45,
-                        color: '#1e293b',
-                        weight: 1.2,
-                        opacity: 0.85
-                    };
+                    return getLpmKecamatanStyle(feature, initialStats);
                 },
                 onEachFeature: function (feature, layer) {
                     const props = feature.properties || {};
-                    const rawKecName = (props.KECAMATAN || props.kecamatan || '').toUpperCase();
+                    const rawKecName = (props.KECAMATAN || props.kecamatan || props.NAME_3 || '').toUpperCase();
 
-                    // Poin e: Label nama kecamatan yang menumpuk dihapus agar peta bersih (info detail sudah ada di popup LPM)
-
+                    // Klik pada blok kecamatan untuk membuka popup rincian lumbung di wilayah ini
                     layer.on({
+                        click: function (e) {
+                            const curStats = getKecamatanLpmStats();
+                            const st = curStats[rawKecName];
+                            const isTersedia = st && (st.totalStock > 0 || st.lpmAktifCount > 0);
+                            const totalKg = st ? st.totalStock : 0;
+                            const lpms = st ? st.lpms : [];
+
+                            let popupHtml = `
+                                <div class="p-3.5 font-sans min-w-[260px] max-w-[320px]">
+                                    <div class="bg-[#117a8b] text-white p-2.5 -m-3.5 mb-3 rounded-t-xl flex items-center justify-between">
+                                        <div>
+                                            <h4 class="font-extrabold text-xs uppercase tracking-wider">KECAMATAN ${escapeHtml(rawKecName)}</h4>
+                                            <p class="text-[10px] text-teal-100">${st ? st.lpmCount + ' Unit Lumbung Terdata' : 'Wilayah Sekitar'}</p>
+                                        </div>
+                                        <span class="px-2 py-0.5 rounded-full text-[9.5px] font-bold ${!st ? 'bg-slate-200 text-slate-700' : (isTersedia ? 'bg-[#2e8a57] text-white' : 'bg-[#dc3545] text-white')}">
+                                            ${!st ? 'Belum Ada LPM' : (isTersedia ? 'Cadangan Tersedia' : 'Stok Kosong')}
+                                        </span>
+                                    </div>
+                            `;
+
+                            if (st && st.lpmCount > 0) {
+                                popupHtml += `
+                                    <div class="space-y-2 text-xs">
+                                        <div class="p-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 text-center">
+                                            <span class="text-[10px] text-slate-400 block font-semibold">Total Cadangan Wilayah</span>
+                                            <span class="font-black text-sm ${isTersedia ? 'text-[#2e8a57]' : 'text-[#dc3545]'} font-mono">${totalKg.toLocaleString('id-ID')} Kg</span>
+                                        </div>
+                                        <div class="space-y-1.5 max-h-48 overflow-y-auto pr-1">
+                                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Daftar Lumbung:</span>
+                                `;
+
+                                lpms.forEach(l => {
+                                    popupHtml += `
+                                        <div class="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/80 shadow-2xs space-y-1">
+                                            <div class="flex items-center justify-between">
+                                                <span class="font-bold text-[11px] text-slate-800 dark:text-slate-100 truncate">${escapeHtml(l.nama)}</span>
+                                                <span class="text-[9px] px-1.5 py-0.5 rounded font-bold ${l.isTersedia ? 'bg-emerald-100 text-[#2e8a57]' : 'bg-red-100 text-[#dc3545]'}">
+                                                    ${l.isTersedia ? 'Tersedia' : 'Kosong'}
+                                                </span>
+                                            </div>
+                                            <div class="flex items-center justify-between text-[10px] text-slate-500">
+                                                <span>Ds. ${escapeHtml(l.desa)}</span>
+                                                <span class="font-bold font-mono ${l.isTersedia ? 'text-[#2e8a57]' : 'text-[#dc3545]'}">${l.stock.toLocaleString('id-ID')} Kg</span>
+                                            </div>
+                                            ${l.ketua && l.ketua !== '-' ? `<p class="text-[9.5px] text-slate-400">Ketua: ${escapeHtml(l.ketua)}</p>` : ''}
+                                        </div>
+                                    `;
+                                });
+
+                                popupHtml += `
+                                        </div>
+                                    </div>
+                                `;
+                            } else {
+                                popupHtml += `
+                                    <p class="text-[11px] text-slate-500 dark:text-slate-400 italic py-2 text-center">
+                                        Kecamatan ini saat ini belum memiliki unit Lumbung Pangan Masyarakat (LPM) terdaftar.
+                                    </p>
+                                `;
+                            }
+
+                            popupHtml += `</div>`;
+                            layer.bindPopup(popupHtml).openPopup(e.latlng);
+                        },
                         mouseover: function (e) {
-                            e.target.setStyle({ weight: 2.4, color: '#ffffff', fillOpacity: 0.95 });
+                            e.target.setStyle({ weight: 2.5, color: '#ffffff', fillOpacity: 0.92 });
                         },
                         mouseout: function (e) {
-                            state.mapLayers.kecamatan.resetStyle(e.target);
+                            const curStats = getKecamatanLpmStats();
+                            layer.setStyle(getLpmKecamatanStyle(feature, curStats));
                         }
                     });
                 }
@@ -1995,71 +2175,106 @@
             resetMapView();
         }
 
+        // Toggle fungsi untuk menampilkan pin titik vs blok warna saja
+        function toggleMapPins() {
+            state.showPins = !state.showPins;
+            const btn = document.getElementById('btn-toggle-pins');
+            const lbl = document.getElementById('label-toggle-pins');
+            if (btn && lbl) {
+                if (state.showPins) {
+                    btn.classList.add('bg-[#117a8b]', 'text-white');
+                    btn.classList.remove('bg-white', 'text-slate-700');
+                    lbl.innerText = 'Blok Saja';
+                } else {
+                    btn.classList.remove('bg-[#117a8b]', 'text-white');
+                    btn.classList.add('bg-white', 'text-slate-700');
+                    lbl.innerText = 'Pin Titik';
+                }
+            }
+            updateMapMarkers();
+        }
+
         function updateMapMarkers() {
-            if (!state.map || !state.mapLayers.markers) return;
-            state.mapLayers.markers.clearLayers();
+            if (!state.map) return;
 
-            state.filteredLpm.forEach(item => {
-                const d = item.detail || {};
-                const name = d.nama_lumbung;
-                if (!name) return;
-
-                const coord = state.lpmCoordsMap[name] || BANDUNG_CENTER;
-                const { tahun, bulan } = state.filters;
-                const stock = getLpmStockForPeriod(name, tahun, bulan);
-                const isTersedia = stock > 0;
-                const color = isTersedia ? '#2e8a57' : '#dc3545';
-
-                const pinHtml = `
-                    <div class="lpm-pin-circle" style="background-color: ${color};" title="${escapeHtml(name)}: ${stock.toLocaleString('id-ID')} Kg">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                            <polyline points="9 22 9 12 15 12 15 22"/>
-                        </svg>
-                    </div>
-                `;
-
-                const customIcon = L.divIcon({
-                    className: 'lpm-pin-marker',
-                    html: pinHtml,
-                    iconSize: [28, 28],
-                    iconAnchor: [14, 14]
+            // 1. Perbarui warna blok setiap kecamatan sesuai indikator periode & status terfilter
+            if (state.mapLayers.kecamatan) {
+                const currentStats = getKecamatanLpmStats();
+                state.mapLayers.kecamatan.eachLayer(function (layer) {
+                    if (layer.feature) {
+                        layer.setStyle(getLpmKecamatanStyle(layer.feature, currentStats));
+                    }
                 });
+            }
 
-                const popupHtml = `
-                    <div class="p-3.5 font-sans min-w-[240px]">
-                        <div class="bg-[#117a8b] text-white p-2.5 -m-3.5 mb-3 rounded-t-xl flex items-center justify-between">
-                            <div>
-                                <h4 class="font-extrabold text-xs uppercase tracking-wider">${escapeHtml(name)}</h4>
-                                <p class="text-[10px] text-teal-100">Lumbung Pangan Masyarakat</p>
-                            </div>
-                            <span class="px-2 py-0.5 rounded-full text-[9.5px] font-bold ${isTersedia ? 'bg-[#2e8a57] text-white' : 'bg-[#dc3545] text-white'}">
-                                ${isTersedia ? 'Stok Tersedia' : 'Stok Kosong'}
-                            </span>
-                        </div>
-                        <div class="space-y-1.5 text-xs text-slate-700 dark:text-slate-300">
-                            <p><span class="text-slate-400 font-medium">Ketua:</span> <span class="font-bold text-slate-900 dark:text-white">${escapeHtml(d.ketua || '-')}</span></p>
-                            <p><span class="text-slate-400 font-medium">Nomor Kontak:</span> <span class="font-bold text-slate-900 dark:text-white font-mono">${escapeHtml(d.kontak || '-')}</span></p>
-                            <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-center my-2 border border-slate-200/80 dark:border-slate-700">
-                                <span class="text-[10px] text-slate-400 block font-semibold">Jumlah Stok Terkini</span>
-                                <span class="font-black text-sm ${isTersedia ? 'text-[#2e8a57]' : 'text-[#dc3545]'} font-mono">${stock.toLocaleString('id-ID')} Kg</span>
-                            </div>
-                            <p class="text-[11px] text-slate-500"><span class="text-slate-400">Wilayah:</span> Kec. ${escapeHtml(d.kecamatan || '-')}, Ds. ${escapeHtml(d.desa || '-')}</p>
-                            <p class="text-[11px] text-slate-500"><span class="text-slate-400">Alamat:</span> ${escapeHtml(d.alamat || '-')}</p>
-                        </div>
-                        ${d.lokasi && d.lokasi !== '-' ? `
-                            <a href="${escapeHtml(d.lokasi)}" target="_blank" rel="noopener noreferrer"
-                                class="mt-2.5 block w-full py-1.5 px-2 bg-[#117a8b] hover:bg-[#0a4b57] text-white text-[11px] font-bold rounded-lg transition text-center shadow-xs">
-                                Buka Rute Google Maps 📍
-                            </a>
-                        ` : ''}
-                    </div>
-                `;
+            // 2. Bersihkan pin titik. Jika showPins false, peta tetap bersih hanya blok warna dengan indikator saja
+            if (state.mapLayers.markers) {
+                state.mapLayers.markers.clearLayers();
+            }
 
-                const marker = L.marker(coord, { icon: customIcon });
-                marker.bindPopup(popupHtml);
-                state.mapLayers.markers.addLayer(marker);
-            });
+            if (state.showPins && state.mapLayers.markers) {
+                state.filteredLpm.forEach(item => {
+                    const d = item.detail || {};
+                    const name = d.nama_lumbung;
+                    if (!name) return;
+
+                    const coord = state.lpmCoordsMap[name] || BANDUNG_CENTER;
+                    const { tahun, bulan } = state.filters;
+                    const stock = getLpmStockForPeriod(name, tahun, bulan);
+                    const isTersedia = stock > 0;
+                    const color = isTersedia ? '#2e8a57' : '#dc3545';
+
+                    const pinHtml = `
+                        <div class="lpm-pin-circle" style="background-color: ${color};" title="${escapeHtml(name)}: ${stock.toLocaleString('id-ID')} Kg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                                <polyline points="9 22 9 12 15 12 15 22"/>
+                            </svg>
+                        </div>
+                    `;
+
+                    const customIcon = L.divIcon({
+                        className: 'lpm-pin-marker',
+                        html: pinHtml,
+                        iconSize: [28, 28],
+                        iconAnchor: [14, 14]
+                    });
+
+                    const popupHtml = `
+                        <div class="p-3.5 font-sans min-w-[240px]">
+                            <div class="bg-[#117a8b] text-white p-2.5 -m-3.5 mb-3 rounded-t-xl flex items-center justify-between">
+                                <div>
+                                    <h4 class="font-extrabold text-xs uppercase tracking-wider">${escapeHtml(name)}</h4>
+                                    <p class="text-[10px] text-teal-100">Lumbung Pangan Masyarakat</p>
+                                </div>
+                                <span class="px-2 py-0.5 rounded-full text-[9.5px] font-bold ${isTersedia ? 'bg-[#2e8a57] text-white' : 'bg-[#dc3545] text-white'}">
+                                    ${isTersedia ? 'Stok Tersedia' : 'Stok Kosong'}
+                                </span>
+                            </div>
+                            <div class="space-y-1.5 text-xs text-slate-700 dark:text-slate-300">
+                                <p><span class="text-slate-400 font-medium">Ketua:</span> <span class="font-bold text-slate-900 dark:text-white">${escapeHtml(d.ketua || '-')}</span></p>
+                                <p><span class="text-slate-400 font-medium">Nomor Kontak:</span> <span class="font-bold text-slate-900 dark:text-white font-mono">${escapeHtml(d.kontak || '-')}</span></p>
+                                <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-center my-2 border border-slate-200/80 dark:border-slate-700">
+                                    <span class="text-[10px] text-slate-400 block font-semibold">Jumlah Stok Terkini</span>
+                                    <span class="font-black text-sm ${isTersedia ? 'text-[#2e8a57]' : 'text-[#dc3545]'} font-mono">${stock.toLocaleString('id-ID')} Kg</span>
+                                </div>
+                                <p class="text-[11px] text-slate-500"><span class="text-slate-400">Wilayah:</span> Kec. ${escapeHtml(d.kecamatan || '-')}, Ds. ${escapeHtml(d.desa || '-')}</p>
+                                <p class="text-[11px] text-slate-500"><span class="text-slate-400">Alamat:</span> ${escapeHtml(d.alamat || '-')}</p>
+                            </div>
+                            ${d.lokasi && d.lokasi !== '-' ? `
+                                <a href="${escapeHtml(d.lokasi)}" target="_blank" rel="noopener noreferrer"
+                                    class="mt-2.5 block w-full py-1.5 px-2 bg-[#117a8b] hover:bg-[#0a4b57] text-white text-[11px] font-bold rounded-lg transition text-center shadow-xs">
+                                    Buka Rute Google Maps 📍
+                                </a>
+                            ` : ''}
+                        </div>
+                    `;
+
+                    const marker = L.marker(coord, { icon: customIcon });
+                    marker.bindPopup(popupHtml);
+                    state.mapLayers.markers.addLayer(marker);
+                });
+            }
 
             // Update Map Sidebar Counters
             const { tahun: curThn, bulan: curBln } = state.filters;
