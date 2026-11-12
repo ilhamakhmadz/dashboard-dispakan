@@ -641,8 +641,7 @@
                             <i data-lucide="trending-up" class="w-4 h-4"></i>
                         </div>
                         <div>
-                            <h3 class="font-bold text-slate-800 text-base leading-tight">Tren Rata-Rata per Tahun</h3>
-                            <p class="text-xs text-slate-500 font-medium">Tren Rata-Rata Indeks Komposit per Tahun</p>
+                            <h3 class="font-bold text-slate-800 text-base leading-tight">Tren Indeks Ketahanan Pangan</h3>
                         </div>
                     </div>
                     <span
@@ -664,8 +663,7 @@
                             <i data-lucide="bar-chart-2" class="w-4 h-4"></i>
                         </div>
                         <div>
-                            <h3 class="font-bold text-slate-800 text-base leading-tight">Tren Desa Rentan Pangan Per
-                                Tahun</h3>
+                            <h3 class="font-bold text-slate-800 text-base leading-tight">Tren Desa Rentan Pangan</h3>
                         </div>
                     </div>
                     <span
@@ -918,37 +916,37 @@
             '_plahan': {
                 name: 'Aspek Lahan',
                 title: 'Peta Aspek Lahan',
-                desc: 'Peta tematik rasio luas lahan baku pertanian terhadap luas wilayah per desa',
+                desc: 'Rasio luas baku lahan pertanian terhadap jumlah penduduk',
                 legendTitle: 'KETERANGAN<br>ASPEK LAHAN :'
             },
             '_psarana': {
                 name: 'Aspek Sarana',
                 title: 'Peta Aspek Sarana',
-                desc: 'Peta tematik rasio sarana prasarana penyedia pangan per desa',
+                desc: 'Rasio jumlah sarana dan prasarana penyedia pangan terhadap jumlah rumah tangga',
                 legendTitle: 'KETERANGAN<br>ASPEK SARANA :'
             },
             '_ptdk_sejah': {
                 name: 'Aspek Penduduk Tidak Sejahtera',
                 title: 'Peta Aspek Penduduk Tidak Sejahtera',
-                desc: 'Peta tematik persentase penduduk tidak sejahtera per desa',
+                desc: 'Rasio jumlah penduduk dengan tingkat kesejahteraan terendah terhadap jumlah penduduk',
                 legendTitle: 'KETERANGAN<br>PENDUDUK TIDAK SEJAHTERA :'
             },
             '_pjalan': {
                 name: 'Aspek Akses Jalan',
                 title: 'Peta Aspek Akses Jalan',
-                desc: 'Peta tematik aksesibilitas jalan per desa',
+                desc: 'Desa yang tidak memiliki akses penghubung memadai melalui darat, air, atau udara',
                 legendTitle: 'KETERANGAN<br>ASPEK AKSES JALAN :'
             },
             '_pnowater': {
                 name: 'Aspek Air Bersih',
                 title: 'Peta Aspek Air Bersih',
-                desc: 'Peta tematik persentase rumah tangga tanpa akses air bersih per desa',
+                desc: 'Rasio jumlah rumah tangga tanpa akses air bersih terhadap jumlah rumah tangga',
                 legendTitle: 'KETERANGAN<br>ASPEK AIR BERSIH :'
             },
             '_ptenkes': {
                 name: 'Aspek Tenaga Kesehatan',
                 title: 'Peta Aspek Tenaga Kesehatan',
-                desc: 'Peta tematik rasio ketersediaan tenaga kesehatan per desa',
+                desc: 'Rasio jumlah penduduk per tenaga kesehatan terhadap kepadatan penduduk',
                 legendTitle: 'KETERANGAN<br>ASPEK TENAGA KESEHATAN :'
             }
         };
@@ -1657,7 +1655,7 @@
                         title: { text: 'Tahun', style: { fontWeight: 700 } }
                     },
                     yaxis: {
-                        title: { text: 'Indeks Komposit', style: { fontWeight: 700 } },
+                        title: { text: 'Indeks Ketahanan', style: { fontWeight: 700 } },
                         min: function (min) { return Math.max(0, Math.floor(min - 2)); },
                         labels: {
                             formatter: (val) => val.toFixed(2)
