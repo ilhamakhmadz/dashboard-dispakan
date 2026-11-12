@@ -553,7 +553,7 @@
                         <select id="filter-status" onchange="syncFilter('status', this.value)"
                             class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs font-semibold rounded-xl pl-3 pr-8 py-2 focus:ring-2 focus:ring-[#117a8b] focus:border-[#117a8b] appearance-none cursor-pointer shadow-2xs hover:bg-slate-50 transition">
                             <option value="all">Semua Status</option>
-                            <option value="tersedia">Tersedia Stok</option>
+                            <option value="tersedia">Stok Tersedia</option>
                             <option value="kosong">Stok Kosong</option>
                         </select>
                         <div
@@ -612,12 +612,12 @@
                                     <span
                                         class="w-3.5 h-3.5 rounded-full bg-[#2e8a57] border border-white inline-block shadow-2xs shrink-0"></span>
                                     <span class="text-slate-700 dark:text-slate-200 font-medium text-[11px]">LPM
-                                        Cadangan Tersedia</span>
+                                        Tersedia</span>
                                 </div>
                                 <div class="flex items-center gap-2.5">
                                     <span
                                         class="w-3.5 h-3.5 rounded-full bg-[#dc3545] border border-white inline-block shadow-2xs shrink-0"></span>
-                                    <span class="text-slate-700 dark:text-slate-200 font-medium text-[11px]">LPM Stok
+                                    <span class="text-slate-700 dark:text-slate-200 font-medium text-[11px]">LPM
                                         Kosong</span>
                                 </div>
                                 <div class="flex items-center gap-2.5">
@@ -859,7 +859,7 @@
                         </div>
 
                         <!-- Column Bar Chart -->
-                        <div id="chart-kecamatan-stok" class="h-[380px] flex items-center justify-center">
+                        <div id="chart-kecamatan-stok" class="w-full min-h-[380px] flex items-center justify-center">
                             <div class="loader opacity-50"></div>
                         </div>
                     </div>
@@ -1811,10 +1811,13 @@
             const totalInfoEl = document.getElementById('kec-chart-total-info');
             if (totalInfoEl) totalInfoEl.innerText = `${kecLabels.length} Kecamatan Terdata`;
 
+            // Tinggi chart dinamis agar seluruh nama kecamatan muat di sumbu Y
+            const kecChartHeight = Math.max(380, kecLabels.length * 28);
+
             const optKec = {
                 chart: {
                     type: 'bar',
-                    height: 380,
+                    height: kecChartHeight,
                     toolbar: { show: false },
                     fontFamily: 'Plus Jakarta Sans',
                     animations: { enabled: true }
@@ -1835,8 +1838,11 @@
                 dataLabels: {
                     enabled: true,
                     offsetX: 10,
-                    formatter: function (val) {
-                        return val > 0 ? val.toLocaleString('id-ID') + ' Kg' : '0 Kg';
+                    formatter: function (val, opts) {
+                        const idx = opts && typeof opts.dataPointIndex === 'number' ? opts.dataPointIndex : -1;
+                        const nama = idx >= 0 && kecLabels[idx] ? kecLabels[idx] : '';
+                        const kg = val > 0 ? val.toLocaleString('id-ID') + ' Kg' : '0 Kg';
+                        return nama ? `${nama} - ${kg}` : kg;
                     },
                     style: {
                         fontSize: '9.5px',
@@ -1860,6 +1866,9 @@
                 yaxis: {
                     categories: kecLabels.length > 0 ? kecLabels : ['-'],
                     labels: {
+                        show: true,
+                        minWidth: 80,
+                        maxWidth: 140,
                         style: { colors: textColor, fontSize: '11px', fontWeight: '600' }
                     }
                 },

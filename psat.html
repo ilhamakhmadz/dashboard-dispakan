@@ -161,9 +161,10 @@
         }
 
         .psat-pin-circle.is-aman {
-            background: #ffedd5;
-            color: #ea580c;
+            background: #dcfce7;
+            color: #2e8a57;
             border-color: #ffffff;
+            box-shadow: 0 0 0 2px #2e8a57, 0 3px 8px rgba(46, 138, 87, 0.35);
         }
 
         .psat-pin-circle.has-kritis {
@@ -505,30 +506,20 @@
                         class="relative w-full h-[460px] rounded-xl overflow-hidden bg-slate-50 border border-slate-200/60 shadow-xs">
                         <div id="psat-map" class="w-full h-full z-10 bg-slate-50"></div>
 
-                        <!-- Floating Mini Legend (Kiri Bawah Peta - Indikator Blok Warna & Pin) -->
+                        <!-- Floating Mini Legend (Kiri Bawah Peta - Hanya Titik Sampling Pengujian) -->
                         <div
                             class="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md p-3 rounded-xl shadow-md border border-slate-200 z-[400] text-[10px] font-semibold hidden sm:flex flex-col gap-1.5">
                             <div class="text-[9.5px] font-black text-slate-700 uppercase tracking-wider mb-0.5">
-                                INDIKATOR STATUS WILAYAH :</div>
+                                INDIKATOR TITIK SAMPLING :</div>
                             <div class="flex items-center gap-2">
                                 <span
-                                    class="w-3.5 h-3 rounded-xs bg-[#2e8a57] border border-[#1b5e37] inline-block shadow-2xs"></span>
-                                <span class="text-slate-700">Kecamatan Aman (Semua Sampel Aman)</span>
+                                    class="w-3.5 h-3.5 rounded-full bg-[#dcfce7] border-2 border-[#2e8a57] inline-block shadow-2xs"></span>
+                                <span class="text-slate-700">Titik Sampling Aman</span>
                             </div>
                             <div class="flex items-center gap-2">
                                 <span
-                                    class="w-3.5 h-3 rounded-xs bg-[#dc3545] border border-[#991b1b] inline-block shadow-2xs"></span>
-                                <span class="text-slate-700">Kecamatan Ada Temuan Kritis (Tidak Aman)</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <span
-                                    class="w-3.5 h-3 rounded-xs bg-[#cbd5e1] border border-slate-400 inline-block shadow-2xs"></span>
-                                <span class="text-slate-600">Belum Ada Titik Pengawasan</span>
-                            </div>
-                            <div class="flex items-center gap-2 pt-1 border-t border-slate-200/80 mt-0.5">
-                                <span
-                                    class="w-3 h-3 rounded-full bg-[#ea580c] border border-white inline-block shadow-2xs"></span>
-                                <span class="text-slate-700">Titik Sampling Pengujian</span>
+                                    class="w-3.5 h-3.5 rounded-full bg-[#fee2e2] border-2 border-[#dc3545] inline-block shadow-2xs"></span>
+                                <span class="text-slate-700">Titik Sampling Temuan Kritis</span>
                             </div>
                         </div>
 
@@ -671,7 +662,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="chart-komoditi" class="h-[340px] flex items-center justify-center">
+                <div id="chart-komoditi" class="h-[420px] flex items-center justify-center">
                     <div class="loader opacity-50"></div>
                 </div>
             </div>
@@ -691,7 +682,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="chart-tren-bulanan" class="h-[340px] flex items-center justify-center">
+                <div id="chart-tren-bulanan" class="h-[420px] flex items-center justify-center">
                     <div class="loader opacity-50"></div>
                 </div>
             </div>
@@ -1135,30 +1126,32 @@
         }
 
         function getKecamatanStyle(feature, kecStats) {
+            // Batas wilayah kecamatan diwarnai sesuai indikator status PSAT,
+            // dengan garis putus-putus (dashed) seperti gambar referensi.
             const props = feature.properties || {};
             const kName = (props.KECAMATAN || props.kecamatan || props.NAME_3 || '').toLowerCase();
             const st = kecStats[kName];
 
-            let fillColor = '#cbd5e1'; // Netral / belum ada data pengawasan
-            let fillOpacity = 0.38;
+            let fillColor = '#cbd5e1'; // Belum ada titik pengawasan (netral)
+            let fillOpacity = 0.45;
 
             if (st && st.total > 0) {
                 if (st.tidakAman > 0) {
-                    fillColor = '#dc3545'; // Ada temuan kritis (Merah)
-                    fillOpacity = 0.75;
+                    fillColor = '#dc3545'; // Ada temuan kritis (merah indikator PSAT)
+                    fillOpacity = 0.6;
                 } else {
-                    fillColor = '#2e8a57'; // Semua sampel aman (Hijau)
-                    fillOpacity = 0.72;
+                    fillColor = '#2e8a57'; // Semua sampel aman (hijau indikator PSAT)
+                    fillOpacity = 0.6;
                 }
             }
 
             return {
                 fillColor: fillColor,
                 fillOpacity: fillOpacity,
-                color: '#0f172a',
+                color: '#0f172a', // garis batas wilayah
                 weight: 1.5,
                 opacity: 0.9,
-                dashArray: '4, 4'
+                dashArray: '5, 5'
             };
         }
 
@@ -1790,7 +1783,7 @@
                 series: [{ name: 'Total Sampel', data: komoditiValues }],
                 chart: {
                     type: 'bar',
-                    height: 340,
+                    height: 420,
                     toolbar: { show: false },
                     fontFamily: 'Plus Jakarta Sans, sans-serif'
                 },
@@ -1859,7 +1852,7 @@
                 ],
                 chart: {
                     type: 'bar',
-                    height: 340,
+                    height: 420,
                     stacked: true,
                     toolbar: { show: false },
                     fontFamily: 'Plus Jakarta Sans, sans-serif'
