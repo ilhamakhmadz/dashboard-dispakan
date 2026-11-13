@@ -226,7 +226,7 @@
                 </div>
             </div>
 
-            </div>
+        </div>
         </div>
     </nav>
 
@@ -327,8 +327,10 @@
                         <i data-lucide="map" class="w-5 h-5"></i>
                     </div>
                     <div>
-                        <h3 id="map-header-title" class="font-bold text-slate-800 text-base leading-tight">Peta Kerawanan Pangan</h3>
-                        <p id="map-header-desc" class="text-xs text-slate-500">Peta tematik visualisasi geografis status ketahanan pangan per desa</p>
+                        <h3 id="map-header-title" class="font-bold text-slate-800 text-base leading-tight">Peta
+                            Kerawanan Pangan</h3>
+                        <p id="map-header-desc" class="text-xs text-slate-500">Peta tematik visualisasi geografis status
+                            ketahanan pangan per desa</p>
                     </div>
                 </div>
 
@@ -340,7 +342,9 @@
                         <button type="button" id="map-layer-btn"
                             class="w-full flex items-center justify-between bg-white border border-slate-200 hover:border-slate-300 text-slate-700 text-sm font-medium rounded-2xl px-4 py-2.5 shadow-2xs transition focus:outline-none focus:ring-2 focus:ring-[#117a8b]/20">
                             <span id="map-layer-selected-label" class="truncate">Pilih Maps</span>
-                            <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200" id="map-layer-chevron"></i>
+                            <i data-lucide="chevron-down"
+                                class="w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200"
+                                id="map-layer-chevron"></i>
                         </button>
 
                         <!-- Dropdown Menu Box -->
@@ -352,29 +356,38 @@
                                     class="w-full bg-slate-50 border border-slate-200 focus:bg-white text-slate-800 text-xs rounded-xl px-3 py-2 focus:outline-none focus:border-[#117a8b] transition" />
                             </div>
                             <!-- Options List -->
-                            <div id="map-layer-options" class="max-h-60 overflow-y-auto space-y-1 text-xs font-medium text-slate-700 custom-scrollbar">
-                                <div class="map-layer-opt px-3 py-2.5 rounded-xl hover:bg-slate-100 cursor-pointer transition flex items-center justify-between bg-slate-100 font-bold text-slate-900" data-value="prio_komp" data-label="Pilih Maps">
+                            <div id="map-layer-options"
+                                class="max-h-60 overflow-y-auto space-y-1 text-xs font-medium text-slate-700 custom-scrollbar">
+                                <div class="map-layer-opt px-3 py-2.5 rounded-xl hover:bg-slate-100 cursor-pointer transition flex items-center justify-between bg-slate-100 font-bold text-slate-900"
+                                    data-value="prio_komp" data-label="Pilih Maps">
                                     <span>Pilih Maps</span>
                                 </div>
-                                <div class="map-layer-opt px-3 py-2.5 rounded-xl hover:bg-slate-100 cursor-pointer transition flex items-center justify-between" data-value="prio_komp" data-label="Peta Kerawanan Pangan">
+                                <div class="map-layer-opt px-3 py-2.5 rounded-xl hover:bg-slate-100 cursor-pointer transition flex items-center justify-between"
+                                    data-value="prio_komp" data-label="Peta Kerawanan Pangan">
                                     <span>Peta Kerawanan Pangan</span>
                                 </div>
-                                <div class="map-layer-opt px-3 py-2.5 rounded-xl hover:bg-slate-100 cursor-pointer transition flex items-center justify-between" data-value="_plahan" data-label="Peta Aspek Lahan">
+                                <div class="map-layer-opt px-3 py-2.5 rounded-xl hover:bg-slate-100 cursor-pointer transition flex items-center justify-between"
+                                    data-value="_plahan" data-label="Peta Aspek Lahan">
                                     <span>Peta Aspek Lahan</span>
                                 </div>
-                                <div class="map-layer-opt px-3 py-2.5 rounded-xl hover:bg-slate-100 cursor-pointer transition flex items-center justify-between" data-value="_psarana" data-label="Peta Aspek Sarana">
+                                <div class="map-layer-opt px-3 py-2.5 rounded-xl hover:bg-slate-100 cursor-pointer transition flex items-center justify-between"
+                                    data-value="_psarana" data-label="Peta Aspek Sarana">
                                     <span>Peta Aspek Sarana</span>
                                 </div>
-                                <div class="map-layer-opt px-3 py-2.5 rounded-xl hover:bg-slate-100 cursor-pointer transition flex items-center justify-between" data-value="_ptdk_sejah" data-label="Peta Aspek Penduduk Tidak Sejahtera">
+                                <div class="map-layer-opt px-3 py-2.5 rounded-xl hover:bg-slate-100 cursor-pointer transition flex items-center justify-between"
+                                    data-value="_ptdk_sejah" data-label="Peta Aspek Penduduk Tidak Sejahtera">
                                     <span>Peta Aspek Penduduk Tidak Sejahtera</span>
                                 </div>
-                                <div class="map-layer-opt px-3 py-2.5 rounded-xl hover:bg-slate-100 cursor-pointer transition flex items-center justify-between" data-value="_pjalan" data-label="Peta Aspek Akses Jalan">
+                                <div class="map-layer-opt px-3 py-2.5 rounded-xl hover:bg-slate-100 cursor-pointer transition flex items-center justify-between"
+                                    data-value="_pjalan" data-label="Peta Aspek Akses Jalan">
                                     <span>Peta Aspek Akses Jalan</span>
                                 </div>
-                                <div class="map-layer-opt px-3 py-2.5 rounded-xl hover:bg-slate-100 cursor-pointer transition flex items-center justify-between" data-value="_pnowater" data-label="Peta Aspek Air Bersih">
-                                    <span>Peta Aspek Air Bersih</span>
+                                <div class="map-layer-opt px-3 py-2.5 rounded-xl hover:bg-slate-100 cursor-pointer transition flex items-center justify-between"
+                                    data-value="_pnowater" data-label="Peta Aspek Tanpa Air Bersih">
+                                    <span>Peta Aspek Tanpa Air Bersih</span>
                                 </div>
-                                <div class="map-layer-opt px-3 py-2.5 rounded-xl hover:bg-slate-100 cursor-pointer transition flex items-center justify-between" data-value="_ptenkes" data-label="Peta Aspek Tenaga Kesehatan">
+                                <div class="map-layer-opt px-3 py-2.5 rounded-xl hover:bg-slate-100 cursor-pointer transition flex items-center justify-between"
+                                    data-value="_ptenkes" data-label="Peta Aspek Tenaga Kesehatan">
                                     <span>Peta Aspek Tenaga Kesehatan</span>
                                 </div>
                             </div>
@@ -387,14 +400,18 @@
                         <button type="button" id="map-year-btn"
                             class="w-full flex items-center justify-between bg-white border border-slate-200 hover:border-slate-300 text-slate-700 text-sm font-medium rounded-2xl px-4 py-2.5 shadow-2xs transition focus:outline-none focus:ring-2 focus:ring-[#117a8b]/20">
                             <span id="map-year-selected-label" class="truncate">Pilih Tahun</span>
-                            <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200" id="map-year-chevron"></i>
+                            <i data-lucide="chevron-down"
+                                class="w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200"
+                                id="map-year-chevron"></i>
                         </button>
 
                         <!-- Dropdown Menu Box -->
                         <div id="map-year-menu"
                             class="hidden absolute right-0 mt-1.5 w-full sm:w-[220px] bg-white border border-slate-200 rounded-2xl shadow-xl z-50 p-2.5 space-y-1">
-                            <div id="map-year-options" class="max-h-60 overflow-y-auto space-y-1 text-xs font-medium text-slate-700 custom-scrollbar">
-                                <div class="map-year-opt px-3 py-2 rounded-xl hover:bg-slate-100 cursor-pointer transition flex items-center justify-between bg-slate-100 font-bold text-slate-900" data-value="all">
+                            <div id="map-year-options"
+                                class="max-h-60 overflow-y-auto space-y-1 text-xs font-medium text-slate-700 custom-scrollbar">
+                                <div class="map-year-opt px-3 py-2 rounded-xl hover:bg-slate-100 cursor-pointer transition flex items-center justify-between bg-slate-100 font-bold text-slate-900"
+                                    data-value="all">
                                     <span>Pilih Tahun</span>
                                 </div>
                             </div>
@@ -478,7 +495,8 @@
                         </div>
 
                         <div class="text-center mb-5">
-                            <h4 id="map-sidebar-legend-title" class="text-xs font-black text-slate-800 tracking-wider uppercase leading-tight">
+                            <h4 id="map-sidebar-legend-title"
+                                class="text-xs font-black text-slate-800 tracking-wider uppercase leading-tight">
                                 KETERANGAN<br>KERAWANAN PANGAN :
                             </h4>
                             <p class="text-[11px] font-bold text-[#117a8b] mt-2">
@@ -641,7 +659,8 @@
                             <i data-lucide="trending-up" class="w-4 h-4"></i>
                         </div>
                         <div>
-                            <h3 class="font-bold text-slate-800 text-base leading-tight">Tren Indeks Ketahanan Pangan</h3>
+                            <h3 class="font-bold text-slate-800 text-base leading-tight">Tren Indeks Ketahanan Pangan
+                            </h3>
                         </div>
                     </div>
                     <span
