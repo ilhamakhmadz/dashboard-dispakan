@@ -52,7 +52,6 @@
 
     <!-- Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
 
@@ -834,26 +833,42 @@
                     </div>
                 </div>
 
-                <!-- 3. Grafik Distribusi Stok per Kecamatan (Format Horizontal Bar Sesuai CPPD) -->
+                <!-- 3. Grafik Distribusi Stok per Kecamatan -->
                 <div
                     class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-soft border border-slate-100 dark:border-slate-800 flex flex-col justify-between">
                     <div>
-                        <div class="text-center mb-3">
-                            <h3 class="font-bold text-slate-800 dark:text-white text-base leading-tight">
-                                Distribusi Stok per Kecamatan (Kg)
-                            </h3>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white shrink-0 shadow-sm"
+                                    style="background-color: #117a8b;">
+                                    <i data-lucide="bar-chart-2" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-slate-800 dark:text-white text-base leading-tight">
+                                        Distribusi Stok per Kecamatan
+                                    </h3>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                                        Peringkat akumulasi volume cadangan pangan wilayah (Kg)
+                                    </p>
+                                </div>
+                            </div>
+                            <span
+                                class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#117a8b]/10 text-[#117a8b] border border-[#117a8b]/20">
+                                Largest to Smallest
+                            </span>
                         </div>
 
-                        <!-- Canvas for Chart.js Horizontal Bar Chart -->
-                        <div class="relative w-full" style="height: 340px;">
-                            <canvas id="chart-kecamatan-stok"></canvas>
+                        <!-- Column Bar Chart -->
+                        <div id="chart-kecamatan-stok" class="w-full min-h-[380px] flex items-center justify-center">
+                            <div class="loader opacity-50"></div>
                         </div>
                     </div>
 
                     <div
                         class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-400 flex items-center justify-between">
                         <span>Sumber: Dinas Ketahanan Pangan dan Perikanan</span>
-                        <span id="kec-chart-total-info" class="font-bold text-slate-700 dark:text-slate-300">Top 10 Kecamatan Terdata</span>
+                        <span id="kec-chart-total-info" class="font-bold text-slate-700 dark:text-slate-300">19
+                            Kecamatan</span>
                     </div>
                 </div>
 
@@ -1774,21 +1789,12 @@
             }
         }
 
-        // Chart 3: Grafik Distribusi Stok per Kecamatan (Format Horizontal Bar Sesuai CPPD / Image)
+        // Chart 3: Grafik Distribusi Stok per Kecamatan (Image 4: Column chart, Warna 4 #4dbdaf, Largest to Smallest)
         function renderChartKecamatan() {
-            const canvasEl = document.getElementById('chart-kecamatan-stok');
-            if (!canvasEl) return;
-
-            if (state.charts.kec) {
-                state.charts.kec.destroy();
-                state.charts.kec = null;
-            }
-
             const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-            const textColor = isDark ? '#94a3b8' : '#64748b';
-            const gridColor = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(15, 23, 42, 0.06)';
+            const textColor = isDark ? '#cbd5e1' : '#475569';
+            const gridBorderColor = isDark ? '#1e293b' : '#f1f5f9';
 
-            // Agregasi data real stok LPM per kecamatan
             const kecStockMap = {};
             state.filteredTransaksi.forEach(item => {
                 const d = item.detail || {};
@@ -1797,105 +1803,84 @@
                 kecStockMap[k] = (kecStockMap[k] || 0) + s;
             });
 
-            // Urutkan largest to smallest (descending)
+            // Urutkan largest to smallest (descending) sesuai instruksi Image 4
             const sortedKec = Object.entries(kecStockMap).sort((a, b) => b[1] - a[1]);
-
-            // Prioritaskan kecamatan yang memiliki stok > 0, ambil Top 10 sesuai format gambar
-            let displayKec = sortedKec.filter(x => x[1] > 0);
-            if (displayKec.length === 0) {
-                displayKec = sortedKec.slice(0, 10);
-            } else {
-                displayKec = displayKec.slice(0, 10);
-            }
-
-            let kecLabels = displayKec.map(x => x[0]);
-            let kecValues = displayKec.map(x => Math.round(x[1]));
-
-            if (kecLabels.length === 0) {
-                kecLabels = ['Tidak Ada Data'];
-                kecValues = [0];
-            }
+            const kecLabels = sortedKec.map(x => x[0]);
+            const kecValues = sortedKec.map(x => Math.round(x[1]));
 
             const totalInfoEl = document.getElementById('kec-chart-total-info');
-            if (totalInfoEl) {
-                const totalKec = Object.keys(kecStockMap).length;
-                totalInfoEl.innerText = totalKec > 10 ? `Top 10 dari ${totalKec} Kecamatan` : `${kecLabels.length} Kecamatan Terdata`;
-            }
+            if (totalInfoEl) totalInfoEl.innerText = `${kecLabels.length} Kecamatan Terdata`;
 
-            if (typeof Chart === 'undefined') {
-                console.warn('Chart.js library belum selesai dimuat.');
-                return;
-            }
+            // Tinggi chart dinamis agar seluruh nama kecamatan muat di sumbu Y
+            const kecChartHeight = Math.max(380, kecLabels.length * 28);
 
-            state.charts.kec = new Chart(canvasEl, {
-                type: 'bar',
-                data: {
-                    labels: kecLabels,
-                    datasets: [{
-                        label: 'Total Stok (Kg)',
-                        data: kecValues,
-                        backgroundColor: '#117a8b',
-                        borderRadius: 4
-                    }]
+            const optKec = {
+                chart: {
+                    type: 'bar',
+                    height: kecChartHeight,
+                    toolbar: { show: false },
+                    fontFamily: 'Plus Jakarta Sans',
+                    animations: { enabled: true }
                 },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top',
-                            align: 'center',
-                            labels: {
-                                color: textColor,
-                                boxWidth: 32,
-                                boxHeight: 12,
-                                font: {
-                                    family: "'Plus Jakarta Sans', sans-serif",
-                                    size: 12,
-                                    weight: '500'
-                                }
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: ctx => ` ${(ctx.raw || 0).toLocaleString('id-ID')} Kg`
-                            }
-                        }
+                series: [{
+                    name: 'Total Stok (Kg)',
+                    data: kecValues
+                }],
+                colors: ['#117a8b'], // Warna tema
+                plotOptions: {
+                    bar: {
+                        horizontal: true,
+                        borderRadius: 4,
+                        barHeight: '62%'
+                    }
+                },
+                // Sesuai gambar: bar bersih tanpa label nilai, nama kecamatan tampil di sumbu Y
+                dataLabels: {
+                    enabled: false
+                },
+                // Horizontal bar: kategori (nama kecamatan) WAJIB di xaxis.categories,
+                // bukan yaxis. ApexCharts akan menampilkannya di sisi kiri secara visual.
+                xaxis: {
+                    categories: kecLabels.length > 0 ? kecLabels : ['-'],
+                    labels: {
+                        show: true,
+                        minWidth: 80,
+                        maxWidth: 140,
+                        style: { colors: textColor, fontSize: '11px', fontWeight: '600' }
+                    }
+                },
+                yaxis: {
+                    title: {
+                        text: 'Total Stok Cadangan (Kg)',
+                        style: { color: textColor, fontSize: '11px', fontWeight: '600' }
                     },
-                    scales: {
-                        x: {
-                            grid: {
-                                color: gridColor,
-                                drawBorder: false
-                            },
-                            ticks: {
-                                color: textColor,
-                                font: {
-                                    family: "'Plus Jakarta Sans', sans-serif",
-                                    size: 11
-                                },
-                                callback: val => val.toLocaleString('id-ID')
-                            }
+                    labels: {
+                        formatter: function (val) {
+                            return val.toLocaleString('id-ID');
                         },
-                        y: {
-                            grid: {
-                                display: false,
-                                drawBorder: false
-                            },
-                            ticks: {
-                                color: textColor,
-                                font: {
-                                    family: "'Plus Jakarta Sans', sans-serif",
-                                    size: 12,
-                                    weight: '500'
-                                }
-                            }
-                        }
+                        style: { colors: textColor, fontSize: '10px', fontWeight: '600' }
+                    },
+                    axisBorder: { color: gridBorderColor }
+                },
+                grid: {
+                    borderColor: gridBorderColor,
+                    strokeDashArray: 3
+                },
+                tooltip: {
+                    theme: isDark ? 'dark' : 'light',
+                    y: {
+                        formatter: val => `${val.toLocaleString('id-ID')} Kg`
                     }
                 }
-            });
+            };
+
+            const chartKecEl = document.getElementById('chart-kecamatan-stok');
+            if (chartKecEl) {
+                if (state.charts.kec) state.charts.kec.destroy();
+                chartKecEl.innerHTML = '';
+                state.charts.kec = new ApexCharts(chartKecEl, optKec);
+                state.charts.kec.render();
+            }
         }
 
         // --- 3. LEAFLET MAP IMPLEMENTATION ---
